@@ -1,0 +1,27 @@
+{
+    "name": "spomky-labs/cbor-php",
+    "type": "library",
+    "license": "MIT",
+    "description": "CBOR Encoder/Decoder for PHP",
+    "authors": [
+        {
+            "name": "Spomky"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CBOR\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CBOR\\Test\\": "tests/"
+        }
+    },
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "symfony/var-dumper": "^4.0"
+    }
+}
