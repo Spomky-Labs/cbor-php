@@ -41,7 +41,7 @@ final class ListObject implements CBORObject
     private function __construct(int $additionalInformation, ?string $value, array $objects)
     {
         $this->additionalInformation = $additionalInformation;
-        array_map(function($item) {
+        array_map(function ($item) {
             if (!$item instanceof CBORObject) {
                 throw new \InvalidArgumentException('The list must contain only CBORObjects.');
             }
@@ -99,7 +99,7 @@ final class ListObject implements CBORObject
      */
     public function getNormalizedValue(): array
     {
-        return array_map(function(CBORObject $item) {
+        return array_map(function (CBORObject $item) {
             return $item->getNormalizedValue();
         }, $this->objects);
     }

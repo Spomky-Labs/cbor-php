@@ -51,7 +51,7 @@ final class Decoder
             case 0b00011001: //25
             case 0b00011010: //26
             case 0b00011011: //27
-                $val = $this->take(pow($ai-0b00011000+1, 2));
+                $val = $this->take(pow($ai - 0b00011000 + 1, 2));
                 break;
             case 0b00011100: //28
             case 0b00011101: //29
@@ -83,9 +83,11 @@ final class Decoder
                 return OtherObject::create($ai, $val);
             case 0b010: //2
                 $length = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
+
                 return ByteStringObject::create($ai, $this->take($length));
             case 0b011: //3
                 $length = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
+
                 return TextStringObject::create($ai, $this->take($length));
             case 0b100: //4
                 $list = [];
@@ -93,6 +95,7 @@ final class Decoder
                 for ($i = 0; $i < $nbItems; $i++) {
                     $list[] = $this->process();
                 }
+
                 return ListObject::create($ai, $val, $list);
             case 0b101: //5
                 $list = [];
@@ -100,6 +103,7 @@ final class Decoder
                 for ($i = 0; $i < $nbItems; $i++) {
                     $list[] = MapItem::create($this->process(), $this->process());
                 }
+
                 return MapObject::create($ai, $val, $list);
             case 0b110: //6
                 return TagObject::create($ai, $val, $this->process());
@@ -125,6 +129,7 @@ final class Decoder
                     }
                     $val[] = $it;
                 }
+
                 return ByteStringWithChunkObject::create(0b00011111, $val);
             case 0b011: //3
                 $val = [];
@@ -134,6 +139,7 @@ final class Decoder
                     }
                     $val[] = $it;
                 }
+
                 return TextStringWithChunkObject::create(0b00011111, $val);
             case 0b100: //4
                 $val = [];
@@ -142,7 +148,8 @@ final class Decoder
                         break;
                     }
                     $val[] = $it;
-                };
+                }
+
                 return ListObject::create(0b00011111, null, $val);
             case 0b101: //5
                 $val = [];
@@ -152,6 +159,7 @@ final class Decoder
                     }
                     $val[] = MapItem::create($it, $this->process());
                 }
+
                 return MapObject::create(0b00011111, null, $val);
             case 0b111: //7
                 if ($breakable) {
@@ -162,35 +170,35 @@ final class Decoder
             default:
                 throw new \InvalidArgumentException('Cannot stream the data');
         }
-   }
+    }
 
     /**
      * @param int $length
      *
-     * @return string
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return string
      */
-   private function take(int $length): string
-   {
-       if (0 === $length) {
-           return '';
-       }
-       $data = fread($this->stream, $length);
-       if (!is_string($data)) {
-           throw new \InvalidArgumentException('Cannot stream the data');
-       }
+    private function take(int $length): string
+    {
+        if (0 === $length) {
+            return '';
+        }
+        $data = fread($this->stream, $length);
+        if (!is_string($data)) {
+            throw new \InvalidArgumentException('Cannot stream the data');
+        }
 
-       return $data;
-   }
+        return $data;
+    }
 
     /**
      * @param CBORObject $object
      *
      * @return bool
      */
-   private function isBreak(CBORObject $object): bool
-   {
-       return $object->getMajorType() === 0b111 && $object->getAdditionalInformation() === 0b00011111;
-   }
+    private function isBreak(CBORObject $object): bool
+    {
+        return $object->getMajorType() === 0b111 && $object->getAdditionalInformation() === 0b00011111;
+    }
 }

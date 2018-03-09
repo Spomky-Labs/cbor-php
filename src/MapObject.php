@@ -42,7 +42,7 @@ final class MapObject implements CBORObject
     private function __construct(int $additionalInformation, ?string $value, array $objects)
     {
         $this->additionalInformation = $additionalInformation;
-        array_map(function($item) {
+        array_map(function ($item) {
             if (!$item instanceof MapItem) {
                 throw new \InvalidArgumentException('The list must contain only MapItem.');
             }
@@ -58,7 +58,7 @@ final class MapObject implements CBORObject
      *
      * @return MapObject
      */
-    public static function create(int $additionalInformation, ?string $value,  array $objects): self
+    public static function create(int $additionalInformation, ?string $value, array $objects): self
     {
         return new self($additionalInformation, $value, $objects);
     }

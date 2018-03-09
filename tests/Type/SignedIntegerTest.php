@@ -21,11 +21,12 @@ final class SignedIntegerTest extends TestCase
     /**
      * @test
      * @dataProvider getDataSet
+     *
      * @param string $data
      */
     public function anUnsignedIntegerCanBeEncodedAndDecoded(string $data)
     {
-        $stream = fopen('php://memory','r+');
+        $stream = fopen('php://memory', 'r+');
         fwrite($stream, hex2bin($data));
         rewind($stream);
 
@@ -42,13 +43,13 @@ final class SignedIntegerTest extends TestCase
     {
         return [
             [
-                '20'
-            ],[
-                '29'
-            ],[
-                '3863'
-            ],[
-                '3903e7'
+                '20',
+            ], [
+                '29',
+            ], [
+                '3863',
+            ], [
+                '3903e7',
             ],
         ];
     }
