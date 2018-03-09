@@ -21,11 +21,12 @@ final class OtherTest extends TestCase
     /**
      * @test
      * @dataProvider getDataSet
+     *
      * @param string $data
      */
     public function aSignedIntegerCanBeParsed(string $data)
     {
-        $stream = fopen('php://memory','r+');
+        $stream = fopen('php://memory', 'r+');
         fwrite($stream, hex2bin($data));
         rewind($stream);
 
@@ -42,19 +43,19 @@ final class OtherTest extends TestCase
     {
         return [
             [
-                'f4'
-            ],[
-                'f5'
-            ],[
-                'f6'
-            ],[
-                'f7'
-            ],[
-                'f0'
-            ],[
-                'f818'
-            ],[
-                'f8ff'
+                'f4',
+            ], [
+                'f5',
+            ], [
+                'f6',
+            ], [
+                'f7',
+            ], [
+                'f0',
+            ], [
+                'f818',
+            ], [
+                'f8ff',
             ],
         ];
     }

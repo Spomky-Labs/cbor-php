@@ -80,7 +80,7 @@ final class SignedIntegerObject implements CBORObject
     public function getNormalizedValue(): string
     {
         if (null === $this->value) {
-            return strval(-1-$this->additionalInformation);
+            return strval(-1 - $this->additionalInformation);
         }
 
         $result = gmp_init(bin2hex($this->value), 16);

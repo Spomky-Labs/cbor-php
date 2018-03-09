@@ -21,11 +21,12 @@ final class UnsignedIntegerTest extends TestCase
     /**
      * @test
      * @dataProvider getDataSet
+     *
      * @param string $data
      */
     public function anUnsignedIntegerCanBeParsed(string $data)
     {
-        $stream = fopen('php://memory','r+');
+        $stream = fopen('php://memory', 'r+');
         fwrite($stream, hex2bin($data));
         rewind($stream);
 
@@ -42,29 +43,29 @@ final class UnsignedIntegerTest extends TestCase
     {
         return [
             [
-                '00'
-            ],[
-                '01'
-            ],[
-                '0a'
-            ],[
-                '17'
-            ],[
-                '1818'
-            ],[
-                '1819'
-            ],[
-                '1864'
-            ],[
-                '1903e8'
-            ],[
-                '1a000f4240'
-            ],[
-                '1b000000e8d4a51000'
-            ],[
-                '1bffffffffffffffff'
-            ],[
-                'c249010000000000000000'
+                '00',
+            ], [
+                '01',
+            ], [
+                '0a',
+            ], [
+                '17',
+            ], [
+                '1818',
+            ], [
+                '1819',
+            ], [
+                '1864',
+            ], [
+                '1903e8',
+            ], [
+                '1a000f4240',
+            ], [
+                '1b000000e8d4a51000',
+            ], [
+                '1bffffffffffffffff',
+            ], [
+                'c249010000000000000000',
             ],
         ];
     }
