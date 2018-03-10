@@ -15,8 +15,8 @@ namespace CBOR\Test\Type;
 
 use CBOR\Decoder;
 use CBOR\OtherObject;
-use CBOR\Tag;
 use CBOR\OtherObject\OtherObjectManager;
+use CBOR\Tag;
 use CBOR\Tag\TagObjectManager;
 use PHPUnit\Framework\TestCase;
 
@@ -34,7 +34,7 @@ class BaseTestCase extends TestCase
     {
         if (null === $this->decoder) {
             $otherObjectManager = new OtherObjectManager();
-            for ($i = 0; $i < 20; ++$i) {
+            for ($i = 0; $i < 20; $i++) {
                 $otherObjectManager->add($i, OtherObject\SimpleObject::class);
             }
             $otherObjectManager->add(20, OtherObject\FalseObject::class);

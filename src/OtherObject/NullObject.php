@@ -33,6 +33,5 @@ final class NullObject extends Base
      */
     public function getNormalizedData()
     {
-        return null;
     }
 }

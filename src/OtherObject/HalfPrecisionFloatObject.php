@@ -39,7 +39,7 @@ final class HalfPrecisionFloatObject extends Base
 
         if ($exp === 0) {
             $val = $mant * pow(2, -24);
-        } else if ($exp !== 0b11111) {
+        } elseif ($exp !== 0b11111) {
             $val = ($mant + (1 << 10)) * pow(2, $exp - 25);
         } else {
             $val = $mant === 0 ? INF : NAN;

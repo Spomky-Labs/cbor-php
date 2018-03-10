@@ -35,7 +35,7 @@ final class TimestampTagObject extends Base
      */
     public function getNormalizedData()
     {
-        switch(true) {
+        switch (true) {
             case $this->getData() instanceof UnsignedIntegerObject:
                 return \DateTimeImmutable::createFromFormat('U', strval($this->getData()->getNormalizedData()));
             case $this->getData() instanceof HalfPrecisionFloatObject:

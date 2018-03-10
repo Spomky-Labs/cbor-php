@@ -24,8 +24,7 @@ class TagObjectManager
     private $classes = [];
 
     /**
-     * @param int $value
-     *
+     * @param int    $value
      * @param string $class
      */
     public function add(int $value, string $class)
