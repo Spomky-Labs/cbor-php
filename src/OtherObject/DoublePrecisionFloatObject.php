@@ -34,14 +34,14 @@ final class DoublePrecisionFloatObject extends Base
     public function getNormalizedData()
     {
         $single = gmp_init(bin2hex($this->getData()), 16);
-        $exp = gmp_intval($this->bitwiseAnd($this->rightShift($single,52), gmp_init('7ff', 16)));
+        $exp = gmp_intval($this->bitwiseAnd($this->rightShift($single, 52), gmp_init('7ff', 16)));
         $mant = gmp_intval($this->bitwiseAnd($single, gmp_init('fffffffffffff', 16)));
-        $sign = gmp_intval($this->rightShift($single,63));
+        $sign = gmp_intval($this->rightShift($single, 63));
 
         if ($exp === 0) {
-            $val = $mant * pow(2, -(1022+52));
-        } else if ($exp !== 0b11111111111) {
-            $val = ($mant + (1 << 52)) * pow(2, $exp - (1023+52));
+            $val = $mant * pow(2, -(1022 + 52));
+        } elseif ($exp !== 0b11111111111) {
+            $val = ($mant + (1 << 52)) * pow(2, $exp - (1023 + 52));
         } else {
             $val = $mant === 0 ? INF : NAN;
         }

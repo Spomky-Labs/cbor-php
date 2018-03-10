@@ -38,9 +38,9 @@ final class SinglePrecisionFloatObject extends Base
         $mant = $single & 0x7fffff;
 
         if ($exp === 0) {
-            $val = $mant * pow(2, -(126+23));
-        } else if ($exp !== 0b11111111) {
-            $val = ($mant + (1 << 23)) * pow(2, $exp - (127+23));
+            $val = $mant * pow(2, -(126 + 23));
+        } elseif ($exp !== 0b11111111) {
+            $val = ($mant + (1 << 23)) * pow(2, $exp - (127 + 23));
         } else {
             $val = $mant === 0 ? INF : NAN;
         }

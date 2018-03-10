@@ -130,9 +130,9 @@ final class Decoder
     }
 
     /**
-     * @param \resource   $stream
-     * @param int         $mt
-     * @param bool        $breakable
+     * @param \resource $stream
+     * @param int       $mt
+     * @param bool      $breakable
      *
      * @return CBORObject
      */
