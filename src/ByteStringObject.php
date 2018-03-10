@@ -23,31 +23,39 @@ final class ByteStringObject implements CBORObject
     private $additionalInformation;
 
     /**
+     * @var null|string
+     */
+    private $length;
+
+    /**
      * @var null|mixed
      */
-    private $value;
+    private $data;
 
     /**
      * CBORObject constructor.
      *
-     * @param int    $additionalInformation
-     * @param string $value
+     * @param int         $additionalInformation
+     * @param string|null $length
+     * @param string      $data
      */
-    private function __construct(int $additionalInformation, string $value)
+    private function __construct(int $additionalInformation, ?string $length, string $data)
     {
         $this->additionalInformation = $additionalInformation;
-        $this->value = $value;
+        $this->length = $length;
+        $this->data = $data;
     }
 
     /**
-     * @param int    $additionalInformation
-     * @param string $value
+     * @param int         $additionalInformation
+     * @param string|null $length
+     * @param string      $data
      *
      * @return ByteStringObject
      */
-    public static function create(int $additionalInformation, string $value): self
+    public static function create(int $additionalInformation, ?string $length, string $data): self
     {
-        return new self($additionalInformation, $value);
+        return new self($additionalInformation, $length, $data);
     }
 
     /**
@@ -66,20 +74,25 @@ final class ByteStringObject implements CBORObject
         return $this->additionalInformation;
     }
 
+    public function getLength(): ?string
+    {
+        return $this->length;
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function getValue(): string
+    public function getData(): string
     {
-        return $this->value;
+        return $this->data;
     }
 
     /**
      * @return string
      */
-    public function getNormalizedValue(): string
+    public function getNormalizedData(): string
     {
-        return $this->value;
+        return $this->data;
     }
 
     /**
@@ -87,8 +100,11 @@ final class ByteStringObject implements CBORObject
      */
     public function __toString(): string
     {
-        $result = chr(0b01000000 | $this->additionalInformation);
-        $result .= $this->value;
+        $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
+        if (null !== $this->length) {
+            $result .= $this->length;
+        }
+        $result .= $this->data;
         if (0b00011111 === $this->additionalInformation) {
             $result .= hex2bin('FF');
         }

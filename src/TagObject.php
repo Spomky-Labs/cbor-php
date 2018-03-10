@@ -25,7 +25,7 @@ class TagObject implements CBORObject
     /**
      * @var null|string
      */
-    private $value;
+    private $data;
 
     /**
      * @var CBORObject
@@ -36,26 +36,26 @@ class TagObject implements CBORObject
      * CBORObject constructor.
      *
      * @param int         $additionalInformation
-     * @param null|string $value
+     * @param null|string $data
      * @param CBORObject  $object
      */
-    private function __construct(int $additionalInformation, ?string $value, CBORObject $object)
+    protected function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
         $this->additionalInformation = $additionalInformation;
-        $this->value = $value;
+        $this->data = $data;
         $this->object = $object;
     }
 
     /**
      * @param int         $additionalInformation
-     * @param null|string $value
+     * @param null|string $data
      * @param CBORObject  $object
      *
      * @return TagObject
      */
-    public static function create(int $additionalInformation, ?string $value, CBORObject $object): self
+    public static function create(int $additionalInformation, ?string $data, CBORObject $object): self
     {
-        return new self($additionalInformation, $value, $object);
+        return new self($additionalInformation, $data, $object);
     }
 
     /**
@@ -77,15 +77,7 @@ class TagObject implements CBORObject
     /**
      * {@inheritdoc}
      */
-    public function getValue(): CBORObject
-    {
-        return $this->object;
-    }
-
-    /**
-     * @return CBORObject
-     */
-    public function getObject(): CBORObject
+    public function getData(): CBORObject
     {
         return $this->object;
     }
@@ -93,9 +85,17 @@ class TagObject implements CBORObject
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedValue()
+    public function getLength(): ?string
     {
-        return $this->object->getNormalizedValue();
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNormalizedData()
+    {
+        return $this->object->getNormalizedData();
     }
 
     /**
@@ -103,9 +103,9 @@ class TagObject implements CBORObject
      */
     public function __toString(): string
     {
-        $result = chr(0b11000000 | $this->additionalInformation);
-        if (null !== $this->value) {
-            $result .= $this->value;
+        $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
+        if (null !== $this->data) {
+            $result .= $this->data;
         }
         $result .= $this->object->__toString();
 

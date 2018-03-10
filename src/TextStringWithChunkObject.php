@@ -16,38 +16,31 @@ namespace CBOR;
 final class TextStringWithChunkObject implements CBORObject
 {
     private const MAJOR_TYPE = 0b011;
-
-    /**
-     * @var int
-     */
-    private $additionalInformation;
+    private const ADDITIONAL_INFORMATION = 0b00011111;
 
     /**
      * @var TextStringObject[]
      */
-    private $value;
+    private $data;
 
     /**
      * CBORObject constructor.
      *
-     * @param int                $additionalInformation
-     * @param TextStringObject[] $value
+     * @param TextStringObject[] $data
      */
-    private function __construct(int $additionalInformation, array $value)
+    private function __construct(array $data)
     {
-        $this->additionalInformation = $additionalInformation;
-        $this->value = $value;
+        $this->data = $data;
     }
 
     /**
-     * @param int                $additionalInformation
-     * @param TextStringObject[] $value
+     * @param TextStringObject[] $data
      *
      * @return TextStringWithChunkObject
      */
-    public static function create(int $additionalInformation, array $value): self
+    public static function create(array $data): self
     {
-        return new self($additionalInformation, $value);
+        return new self($data);
     }
 
     /**
@@ -63,25 +56,30 @@ final class TextStringWithChunkObject implements CBORObject
      */
     public function getAdditionalInformation(): int
     {
-        return $this->additionalInformation;
+        return self::ADDITIONAL_INFORMATION;
+    }
+
+    public function getLength(): ?string
+    {
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getValue(): array
+    public function getData(): array
     {
-        return $this->value;
+        return $this->data;
     }
 
     /**
      * @return string
      */
-    public function getNormalizedValue(): string
+    public function getNormalizedData(): string
     {
         $result = '';
-        foreach ($this->value as $object) {
-            $result .= $object->getNormalizedValue();
+        foreach ($this->data as $object) {
+            $result .= $object->getNormalizedData();
         }
 
         return $result;
@@ -92,13 +90,11 @@ final class TextStringWithChunkObject implements CBORObject
      */
     public function __toString(): string
     {
-        $result = chr(0b01100000 | $this->additionalInformation);
-        foreach ($this->value as $object) {
+        $result = chr(self::MAJOR_TYPE << 5 | self::ADDITIONAL_INFORMATION);
+        foreach ($this->data as $object) {
             $result .= $object->__toString();
         }
-        if (0b00011111 === $this->additionalInformation) {
-            $result .= hex2bin('FF');
-        }
+        $result .= hex2bin('FF');
 
         return $result;
     }

@@ -25,42 +25,42 @@ final class MapObject implements CBORObject
     /**
      * @var MapItem[]
      */
-    private $objects;
+    private $data;
 
     /**
      * @var null|string
      */
-    private $value;
+    private $length;
 
     /**
      * CBORObject constructor.
      *
      * @param int         $additionalInformation
-     * @param null|string $value
-     * @param MapItem[]   $objects
+     * @param null|string $length
+     * @param MapItem[]   $data
      */
-    private function __construct(int $additionalInformation, ?string $value, array $objects)
+    private function __construct(int $additionalInformation, ?string $length, array $data)
     {
         $this->additionalInformation = $additionalInformation;
         array_map(function ($item) {
             if (!$item instanceof MapItem) {
                 throw new \InvalidArgumentException('The list must contain only MapItem.');
             }
-        }, $objects);
-        $this->objects = $objects;
-        $this->value = $value;
+        }, $data);
+        $this->data = $data;
+        $this->length = $length;
     }
 
     /**
      * @param int         $additionalInformation
-     * @param null|string $value
-     * @param MapItem[]   $objects
+     * @param null|string $length
+     * @param MapItem[]   $data
      *
      * @return MapObject
      */
-    public static function create(int $additionalInformation, ?string $value, array $objects): self
+    public static function create(int $additionalInformation, ?string $length, array $data): self
     {
-        return new self($additionalInformation, $value, $objects);
+        return new self($additionalInformation, $length, $data);
     }
 
     /**
@@ -82,27 +82,27 @@ final class MapObject implements CBORObject
     /**
      * {@inheritdoc}
      */
-    public function getValue(): ?string
+    public function getLength(): ?string
     {
-        return $this->value;
+        return $this->length;
     }
 
     /**
      * @return MapItem[]
      */
-    public function getObjects(): array
+    public function getData(): array
     {
-        return $this->objects;
+        return $this->data;
     }
 
     /**
      * @return array
      */
-    public function getNormalizedValue(): array
+    public function getNormalizedData(): array
     {
         $result = [];
-        foreach ($this->objects as $object) {
-            $result[$object->getKey()->getNormalizedValue()] = $object->getValue()->getNormalizedValue();
+        foreach ($this->data as $object) {
+            $result[$object->getKey()->getNormalizedData()] = $object->getValue()->getNormalizedData();
         }
 
         return $result;
@@ -113,8 +113,11 @@ final class MapObject implements CBORObject
      */
     public function __toString(): string
     {
-        $result = chr(0b10100000 | $this->additionalInformation);
-        foreach ($this->objects as $object) {
+        $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
+        if (null !== $this->length) {
+            $result .= $this->length;
+        }
+        foreach ($this->data as $object) {
             $result .= $object->getKey()->__toString();
             $result .= $object->getValue()->__toString();
         }

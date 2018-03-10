@@ -25,29 +25,29 @@ final class UnsignedIntegerObject implements CBORObject
     /**
      * @var null|mixed
      */
-    private $value;
+    private $data;
 
     /**
      * CBORObject constructor.
      *
      * @param int         $additionalInformation
-     * @param null|string $value
+     * @param null|string $data
      */
-    private function __construct(int $additionalInformation, ?string $value)
+    private function __construct(int $additionalInformation, ?string $data)
     {
         $this->additionalInformation = $additionalInformation;
-        $this->value = $value;
+        $this->data = $data;
     }
 
     /**
      * @param int         $additionalInformation
-     * @param null|string $value
+     * @param null|string $data
      *
      * @return UnsignedIntegerObject
      */
-    public static function create(int $additionalInformation, ?string $value): self
+    public static function create(int $additionalInformation, ?string $data): self
     {
-        return new self($additionalInformation, $value);
+        return new self($additionalInformation, $data);
     }
 
     /**
@@ -69,21 +69,29 @@ final class UnsignedIntegerObject implements CBORObject
     /**
      * {@inheritdoc}
      */
-    public function getValue()
+    public function getData()
     {
-        return $this->value;
+        return $this->data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLength(): ?string
+    {
+        return null;
     }
 
     /**
      * @return string
      */
-    public function getNormalizedValue(): string
+    public function getNormalizedData(): string
     {
-        if (null === $this->value) {
+        if (null === $this->data) {
             return strval($this->additionalInformation);
         }
 
-        return gmp_strval(gmp_init(bin2hex($this->value), 16), 10);
+        return gmp_strval(gmp_init(bin2hex($this->data), 16), 10);
     }
 
     /**
@@ -91,9 +99,9 @@ final class UnsignedIntegerObject implements CBORObject
      */
     public function __toString(): string
     {
-        $result = chr(0b00000000 | $this->additionalInformation);
-        if (null !== $this->value) {
-            $result .= $this->value;
+        $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
+        if (null !== $this->data) {
+            $result .= $this->data;
         }
 
         return $result;

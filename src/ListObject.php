@@ -25,41 +25,42 @@ final class ListObject implements CBORObject
     /**
      * @var CBORObject[]
      */
-    private $objects;
+    private $data;
 
     /**
      * @var null|string
      */
-    private $value;
+    private $length;
 
     /**
      * CBORObject constructor.
      *
      * @param int          $additionalInformation
-     * @param CBORObject[] $objects
+     * @param null|string  $length
+     * @param CBORObject[] $data
      */
-    private function __construct(int $additionalInformation, ?string $value, array $objects)
+    private function __construct(int $additionalInformation, ?string $length, array $data)
     {
         $this->additionalInformation = $additionalInformation;
         array_map(function ($item) {
             if (!$item instanceof CBORObject) {
                 throw new \InvalidArgumentException('The list must contain only CBORObjects.');
             }
-        }, $objects);
-        $this->objects = $objects;
-        $this->value = $value;
+        }, $data);
+        $this->data = $data;
+        $this->length = $length;
     }
 
     /**
      * @param int          $additionalInformation
-     * @param null|string  $value
-     * @param CBORObject[] $objects
+     * @param null|string  $length
+     * @param CBORObject[] $data
      *
      * @return ListObject
      */
-    public static function create(int $additionalInformation, ?string $value, array $objects): self
+    public static function create(int $additionalInformation, ?string $length, array $data): self
     {
-        return new self($additionalInformation, $value, $objects);
+        return new self($additionalInformation, $length, $data);
     }
 
     /**
@@ -81,27 +82,27 @@ final class ListObject implements CBORObject
     /**
      * {@inheritdoc}
      */
-    public function getValue(): ?string
+    public function getLength(): ?string
     {
-        return $this->value;
+        return $this->length;
     }
 
     /**
      * @return CBORObject[]
      */
-    public function getObjects(): array
+    public function getData(): array
     {
-        return $this->objects;
+        return $this->data;
     }
 
     /**
      * @return array
      */
-    public function getNormalizedValue(): array
+    public function getNormalizedData(): array
     {
         return array_map(function (CBORObject $item) {
-            return $item->getNormalizedValue();
-        }, $this->objects);
+            return $item->getNormalizedData();
+        }, $this->data);
     }
 
     /**
@@ -109,11 +110,11 @@ final class ListObject implements CBORObject
      */
     public function __toString(): string
     {
-        $result = chr(0b10000000 | $this->additionalInformation);
-        if (null !== $this->value) {
-            $result .= $this->value;
+        $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
+        if (null !== $this->length) {
+            $result .= $this->length;
         }
-        foreach ($this->objects as $object) {
+        foreach ($this->data as $object) {
             $result .= $object->__toString();
         }
         if (0b00011111 === $this->additionalInformation) {

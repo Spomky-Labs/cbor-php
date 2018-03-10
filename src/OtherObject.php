@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class OtherObject implements CBORObject
+class OtherObject implements CBORObject
 {
     private const MAJOR_TYPE = 0b111;
 
@@ -25,29 +25,29 @@ final class OtherObject implements CBORObject
     /**
      * @var null|string
      */
-    private $value;
+    private $data;
 
     /**
      * CBORObject constructor.
      *
      * @param int         $additionalInformation
-     * @param null|string $value
+     * @param null|string $data
      */
-    private function __construct(int $additionalInformation, ?string $value)
+    protected function __construct(int $additionalInformation, ?string $data)
     {
         $this->additionalInformation = $additionalInformation;
-        $this->value = $value;
+        $this->data = $data;
     }
 
     /**
      * @param int         $additionalInformation
-     * @param null|string $value
+     * @param null|string $data
      *
      * @return OtherObject
      */
-    public static function create(int $additionalInformation, ?string $value): self
+    public static function create(int $additionalInformation, ?string $data): self
     {
-        return new self($additionalInformation, $value);
+        return new self($additionalInformation, $data);
     }
 
     /**
@@ -69,17 +69,25 @@ final class OtherObject implements CBORObject
     /**
      * {@inheritdoc}
      */
-    public function getValue(): ?string
+    public function getData(): ?string
     {
-        return $this->value;
+        return $this->data;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedValue(): ?string
+    public function getLength(): ?string
     {
-        return $this->value;
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNormalizedData()
+    {
+        return $this->data;
     }
 
     /**
@@ -87,9 +95,9 @@ final class OtherObject implements CBORObject
      */
     public function __toString(): string
     {
-        $result = chr(0b11100000 | $this->additionalInformation);
-        if (null !== $this->value) {
-            $result .= $this->value;
+        $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
+        if (null !== $this->data) {
+            $result .= $this->data;
         }
 
         return $result;

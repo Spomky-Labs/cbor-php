@@ -26,14 +26,19 @@ interface CBORObject
     public function getAdditionalInformation(): int;
 
     /**
-     * @return mixed|null
+     * @return null|string
      */
-    public function getValue();
+    public function getLength(): ?string;
 
     /**
      * @return mixed|null
      */
-    public function getNormalizedValue();
+    public function getData();
+
+    /**
+     * @return mixed|null
+     */
+    public function getNormalizedData();
 
     /**
      * @return string

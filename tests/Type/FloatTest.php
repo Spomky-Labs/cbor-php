@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR\Test\Type;
 
-use CBOR\Decoder;
-use PHPUnit\Framework\TestCase;
-
-final class FloatTest extends TestCase
+final class FloatTest extends BaseTestCase
 {
     /**
      * @test
@@ -30,9 +27,7 @@ final class FloatTest extends TestCase
         fwrite($stream, hex2bin($data));
         rewind($stream);
 
-        $decoder = new Decoder($stream);
-        $object = $decoder->decode();
-        dump($object, $object->getNormalizedValue());
+        $object = $this->getDecoder()->decode($stream);
         self::assertEquals($data, bin2hex($object->__toString()));
     }
 
