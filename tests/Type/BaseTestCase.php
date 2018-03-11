@@ -49,6 +49,13 @@ class BaseTestCase extends TestCase
             $tagObjectManager = new TagObjectManager();
             $tagObjectManager->add(0, Tag\EpochTagObject::class);
             $tagObjectManager->add(1, Tag\TimestampTagObject::class);
+            $tagObjectManager->add(2, Tag\PositiveBigIntegerObject::class);
+            $tagObjectManager->add(3, Tag\NegativeBigIntegerObject::class);
+            $tagObjectManager->add(4, Tag\DecimalFractionObject::class);
+            $tagObjectManager->add(5, Tag\BigFloatObject::class);
+            $tagObjectManager->add(21, Tag\Base64UrlEncodingObject::class);
+            $tagObjectManager->add(22, Tag\Base64EncodingObject::class);
+            $tagObjectManager->add(23, Tag\Base16EncodingObject::class);
 
             $this->decoder = new Decoder(
                 $tagObjectManager,

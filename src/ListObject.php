@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class ListObject implements CBORObject
+final class ListObject implements CBORObject, \Countable
 {
     private const MAJOR_TYPE = 0b100;
 
@@ -80,6 +80,20 @@ final class ListObject implements CBORObject
     }
 
     /**
+     * @param int $index
+     *
+     * @return CBORObject
+     */
+    public function get(int $index): CBORObject
+    {
+        if (!array_key_exists($index, $this->data)) {
+            throw new \InvalidArgumentException('Index not found.');
+        }
+
+        return $this->data[$index];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getLength(): ?string
@@ -103,6 +117,14 @@ final class ListObject implements CBORObject
         return array_map(function (CBORObject $item) {
             return $item->getNormalizedData();
         }, $this->data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return count($this->data);
     }
 
     /**

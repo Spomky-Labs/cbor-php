@@ -28,6 +28,7 @@ final class OtherTest extends BaseTestCase
         rewind($stream);
 
         $object = $this->getDecoder()->decode($stream);
+        $object->getNormalizedData();
         self::assertEquals($data, bin2hex($object->__toString()));
     }
 

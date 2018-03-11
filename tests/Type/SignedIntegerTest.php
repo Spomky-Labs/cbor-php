@@ -28,6 +28,7 @@ final class SignedIntegerTest extends BaseTestCase
         rewind($stream);
 
         $object = $this->getDecoder()->decode($stream);
+        $object->getNormalizedData();
         self::assertEquals($data, bin2hex($object->__toString()));
     }
 
@@ -45,6 +46,10 @@ final class SignedIntegerTest extends BaseTestCase
                 '3863',
             ], [
                 '3903e7',
+            ], [
+                'c349010000000000000000',
+            ], [
+                '3bffffffffffffffff',
             ],
         ];
     }

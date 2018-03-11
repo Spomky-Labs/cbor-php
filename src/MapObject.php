@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class MapObject implements CBORObject
+final class MapObject implements CBORObject, \Countable
 {
     private const MAJOR_TYPE = 0b101;
 
@@ -85,6 +85,14 @@ final class MapObject implements CBORObject
     public function getLength(): ?string
     {
         return $this->length;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return count($this->data);
     }
 
     /**
