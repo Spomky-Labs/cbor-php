@@ -55,8 +55,9 @@ class TagObjectManager
         if ($additionalInformation >= 24) {
             $value = gmp_intval(gmp_init(bin2hex($data), 16));
         }
+        /** @var TagObject $class */
         $class = $this->getClassForValue($value);
 
-        return $class::create($additionalInformation, $data, $object);
+        return $class::createFromLoadedData($additionalInformation, $data, $object);
     }
 }

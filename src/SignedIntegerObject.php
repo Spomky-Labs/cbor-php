@@ -45,7 +45,7 @@ final class SignedIntegerObject implements CBORObject
      *
      * @return SignedIntegerObject
      */
-    public static function create(int $additionalInformation, ?string $data): self
+    public static function createObjectForValue(int $additionalInformation, ?string $data): self
     {
         return new self($additionalInformation, $data);
     }

@@ -45,7 +45,7 @@ final class UnsignedIntegerObject implements CBORObject
      *
      * @return UnsignedIntegerObject
      */
-    public static function create(int $additionalInformation, ?string $data): self
+    public static function createObjectForValue(int $additionalInformation, ?string $data): self
     {
         return new self($additionalInformation, $data);
     }

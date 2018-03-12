@@ -53,7 +53,7 @@ class TagObject implements CBORObject
      *
      * @return TagObject
      */
-    public static function create(int $additionalInformation, ?string $data, CBORObject $object): self
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): self
     {
         return new self($additionalInformation, $data, $object);
     }

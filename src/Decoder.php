@@ -93,19 +93,19 @@ final class Decoder
         switch ($mt) {
             // case 0, 1, 7 do not have content; just use val
             case 0b000: //0
-                return UnsignedIntegerObject::create($ai, $val);
+                return UnsignedIntegerObject::createObjectForValue($ai, $val);
             case 0b001: //1
-                return SignedIntegerObject::create($ai, $val);
+                return SignedIntegerObject::createObjectForValue($ai, $val);
             case 0b111: //7
                 return $this->otherTypeManager->createObjectForValue($ai, $val);
             case 0b010: //2
                 $length = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
 
-                return ByteStringObject::create($ai, $val, $this->take($stream, $length));
+                return ByteStringObject::createFromLoadedData($ai, $val, $this->take($stream, $length));
             case 0b011: //3
                 $length = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
 
-                return TextStringObject::create($ai, $val, $this->take($stream, $length));
+                return TextStringObject::createFromLoadedData($ai, $val, $this->take($stream, $length));
             case 0b100: //4
                 $list = [];
                 $nbItems = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
@@ -113,7 +113,7 @@ final class Decoder
                     $list[] = $this->process($stream);
                 }
 
-                return ListObject::create($ai, $val, $list);
+                return ListObject::createObjectForValue($ai, $val, $list);
             case 0b101: //5
                 $list = [];
                 $nbItems = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
@@ -121,7 +121,7 @@ final class Decoder
                     $list[] = MapItem::create($this->process($stream), $this->process($stream));
                 }
 
-                return MapObject::create($ai, $val, $list);
+                return MapObject::createObjectForValue($ai, $val, $list);
             case 0b110: //6
                 return $this->tagObjectManager->createObjectForValue($ai, $val, $this->process($stream));
             default:
@@ -148,7 +148,7 @@ final class Decoder
                     $val[] = $it;
                 }
 
-                return ByteStringWithChunkObject::create($val);
+                return ByteStringWithChunkObject::createFromLoadedData($val);
             case 0b011: //3
                 $val = [];
                 while ($it = $this->process($stream, true)) {
@@ -158,7 +158,7 @@ final class Decoder
                     $val[] = $it;
                 }
 
-                return TextStringWithChunkObject::create($val);
+                return TextStringWithChunkObject::createFromLoadedData($val);
             case 0b100: //4
                 $val = [];
                 while ($it = $this->process($stream, true)) {
@@ -168,7 +168,7 @@ final class Decoder
                     $val[] = $it;
                 }
 
-                return ListObject::create(0b00011111, null, $val);
+                return ListObject::createObjectForValue(0b00011111, null, $val);
             case 0b101: //5
                 $val = [];
                 while ($it = $this->process($stream, true)) {
@@ -178,7 +178,7 @@ final class Decoder
                     $val[] = MapItem::create($it, $this->process($stream));
                 }
 
-                return MapObject::create(0b00011111, null, $val);
+                return MapObject::createObjectForValue(0b00011111, null, $val);
             case 0b111: //7
                 if ($breakable) {
                     return $this->otherTypeManager->createObjectForValue(0b00011111, null);

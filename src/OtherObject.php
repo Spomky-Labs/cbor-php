@@ -45,7 +45,7 @@ class OtherObject implements CBORObject
      *
      * @return OtherObject
      */
-    public static function create(int $additionalInformation, ?string $data): self
+    public static function createFromLoadedData(int $additionalInformation, ?string $data): self
     {
         return new self($additionalInformation, $data);
     }

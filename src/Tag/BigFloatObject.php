@@ -24,7 +24,7 @@ final class BigFloatObject extends Base
     /**
      * {@inheritdoc}
      */
-    public static function create(int $additionalInformation, ?string $data, CBORObject $object): Base
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);
     }

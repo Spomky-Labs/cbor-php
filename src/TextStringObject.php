@@ -53,8 +53,20 @@ final class TextStringObject implements CBORObject
      *
      * @return TextStringObject
      */
-    public static function create(int $additionalInformation, ?string $length, string $data): self
+    public static function createFromLoadedData(int $additionalInformation, ?string $length, string $data): self
     {
+        return new self($additionalInformation, $length, $data);
+    }
+
+    /**
+     * @param string $data
+     *
+     * @return TextStringObject
+     */
+    public static function create(string $data): self
+    {
+        list($additionalInformation, $length) = LengthCalculator::getLengthOfString($data);
+
         return new self($additionalInformation, $length, $data);
     }
 

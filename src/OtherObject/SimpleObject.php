@@ -23,7 +23,7 @@ final class SimpleObject extends Base
      *
      * @return SimpleObject
      */
-    public static function create(int $additionalInformation, ?string $data): Base
+    public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {
         return new self($additionalInformation, $data);
     }

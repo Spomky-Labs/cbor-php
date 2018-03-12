@@ -58,8 +58,20 @@ final class ListObject implements CBORObject, \Countable
      *
      * @return ListObject
      */
-    public static function create(int $additionalInformation, ?string $length, array $data): self
+    public static function createObjectForValue(int $additionalInformation, ?string $length, array $data): self
     {
+        return new self($additionalInformation, $length, $data);
+    }
+
+    /**
+     * @param CBORObject[] $data
+     *
+     * @return ListObject
+     */
+    public static function create(array $data): self
+    {
+        list($additionalInformation, $length) = LengthCalculator::getLengthOfArray($data);
+
         return new self($additionalInformation, $length, $data);
     }
 

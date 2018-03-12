@@ -28,12 +28,12 @@ final class ByteStringObject implements CBORObject
     private $length;
 
     /**
-     * @var null|mixed
+     * @var string
      */
     private $data;
 
     /**
-     * CBORObject constructor.
+     * ByteStringObject constructor.
      *
      * @param int         $additionalInformation
      * @param string|null $length
@@ -53,8 +53,20 @@ final class ByteStringObject implements CBORObject
      *
      * @return ByteStringObject
      */
-    public static function create(int $additionalInformation, ?string $length, string $data): self
+    public static function createFromLoadedData(int $additionalInformation, ?string $length, string $data): self
     {
+        return new self($additionalInformation, $length, $data);
+    }
+
+    /**
+     * @param string $data
+     *
+     * @return ByteStringObject
+     */
+    public static function create(string $data): self
+    {
+        list($additionalInformation, $length) = LengthCalculator::getLengthOfString($data);
+
         return new self($additionalInformation, $length, $data);
     }
 

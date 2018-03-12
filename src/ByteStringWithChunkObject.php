@@ -38,9 +38,29 @@ final class ByteStringWithChunkObject implements CBORObject
      *
      * @return ByteStringWithChunkObject
      */
-    public static function create(array $data): self
+    public static function createFromLoadedData(array $data): self
     {
         return new self($data);
+    }
+
+    /**
+     * @param string $data
+     *
+     * @return ByteStringWithChunkObject
+     */
+    public static function create(string $data): self
+    {
+        return new self(
+            [ByteStringObject::create($data)]
+        );
+    }
+
+    /**
+     * @param ByteStringObject $chunk
+     */
+    public function addChunk(ByteStringObject $chunk)
+    {
+        $this->data[] = $chunk;
     }
 
     /**

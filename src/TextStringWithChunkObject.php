@@ -38,9 +38,29 @@ final class TextStringWithChunkObject implements CBORObject
      *
      * @return TextStringWithChunkObject
      */
-    public static function create(array $data): self
+    public static function createFromLoadedData(array $data): self
     {
         return new self($data);
+    }
+
+    /**
+     * @param string $data
+     *
+     * @return TextStringWithChunkObject
+     */
+    public static function create(string $data): self
+    {
+        return new self(
+            [TextStringObject::create($data)]
+        );
+    }
+
+    /**
+     * @param TextStringObject $chunk
+     */
+    public function addChunk(TextStringObject $chunk)
+    {
+        $this->data[] = $chunk;
     }
 
     /**
