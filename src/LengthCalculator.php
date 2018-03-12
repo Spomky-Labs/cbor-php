@@ -26,6 +26,7 @@ final class LengthCalculator
 
         return self::computeLength($length);
     }
+
     /**
      * @param array $data
      *
