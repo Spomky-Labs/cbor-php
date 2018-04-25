@@ -21,7 +21,7 @@ final class HalfPrecisionFloatObject extends Base
      * @param int         $additionalInformation
      * @param null|string $data
      *
-     * @return FalseObject
+     * @return HalfPrecisionFloatObject
      */
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {

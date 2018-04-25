@@ -21,7 +21,7 @@ final class DoublePrecisionFloatObject extends Base
      * @param int         $additionalInformation
      * @param null|string $data
      *
-     * @return FalseObject
+     * @return DoublePrecisionFloatObject
      */
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {

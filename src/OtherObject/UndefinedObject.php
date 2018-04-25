@@ -21,7 +21,7 @@ final class UndefinedObject extends Base
      * @param int         $additionalInformation
      * @param null|string $data
      *
-     * @return NullObject
+     * @return UndefinedObject
      */
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {

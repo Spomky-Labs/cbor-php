@@ -23,10 +23,7 @@ final class FloatTest extends BaseTestCase
      */
     public function aFloatCanBeParsed(string $data)
     {
-        $stream = fopen('php://memory', 'r+');
-        fwrite($stream, hex2bin($data));
-        rewind($stream);
-
+        $stream = new StringStream(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         $object->getNormalizedData();
         self::assertEquals($data, bin2hex($object->__toString()));

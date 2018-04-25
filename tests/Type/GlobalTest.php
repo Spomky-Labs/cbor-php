@@ -23,10 +23,7 @@ final class GlobalTest extends BaseTestCase
      */
     public function aSignedIntegerCanBeParsed(string $data)
     {
-        $stream = fopen('php://memory', 'r+');
-        fwrite($stream, hex2bin($data));
-        rewind($stream);
-
+        $stream = new StringStream(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         $object->getNormalizedData();
         //dump($object->getNormalizedData());

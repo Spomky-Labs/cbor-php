@@ -21,7 +21,7 @@ final class SimpleValueObject extends Base
      * @param int         $additionalInformation
      * @param null|string $data
      *
-     * @return TrueObject
+     * @return SimpleValueObject
      */
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {

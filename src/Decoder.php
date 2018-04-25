@@ -41,24 +41,24 @@ final class Decoder
     }
 
     /**
-     * @param \resource $stream
+     * @param Stream $stream
      *
      * @return CBORObject
      */
-    public function decode($stream): CBORObject
+    public function decode(Stream $stream): CBORObject
     {
         return $this->process($stream);
     }
 
     /**
-     * @param \resource $stream
-     * @param bool      $breakable
+     * @param Stream $stream
+     * @param bool   $breakable
      *
      * @return CBORObject
      */
-    private function process($stream, bool $breakable = false): CBORObject
+    private function process(Stream $stream, bool $breakable = false): CBORObject
     {
-        $ib = ord($this->take($stream, 1));
+        $ib = ord($stream->read(1));
         $mt = $ib >> 5;
         $ai = $ib & 0b00011111;
         $val = null;
@@ -67,7 +67,7 @@ final class Decoder
             case 0b00011001: //25
             case 0b00011010: //26
             case 0b00011011: //27
-                $val = $this->take($stream, pow($ai - 0b00011000 + 1, 2));
+                $val = $stream->read(pow(2, $ai & 0b00000111));
                 break;
             case 0b00011100: //28
             case 0b00011101: //29
@@ -81,14 +81,14 @@ final class Decoder
     }
 
     /**
-     * @param \resource   $stream
+     * @param Stream      $stream
      * @param int         $mt
      * @param int         $ai
      * @param null|string $val
      *
      * @return CBORObject
      */
-    private function processFinite($stream, int $mt, int $ai, ?string $val): CBORObject
+    private function processFinite(Stream $stream, int $mt, int $ai, ?string $val): CBORObject
     {
         switch ($mt) {
             // case 0, 1, 7 do not have content; just use val
@@ -96,16 +96,14 @@ final class Decoder
                 return UnsignedIntegerObject::createObjectForValue($ai, $val);
             case 0b001: //1
                 return SignedIntegerObject::createObjectForValue($ai, $val);
-            case 0b111: //7
-                return $this->otherTypeManager->createObjectForValue($ai, $val);
             case 0b010: //2
                 $length = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
 
-                return ByteStringObject::createFromLoadedData($ai, $val, $this->take($stream, $length));
+                return ByteStringObject::createFromLoadedData($ai, $val, $stream->read($length));
             case 0b011: //3
                 $length = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
 
-                return TextStringObject::createFromLoadedData($ai, $val, $this->take($stream, $length));
+                return TextStringObject::createFromLoadedData($ai, $val, $stream->read($length));
             case 0b100: //4
                 $list = [];
                 $nbItems = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
@@ -124,19 +122,21 @@ final class Decoder
                 return MapObject::createObjectForValue($ai, $val, $list);
             case 0b110: //6
                 return $this->tagObjectManager->createObjectForValue($ai, $val, $this->process($stream));
+            case 0b111: //7
+                return $this->otherTypeManager->createObjectForValue($ai, $val);
             default:
                 throw new \RuntimeException('Unsupported major type'); // Should never append
         }
     }
 
     /**
-     * @param \resource $stream
-     * @param int       $mt
-     * @param bool      $breakable
+     * @param Stream $stream
+     * @param int    $mt
+     * @param bool   $breakable
      *
      * @return CBORObject
      */
-    private function processInfinite($stream, int $mt, bool $breakable): CBORObject
+    private function processInfinite(Stream $stream, int $mt, bool $breakable): CBORObject
     {
         switch ($mt) {
             case 0b010: //2
@@ -188,27 +188,6 @@ final class Decoder
             default:
                 throw new \InvalidArgumentException('Cannot stream the data');
         }
-    }
-
-    /**
-     * @param \resource $stream
-     * @param int       $length
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
-     */
-    private function take($stream, int $length): string
-    {
-        if (0 === $length) {
-            return '';
-        }
-        $data = fread($stream, $length);
-        if (!is_string($data)) {
-            throw new \InvalidArgumentException('Cannot stream the data');
-        }
-
-        return $data;
     }
 
     /**
