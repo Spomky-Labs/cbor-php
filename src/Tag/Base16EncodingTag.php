@@ -33,7 +33,7 @@ final class Base16EncodingTag extends Base
     /**
      * {@inheritdoc}
      */
-    static public function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Base
     {
         if (!$object instanceof ByteStringObject && !$object instanceof ByteStringWithChunkObject && !$object instanceof TextStringObject && !$object instanceof TextStringWithChunkObject) {
             throw new \InvalidArgumentException('This tag only accepts Byte String, Infinite Byte String, Text String or Infinite Text String objects.');

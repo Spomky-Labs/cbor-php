@@ -32,7 +32,7 @@ final class DecimalFractionTag extends Base
     /**
      * {@inheritdoc}
      */
-    static public function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Base
     {
         if (!$object instanceof ListObject || count($object) !== 2) {
             throw new \InvalidArgumentException('This tag only accepts a ListObject object that contains an exponent and a mantissa.');
@@ -55,7 +55,7 @@ final class DecimalFractionTag extends Base
      *
      * @return Base
      */
-    static public function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Base
+    public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Base
     {
         $object = ListObject::create([$e, $m]);
 

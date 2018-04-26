@@ -29,7 +29,7 @@ final class EpochTag extends Base
     /**
      * {@inheritdoc}
      */
-    static public function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Base
     {
         return new self(0, null, $object);
     }
