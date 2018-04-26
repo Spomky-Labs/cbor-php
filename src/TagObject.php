@@ -47,7 +47,7 @@ class TagObject implements CBORObject
     }
 
     /**
-     * @param CBORObject  $object
+     * @param CBORObject $object
      *
      * @return TagObject
      */

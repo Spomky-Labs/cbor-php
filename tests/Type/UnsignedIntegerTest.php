@@ -26,7 +26,7 @@ final class UnsignedIntegerTest extends BaseTestCase
     {
         $stream = new StringStream(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
-        self::assertEquals($data, bin2hex((string)$object));
+        self::assertEquals($data, bin2hex((string) $object));
         self::assertEquals($expected_normalized_data, $object->getNormalizedData());
     }
 

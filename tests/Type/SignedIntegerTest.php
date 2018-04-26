@@ -27,7 +27,7 @@ final class SignedIntegerTest extends BaseTestCase
         $stream = new StringStream(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         $object->getNormalizedData();
-        self::assertEquals($data, bin2hex((string)$object));
+        self::assertEquals($data, bin2hex((string) $object));
         self::assertEquals($expected_normalized_data, $object->getNormalizedData());
     }
 

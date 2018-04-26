@@ -33,7 +33,7 @@ final class TimestampTag extends Base
     /**
      * {@inheritdoc}
      */
-    static public function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Base
     {
         if (!$object instanceof UnsignedIntegerObject && !$object instanceof HalfPrecisionFloatObject && !$object instanceof SinglePrecisionFloatObject && !$object instanceof DoublePrecisionFloatObject) {
             throw new \InvalidArgumentException('This tag only accepts a Byte String object.');

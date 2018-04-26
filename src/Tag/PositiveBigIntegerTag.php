@@ -30,7 +30,7 @@ final class PositiveBigIntegerTag extends Base
     /**
      * {@inheritdoc}
      */
-    static public function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Base
     {
         if (!$object instanceof ByteStringObject) {
             throw new \InvalidArgumentException('This tag only accepts a Byte String object.');

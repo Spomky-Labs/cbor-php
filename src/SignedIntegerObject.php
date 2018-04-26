@@ -61,7 +61,7 @@ final class SignedIntegerObject implements CBORObject
             throw new \InvalidArgumentException('The value must be a negative integer.');
         }
 
-        $computed_value = -1-$value;
+        $computed_value = -1 - $value;
         $result = gmp_init($computed_value);
 
         switch (true) {
@@ -69,15 +69,15 @@ final class SignedIntegerObject implements CBORObject
                 $ai = $computed_value;
                 $data = null;
                 break;
-            case gmp_cmp($result, gmp_init('FF', 16)) < 0 :
+            case gmp_cmp($result, gmp_init('FF', 16)) < 0:
                 $ai = 24;
                 $data = hex2bin(str_pad(gmp_strval($result, 16), 2, '0', STR_PAD_LEFT));
                 break;
-            case gmp_cmp($result, gmp_init('FFFF', 16)) < 0 :
+            case gmp_cmp($result, gmp_init('FFFF', 16)) < 0:
                 $ai = 25;
                 $data = hex2bin(str_pad(gmp_strval($result, 16), 4, '0', STR_PAD_LEFT));
                 break;
-            case gmp_cmp($result, gmp_init('FFFFFFFF', 16)) < 0 :
+            case gmp_cmp($result, gmp_init('FFFFFFFF', 16)) < 0:
                 $ai = 26;
                 $data = hex2bin(str_pad(gmp_strval($result, 16), 8, '0', STR_PAD_LEFT));
                 break;

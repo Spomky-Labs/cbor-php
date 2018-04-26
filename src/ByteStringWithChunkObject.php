@@ -30,7 +30,7 @@ final class ByteStringWithChunkObject implements CBORObject
      */
     private function __construct(array $data)
     {
-        array_map(function($obj) {
+        array_map(function ($obj) {
             if (!$obj instanceof ByteStringObject) {
                 throw new \InvalidArgumentException('The data must be an array of ByteStringObject objects.');
             }
