@@ -51,6 +51,51 @@ final class UnsignedIntegerObject implements CBORObject
     }
 
     /**
+     * @param int $value
+     *
+     * @return UnsignedIntegerObject
+     */
+    public static function create(int $value): self
+    {
+        return self::createFromGmpValue(gmp_init($value));
+    }
+
+    /**
+     * @param \GMP $value
+     *
+     * @return UnsignedIntegerObject
+     */
+    public static function createFromGmpValue(\GMP $value): self
+    {
+        if (gmp_cmp($value, gmp_init(0)) < 0) {
+            throw new \InvalidArgumentException('The value must be a positive integer.');
+        }
+
+        switch (true) {
+            case gmp_cmp($value, gmp_init(24)) < 0:
+                $ai = gmp_intval($value);
+                $data = null;
+                break;
+            case gmp_cmp($value, gmp_init('FF', 16)) < 0 :
+                $ai = 24;
+                $data = hex2bin(str_pad(gmp_strval($value, 16), 2, '0', STR_PAD_LEFT));
+                break;
+            case gmp_cmp($value, gmp_init('FFFF', 16)) < 0 :
+                $ai = 25;
+                $data = hex2bin(str_pad(gmp_strval($value, 16), 4, '0', STR_PAD_LEFT));
+                break;
+            case gmp_cmp($value, gmp_init('FFFFFFFF', 16)) < 0 :
+                $ai = 26;
+                $data = hex2bin(str_pad(gmp_strval($value, 16), 8, '0', STR_PAD_LEFT));
+                break;
+            default:
+                throw new \InvalidArgumentException('Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.');
+        }
+
+        return new self($ai, $data);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getMajorType(): int

@@ -29,6 +29,14 @@ final class FalseObject extends Base
     }
 
     /**
+     * @return FalseObject
+     */
+    public static function create(): Base
+    {
+        return new self(20, null);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getNormalizedData(): bool

@@ -20,7 +20,7 @@ use CBOR\TagObject as Base;
 use CBOR\TextStringObject;
 use CBOR\TextStringWithChunkObject;
 
-final class Base64EncodingObject extends Base
+final class Base16EncodingTag extends Base
 {
     /**
      * {@inheritdoc}
@@ -33,6 +33,18 @@ final class Base64EncodingObject extends Base
     /**
      * {@inheritdoc}
      */
+    static public function create(CBORObject $object): Base
+    {
+        if (!$object instanceof ByteStringObject && !$object instanceof ByteStringWithChunkObject && !$object instanceof TextStringObject && !$object instanceof TextStringWithChunkObject) {
+            throw new \InvalidArgumentException('This tag only accepts Byte String, Infinite Byte String, Text String or Infinite Text String objects.');
+        }
+
+        return new self(23, null, $object);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getNormalizedData()
     {
         $object = $this->getData();
@@ -40,6 +52,6 @@ final class Base64EncodingObject extends Base
             return $object->getNormalizedData();
         }
 
-        return base64_decode($object->getNormalizedData());
+        return bin2hex($object->getNormalizedData());
     }
 }

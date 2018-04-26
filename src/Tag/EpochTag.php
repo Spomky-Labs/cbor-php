@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace CBOR\Tag;
 
-use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\TagObject as Base;
 
-final class NegativeBigIntegerObject extends Base
+final class EpochTag extends Base
 {
     /**
      * {@inheritdoc}
@@ -30,15 +29,16 @@ final class NegativeBigIntegerObject extends Base
     /**
      * {@inheritdoc}
      */
+    static public function create(CBORObject $object): Base
+    {
+        return new self(0, null, $object);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getNormalizedData()
     {
-        $object = $this->getData();
-        if (!$object instanceof ByteStringObject) {
-            return $this->getData()->getNormalizedData();
-        }
-        $integer = gmp_init(bin2hex($object->getData()), 16);
-        $minusOne = gmp_init('-1', 10);
-
-        return gmp_sub($minusOne, $integer);
+        return \DateTimeImmutable::createFromFormat(DATE_RFC3339, $this->getData()->getNormalizedData());
     }
 }

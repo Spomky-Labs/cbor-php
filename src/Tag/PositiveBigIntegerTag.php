@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace CBOR\Tag;
 
+use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\TagObject as Base;
 
-final class EpochTagObject extends Base
+final class PositiveBigIntegerTag extends Base
 {
     /**
      * {@inheritdoc}
@@ -29,8 +30,25 @@ final class EpochTagObject extends Base
     /**
      * {@inheritdoc}
      */
+    static public function create(CBORObject $object): Base
+    {
+        if (!$object instanceof ByteStringObject) {
+            throw new \InvalidArgumentException('This tag only accepts a Byte String object.');
+        }
+
+        return new self(2, null, $object);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getNormalizedData()
     {
-        return \DateTimeImmutable::createFromFormat(DATE_RFC3339, $this->getData()->getNormalizedData());
+        $object = $this->getData();
+        if (!$object instanceof ByteStringObject) {
+            return $this->getData()->getNormalizedData();
+        }
+
+        return gmp_strval(gmp_init(bin2hex($object->getData()), 16), 10);
     }
 }

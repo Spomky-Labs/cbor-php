@@ -20,13 +20,15 @@ final class SignedIntegerTest extends BaseTestCase
      * @dataProvider getDataSet
      *
      * @param string $data
+     * @param string $expected_normalized_data
      */
-    public function anUnsignedIntegerCanBeEncodedAndDecoded(string $data)
+    public function anUnsignedIntegerCanBeEncodedAndDecoded(string $data, string $expected_normalized_data)
     {
         $stream = new StringStream(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         $object->getNormalizedData();
-        self::assertEquals($data, bin2hex($object->__toString()));
+        self::assertEquals($data, bin2hex((string)$object));
+        self::assertEquals($expected_normalized_data, $object->getNormalizedData());
     }
 
     /**
@@ -37,16 +39,22 @@ final class SignedIntegerTest extends BaseTestCase
         return [
             [
                 '20',
+                '-1',
             ], [
                 '29',
+                '-10',
             ], [
                 '3863',
+                '-100',
             ], [
                 '3903e7',
+                '-1000',
             ], [
                 'c349010000000000000000',
+                '-18446744073709551617',
             ], [
                 '3bffffffffffffffff',
+                '-18446744073709551616',
             ],
         ];
     }

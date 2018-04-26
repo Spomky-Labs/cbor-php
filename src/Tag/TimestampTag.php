@@ -20,7 +20,7 @@ use CBOR\OtherObject\SinglePrecisionFloatObject;
 use CBOR\TagObject as Base;
 use CBOR\UnsignedIntegerObject;
 
-final class TimestampTagObject extends Base
+final class TimestampTag extends Base
 {
     /**
      * {@inheritdoc}
@@ -28,6 +28,18 @@ final class TimestampTagObject extends Base
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    static public function create(CBORObject $object): Base
+    {
+        if (!$object instanceof UnsignedIntegerObject && !$object instanceof HalfPrecisionFloatObject && !$object instanceof SinglePrecisionFloatObject && !$object instanceof DoublePrecisionFloatObject) {
+            throw new \InvalidArgumentException('This tag only accepts a Byte String object.');
+        }
+
+        return new self(1, null, $object);
     }
 
     /**

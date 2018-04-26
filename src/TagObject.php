@@ -47,6 +47,16 @@ class TagObject implements CBORObject
     }
 
     /**
+     * @param CBORObject  $object
+     *
+     * @return TagObject
+     */
+    public static function create(CBORObject $object): self
+    {
+        throw new \InvalidArgumentException('Generic tags cannot be created using this method.');
+    }
+
+    /**
      * @param int         $additionalInformation
      * @param null|string $data
      * @param CBORObject  $object

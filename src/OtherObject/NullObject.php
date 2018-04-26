@@ -29,9 +29,18 @@ final class NullObject extends Base
     }
 
     /**
+     * @return NullObject
+     */
+    public static function create(): Base
+    {
+        return new self(22, null);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getNormalizedData()
     {
+        return null;
     }
 }

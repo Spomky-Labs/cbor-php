@@ -20,13 +20,14 @@ final class UnsignedIntegerTest extends BaseTestCase
      * @dataProvider getDataSet
      *
      * @param string $data
+     * @param string $expected_normalized_data
      */
-    public function anUnsignedIntegerCanBeParsed(string $data)
+    public function anUnsignedIntegerCanBeParsed(string $data, string $expected_normalized_data)
     {
         $stream = new StringStream(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
-        $object->getNormalizedData();
-        self::assertEquals($data, bin2hex($object->__toString()));
+        self::assertEquals($data, bin2hex((string)$object));
+        self::assertEquals($expected_normalized_data, $object->getNormalizedData());
     }
 
     /**
@@ -37,28 +38,40 @@ final class UnsignedIntegerTest extends BaseTestCase
         return [
             [
                 '00',
+                '0',
             ], [
                 '01',
+                '1',
             ], [
                 '0a',
+                '10',
             ], [
                 '17',
+                '23',
             ], [
                 '1818',
+                '24',
             ], [
                 '1819',
+                '25',
             ], [
                 '1864',
+                '100',
             ], [
                 '1903e8',
+                '1000',
             ], [
                 '1a000f4240',
+                '1000000',
             ], [
                 '1b000000e8d4a51000',
+                '1000000000000',
             ], [
                 '1bffffffffffffffff',
+                '18446744073709551615',
             ], [
                 'c249010000000000000000',
+                '18446744073709551616',
             ],
         ];
     }

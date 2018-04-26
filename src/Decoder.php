@@ -91,7 +91,6 @@ final class Decoder
     private function processFinite(Stream $stream, int $mt, int $ai, ?string $val): CBORObject
     {
         switch ($mt) {
-            // case 0, 1, 7 do not have content; just use val
             case 0b000: //0
                 return UnsignedIntegerObject::createObjectForValue($ai, $val);
             case 0b001: //1

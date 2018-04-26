@@ -47,15 +47,15 @@ class BaseTestCase extends TestCase
             $otherObjectManager->add(27, OtherObject\DoublePrecisionFloatObject::class);
 
             $tagObjectManager = new TagObjectManager();
-            $tagObjectManager->add(0, Tag\EpochTagObject::class);
-            $tagObjectManager->add(1, Tag\TimestampTagObject::class);
-            $tagObjectManager->add(2, Tag\PositiveBigIntegerObject::class);
-            $tagObjectManager->add(3, Tag\NegativeBigIntegerObject::class);
-            $tagObjectManager->add(4, Tag\DecimalFractionObject::class);
-            $tagObjectManager->add(5, Tag\BigFloatObject::class);
-            $tagObjectManager->add(21, Tag\Base64UrlEncodingObject::class);
-            $tagObjectManager->add(22, Tag\Base64EncodingObject::class);
-            $tagObjectManager->add(23, Tag\Base16EncodingObject::class);
+            $tagObjectManager->add(0, Tag\EpochTag::class);
+            $tagObjectManager->add(1, Tag\TimestampTag::class);
+            $tagObjectManager->add(2, Tag\PositiveBigIntegerTag::class);
+            $tagObjectManager->add(3, Tag\NegativeBigIntegerTag::class);
+            $tagObjectManager->add(4, Tag\DecimalFractionTag::class);
+            $tagObjectManager->add(5, Tag\BigFloatTag::class);
+            $tagObjectManager->add(21, Tag\Base64UrlEncodingTag::class);
+            $tagObjectManager->add(22, Tag\Base64EncodingTag::class);
+            $tagObjectManager->add(23, Tag\Base16EncodingTag::class);
 
             $this->decoder = new Decoder(
                 $tagObjectManager,

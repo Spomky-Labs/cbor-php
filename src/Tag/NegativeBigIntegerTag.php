@@ -13,15 +13,11 @@ declare(strict_types=1);
 
 namespace CBOR\Tag;
 
-use Base64Url\Base64Url;
 use CBOR\ByteStringObject;
-use CBOR\ByteStringWithChunkObject;
 use CBOR\CBORObject;
 use CBOR\TagObject as Base;
-use CBOR\TextStringObject;
-use CBOR\TextStringWithChunkObject;
 
-final class Base64UrlEncodingObject extends Base
+final class NegativeBigIntegerTag extends Base
 {
     /**
      * {@inheritdoc}
@@ -34,13 +30,27 @@ final class Base64UrlEncodingObject extends Base
     /**
      * {@inheritdoc}
      */
+    static public function create(CBORObject $object): Base
+    {
+        if (!$object instanceof ByteStringObject) {
+            throw new \InvalidArgumentException('This tag only accepts a Byte String object.');
+        }
+
+        return new self(3, null, $object);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getNormalizedData()
     {
         $object = $this->getData();
-        if (!$object instanceof ByteStringObject && !$object instanceof ByteStringWithChunkObject && !$object instanceof TextStringObject && !$object instanceof TextStringWithChunkObject) {
-            return $object->getNormalizedData();
+        if (!$object instanceof ByteStringObject) {
+            return $this->getData()->getNormalizedData();
         }
+        $integer = gmp_init(bin2hex($object->getData()), 16);
+        $minusOne = gmp_init('-1', 10);
 
-        return Base64Url::decode($object->getNormalizedData());
+        return gmp_strval(gmp_sub($minusOne, $integer), 10);
     }
 }

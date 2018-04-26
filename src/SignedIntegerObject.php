@@ -51,6 +51,44 @@ final class SignedIntegerObject implements CBORObject
     }
 
     /**
+     * @param int $value
+     *
+     * @return SignedIntegerObject
+     */
+    public static function create(int $value): self
+    {
+        if ($value >= 0) {
+            throw new \InvalidArgumentException('The value must be a negative integer.');
+        }
+
+        $computed_value = -1-$value;
+        $result = gmp_init($computed_value);
+
+        switch (true) {
+            case $computed_value < 24:
+                $ai = $computed_value;
+                $data = null;
+                break;
+            case gmp_cmp($result, gmp_init('FF', 16)) < 0 :
+                $ai = 24;
+                $data = hex2bin(str_pad(gmp_strval($result, 16), 2, '0', STR_PAD_LEFT));
+                break;
+            case gmp_cmp($result, gmp_init('FFFF', 16)) < 0 :
+                $ai = 25;
+                $data = hex2bin(str_pad(gmp_strval($result, 16), 4, '0', STR_PAD_LEFT));
+                break;
+            case gmp_cmp($result, gmp_init('FFFFFFFF', 16)) < 0 :
+                $ai = 26;
+                $data = hex2bin(str_pad(gmp_strval($result, 16), 8, '0', STR_PAD_LEFT));
+                break;
+            default:
+                throw new \InvalidArgumentException('Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.');
+        }
+
+        return new self($ai, $data);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getMajorType(): int

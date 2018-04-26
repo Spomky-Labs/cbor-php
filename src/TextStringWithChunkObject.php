@@ -30,6 +30,11 @@ final class TextStringWithChunkObject implements CBORObject
      */
     private function __construct(array $data)
     {
+        array_map(function($obj) {
+            if (!$obj instanceof TextStringObject) {
+                throw new \InvalidArgumentException('The data must be an array of TextStringObject objects.');
+            }
+        }, $data);
         $this->data = $data;
     }
 

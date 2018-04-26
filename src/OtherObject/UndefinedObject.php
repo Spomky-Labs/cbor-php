@@ -29,6 +29,14 @@ final class UndefinedObject extends Base
     }
 
     /**
+     * @return UndefinedObject
+     */
+    public static function create(): Base
+    {
+        return new self(23, null);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getNormalizedData()

@@ -29,6 +29,14 @@ final class TrueObject extends Base
     }
 
     /**
+     * @return TrueObject
+     */
+    public static function create(): Base
+    {
+        return new self(21, null);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getNormalizedData(): bool
