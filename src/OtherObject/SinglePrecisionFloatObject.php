@@ -29,6 +29,20 @@ final class SinglePrecisionFloatObject extends Base
     }
 
     /**
+     * @param string $value
+     *
+     * @return SinglePrecisionFloatObject
+     */
+    public static function create(string $value): SinglePrecisionFloatObject
+    {
+        if (mb_strlen($value, '8bit') !== 4) {
+            throw new \InvalidArgumentException('The value is not a valid single precision floating point');
+        }
+
+        return new self(26, $value);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getNormalizedData()

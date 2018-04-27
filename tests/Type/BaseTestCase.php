@@ -35,7 +35,7 @@ class BaseTestCase extends TestCase
         if (null === $this->decoder) {
             $otherObjectManager = new OtherObjectManager();
             for ($i = 0; $i < 20; $i++) {
-                $otherObjectManager->add($i, OtherObject\SimpleObject::class);
+                $otherObjectManager->add($i, OtherObject\SimpleValueObject::class);
             }
             $otherObjectManager->add(20, OtherObject\FalseObject::class);
             $otherObjectManager->add(21, OtherObject\TrueObject::class);

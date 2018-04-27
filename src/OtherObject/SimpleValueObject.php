@@ -29,10 +29,49 @@ final class SimpleValueObject extends Base
     }
 
     /**
+     * @param int $value
+     *
+     * @return SimpleValueObject
+     */
+    public static function createFromInteger(int $value): SimpleValueObject
+    {
+        if ($value > 255) {
+            throw new \InvalidArgumentException('The value is not a valid simple value');
+        }
+
+        return self::create(chr($value));
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return SimpleValueObject
+     */
+    public static function create(string $value): SimpleValueObject
+    {
+        if (mb_strlen($value, '8bit') !== 1) {
+            throw new \InvalidArgumentException('The value is not a valid simple value');
+        }
+
+        $ai = ord($value);
+        if ($ai > 23) {
+            $ai = 24;
+            $data = $value;
+        } else {
+            $data = null;
+        }
+
+        return new self($ai, $data);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getNormalizedData()
     {
+        if (null === $this->getData()) {
+            return $this->getAdditionalInformation();
+        }
         return gmp_intval(gmp_init(bin2hex($this->getData()), 16));
     }
 }
