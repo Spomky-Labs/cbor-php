@@ -23,6 +23,6 @@ final class DoublePrecisionFloatTest extends BaseTestCase
     public function aDoublePrecisionObjectCanBeCreated()
     {
         $obj = DoublePrecisionFloatObject::create(hex2bin('3fd5555555555555'));
-        self::assertEquals(1/3, $obj->getNormalizedData());
+        self::assertEquals(1 / 3, $obj->getNormalizedData());
     }
 }

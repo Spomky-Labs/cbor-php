@@ -33,7 +33,7 @@ final class DoublePrecisionFloatObject extends Base
      *
      * @return DoublePrecisionFloatObject
      */
-    public static function create(string $value): DoublePrecisionFloatObject
+    public static function create(string $value): self
     {
         if (mb_strlen($value, '8bit') !== 8) {
             throw new \InvalidArgumentException('The value is not a valid double precision floating point');
