@@ -33,7 +33,7 @@ final class HalfPrecisionFloatObject extends Base
      *
      * @return HalfPrecisionFloatObject
      */
-    public static function create(string $value): HalfPrecisionFloatObject
+    public static function create(string $value): self
     {
         if (mb_strlen($value, '8bit') !== 4) {
             throw new \InvalidArgumentException('The value is not a valid half precision floating point');

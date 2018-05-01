@@ -33,7 +33,7 @@ final class SimpleValueObject extends Base
      *
      * @return SimpleValueObject
      */
-    public static function createFromInteger(int $value): SimpleValueObject
+    public static function createFromInteger(int $value): self
     {
         if ($value > 255) {
             throw new \InvalidArgumentException('The value is not a valid simple value');
@@ -47,7 +47,7 @@ final class SimpleValueObject extends Base
      *
      * @return SimpleValueObject
      */
-    public static function create(string $value): SimpleValueObject
+    public static function create(string $value): self
     {
         if (mb_strlen($value, '8bit') !== 1) {
             throw new \InvalidArgumentException('The value is not a valid simple value');
@@ -72,6 +72,7 @@ final class SimpleValueObject extends Base
         if (null === $this->getData()) {
             return $this->getAdditionalInformation();
         }
+
         return gmp_intval(gmp_init(bin2hex($this->getData()), 16));
     }
 }
