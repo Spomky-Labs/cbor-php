@@ -34,28 +34,26 @@ class BaseTestCase extends TestCase
     {
         if (null === $this->decoder) {
             $otherObjectManager = new OtherObjectManager();
-            for ($i = 0; $i < 20; $i++) {
-                $otherObjectManager->add($i, OtherObject\SimpleValueObject::class);
-            }
-            $otherObjectManager->add(20, OtherObject\FalseObject::class);
-            $otherObjectManager->add(21, OtherObject\TrueObject::class);
-            $otherObjectManager->add(22, OtherObject\NullObject::class);
-            $otherObjectManager->add(23, OtherObject\UndefinedObject::class);
-            $otherObjectManager->add(24, OtherObject\SimpleValueObject::class);
-            $otherObjectManager->add(25, OtherObject\HalfPrecisionFloatObject::class);
-            $otherObjectManager->add(26, OtherObject\SinglePrecisionFloatObject::class);
-            $otherObjectManager->add(27, OtherObject\DoublePrecisionFloatObject::class);
+            $otherObjectManager->add(OtherObject\SimpleObject::class);
+            $otherObjectManager->add(OtherObject\FalseObject::class);
+            $otherObjectManager->add(OtherObject\TrueObject::class);
+            $otherObjectManager->add(OtherObject\NullObject::class);
+            $otherObjectManager->add(OtherObject\UndefinedObject::class);
+            $otherObjectManager->add(OtherObject\SimpleValueObject::class);
+            $otherObjectManager->add(OtherObject\HalfPrecisionFloatObject::class);
+            $otherObjectManager->add(OtherObject\SinglePrecisionFloatObject::class);
+            $otherObjectManager->add(OtherObject\DoublePrecisionFloatObject::class);
 
             $tagObjectManager = new TagObjectManager();
-            $tagObjectManager->add(0, Tag\EpochTag::class);
-            $tagObjectManager->add(1, Tag\TimestampTag::class);
-            $tagObjectManager->add(2, Tag\PositiveBigIntegerTag::class);
-            $tagObjectManager->add(3, Tag\NegativeBigIntegerTag::class);
-            $tagObjectManager->add(4, Tag\DecimalFractionTag::class);
-            $tagObjectManager->add(5, Tag\BigFloatTag::class);
-            $tagObjectManager->add(21, Tag\Base64UrlEncodingTag::class);
-            $tagObjectManager->add(22, Tag\Base64EncodingTag::class);
-            $tagObjectManager->add(23, Tag\Base16EncodingTag::class);
+            $tagObjectManager->add(Tag\EpochTag::class);
+            $tagObjectManager->add(Tag\TimestampTag::class);
+            $tagObjectManager->add(Tag\PositiveBigIntegerTag::class);
+            $tagObjectManager->add(Tag\NegativeBigIntegerTag::class);
+            $tagObjectManager->add(Tag\DecimalFractionTag::class);
+            $tagObjectManager->add(Tag\BigFloatTag::class);
+            $tagObjectManager->add(Tag\Base64UrlEncodingTag::class);
+            $tagObjectManager->add(Tag\Base64EncodingTag::class);
+            $tagObjectManager->add(Tag\Base16EncodingTag::class);
 
             $this->decoder = new Decoder(
                 $tagObjectManager,

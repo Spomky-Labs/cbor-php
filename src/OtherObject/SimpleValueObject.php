@@ -18,10 +18,15 @@ use CBOR\OtherObject as Base;
 final class SimpleValueObject extends Base
 {
     /**
-     * @param int         $additionalInformation
-     * @param null|string $data
-     *
-     * @return SimpleValueObject
+     * {@inheritdoc}
+     */
+    public static function supportedAdditionalInformation(): array
+    {
+        return [24];
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {

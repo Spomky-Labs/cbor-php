@@ -18,10 +18,15 @@ use CBOR\OtherObject as Base;
 final class HalfPrecisionFloatObject extends Base
 {
     /**
-     * @param int         $additionalInformation
-     * @param null|string $data
-     *
-     * @return HalfPrecisionFloatObject
+     * {@inheritdoc}
+     */
+    public static function supportedAdditionalInformation(): array
+    {
+        return [25];
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {

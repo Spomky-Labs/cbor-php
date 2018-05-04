@@ -18,10 +18,15 @@ use CBOR\OtherObject as Base;
 final class FalseObject extends Base
 {
     /**
-     * @param int         $additionalInformation
-     * @param null|string $data
-     *
-     * @return FalseObject
+     * {@inheritdoc}
+     */
+    public static function supportedAdditionalInformation(): array
+    {
+        return [20];
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {

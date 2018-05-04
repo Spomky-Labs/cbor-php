@@ -24,6 +24,14 @@ final class DecimalFractionTag extends Base
     /**
      * {@inheritdoc}
      */
+    public static function getTagId(): int
+    {
+        return 4;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);

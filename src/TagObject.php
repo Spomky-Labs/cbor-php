@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-class TagObject implements CBORObject
+abstract class TagObject implements CBORObject
 {
     private const MAJOR_TYPE = 0b110;
 
@@ -47,14 +47,9 @@ class TagObject implements CBORObject
     }
 
     /**
-     * @param CBORObject $object
-     *
-     * @return TagObject
+     * @return int
      */
-    public static function create(CBORObject $object): self
-    {
-        throw new \InvalidArgumentException('Generic tags cannot be created using this method.');
-    }
+    abstract public static function getTagId(): int;
 
     /**
      * @param int         $additionalInformation
@@ -63,10 +58,7 @@ class TagObject implements CBORObject
      *
      * @return TagObject
      */
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): self
-    {
-        return new self($additionalInformation, $data, $object);
-    }
+    abstract public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): TagObject;
 
     /**
      * {@inheritdoc}

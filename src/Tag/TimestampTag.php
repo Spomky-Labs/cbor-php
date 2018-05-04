@@ -25,6 +25,14 @@ final class TimestampTag extends Base
     /**
      * {@inheritdoc}
      */
+    public static function getTagId(): int
+    {
+        return 1;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);

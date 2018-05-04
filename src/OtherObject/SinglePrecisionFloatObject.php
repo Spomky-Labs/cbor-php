@@ -18,10 +18,15 @@ use CBOR\OtherObject as Base;
 final class SinglePrecisionFloatObject extends Base
 {
     /**
-     * @param int         $additionalInformation
-     * @param null|string $data
-     *
-     * @return SinglePrecisionFloatObject
+     * {@inheritdoc}
+     */
+    public static function supportedAdditionalInformation(): array
+    {
+        return [26];
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {

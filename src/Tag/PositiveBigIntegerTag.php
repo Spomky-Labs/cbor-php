@@ -22,6 +22,14 @@ final class PositiveBigIntegerTag extends Base
     /**
      * {@inheritdoc}
      */
+    public static function getTagId(): int
+    {
+        return 2;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);

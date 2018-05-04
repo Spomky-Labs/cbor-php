@@ -19,6 +19,7 @@
         }
     },
     "require": {
+        "php": "^7.1",
         "spomky-labs/base64url": "^1.0",
         "ext-gmp": "*",
         "ext-bcmath": "*"

@@ -26,6 +26,14 @@ final class Base64UrlEncodingTag extends Base
     /**
      * {@inheritdoc}
      */
+    public static function getTagId(): int
+    {
+        return 21;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);

@@ -21,6 +21,14 @@ final class EpochTag extends Base
     /**
      * {@inheritdoc}
      */
+    public static function getTagId(): int
+    {
+        return 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);

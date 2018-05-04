@@ -14,17 +14,20 @@ declare(strict_types=1);
 namespace CBOR\Tag;
 
 use CBOR\ByteStringObject;
+use CBOR\ByteStringWithChunkObject;
 use CBOR\CBORObject;
 use CBOR\TagObject as Base;
+use CBOR\TextStringObject;
+use CBOR\TextStringWithChunkObject;
 
-final class NegativeBigIntegerTag extends Base
+final class GenericTag extends Base
 {
     /**
      * {@inheritdoc}
      */
     public static function getTagId(): int
     {
-        return 3;
+        return -1;
     }
 
     /**
@@ -35,30 +38,12 @@ final class NegativeBigIntegerTag extends Base
         return new self($additionalInformation, $data, $object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function create(CBORObject $object): Base
-    {
-        if (!$object instanceof ByteStringObject) {
-            throw new \InvalidArgumentException('This tag only accepts a Byte String object.');
-        }
-
-        return new self(3, null, $object);
-    }
 
     /**
      * {@inheritdoc}
      */
     public function getNormalizedData()
     {
-        $object = $this->getData();
-        if (!$object instanceof ByteStringObject) {
-            return $this->getData()->getNormalizedData();
-        }
-        $integer = gmp_init(bin2hex($object->getData()), 16);
-        $minusOne = gmp_init('-1', 10);
-
-        return gmp_strval(gmp_sub($minusOne, $integer), 10);
+        return $this->getData();
     }
 }

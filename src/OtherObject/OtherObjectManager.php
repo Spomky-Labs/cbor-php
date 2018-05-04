@@ -23,12 +23,13 @@ class OtherObjectManager
     private $classes = [];
 
     /**
-     * @param int    $value
      * @param string $class
      */
-    public function add(int $value, string $class)
+    public function add(string $class)
     {
-        $this->classes[$value] = $class;
+        foreach ($class::supportedAdditionalInformation() as $ai) {
+            $this->classes[$ai] = $class;
+        }
     }
 
     /**
@@ -38,7 +39,7 @@ class OtherObjectManager
      */
     public function getClassForValue(int $value): string
     {
-        return array_key_exists($value, $this->classes) ? $this->classes[$value] : OtherObject::class;
+        return array_key_exists($value, $this->classes) ? $this->classes[$value] : GenericObject::class;
     }
 
     /**

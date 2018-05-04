@@ -15,14 +15,14 @@ namespace CBOR\OtherObject;
 
 use CBOR\OtherObject as Base;
 
-final class UndefinedObject extends Base
+final class GenericObject extends Base
 {
     /**
      * {@inheritdoc}
      */
     public static function supportedAdditionalInformation(): array
     {
-        return [23];
+        return [];
     }
 
     /**
@@ -34,18 +34,10 @@ final class UndefinedObject extends Base
     }
 
     /**
-     * @return UndefinedObject
-     */
-    public static function create(): Base
-    {
-        return new self(23, null);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getNormalizedData()
     {
-        return 'undefined';
+        return $this->getData();
     }
 }

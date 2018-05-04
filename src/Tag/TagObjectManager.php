@@ -24,12 +24,11 @@ class TagObjectManager
     private $classes = [];
 
     /**
-     * @param int    $value
      * @param string $class
      */
-    public function add(int $value, string $class)
+    public function add(string $class)
     {
-        $this->classes[$value] = $class;
+        $this->classes[$class::getTagId()] = $class;
     }
 
     /**
@@ -39,7 +38,7 @@ class TagObjectManager
      */
     public function getClassForValue(int $value): string
     {
-        return array_key_exists($value, $this->classes) ? $this->classes[$value] : TagObject::class;
+        return array_key_exists($value, $this->classes) ? $this->classes[$value] : GenericTag::class;
     }
 
     /**

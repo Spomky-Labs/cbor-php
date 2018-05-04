@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-class OtherObject implements CBORObject
+abstract class OtherObject implements CBORObject
 {
     private const MAJOR_TYPE = 0b111;
 
@@ -28,6 +28,19 @@ class OtherObject implements CBORObject
     private $data;
 
     /**
+     * @return int[]
+     */
+    abstract public static function supportedAdditionalInformation(): array;
+
+    /**
+     * @param int         $additionalInformation
+     * @param null|string $data
+     *
+     * @return OtherObject
+     */
+    abstract public static function createFromLoadedData(int $additionalInformation, ?string $data): OtherObject;
+
+    /**
      * CBORObject constructor.
      *
      * @param int         $additionalInformation
@@ -37,17 +50,6 @@ class OtherObject implements CBORObject
     {
         $this->additionalInformation = $additionalInformation;
         $this->data = $data;
-    }
-
-    /**
-     * @param int         $additionalInformation
-     * @param null|string $data
-     *
-     * @return OtherObject
-     */
-    public static function createFromLoadedData(int $additionalInformation, ?string $data): self
-    {
-        return new self($additionalInformation, $data);
     }
 
     /**
