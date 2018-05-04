@@ -58,7 +58,7 @@ abstract class TagObject implements CBORObject
      *
      * @return TagObject
      */
-    abstract public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): TagObject;
+    abstract public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): self;
 
     /**
      * {@inheritdoc}

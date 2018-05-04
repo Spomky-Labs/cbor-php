@@ -13,12 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR\Tag;
 
-use CBOR\ByteStringObject;
-use CBOR\ByteStringWithChunkObject;
 use CBOR\CBORObject;
 use CBOR\TagObject as Base;
-use CBOR\TextStringObject;
-use CBOR\TextStringWithChunkObject;
 
 final class GenericTag extends Base
 {
@@ -37,7 +33,6 @@ final class GenericTag extends Base
     {
         return new self($additionalInformation, $data, $object);
     }
-
 
     /**
      * {@inheritdoc}

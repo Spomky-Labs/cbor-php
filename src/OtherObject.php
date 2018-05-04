@@ -38,7 +38,7 @@ abstract class OtherObject implements CBORObject
      *
      * @return OtherObject
      */
-    abstract public static function createFromLoadedData(int $additionalInformation, ?string $data): OtherObject;
+    abstract public static function createFromLoadedData(int $additionalInformation, ?string $data): self;
 
     /**
      * CBORObject constructor.
