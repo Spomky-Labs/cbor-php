@@ -53,11 +53,22 @@ final class ByteStringWithChunkObject implements CBORObject
      *
      * @return ByteStringWithChunkObject
      */
-    public static function create(string $data): self
+    public static function create(string $data = ''): self
     {
-        return new self(
-            [ByteStringObject::create($data)]
-        );
+        $chunks = [];
+        if (!empty($data)) {
+            $chunks[] = ByteStringObject::create($data);
+        }
+
+        return new self($chunks);
+    }
+
+    /**
+     * @param string $chunk
+     */
+    public function append(string $chunk)
+    {
+        $this->addChunk(ByteStringObject::create($chunk));
     }
 
     /**
@@ -98,13 +109,13 @@ final class ByteStringWithChunkObject implements CBORObject
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getNormalizedData(): string
+    public function getNormalizedData(bool $ignoreTags = false): string
     {
         $result = '';
         foreach ($this->data as $object) {
-            $result .= $object->getNormalizedData();
+            $result .= $object->getNormalizedData($ignoreTags);
         }
 
         return $result;

@@ -36,7 +36,7 @@ final class SimpleObject extends Base
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedData()
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         return $this->getAdditionalInformation();
     }

@@ -50,7 +50,7 @@ final class HalfPrecisionFloatObject extends Base
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedData()
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         $half = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
         $exp = ($half >> 10) & 0x1f;

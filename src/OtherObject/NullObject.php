@@ -44,7 +44,7 @@ final class NullObject extends Base
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedData()
+    public function getNormalizedData(bool $ignoreTags = false)
     {
     }
 }

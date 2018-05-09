@@ -44,7 +44,7 @@ final class FalseObject extends Base
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedData(): bool
+    public function getNormalizedData(bool $ignoreTags = false): bool
     {
         return false;
     }

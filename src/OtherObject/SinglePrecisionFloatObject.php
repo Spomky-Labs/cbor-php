@@ -50,7 +50,7 @@ final class SinglePrecisionFloatObject extends Base
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedData()
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         $single = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
         $exp = ($single >> 23) & 0xff;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-class ListObject implements CBORObject, \Countable
+final class InfiniteListObject implements CBORObject, \Countable
 {
     private const MAJOR_TYPE = 0b100;
 
@@ -33,46 +33,40 @@ class ListObject implements CBORObject, \Countable
     private $length;
 
     /**
-     * CBORObject constructor.
+     * InfiniteListObject constructor.
      *
-     * @param int          $additionalInformation
-     * @param null|string  $length
      * @param CBORObject[] $data
      */
-    private function __construct(int $additionalInformation, ?string $length, array $data)
+    private function __construct(array $data)
     {
-        $this->additionalInformation = $additionalInformation;
         array_map(function ($item) {
             if (!$item instanceof CBORObject) {
                 throw new \InvalidArgumentException('The list must contain only CBORObjects.');
             }
         }, $data);
+        $this->additionalInformation = 0b00011111;
+        $this->length = null;
         $this->data = $data;
-        $this->length = $length;
-    }
-
-    /**
-     * @param int          $additionalInformation
-     * @param null|string  $length
-     * @param CBORObject[] $data
-     *
-     * @return ListObject
-     */
-    public static function createObjectForValue(int $additionalInformation, ?string $length, array $data): self
-    {
-        return new self($additionalInformation, $length, $data);
     }
 
     /**
      * @param CBORObject[] $data
      *
-     * @return ListObject
+     * @return InfiniteListObject
      */
-    public static function create(array $data): self
+    public static function createObjectForValue(array $data): self
     {
-        list($additionalInformation, $length) = LengthCalculator::getLengthOfArray($data);
+        return new self($data);
+    }
 
-        return new self($additionalInformation, $length, $data);
+    /**
+     * @param CBORObject[] $data
+     *
+     * @return InfiniteListObject
+     */
+    public static function create(array $data = []): self
+    {
+        return new self($data);
     }
 
     /**
@@ -132,6 +126,14 @@ class ListObject implements CBORObject, \Countable
     }
 
     /**
+     * @param CBORObject $item
+     */
+    public function append(CBORObject $item)
+    {
+        $this->data[] = $item;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function count()
@@ -145,15 +147,10 @@ class ListObject implements CBORObject, \Countable
     public function __toString(): string
     {
         $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
-        if (null !== $this->length) {
-            $result .= $this->length;
-        }
         foreach ($this->data as $object) {
             $result .= $object->__toString();
         }
-        if (0b00011111 === $this->additionalInformation) {
-            $result .= hex2bin('FF');
-        }
+        $result .= hex2bin('FF');
 
         return $result;
     }

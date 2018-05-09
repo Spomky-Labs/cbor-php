@@ -95,9 +95,9 @@ abstract class TagObject implements CBORObject
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedData()
+    public function getNormalizedData(bool $ignoreTags = false)
     {
-        return $this->object->getNormalizedData();
+        return $this->object->getNormalizedData($ignoreTags);
     }
 
     /**

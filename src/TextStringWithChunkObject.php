@@ -53,11 +53,22 @@ final class TextStringWithChunkObject implements CBORObject
      *
      * @return TextStringWithChunkObject
      */
-    public static function create(string $data): self
+    public static function create(string $data = ''): self
     {
-        return new self(
-            [TextStringObject::create($data)]
-        );
+        $chunks = [];
+        if (!empty($data)) {
+            $chunks[] = TextStringObject::create($data);
+        }
+
+        return new self($chunks);
+    }
+
+    /**
+     * @param string $chunk
+     */
+    public function append(string $chunk)
+    {
+        $this->addChunk(TextStringObject::create($chunk));
     }
 
     /**
@@ -98,13 +109,13 @@ final class TextStringWithChunkObject implements CBORObject
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getNormalizedData(): string
+    public function getNormalizedData(bool $ignoreTags = false): string
     {
         $result = '';
         foreach ($this->data as $object) {
-            $result .= $object->getNormalizedData();
+            $result .= $object->getNormalizedData($ignoreTags);
         }
 
         return $result;

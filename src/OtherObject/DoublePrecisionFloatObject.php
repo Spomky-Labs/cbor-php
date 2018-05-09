@@ -50,7 +50,7 @@ final class DoublePrecisionFloatObject extends Base
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedData()
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         $single = gmp_init(bin2hex($this->getData()), 16);
         $exp = gmp_intval($this->bitwiseAnd($this->rightShift($single, 52), gmp_init('7ff', 16)));

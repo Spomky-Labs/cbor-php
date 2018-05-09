@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class MapObject implements CBORObject, \Countable
+final class InfiniteMapObject implements CBORObject, \Countable
 {
     private const MAJOR_TYPE = 0b101;
 
@@ -35,44 +35,47 @@ final class MapObject implements CBORObject, \Countable
     /**
      * CBORObject constructor.
      *
-     * @param int         $additionalInformation
-     * @param null|string $length
      * @param MapItem[]   $data
      */
-    private function __construct(int $additionalInformation, ?string $length, array $data)
+    private function __construct(array $data)
     {
-        $this->additionalInformation = $additionalInformation;
         array_map(function ($item) {
             if (!$item instanceof MapItem) {
                 throw new \InvalidArgumentException('The list must contain only MapItem.');
             }
         }, $data);
         $this->data = $data;
-        $this->length = $length;
+        $this->additionalInformation = 0b00011111;
+        $this->length = null;
     }
 
     /**
-     * @param int         $additionalInformation
-     * @param null|string $length
      * @param MapItem[]   $data
      *
-     * @return MapObject
+     * @return InfiniteMapObject
      */
-    public static function createObjectForValue(int $additionalInformation, ?string $length, array $data): self
+    public static function createObjectForValue(array $data): self
     {
-        return new self($additionalInformation, $length, $data);
+        return new self($data);
     }
 
     /**
      * @param MapItem[] $data
      *
-     * @return MapObject
+     * @return InfiniteMapObject
      */
-    public static function create(array $data): self
+    public static function create(array $data = []): self
     {
-        list($additionalInformation, $length) = LengthCalculator::getLengthOfArray($data);
+        return new self($data);
+    }
 
-        return new self($additionalInformation, $length, $data);
+    /**
+     * @param CBORObject $key
+     * @param CBORObject $value
+     */
+    public function append(CBORObject $key, CBORObject $value)
+    {
+        $this->data[] = MapItem::create($key, $value);
     }
 
     /**
@@ -134,16 +137,11 @@ final class MapObject implements CBORObject, \Countable
     public function __toString(): string
     {
         $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
-        if (null !== $this->length) {
-            $result .= $this->length;
-        }
         foreach ($this->data as $object) {
             $result .= $object->getKey()->__toString();
             $result .= $object->getValue()->__toString();
         }
-        if (0b00011111 === $this->additionalInformation) {
-            $result .= hex2bin('FF');
-        }
+        $result .= hex2bin('FF');
 
         return $result;
     }

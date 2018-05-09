@@ -72,7 +72,7 @@ final class SimpleValueObject extends Base
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedData()
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         if (null === $this->getData()) {
             return $this->getAdditionalInformation();

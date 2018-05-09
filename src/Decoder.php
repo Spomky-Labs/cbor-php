@@ -167,7 +167,7 @@ final class Decoder
                     $val[] = $it;
                 }
 
-                return ListObject::createObjectForValue(0b00011111, null, $val);
+                return InfiniteListObject::createObjectForValue($val);
             case 0b101: //5
                 $val = [];
                 while ($it = $this->process($stream, true)) {
@@ -177,7 +177,7 @@ final class Decoder
                     $val[] = MapItem::create($it, $this->process($stream));
                 }
 
-                return MapObject::createObjectForValue(0b00011111, null, $val);
+                return InfiniteMapObject::createObjectForValue($val);
             case 0b111: //7
                 if ($breakable) {
                     return $this->otherTypeManager->createObjectForValue(0b00011111, null);

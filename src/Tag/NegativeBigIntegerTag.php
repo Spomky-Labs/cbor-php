@@ -50,11 +50,14 @@ final class NegativeBigIntegerTag extends Base
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedData()
+    public function getNormalizedData(bool $ignoreTags = false)
     {
+        if ($ignoreTags) {
+            return $this->getData()->getNormalizedData($ignoreTags);
+        }
         $object = $this->getData();
         if (!$object instanceof ByteStringObject) {
-            return $this->getData()->getNormalizedData();
+            return $this->getData()->getNormalizedData($ignoreTags);
         }
         $integer = gmp_init(bin2hex($object->getData()), 16);
         $minusOne = gmp_init('-1', 10);

@@ -103,9 +103,9 @@ final class TextStringObject implements CBORObject
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getNormalizedData(): string
+    public function getNormalizedData(bool $ignoreTags = false): string
     {
         return $this->data;
     }

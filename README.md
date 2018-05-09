@@ -1,0 +1,200 @@
+CBOR for PHP
+============
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Spomky-Labs/cbor-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Spomky-Labs/cbor-php/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Spomky-Labs/cbor-php/badge.svg?branch=master)](https://coveralls.io/github/Spomky-Labs/cbor-php?branch=master)
+
+[![Build Status](https://travis-ci.org/Spomky-Labs/cbor-php.svg?branch=master)](https://travis-ci.org/Spomky-Labs/cbor-php)
+
+[![Latest Stable Version](https://poser.pugx.org/spomky-labs/cbor-php/v/stable.png)](https://packagist.org/packages/spomky-labs/cbor-php)
+[![Total Downloads](https://poser.pugx.org/spomky-labs/cbor-php/downloads.png)](https://packagist.org/packages/spomky-labs/cbor-php)
+[![Latest Unstable Version](https://poser.pugx.org/spomky-labs/cbor-php/v/unstable.png)](https://packagist.org/packages/spomky-labs/cbor-php)
+[![License](https://poser.pugx.org/spomky-labs/cbor-php/license.png)](https://packagist.org/packages/spomky-labs/cbor-php)
+
+# Scope
+
+This library will help you to decode and create objects using the Concise Binary Object Representation (CBOR - [RFC7049](https://tools.ietf.org/html/rfc7049)).
+
+# Installation
+
+Install the library with Composer: `composer require spomky-labs/cbor-php`.
+
+This project follows the [semantic versioning](http://semver.org/) strictly.
+
+# Documentation
+
+## Object Creation
+
+This library supports all Major Types defined in the RFC7049 and has capabilities to support any kind of Tags (Major Type 6) and Other Objects (Major Type 7).
+
+Each object have at least:
+
+* a static method `create`. This method will correctly instantiate the object.
+* can be converted into a binary string: `$object->__toString();` or `(string) $object`.
+* a method `getNormalizedData($ignoreTags = false)` that converts the object into its normalized representation. Tags can be ignored with the first argument set to `true`.
+
+### Unsigned Integer (Major Type 0)
+
+```php
+<?php
+
+use CBOR\UnsignedIntegerObject;
+
+$object = UnsignedIntegerObject::create(10);
+$object = UnsignedIntegerObject::create(1000);
+$object = UnsignedIntegerObject::create(10000);
+
+$longInteger = gmp_init('0AFFEBFF', 16);
+$object = UnsignedIntegerObject::createFromGmpValue($longInteger);
+
+echo bin2hex((string)$object); // 1a0affebff
+```
+
+**Note: the method `getNormalizedData()` will always return the integer as a string. This is needed to avoid lack of 64 bits integer support on PHP**
+
+### Signed Integer (Major Type 1)
+
+```php
+<?php
+
+use CBOR\SignedIntegerObject;
+
+$object = SignedIntegerObject::create(-10);
+$object = SignedIntegerObject::create(-1000);
+$object = SignedIntegerObject::create(-10000);
+```
+
+**Note: the method `getNormalizedData()` will always return the integer as a string. This is needed to avoid lack of 64 bits integer support on PHP**
+
+### Byte String / Infinite Byte String (Major Type 2)
+
+Byte String and Infinite Byte String objects have the same major type but are handled by two different classes in this library.
+
+```php
+<?php
+
+use CBOR\ByteStringObject; // Byte String
+use CBOR\ByteStringWithChunkObject; // Infinite Byte String
+
+// Create a Byte String with value "Hello"
+$object = ByteStringObject::create('Hello');
+
+// Create an Infinite Byte String with value "Hello" ("He" + "" + "ll" + "o")
+$object = ByteStringWithChunkObject::create();
+$object->append('He');
+$object->append('');
+$object->append('ll');
+$object->append('o');
+```
+
+### Text String / Infinite Text String (Major Type 3)
+
+Text String and Infinite Text String objects have the same major type but are handled by two different classes in this library.
+
+```php
+<?php
+
+use CBOR\TextStringObject; // Text String
+use CBOR\TextStringWithChunkObject; // Infinite Text String
+
+// Create a Text String with value "(｡◕‿◕｡)"
+$object = TextStringObject::create('(｡◕‿◕｡)⚡');
+
+// Create an Infinite Text String with value "(｡◕‿◕｡)⚡" ("(｡◕" + "" + "‿◕" + "｡)⚡")
+$object = TextStringWithChunkObject::create();
+$object->append('(｡◕');
+$object->append('');
+$object->append('‿◕');
+$object->append('｡)⚡');
+```
+
+### List / Infinite List (Major Type 4)
+
+List and Infinite List objects have the same major type but are handled by two different classes in this library.
+Items in the List object can be any of CBOR Object type.
+
+```php
+<?php
+
+use CBOR\ListObject; // List
+use CBOR\InfiniteListObject; // Infinite List
+use CBOR\TextStringObject;
+use CBOR\UnsignedIntegerObject;
+
+// Create a List with a single item
+$object = ListObject::create([
+    TextStringObject::create('(｡◕‿◕｡)⚡')
+]);
+
+// Create an Infinite List with several items
+$object = InfiniteListObject::create();
+$object->append(TextStringObject::create('(｡◕‿◕｡)⚡'));
+$object->append(UnsignedIntegerObject::create(25));
+```
+
+### Map / Infinite Map (Major Type 5)
+
+Map and Infinite Map objects have the same major type but are handled by two different classes in this library.
+Keys and values in the Map object can be any of CBOR Object type.
+
+**However, be really careful with keys. Please follow the recommendation hereunder:**
+
+* Keys should not be duplicated
+* Keys should be of type Unsigned Integer, Signed Integer, (Infinite)Byte String or (Infinite)Text String. Other types may cause errors.
+
+```php
+<?php
+
+use CBOR\MapObject; // Map
+use CBOR\MapItem; // Map
+use CBOR\InfiniteMapObject; // Infinite Map
+use CBOR\ByteStringObject;
+use CBOR\TextStringObject;
+use CBOR\UnsignedIntegerObject;
+use CBOR\SignedIntegerObject;
+
+// Create a Map with a single item
+$object = MapObject::create([
+    MapItem::create(UnsignedIntegerObject::create(25),TextStringObject::create('(｡◕‿◕｡)⚡'))
+]);
+
+// Create an Infinite Map with several items
+$object = InfiniteMapObject::create();
+$object->append(ByteStringObject::create('A'), SignedIntegerObject::create(-652));
+$object->append(UnsignedIntegerObject::create(25), TextStringObject::create('(｡◕‿◕｡)⚡'));
+```
+
+### Tags (Major Type 6)
+
+```php
+<?php
+
+use CBOR\Tag\TimestampTag;
+use CBOR\UnsignedIntegerObject;
+
+// Create an unsigned object that represents the current timestamp
+$object = UnsignedIntegerObject::create(time()); // e.g. 1525873787
+
+//We tag the object with the Timestamp Tag
+$taggedObject = TimestampTag::create($object); // Returns a \DateTimeImmutable object with timestamp at 1525873787
+```
+
+### Other Objects (Major Type 7)
+
+# Contributing
+
+Requests for new features, bug fixed and all other ideas to make this project useful are welcome.
+The best contribution you could provide is by fixing the [opened issues where help is wanted](https://github.com/Spomky-Labs/cbor-php/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
+
+Please report all issues in [the main repository](https://github.com/Spomky-Labs/cbor-php/issues).
+
+Please make sure to [follow these best practices](.github/CONTRIBUTING.md).
+
+# Security Issues
+
+If you discover a security vulnerability within the project, please **don't use the bug tracker and don't publish it publicly**.
+Instead, all security issues must be sent to security [at] spomky-labs.com. 
+
+# Licence
+
+This project is release under [MIT licence](LICENSE).

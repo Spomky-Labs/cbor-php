@@ -36,9 +36,11 @@ interface CBORObject
     public function getData();
 
     /**
+     * @param bool $ignoreTags
+     *
      * @return mixed|null
      */
-    public function getNormalizedData();
+    public function getNormalizedData(bool $ignoreTags = false);
 
     /**
      * @return string

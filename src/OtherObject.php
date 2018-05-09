@@ -87,7 +87,7 @@ abstract class OtherObject implements CBORObject
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedData()
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         return $this->data;
     }

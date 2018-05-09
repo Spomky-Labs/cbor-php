@@ -36,7 +36,7 @@ final class GenericObject extends Base
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedData()
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         return $this->getData();
     }

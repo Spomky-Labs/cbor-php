@@ -44,7 +44,7 @@ final class UndefinedObject extends Base
     /**
      * {@inheritdoc}
      */
-    public function getNormalizedData()
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         return 'undefined';
     }

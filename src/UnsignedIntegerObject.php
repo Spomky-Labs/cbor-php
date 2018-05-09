@@ -128,9 +128,9 @@ final class UnsignedIntegerObject implements CBORObject
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getNormalizedData(): string
+    public function getNormalizedData(bool $ignoreTags = false): string
     {
         if (null === $this->data) {
             return strval($this->additionalInformation);

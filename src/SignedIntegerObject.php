@@ -57,29 +57,39 @@ final class SignedIntegerObject implements CBORObject
      */
     public static function create(int $value): self
     {
-        if ($value >= 0) {
+        return self::createFromGmpValue(gmp_init($value));
+    }
+
+    /**
+     * @param \GMP $value
+     *
+     * @return SignedIntegerObject
+     */
+    public static function createFromGmpValue(\GMP $value): self
+    {
+        if (gmp_cmp($value, gmp_init(0)) >= 0) {
             throw new \InvalidArgumentException('The value must be a negative integer.');
         }
 
-        $computed_value = -1 - $value;
-        $result = gmp_init($computed_value);
+        $minusOne = gmp_init(-1);
+        $computed_value = gmp_sub($minusOne, $value);
 
         switch (true) {
             case $computed_value < 24:
                 $ai = $computed_value;
                 $data = null;
                 break;
-            case gmp_cmp($result, gmp_init('FF', 16)) < 0:
+            case gmp_cmp($computed_value, gmp_init('FF', 16)) < 0:
                 $ai = 24;
-                $data = hex2bin(str_pad(gmp_strval($result, 16), 2, '0', STR_PAD_LEFT));
+                $data = hex2bin(str_pad(gmp_strval($computed_value, 16), 2, '0', STR_PAD_LEFT));
                 break;
-            case gmp_cmp($result, gmp_init('FFFF', 16)) < 0:
+            case gmp_cmp($computed_value, gmp_init('FFFF', 16)) < 0:
                 $ai = 25;
-                $data = hex2bin(str_pad(gmp_strval($result, 16), 4, '0', STR_PAD_LEFT));
+                $data = hex2bin(str_pad(gmp_strval($computed_value, 16), 4, '0', STR_PAD_LEFT));
                 break;
-            case gmp_cmp($result, gmp_init('FFFFFFFF', 16)) < 0:
+            case gmp_cmp($computed_value, gmp_init('FFFFFFFF', 16)) < 0:
                 $ai = 26;
-                $data = hex2bin(str_pad(gmp_strval($result, 16), 8, '0', STR_PAD_LEFT));
+                $data = hex2bin(str_pad(gmp_strval($computed_value, 16), 8, '0', STR_PAD_LEFT));
                 break;
             default:
                 throw new \InvalidArgumentException('Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.');
@@ -121,9 +131,9 @@ final class SignedIntegerObject implements CBORObject
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getNormalizedData(): string
+    public function getNormalizedData(bool $ignoreTags = false): string
     {
         if (null === $this->data) {
             return strval(-1 - $this->additionalInformation);
