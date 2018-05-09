@@ -166,6 +166,22 @@ $object->append(UnsignedIntegerObject::create(25), TextStringObject::create('(�
 
 ### Tags (Major Type 6)
 
+This library can support any kind of tags.
+It comes with some of thew described in the specification:
+
+* Base 16 encoding
+* Base 64 encoding
+* Base 64 Url Safe encoding
+* Big Float
+* Decimal Fraction
+* Epoch
+* Timestamp
+* Positive Big Integer
+* Negative Big Integer
+
+You can easily create your own tag by extending the abstract class `CBOR\TagObject`.
+This library provides a `CBOR\Tag\GenericTag` class that can be used for any other unknown/unsupported tags.
+
 ```php
 <?php
 
@@ -180,6 +196,99 @@ $taggedObject = TimestampTag::create($object); // Returns a \DateTimeImmutable o
 ```
 
 ### Other Objects (Major Type 7)
+
+This library can support any kind of "other objects".
+It comes with some of thew described in the specification:
+
+* False
+* True
+* Null
+* Undefined
+* Half Precision Float
+* Single Precision Float
+* Double Precision Float
+* Simple Value
+
+You can easily create your own object by extending the abstract class `CBOR\OtherObject`.
+This library provides a `CBOR\OtherObject\GenericTag` class that can be used for any other unknown/unsupported objects.
+
+**Because PHP does not support an 'undefined' object, the normalization method will return `'undefined'`.**
+
+```php
+<?php
+
+use CBOR\OtherObject\FalseObject;
+use CBOR\OtherObject\NullObject;
+use CBOR\OtherObject\UndefinedObject;
+
+$object = FalseObject::create();
+$object->getNormalizedData(); // false
+
+$object = NullObject::create();
+$object->getNormalizedData(); // null
+
+$object = UndefinedObject::create();
+$object->getNormalizedData(); // 'undefined'
+```
+
+## Object Loading
+
+If you want to load a CBOR encoded string, you just have to instantiate a `CBOR\Decoder` class.
+This class needs the following arguments:
+
+* A `Tag` manager: this manager will be able to identify the tags associated to the data and create it accordingly if the tag ID is supported.
+* An `Other Object` manager: this manager will be able to identify all other objects and create it accordingly if supported.
+
+```php
+<?php
+
+use CBOR\Decoder;
+use CBOR\OtherObject;
+use CBOR\Tag;
+
+$otherObjectManager = new OtherObject\OtherObjectManager();
+$otherObjectManager->add(OtherObject\SimpleObject::class);
+$otherObjectManager->add(OtherObject\FalseObject::class);
+$otherObjectManager->add(OtherObject\TrueObject::class);
+$otherObjectManager->add(OtherObject\NullObject::class);
+$otherObjectManager->add(OtherObject\UndefinedObject::class);
+$otherObjectManager->add(OtherObject\SimpleValueObject::class);
+$otherObjectManager->add(OtherObject\HalfPrecisionFloatObject::class);
+$otherObjectManager->add(OtherObject\SinglePrecisionFloatObject::class);
+$otherObjectManager->add(OtherObject\DoublePrecisionFloatObject::class);
+
+$tagManager = new Tag\TagObjectManager();
+$tagManager->add(Tag\EpochTag::class);
+$tagManager->add(Tag\TimestampTag::class);
+$tagManager->add(Tag\PositiveBigIntegerTag::class);
+$tagManager->add(Tag\NegativeBigIntegerTag::class);
+$tagManager->add(Tag\DecimalFractionTag::class);
+$tagManager->add(Tag\BigFloatTag::class);
+$tagManager->add(Tag\Base64UrlEncodingTag::class);
+$tagManager->add(Tag\Base64EncodingTag::class);
+$tagManager->add(Tag\Base16EncodingTag::class);
+
+$decoder = new Decoder($tagManager, $otherObjectManager);
+```
+
+Then, the decoder will read the data you want to load.
+The data has to be handled by an object that implements the `CBOR\Stream` interface.
+This library provides a `CBOR\StringStream` class to stream the string.
+
+```php
+<?php
+
+use CBOR\StringStream;
+
+// CBOR object (in hex for the example)
+$data = hex2bin('fb3fd5555555555555');
+
+// String Stream
+$stream = new StringStream($data);
+
+// Load the data
+$object = $decoder->decode($stream); // Return a CBOR\OtherObject\DoublePrecisionFloatObject class with normalized value ~0.3333 (1/3)
+```
 
 # Contributing
 

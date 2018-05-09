@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR\Test\Type;
 
+use CBOR\StringStream;
+
 final class OtherTest extends BaseTestCase
 {
     /**
