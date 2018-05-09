@@ -35,7 +35,7 @@ final class InfiniteMapObject implements CBORObject, \Countable
     /**
      * CBORObject constructor.
      *
-     * @param MapItem[]   $data
+     * @param MapItem[] $data
      */
     private function __construct(array $data)
     {
@@ -50,7 +50,7 @@ final class InfiniteMapObject implements CBORObject, \Countable
     }
 
     /**
-     * @param MapItem[]   $data
+     * @param MapItem[] $data
      *
      * @return InfiniteMapObject
      */
