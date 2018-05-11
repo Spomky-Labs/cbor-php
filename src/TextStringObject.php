@@ -78,6 +78,12 @@ final class TextStringObject implements CBORObject
         return $this->data;
     }
 
+
+    public function getLength(): int
+    {
+        return mb_strlen($this->data, 'utf8');
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -21,44 +21,21 @@ final class TextStringWithChunkObject implements CBORObject
     /**
      * @var TextStringObject[]
      */
-    private $data;
+    private $data = [];
 
     /**
      * CBORObject constructor.
-     *
-     * @param TextStringObject[] $data
      */
-    private function __construct(array $data)
+    private function __construct()
     {
-        array_map(function ($obj) {
-            if (!$obj instanceof TextStringObject) {
-                throw new \InvalidArgumentException('The data must be an array of TextStringObject objects.');
-            }
-        }, $data);
-        $this->data = $data;
     }
 
     /**
-     * @param string $data
-     *
      * @return TextStringWithChunkObject
      */
-    public static function create(string $data = ''): self
+    public static function create(): self
     {
-        $chunks = [];
-        if (!empty($data)) {
-            $chunks[] = TextStringObject::create($data);
-        }
-
-        return new self($chunks);
-    }
-
-    /**
-     * @param string $chunk
-     */
-    public function append(string $chunk)
-    {
-        $this->addChunk(TextStringObject::create($chunk));
+        return new self();
     }
 
     /**
@@ -96,6 +73,17 @@ final class TextStringWithChunkObject implements CBORObject
         }
 
         return $result;
+    }
+
+
+    public function getLength(): int
+    {
+        $length = 0;
+        foreach ($this->data as $object) {
+            $length += $object->getLength();
+        }
+
+        return $length;
     }
 
     /**
