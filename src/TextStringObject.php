@@ -35,7 +35,7 @@ final class TextStringObject implements CBORObject
     /**
      * CBORObject constructor.
      *
-     * @param string      $data
+     * @param string $data
      */
     private function __construct(string $data)
     {

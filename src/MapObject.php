@@ -35,7 +35,7 @@ final class MapObject implements CBORObject, \Countable, \IteratorAggregate
     /**
      * CBORObject constructor.
      *
-     * @param MapItem[]   $data
+     * @param MapItem[] $data
      */
     private function __construct(array $data)
     {
