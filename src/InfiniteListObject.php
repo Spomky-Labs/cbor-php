@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-use Traversable;
-
 final class InfiniteListObject implements CBORObject, \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b100;

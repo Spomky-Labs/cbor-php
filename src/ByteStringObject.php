@@ -31,10 +31,11 @@ final class ByteStringObject implements CBORObject
      * @var null|string
      */
     private $value;
+
     /**
      * ByteStringObject constructor.
      *
-     * @param string      $data
+     * @param string $data
      */
     private function __construct(string $data)
     {
