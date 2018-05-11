@@ -115,19 +115,11 @@ final class SignedIntegerObject implements CBORObject
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
-    public function getData()
+    public function getValue(): string
     {
-        return $this->data;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLength(): ?string
-    {
-        return null;
+        return $this->getNormalizedData();
     }
 
     /**

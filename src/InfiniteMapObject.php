@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class InfiniteMapObject implements CBORObject, \Countable
+final class InfiniteMapObject implements CBORObject, \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b101;
 
@@ -54,16 +54,6 @@ final class InfiniteMapObject implements CBORObject, \Countable
      *
      * @return InfiniteMapObject
      */
-    public static function createObjectForValue(array $data): self
-    {
-        return new self($data);
-    }
-
-    /**
-     * @param MapItem[] $data
-     *
-     * @return InfiniteMapObject
-     */
     public static function create(array $data = []): self
     {
         return new self($data);
@@ -89,33 +79,25 @@ final class InfiniteMapObject implements CBORObject, \Countable
     /**
      * {@inheritdoc}
      */
-    public function getAdditionalInformation(): int
-    {
-        return $this->additionalInformation;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLength(): ?string
-    {
-        return $this->length;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function count()
     {
         return count($this->data);
     }
 
     /**
-     * @return MapItem[]
+     * {@inheritdoc}
      */
-    public function getData(): array
+    public function getIterator()
     {
-        return $this->data;
+        return new \ArrayIterator($this->data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAdditionalInformation(): int
+    {
+        return $this->additionalInformation;
     }
 
     /**

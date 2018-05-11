@@ -39,16 +39,6 @@ final class TextStringWithChunkObject implements CBORObject
     }
 
     /**
-     * @param TextStringObject[] $data
-     *
-     * @return TextStringWithChunkObject
-     */
-    public static function createFromLoadedData(array $data): self
-    {
-        return new self($data);
-    }
-
-    /**
      * @param string $data
      *
      * @return TextStringWithChunkObject
@@ -95,17 +85,17 @@ final class TextStringWithChunkObject implements CBORObject
         return self::ADDITIONAL_INFORMATION;
     }
 
-    public function getLength(): ?string
-    {
-        return null;
-    }
-
     /**
-     * {@inheritdoc}
+     * @return string
      */
-    public function getData(): array
+    public function getValue(): string
     {
-        return $this->data;
+        $result = '';
+        foreach ($this->data as $object) {
+            $result .= $object->getValue();
+        }
+
+        return $result;
     }
 
     /**

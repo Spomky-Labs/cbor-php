@@ -56,17 +56,17 @@ final class TimestampTag extends Base
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
-            return $this->getData()->getNormalizedData($ignoreTags);
+            return $this->object->getNormalizedData($ignoreTags);
         }
         switch (true) {
-            case $this->getData() instanceof UnsignedIntegerObject:
-                return \DateTimeImmutable::createFromFormat('U', strval($this->getData()->getNormalizedData($ignoreTags)));
-            case $this->getData() instanceof HalfPrecisionFloatObject:
-            case $this->getData() instanceof SinglePrecisionFloatObject:
-            case $this->getData() instanceof DoublePrecisionFloatObject:
-                return \DateTimeImmutable::createFromFormat('U.u', strval($this->getData()->getNormalizedData($ignoreTags)));
+            case $this->object instanceof UnsignedIntegerObject:
+                return \DateTimeImmutable::createFromFormat('U', strval($this->object->getNormalizedData($ignoreTags)));
+            case $this->object instanceof HalfPrecisionFloatObject:
+            case $this->object instanceof SinglePrecisionFloatObject:
+            case $this->object instanceof DoublePrecisionFloatObject:
+                return \DateTimeImmutable::createFromFormat('U.u', strval($this->object->getNormalizedData($ignoreTags)));
             default:
-                return $this->getData()->getNormalizedData($ignoreTags);
+                return $this->object->getNormalizedData($ignoreTags);
         }
     }
 }

@@ -74,10 +74,10 @@ final class SimpleValueObject extends Base
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        if (null === $this->getData()) {
+        if (null === $this->data) {
             return $this->getAdditionalInformation();
         }
 
-        return gmp_intval(gmp_init(bin2hex($this->getData()), 16));
+        return gmp_intval(gmp_init(bin2hex($this->data), 16));
     }
 }

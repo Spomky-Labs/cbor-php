@@ -53,13 +53,13 @@ final class PositiveBigIntegerTag extends Base
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
-            return $this->getData()->getNormalizedData($ignoreTags);
-        }
-        $object = $this->getData();
-        if (!$object instanceof ByteStringObject) {
-            return $this->getData()->getNormalizedData($ignoreTags);
+            return $this->object->getNormalizedData($ignoreTags);
         }
 
-        return gmp_strval(gmp_init(bin2hex($object->getData()), 16), 10);
+        if (!$this->object instanceof ByteStringObject) {
+            return $this->object->getNormalizedData($ignoreTags);
+        }
+
+        return gmp_strval(gmp_init(bin2hex($this->object->getValue()), 16), 10);
     }
 }

@@ -52,7 +52,7 @@ final class SinglePrecisionFloatObject extends Base
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
+        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
         $exp = ($single >> 23) & 0xff;
         $mant = $single & 0x7fffff;
 
@@ -72,7 +72,7 @@ final class SinglePrecisionFloatObject extends Base
      */
     public function getExponent(): int
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
+        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
 
         return ($single >> 23) & 0xff;
     }
@@ -82,7 +82,7 @@ final class SinglePrecisionFloatObject extends Base
      */
     public function getMantissa(): int
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
+        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
 
         return $single & 0x7fffff;
     }
@@ -92,7 +92,7 @@ final class SinglePrecisionFloatObject extends Base
      */
     public function getSign(): int
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
+        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
 
         return $single >> 31 ? -1 : 1;
     }

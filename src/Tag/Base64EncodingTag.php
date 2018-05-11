@@ -56,14 +56,13 @@ final class Base64EncodingTag extends Base
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
-            return $this->getData()->getNormalizedData($ignoreTags);
+            return $this->object->getNormalizedData($ignoreTags);
         }
 
-        $object = $this->getData();
-        if (!$object instanceof ByteStringObject && !$object instanceof ByteStringWithChunkObject && !$object instanceof TextStringObject && !$object instanceof TextStringWithChunkObject) {
-            return $object->getNormalizedData($ignoreTags);
+        if (!$this->object instanceof ByteStringObject && !$this->object instanceof ByteStringWithChunkObject && !$this->object instanceof TextStringObject && !$this->object instanceof TextStringWithChunkObject) {
+            return $this->object->getNormalizedData($ignoreTags);
         }
 
-        return base64_decode($object->getNormalizedData($ignoreTags));
+        return base64_decode($this->object->getNormalizedData($ignoreTags));
     }
 }

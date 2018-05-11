@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-class ListObject implements CBORObject, \Countable
+class ListObject implements CBORObject, \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b100;
 
@@ -35,32 +35,17 @@ class ListObject implements CBORObject, \Countable
     /**
      * CBORObject constructor.
      *
-     * @param int          $additionalInformation
-     * @param null|string  $length
      * @param CBORObject[] $data
      */
-    private function __construct(int $additionalInformation, ?string $length, array $data)
+    private function __construct(array $data)
     {
-        $this->additionalInformation = $additionalInformation;
+        list($this->additionalInformation, $this->length) = LengthCalculator::getLengthOfArray($data);
         array_map(function ($item) {
             if (!$item instanceof CBORObject) {
                 throw new \InvalidArgumentException('The list must contain only CBORObjects.');
             }
         }, $data);
         $this->data = $data;
-        $this->length = $length;
-    }
-
-    /**
-     * @param int          $additionalInformation
-     * @param null|string  $length
-     * @param CBORObject[] $data
-     *
-     * @return ListObject
-     */
-    public static function createObjectForValue(int $additionalInformation, ?string $length, array $data): self
-    {
-        return new self($additionalInformation, $length, $data);
     }
 
     /**
@@ -70,9 +55,7 @@ class ListObject implements CBORObject, \Countable
      */
     public static function create(array $data): self
     {
-        list($additionalInformation, $length) = LengthCalculator::getLengthOfArray($data);
-
-        return new self($additionalInformation, $length, $data);
+        return new self($data);
     }
 
     /**
@@ -81,14 +64,6 @@ class ListObject implements CBORObject, \Countable
     public function getMajorType(): int
     {
         return self::MAJOR_TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdditionalInformation(): int
-    {
-        return $this->additionalInformation;
     }
 
     /**
@@ -108,17 +83,9 @@ class ListObject implements CBORObject, \Countable
     /**
      * {@inheritdoc}
      */
-    public function getLength(): ?string
+    public function getAdditionalInformation(): int
     {
-        return $this->length;
-    }
-
-    /**
-     * @return CBORObject[]
-     */
-    public function getData(): array
-    {
-        return $this->data;
+        return $this->additionalInformation;
     }
 
     /**
@@ -137,6 +104,14 @@ class ListObject implements CBORObject, \Countable
     public function count()
     {
         return count($this->data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->data);
     }
 
     /**

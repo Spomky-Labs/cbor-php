@@ -48,9 +48,9 @@ final class EpochTag extends Base
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
-            return $this->getData()->getNormalizedData($ignoreTags);
+            return $this->object->getNormalizedData($ignoreTags);
         }
 
-        return \DateTimeImmutable::createFromFormat(DATE_RFC3339, $this->getData()->getNormalizedData($ignoreTags));
+        return \DateTimeImmutable::createFromFormat(DATE_RFC3339, $this->object->getNormalizedData($ignoreTags));
     }
 }

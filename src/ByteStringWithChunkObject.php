@@ -24,6 +24,11 @@ final class ByteStringWithChunkObject implements CBORObject
     private $data;
 
     /**
+     * @var int
+     */
+    private $additionalInformation;
+
+    /**
      * CBORObject constructor.
      *
      * @param ByteStringObject[] $data
@@ -36,16 +41,6 @@ final class ByteStringWithChunkObject implements CBORObject
             }
         }, $data);
         $this->data = $data;
-    }
-
-    /**
-     * @param ByteStringObject[] $data
-     *
-     * @return ByteStringWithChunkObject
-     */
-    public static function createFromLoadedData(array $data): self
-    {
-        return new self($data);
     }
 
     /**
@@ -92,20 +87,20 @@ final class ByteStringWithChunkObject implements CBORObject
      */
     public function getAdditionalInformation(): int
     {
-        return self::ADDITION_INFORMATION;
-    }
-
-    public function getLength(): ?string
-    {
-        return null;
+        return $this->additionalInformation;
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
-    public function getData(): array
+    public function getValue(): string
     {
-        return $this->data;
+        $result = '';
+        foreach ($this->data as $object) {
+            $result .= $object->getValue();
+        }
+
+        return $result;
     }
 
     /**

@@ -52,7 +52,7 @@ final class DoublePrecisionFloatObject extends Base
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        $single = gmp_init(bin2hex($this->getData()), 16);
+        $single = gmp_init(bin2hex($this->data), 16);
         $exp = gmp_intval($this->bitwiseAnd($this->rightShift($single, 52), gmp_init('7ff', 16)));
         $mant = gmp_intval($this->bitwiseAnd($single, gmp_init('fffffffffffff', 16)));
         $sign = gmp_intval($this->rightShift($single, 63));
@@ -73,7 +73,7 @@ final class DoublePrecisionFloatObject extends Base
      */
     public function getExponent(): int
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
+        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
 
         return ($single >> 52) & 0x7ff;
     }
@@ -83,7 +83,7 @@ final class DoublePrecisionFloatObject extends Base
      */
     public function getMantissa(): int
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
+        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
 
         return $single & 0x7fffff;
     }
@@ -93,7 +93,7 @@ final class DoublePrecisionFloatObject extends Base
      */
     public function getSign(): int
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
+        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
 
         return $single >> 63 ? -1 : 1;
     }

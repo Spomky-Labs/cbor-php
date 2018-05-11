@@ -28,6 +28,9 @@ class TagObjectManager
      */
     public function add(string $class)
     {
+        if ($class::getTagId() < 0) {
+            throw new \InvalidArgumentException('Invalid tag ID.');
+        }
         $this->classes[$class::getTagId()] = $class;
     }
 

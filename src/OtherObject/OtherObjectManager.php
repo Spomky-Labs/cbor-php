@@ -28,6 +28,9 @@ class OtherObjectManager
     public function add(string $class)
     {
         foreach ($class::supportedAdditionalInformation() as $ai) {
+            if ($ai < 0) {
+                throw new \InvalidArgumentException('Invalid additional information.');
+            }
             $this->classes[$ai] = $class;
         }
     }

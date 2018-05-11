@@ -26,16 +26,6 @@ interface CBORObject
     public function getAdditionalInformation(): int;
 
     /**
-     * @return null|string
-     */
-    public function getLength(): ?string;
-
-    /**
-     * @return mixed|null
-     */
-    public function getData();
-
-    /**
      * @param bool $ignoreTags
      *
      * @return mixed|null

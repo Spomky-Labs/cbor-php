@@ -35,27 +35,13 @@ final class TextStringObject implements CBORObject
     /**
      * CBORObject constructor.
      *
-     * @param int         $additionalInformation
-     * @param string|null $length
      * @param string      $data
      */
-    private function __construct(int $additionalInformation, ?string $length, string $data)
+    private function __construct(string $data)
     {
-        $this->additionalInformation = $additionalInformation;
-        $this->length = $length;
-        $this->data = $data;
-    }
+        list($this->additionalInformation, $this->length) = LengthCalculator::getLengthOfString($data);
 
-    /**
-     * @param int         $additionalInformation
-     * @param string|null $length
-     * @param string      $data
-     *
-     * @return TextStringObject
-     */
-    public static function createFromLoadedData(int $additionalInformation, ?string $length, string $data): self
-    {
-        return new self($additionalInformation, $length, $data);
+        $this->data = $data;
     }
 
     /**
@@ -65,9 +51,7 @@ final class TextStringObject implements CBORObject
      */
     public static function create(string $data): self
     {
-        list($additionalInformation, $length) = LengthCalculator::getLengthOfString($data);
-
-        return new self($additionalInformation, $length, $data);
+        return new self($data);
     }
 
     /**
@@ -87,17 +71,9 @@ final class TextStringObject implements CBORObject
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getLength(): ?string
-    {
-        return $this->length;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getData(): string
+    public function getValue(): string
     {
         return $this->data;
     }

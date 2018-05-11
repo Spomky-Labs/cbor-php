@@ -76,21 +76,20 @@ final class BigFloatTag extends Base
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
-            return $this->getData()->getNormalizedData($ignoreTags);
+            return $this->object->getNormalizedData($ignoreTags);
         }
 
-        $object = $this->getData();
-        if (!$object instanceof ListObject || count($object) !== 2) {
-            return $object->getNormalizedData($ignoreTags);
+        if (!$this->object instanceof ListObject || count($this->object) !== 2) {
+            return $this->object->getNormalizedData($ignoreTags);
         }
-        $e = $object->get(0);
-        $m = $object->get(1);
+        $e = $this->object->get(0);
+        $m = $this->object->get(1);
 
         if (!$e instanceof UnsignedIntegerObject && !$e instanceof SignedIntegerObject) {
-            return $object->getNormalizedData($ignoreTags);
+            return $this->object->getNormalizedData($ignoreTags);
         }
         if (!$m instanceof UnsignedIntegerObject && !$m instanceof SignedIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof PositiveBigIntegerTag) {
-            return $object->getNormalizedData($ignoreTags);
+            return $this->object->getNormalizedData($ignoreTags);
         }
 
         return rtrim(

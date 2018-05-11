@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use CBOR\OtherObject\BreakObject;
 use CBOR\OtherObject\OtherObjectManager;
 use CBOR\Tag\TagObjectManager;
 
@@ -98,11 +99,11 @@ final class Decoder
             case 0b010: //2
                 $length = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
 
-                return ByteStringObject::createFromLoadedData($ai, $val, $stream->read($length));
+                return ByteStringObject::create($stream->read($length));
             case 0b011: //3
                 $length = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
 
-                return TextStringObject::createFromLoadedData($ai, $val, $stream->read($length));
+                return TextStringObject::create($stream->read($length));
             case 0b100: //4
                 $list = [];
                 $nbItems = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
@@ -110,7 +111,7 @@ final class Decoder
                     $list[] = $this->process($stream);
                 }
 
-                return ListObject::createObjectForValue($ai, $val, $list);
+                return ListObject::create($list);
             case 0b101: //5
                 $list = [];
                 $nbItems = null === $val ? $ai : gmp_intval(gmp_init(bin2hex($val), 16));
@@ -118,7 +119,7 @@ final class Decoder
                     $list[] = MapItem::create($this->process($stream), $this->process($stream));
                 }
 
-                return MapObject::createObjectForValue($ai, $val, $list);
+                return MapObject::create($list);
             case 0b110: //6
                 return $this->tagObjectManager->createObjectForValue($ai, $val, $this->process($stream));
             case 0b111: //7
@@ -139,66 +140,44 @@ final class Decoder
     {
         switch ($mt) {
             case 0b010: //2
-                $val = [];
-                while ($it = $this->process($stream, true)) {
-                    if ($this->isBreak($it)) {
-                        break;
-                    }
-                    $val[] = $it;
+                $object = ByteStringWithChunkObject::create();
+                while (!($it = $this->process($stream, true)) instanceof BreakObject) {
+                    $object->addChunk($it);
                 }
 
-                return ByteStringWithChunkObject::createFromLoadedData($val);
+                return $object;
             case 0b011: //3
-                $val = [];
-                while ($it = $this->process($stream, true)) {
-                    if ($this->isBreak($it)) {
-                        break;
-                    }
-                    $val[] = $it;
+                $object = TextStringWithChunkObject::create();
+                while (!($it = $this->process($stream, true)) instanceof BreakObject) {
+                    $object->addChunk($it);
                 }
 
-                return TextStringWithChunkObject::createFromLoadedData($val);
+                return $object;
             case 0b100: //4
-                $val = [];
-                while ($it = $this->process($stream, true)) {
-                    if ($this->isBreak($it)) {
-                        break;
-                    }
-                    $val[] = $it;
+                $object = InfiniteListObject::create();
+                while (!($it = $this->process($stream, true)) instanceof BreakObject) {
+                    $object->append($it);
                 }
 
-                return InfiniteListObject::createObjectForValue($val);
+                return $object;
             case 0b101: //5
-                $val = [];
-                while ($it = $this->process($stream, true)) {
-                    if ($this->isBreak($it)) {
-                        break;
-                    }
-                    $val[] = MapItem::create($it, $this->process($stream));
+                $object = InfiniteMapObject::create();
+                while (!($it = $this->process($stream, true)) instanceof BreakObject) {
+                    $object->append($it, $this->process($stream));
                 }
 
-                return InfiniteMapObject::createObjectForValue($val);
+                return $object;
             case 0b111: //7
-                if ($breakable) {
-                    return $this->otherTypeManager->createObjectForValue(0b00011111, null);
-                } else {
-                    throw new \InvalidArgumentException('Cannot pares the data. No enclosing indefinite.');
+                if (!$breakable) {
+                    throw new \InvalidArgumentException('Cannot parse the data. No enclosing indefinite.');
                 }
+
+                return BreakObject::create();
             case 0b000: //0
             case 0b001: //1
             case 0b110: //6
             default:
                 throw new \InvalidArgumentException(sprintf('Cannot parse the data. Found infinite length for Major Type "%s" (%d).', str_pad(decbin($mt), 5, '0', STR_PAD_LEFT), $mt));
         }
-    }
-
-    /**
-     * @param CBORObject $object
-     *
-     * @return bool
-     */
-    private function isBreak(CBORObject $object): bool
-    {
-        return $object->getMajorType() === 0b111 && $object->getAdditionalInformation() === 0b00011111;
     }
 }

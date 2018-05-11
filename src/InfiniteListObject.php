@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class InfiniteListObject implements CBORObject, \Countable
+use Traversable;
+
+final class InfiniteListObject implements CBORObject, \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b100;
 
@@ -54,16 +56,6 @@ final class InfiniteListObject implements CBORObject, \Countable
      *
      * @return InfiniteListObject
      */
-    public static function createObjectForValue(array $data): self
-    {
-        return new self($data);
-    }
-
-    /**
-     * @param CBORObject[] $data
-     *
-     * @return InfiniteListObject
-     */
     public static function create(array $data = []): self
     {
         return new self($data);
@@ -75,14 +67,6 @@ final class InfiniteListObject implements CBORObject, \Countable
     public function getMajorType(): int
     {
         return self::MAJOR_TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdditionalInformation(): int
-    {
-        return $this->additionalInformation;
     }
 
     /**
@@ -102,17 +86,9 @@ final class InfiniteListObject implements CBORObject, \Countable
     /**
      * {@inheritdoc}
      */
-    public function getLength(): ?string
+    public function getAdditionalInformation(): int
     {
-        return $this->length;
-    }
-
-    /**
-     * @return CBORObject[]
-     */
-    public function getData(): array
-    {
-        return $this->data;
+        return $this->additionalInformation;
     }
 
     /**
@@ -139,6 +115,14 @@ final class InfiniteListObject implements CBORObject, \Countable
     public function count()
     {
         return count($this->data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->data);
     }
 
     /**

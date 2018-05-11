@@ -53,13 +53,13 @@ final class NegativeBigIntegerTag extends Base
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
-            return $this->getData()->getNormalizedData($ignoreTags);
+            return $this->object->getNormalizedData($ignoreTags);
         }
-        $object = $this->getData();
-        if (!$object instanceof ByteStringObject) {
-            return $this->getData()->getNormalizedData($ignoreTags);
+
+        if (!$this->object instanceof ByteStringObject) {
+            return $this->object->getNormalizedData($ignoreTags);
         }
-        $integer = gmp_init(bin2hex($object->getData()), 16);
+        $integer = gmp_init(bin2hex($this->object->getValue()), 16);
         $minusOne = gmp_init('-1', 10);
 
         return gmp_strval(gmp_sub($minusOne, $integer), 10);

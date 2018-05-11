@@ -52,7 +52,7 @@ final class HalfPrecisionFloatObject extends Base
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        $half = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
+        $half = gmp_intval(gmp_init(bin2hex($this->data), 16));
         $exp = ($half >> 10) & 0x1f;
         $mant = $half & 0x3ff;
 
@@ -72,7 +72,7 @@ final class HalfPrecisionFloatObject extends Base
      */
     public function getExponent(): int
     {
-        $half = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
+        $half = gmp_intval(gmp_init(bin2hex($this->data), 16));
 
         return ($half >> 10) & 0x1f;
     }
@@ -82,7 +82,7 @@ final class HalfPrecisionFloatObject extends Base
      */
     public function getMantissa(): int
     {
-        $half = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
+        $half = gmp_intval(gmp_init(bin2hex($this->data), 16));
 
         return $half & 0x3ff;
     }
@@ -92,7 +92,7 @@ final class HalfPrecisionFloatObject extends Base
      */
     public function getSign(): int
     {
-        $half = gmp_intval(gmp_init(bin2hex($this->getData()), 16));
+        $half = gmp_intval(gmp_init(bin2hex($this->data), 16));
 
         return $half >> 15 ? -1 : 1;
     }

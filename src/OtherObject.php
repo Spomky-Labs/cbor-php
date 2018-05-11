@@ -20,12 +20,12 @@ abstract class OtherObject implements CBORObject
     /**
      * @var int
      */
-    private $additionalInformation;
+    protected $additionalInformation;
 
     /**
      * @var null|string
      */
-    private $data;
+    protected $data;
 
     /**
      * @return int[]
@@ -66,22 +66,6 @@ abstract class OtherObject implements CBORObject
     public function getAdditionalInformation(): int
     {
         return $this->additionalInformation;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getData(): ?string
-    {
-        return $this->data;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLength(): ?string
-    {
-        return null;
     }
 
     /**

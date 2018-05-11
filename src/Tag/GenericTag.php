@@ -39,6 +39,6 @@ final class GenericTag extends Base
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        return $this->getData();
+        return $this->object;
     }
 }

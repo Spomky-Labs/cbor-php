@@ -20,17 +20,17 @@ abstract class TagObject implements CBORObject
     /**
      * @var int
      */
-    private $additionalInformation;
+    protected $additionalInformation;
 
     /**
      * @var null|string
      */
-    private $data;
+    protected $data;
 
     /**
      * @var CBORObject
      */
-    private $object;
+    protected $object;
 
     /**
      * CBORObject constructor.
@@ -79,25 +79,17 @@ abstract class TagObject implements CBORObject
     /**
      * {@inheritdoc}
      */
-    public function getData(): CBORObject
-    {
-        return $this->object;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLength(): ?string
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         return $this->object->getNormalizedData($ignoreTags);
+    }
+
+    /**
+     * @return CBORObject
+     */
+    public function getValue(): CBORObject
+    {
+        return $this->object;
     }
 
     /**

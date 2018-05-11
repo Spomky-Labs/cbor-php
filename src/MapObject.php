@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class MapObject implements CBORObject, \Countable
+final class MapObject implements CBORObject, \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b101;
 
@@ -35,32 +35,17 @@ final class MapObject implements CBORObject, \Countable
     /**
      * CBORObject constructor.
      *
-     * @param int         $additionalInformation
-     * @param null|string $length
      * @param MapItem[]   $data
      */
-    private function __construct(int $additionalInformation, ?string $length, array $data)
+    private function __construct(array $data)
     {
-        $this->additionalInformation = $additionalInformation;
+        list($this->additionalInformation, $this->length) = LengthCalculator::getLengthOfArray($data);
         array_map(function ($item) {
             if (!$item instanceof MapItem) {
                 throw new \InvalidArgumentException('The list must contain only MapItem.');
             }
         }, $data);
         $this->data = $data;
-        $this->length = $length;
-    }
-
-    /**
-     * @param int         $additionalInformation
-     * @param null|string $length
-     * @param MapItem[]   $data
-     *
-     * @return MapObject
-     */
-    public static function createObjectForValue(int $additionalInformation, ?string $length, array $data): self
-    {
-        return new self($additionalInformation, $length, $data);
     }
 
     /**
@@ -70,9 +55,7 @@ final class MapObject implements CBORObject, \Countable
      */
     public static function create(array $data): self
     {
-        list($additionalInformation, $length) = LengthCalculator::getLengthOfArray($data);
-
-        return new self($additionalInformation, $length, $data);
+        return new self($data);
     }
 
     /**
@@ -86,33 +69,25 @@ final class MapObject implements CBORObject, \Countable
     /**
      * {@inheritdoc}
      */
-    public function getAdditionalInformation(): int
-    {
-        return $this->additionalInformation;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLength(): ?string
-    {
-        return $this->length;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function count()
     {
         return count($this->data);
     }
 
     /**
-     * @return MapItem[]
+     * {@inheritdoc}
      */
-    public function getData(): array
+    public function getIterator()
     {
-        return $this->data;
+        return new \ArrayIterator($this->data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAdditionalInformation(): int
+    {
+        return $this->additionalInformation;
     }
 
     /**
