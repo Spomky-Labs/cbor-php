@@ -77,7 +77,6 @@ final class ByteStringObject implements CBORObject
         return $this->data;
     }
 
-
     public function getLength(): int
     {
         return mb_strlen($this->data, '8bit');

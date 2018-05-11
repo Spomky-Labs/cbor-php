@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR\Test\Type;
 
-use CBOR\TextStringObject;
 use CBOR\StringStream;
+use CBOR\TextStringObject;
 
 /**
  * @covers \CBOR\TextStringObject
