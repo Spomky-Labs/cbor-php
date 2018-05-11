@@ -30,7 +30,7 @@ final class ByteStringObjectTest extends BaseTestCase
 
         self::assertEquals('Hello', $object->getNormalizedData());
 
-        $normalized = (string)$object;
+        $normalized = (string) $object;
         $stream = new StringStream($normalized);
         $decoded = $this->getDecoder()->decode($stream);
 
