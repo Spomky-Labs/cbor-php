@@ -75,7 +75,6 @@ final class ByteStringWithChunkObject implements CBORObject
         return $result;
     }
 
-
     public function getLength(): int
     {
         $length = 0;

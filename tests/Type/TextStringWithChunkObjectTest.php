@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace CBOR\Test\Type;
 
+use CBOR\StringStream;
 use CBOR\TextStringObject;
 use CBOR\TextStringWithChunkObject;
-use CBOR\StringStream;
 
 /**
  * @covers \CBOR\TextStringWithChunkObject
