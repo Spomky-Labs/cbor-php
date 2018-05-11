@@ -16,54 +16,26 @@ namespace CBOR;
 final class ByteStringWithChunkObject implements CBORObject
 {
     private const MAJOR_TYPE = 0b010;
-    private const ADDITION_INFORMATION = 0b00011111;
+    private const ADDITIONAL_INFORMATION = 0b00011111;
 
     /**
      * @var ByteStringObject[]
      */
-    private $data;
-
-    /**
-     * @var int
-     */
-    private $additionalInformation;
+    private $data = [];
 
     /**
      * CBORObject constructor.
-     *
-     * @param ByteStringObject[] $data
      */
-    private function __construct(array $data)
+    private function __construct()
     {
-        array_map(function ($obj) {
-            if (!$obj instanceof ByteStringObject) {
-                throw new \InvalidArgumentException('The data must be an array of ByteStringObject objects.');
-            }
-        }, $data);
-        $this->data = $data;
     }
 
     /**
-     * @param string $data
-     *
      * @return ByteStringWithChunkObject
      */
-    public static function create(string $data = ''): self
+    public static function create(): self
     {
-        $chunks = [];
-        if (!empty($data)) {
-            $chunks[] = ByteStringObject::create($data);
-        }
-
-        return new self($chunks);
-    }
-
-    /**
-     * @param string $chunk
-     */
-    public function append(string $chunk)
-    {
-        $this->addChunk(ByteStringObject::create($chunk));
+        return new self();
     }
 
     /**
@@ -87,7 +59,7 @@ final class ByteStringWithChunkObject implements CBORObject
      */
     public function getAdditionalInformation(): int
     {
-        return $this->additionalInformation;
+        return self::ADDITIONAL_INFORMATION;
     }
 
     /**
@@ -121,7 +93,7 @@ final class ByteStringWithChunkObject implements CBORObject
      */
     public function __toString(): string
     {
-        $result = chr(self::MAJOR_TYPE << 5 | self::ADDITION_INFORMATION);
+        $result = chr(self::MAJOR_TYPE << 5 | self::ADDITIONAL_INFORMATION);
         foreach ($this->data as $object) {
             $result .= $object->__toString();
         }

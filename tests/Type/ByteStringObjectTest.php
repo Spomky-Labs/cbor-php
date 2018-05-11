@@ -23,17 +23,34 @@ final class ByteStringObjectTest extends BaseTestCase
 {
     /**
      * @test
+     * @dataProvider getData
      */
-    public function aByteStringObjectCanBeCreated()
+    public function aByteStringObjectCanBeCreated(string $string, int $expectedAdditionalInformation, string $expectedEncodedObject)
     {
-        $object = ByteStringObject::create('Hello');
+        $object = ByteStringObject::create($string);
 
-        self::assertEquals('Hello', $object->getNormalizedData());
+        self::assertEquals(0b010, $object->getMajorType());
+        self::assertEquals($expectedAdditionalInformation, $object->getAdditionalInformation());
+        self::assertEquals($string, $object->getValue());
+        self::assertEquals($string, $object->getNormalizedData());
 
-        $normalized = (string) $object;
-        $stream = new StringStream($normalized);
+        $binary = (string) $object;
+        self::assertEquals(hex2bin($expectedEncodedObject), $binary);
+
+        $stream = new StringStream($binary);
         $decoded = $this->getDecoder()->decode($stream);
 
-        self::assertEquals('Hello', $decoded->getNormalizedData());
+        self::assertEquals(0b010, $decoded->getMajorType());
+        self::assertEquals($expectedAdditionalInformation, $decoded->getAdditionalInformation());
+        self::assertEquals($string, $decoded->getValue());
+        self::assertEquals($string, $decoded->getNormalizedData());
+    }
+
+    public function getData(): array
+    {
+        return [
+            ['Hello', 5, '4548656c6c6f'],
+            ['HelloHelloHelloHelloHello', 24, '581948656c6c6f48656c6c6f48656c6c6f48656c6c6f48656c6c6f'],
+        ];
     }
 }

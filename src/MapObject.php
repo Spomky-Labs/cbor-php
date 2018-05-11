@@ -58,6 +58,12 @@ final class MapObject implements CBORObject, \Countable, \IteratorAggregate
         return new self($data);
     }
 
+    public function add(CBORObject $key, CBORObject $value): void
+    {
+        $this->data[] = MapItem::create($key, $value);
+        list($this->additionalInformation, $this->length) = LengthCalculator::getLengthOfArray($this->data);
+    }
+
     /**
      * {@inheritdoc}
      */

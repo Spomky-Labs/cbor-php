@@ -16,47 +16,26 @@ namespace CBOR;
 final class InfiniteListObject implements CBORObject, \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b100;
-
-    /**
-     * @var int
-     */
-    private $additionalInformation;
+    private const ADDITIONAL_INFORMATION = 0b00011111;
 
     /**
      * @var CBORObject[]
      */
-    private $data;
-
-    /**
-     * @var null|string
-     */
-    private $length;
+    private $data = [];
 
     /**
      * InfiniteListObject constructor.
-     *
-     * @param CBORObject[] $data
      */
-    private function __construct(array $data)
+    private function __construct()
     {
-        array_map(function ($item) {
-            if (!$item instanceof CBORObject) {
-                throw new \InvalidArgumentException('The list must contain only CBORObjects.');
-            }
-        }, $data);
-        $this->additionalInformation = 0b00011111;
-        $this->length = null;
-        $this->data = $data;
     }
 
     /**
-     * @param CBORObject[] $data
-     *
      * @return InfiniteListObject
      */
-    public static function create(array $data = []): self
+    public static function create(): self
     {
-        return new self($data);
+        return new self();
     }
 
     /**
@@ -68,25 +47,11 @@ final class InfiniteListObject implements CBORObject, \Countable, \IteratorAggre
     }
 
     /**
-     * @param int $index
-     *
-     * @return CBORObject
-     */
-    public function get(int $index): CBORObject
-    {
-        if (!array_key_exists($index, $this->data)) {
-            throw new \InvalidArgumentException('Index not found.');
-        }
-
-        return $this->data[$index];
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getAdditionalInformation(): int
     {
-        return $this->additionalInformation;
+        return self::ADDITIONAL_INFORMATION;
     }
 
     /**
@@ -128,7 +93,7 @@ final class InfiniteListObject implements CBORObject, \Countable, \IteratorAggre
      */
     public function __toString(): string
     {
-        $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
+        $result = chr(self::MAJOR_TYPE << 5 | self::ADDITIONAL_INFORMATION);
         foreach ($this->data as $object) {
             $result .= $object->__toString();
         }

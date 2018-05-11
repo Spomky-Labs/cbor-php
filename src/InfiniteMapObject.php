@@ -16,21 +16,12 @@ namespace CBOR;
 final class InfiniteMapObject implements CBORObject, \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b101;
-
-    /**
-     * @var int
-     */
-    private $additionalInformation;
+    private const ADDITIONAL_INFORMATION = 0b00011111;
 
     /**
      * @var MapItem[]
      */
-    private $data;
-
-    /**
-     * @var null|string
-     */
-    private $length;
+    private $data = [];
 
     /**
      * CBORObject constructor.
@@ -45,8 +36,6 @@ final class InfiniteMapObject implements CBORObject, \Countable, \IteratorAggreg
             }
         }, $data);
         $this->data = $data;
-        $this->additionalInformation = 0b00011111;
-        $this->length = null;
     }
 
     /**
@@ -97,7 +86,7 @@ final class InfiniteMapObject implements CBORObject, \Countable, \IteratorAggreg
      */
     public function getAdditionalInformation(): int
     {
-        return $this->additionalInformation;
+        return self::ADDITIONAL_INFORMATION;
     }
 
     /**
@@ -118,7 +107,7 @@ final class InfiniteMapObject implements CBORObject, \Countable, \IteratorAggreg
      */
     public function __toString(): string
     {
-        $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
+        $result = chr(self::MAJOR_TYPE << 5 | self::ADDITIONAL_INFORMATION);
         foreach ($this->data as $object) {
             $result .= $object->getKey()->__toString();
             $result .= $object->getValue()->__toString();

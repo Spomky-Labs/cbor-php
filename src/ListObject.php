@@ -61,6 +61,15 @@ class ListObject implements CBORObject, \Countable, \IteratorAggregate
     /**
      * {@inheritdoc}
      */
+    public function add(CBORObject $object): void
+    {
+        $this->data[] = $object;
+        list($this->additionalInformation, $this->length) = LengthCalculator::getLengthOfArray($this->data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getMajorType(): int
     {
         return self::MAJOR_TYPE;
