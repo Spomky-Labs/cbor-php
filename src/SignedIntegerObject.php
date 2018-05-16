@@ -75,8 +75,8 @@ final class SignedIntegerObject implements CBORObject
         $computed_value = gmp_sub($minusOne, $value);
 
         switch (true) {
-            case $computed_value < 24:
-                $ai = $computed_value;
+            case gmp_intval($computed_value) < 24:
+                $ai = gmp_intval($computed_value);
                 $data = null;
                 break;
             case gmp_cmp($computed_value, gmp_init('FF', 16)) < 0:

@@ -53,7 +53,7 @@ class ListObject implements CBORObject, \Countable, \IteratorAggregate
      *
      * @return ListObject
      */
-    public static function create(array $data): self
+    public static function create(array $data = []): self
     {
         return new self($data);
     }
@@ -134,9 +134,6 @@ class ListObject implements CBORObject, \Countable, \IteratorAggregate
         }
         foreach ($this->data as $object) {
             $result .= $object->__toString();
-        }
-        if (0b00011111 === $this->additionalInformation) {
-            $result .= hex2bin('FF');
         }
 
         return $result;

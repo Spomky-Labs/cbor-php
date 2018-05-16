@@ -53,7 +53,7 @@ final class MapObject implements CBORObject, \Countable, \IteratorAggregate
      *
      * @return MapObject
      */
-    public static function create(array $data): self
+    public static function create(array $data = []): self
     {
         return new self($data);
     }
@@ -121,9 +121,6 @@ final class MapObject implements CBORObject, \Countable, \IteratorAggregate
         foreach ($this->data as $object) {
             $result .= $object->getKey()->__toString();
             $result .= $object->getValue()->__toString();
-        }
-        if (0b00011111 === $this->additionalInformation) {
-            $result .= hex2bin('FF');
         }
 
         return $result;

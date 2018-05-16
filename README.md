@@ -97,7 +97,7 @@ Text String and Infinite Text String objects have the same major type but are ha
 use CBOR\TextStringObject; // Text String
 use CBOR\TextStringWithChunkObject; // Infinite Text String
 
-// Create a Text String with value "(｡◕‿◕｡)"
+// Create a Text String with value "(｡◕‿◕｡)⚡"
 $object = TextStringObject::create('(｡◕‿◕｡)⚡');
 
 // Create an Infinite Text String with value "(｡◕‿◕｡)⚡" ("(｡◕" + "" + "‿◕" + "｡)⚡")
@@ -230,6 +230,68 @@ $object->getNormalizedData(); // null
 $object = UndefinedObject::create();
 $object->getNormalizedData(); // 'undefined'
 ```
+
+## Example
+
+```php
+<?php
+
+use CBOR\MapObject;
+use CBOR\TextStringObject;
+use CBOR\ListObject;
+use CBOR\SignedIntegerObject;
+use CBOR\UnsignedIntegerObject;
+use CBOR\OtherObject\TrueObject;
+use CBOR\OtherObject\FalseObject;
+use CBOR\OtherObject\NullObject;
+use CBOR\Tag\DecimalFractionTag;
+use CBOR\Tag\TimestampTag;
+
+$object = MapObject::create();
+$object->add(
+    TextStringObject::create('(｡◕‿◕｡)⚡'),
+    ListObject::create([
+        TrueObject::create(),
+        FalseObject::create(),
+        DecimalFractionTag::create(
+            ListObject::create([
+                SignedIntegerObject::create(-2),
+                UnsignedIntegerObject::create(1234),
+            ])
+        ),
+    ])
+);
+
+$object->add(
+    UnsignedIntegerObject::create(2000),
+    NullObject::create()
+);
+$object->add(
+    TextStringObject::create('date'),
+    TimestampTag::create(
+        UnsignedIntegerObject::create(1577836800)
+    )
+);
+```
+
+The encoded result will be `0xa37428efbda1e29795e280bfe29795efbda129e29aa183f5f4c482211904d21907d0f66464617465c11a5e0be100`.
+The normalized result is:
+
+```php
+array:3 [
+  "(｡◕‿◕｡)⚡" => array:3 [
+    0 => true
+    1 => false
+    2 => "12.34"
+  ]
+  2000 => null
+  "date" => DateTimeImmutable @1577836800 {
+    date: 2020-01-01 00:00:00.0 +00:00
+  }
+]
+
+```
+
 
 ## Object Loading
 
