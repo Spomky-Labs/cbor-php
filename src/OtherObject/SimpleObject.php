@@ -22,7 +22,7 @@ final class SimpleObject extends Base
      */
     public static function supportedAdditionalInformation(): array
     {
-        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 24];
     }
 
     /**
@@ -38,6 +38,27 @@ final class SimpleObject extends Base
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        return $this->additionalInformation;
+        if (null === $this->data) {
+            return $this->getAdditionalInformation();
+        }
+
+        return gmp_intval(gmp_init(bin2hex($this->data), 16));
+    }
+
+    /**
+     * @param int $value
+     *
+     * @return SimpleObject
+     */
+    public static function create(int $value): self
+    {
+        switch (true) {
+            case $value <24:
+                return new self($value, null);
+            case $value <256:
+                return new self(24, chr($value));
+            default:
+                throw new \InvalidArgumentException('The value is not a valid simple value');
+        }
     }
 }
