@@ -28,7 +28,7 @@ final class TextStringObject implements CBORObject
     private $length;
 
     /**
-     * @var null|mixed
+     * @var string
      */
     private $data;
 
