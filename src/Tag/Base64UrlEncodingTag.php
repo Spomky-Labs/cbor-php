@@ -60,11 +60,10 @@ final class Base64UrlEncodingTag extends Base
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        $object = $this->data;
-        if (!$object instanceof ByteStringObject && !$object instanceof ByteStringWithChunkObject && !$object instanceof TextStringObject && !$object instanceof TextStringWithChunkObject) {
-            return $object->getNormalizedData($ignoreTags);
+        if (!$this->object instanceof ByteStringObject && !$this->object instanceof ByteStringWithChunkObject && !$this->object instanceof TextStringObject && !$this->object instanceof TextStringWithChunkObject) {
+            return $this->object->getNormalizedData($ignoreTags);
         }
 
-        return Base64Url::decode($object->getNormalizedData($ignoreTags));
+        return Base64Url::decode($this->object->getNormalizedData($ignoreTags));
     }
 }

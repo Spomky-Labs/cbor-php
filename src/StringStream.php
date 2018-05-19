@@ -25,6 +25,9 @@ final class StringStream implements Stream
     public function __construct(string $data)
     {
         $this->resource = fopen('php://memory', 'r+');
+        if ($this->resource === false) {
+            throw new \InvalidArgumentException('Unable to crate a stream using this string.');
+        }
         fwrite($this->resource, $data);
         rewind($this->resource);
     }
@@ -35,9 +38,6 @@ final class StringStream implements Stream
             return '';
         }
         $data = fread($this->resource, $length);
-        if (!is_string($data)) {
-            throw new \InvalidArgumentException('Cannot stream the data.');
-        }
         if (mb_strlen($data, '8bit') !== $length) {
             throw new \InvalidArgumentException(sprintf('Out of range. Expected: %d, read: %d.', $length, mb_strlen($data, '8bit')));
         }

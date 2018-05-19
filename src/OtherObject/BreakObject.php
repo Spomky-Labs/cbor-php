@@ -34,7 +34,7 @@ final class BreakObject extends Base
     }
 
     /**
-     * @return FalseObject
+     * @return BreakObject
      */
     public static function create(): Base
     {
