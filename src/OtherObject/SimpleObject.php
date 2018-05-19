@@ -53,9 +53,9 @@ final class SimpleObject extends Base
     public static function create(int $value): self
     {
         switch (true) {
-            case $value <24:
+            case $value < 24:
                 return new self($value, null);
-            case $value <256:
+            case $value < 256:
                 return new self(24, chr($value));
             default:
                 throw new \InvalidArgumentException('The value is not a valid simple value');
