@@ -28,7 +28,7 @@ final class GlobalTest extends BaseTestCase
         $stream = new StringStream(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         $object->getNormalizedData();
-        self::assertEquals($data, bin2hex($object->__toString()));
+        self::assertEquals($data, bin2hex((string) $object));
     }
 
     /**
