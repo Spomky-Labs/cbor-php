@@ -13,18 +13,10 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-abstract class OtherObject implements CBORObject
+abstract class OtherObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b111;
 
-    /**
-     * @var int
-     */
-    protected $additionalInformation;
-
-    /**
-     * @var null|string
-     */
     protected $data;
 
     /**
@@ -32,56 +24,17 @@ abstract class OtherObject implements CBORObject
      */
     abstract public static function supportedAdditionalInformation(): array;
 
-    /**
-     * @param int         $additionalInformation
-     * @param null|string $data
-     *
-     * @return OtherObject
-     */
     abstract public static function createFromLoadedData(int $additionalInformation, ?string $data): self;
 
-    /**
-     * CBORObject constructor.
-     *
-     * @param int         $additionalInformation
-     * @param null|string $data
-     */
-    protected function __construct(int $additionalInformation, ?string $data)
+    public function __construct(int $additionalInformation, ?string $data)
     {
-        $this->additionalInformation = $additionalInformation;
+        parent::__construct(self::MAJOR_TYPE, $additionalInformation);
         $this->data = $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getMajorType(): int
-    {
-        return self::MAJOR_TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdditionalInformation(): int
-    {
-        return $this->additionalInformation;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        return $this->data;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function __toString(): string
     {
-        $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
+        $result = parent::__toString();
         if (null !== $this->data) {
             $result .= $this->data;
         }

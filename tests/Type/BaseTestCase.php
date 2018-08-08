@@ -27,13 +27,11 @@ class BaseTestCase extends TestCase
      */
     private $decoder;
 
-    /**
-     * @return Decoder
-     */
     protected function getDecoder(): Decoder
     {
         if (null === $this->decoder) {
             $otherObjectManager = new OtherObjectManager();
+            $otherObjectManager->add(OtherObject\BreakObject::class);
             $otherObjectManager->add(OtherObject\SimpleObject::class);
             $otherObjectManager->add(OtherObject\FalseObject::class);
             $otherObjectManager->add(OtherObject\TrueObject::class);

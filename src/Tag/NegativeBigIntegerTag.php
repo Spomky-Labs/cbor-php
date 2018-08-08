@@ -19,25 +19,16 @@ use CBOR\TagObject as Base;
 
 final class NegativeBigIntegerTag extends Base
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getTagId(): int
     {
         return 3;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function create(CBORObject $object): Base
     {
         if (!$object instanceof ByteStringObject) {
@@ -47,9 +38,6 @@ final class NegativeBigIntegerTag extends Base
         return new self(3, null, $object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {

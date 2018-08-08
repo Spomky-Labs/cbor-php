@@ -22,25 +22,16 @@ use CBOR\UnsignedIntegerObject;
 
 final class TimestampTag extends Base
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getTagId(): int
     {
         return 1;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function create(CBORObject $object): Base
     {
         if (!$object instanceof UnsignedIntegerObject && !$object instanceof HalfPrecisionFloatObject && !$object instanceof SinglePrecisionFloatObject && !$object instanceof DoublePrecisionFloatObject) {
@@ -50,9 +41,6 @@ final class TimestampTag extends Base
         return new self(1, null, $object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
@@ -60,11 +48,11 @@ final class TimestampTag extends Base
         }
         switch (true) {
             case $this->object instanceof UnsignedIntegerObject:
-                return \DateTimeImmutable::createFromFormat('U', strval($this->object->getNormalizedData($ignoreTags)));
+                return \DateTimeImmutable::createFromFormat('U', \strval($this->object->getNormalizedData($ignoreTags)));
             case $this->object instanceof HalfPrecisionFloatObject:
             case $this->object instanceof SinglePrecisionFloatObject:
             case $this->object instanceof DoublePrecisionFloatObject:
-                return \DateTimeImmutable::createFromFormat('U.u', strval($this->object->getNormalizedData($ignoreTags)));
+                return \DateTimeImmutable::createFromFormat('U.u', \strval($this->object->getNormalizedData($ignoreTags)));
             default:
                 return $this->object->getNormalizedData($ignoreTags);
         }

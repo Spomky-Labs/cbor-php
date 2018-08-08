@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class ByteStringWithChunkObject implements CBORObject
+final class ByteStringWithChunkObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b010;
     private const ADDITIONAL_INFORMATION = 0b00011111;
@@ -21,55 +21,28 @@ final class ByteStringWithChunkObject implements CBORObject
     /**
      * @var ByteStringObject[]
      */
-    private $data = [];
+    private $chunks = [];
 
-    /**
-     * CBORObject constructor.
-     */
-    private function __construct()
+    public function __construct()
     {
+        parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
     }
 
-    /**
-     * @return ByteStringWithChunkObject
-     */
-    public static function create(): self
+    public function add(ByteStringObject $chunk): void
     {
-        return new self();
+        $this->chunks[] = $chunk;
     }
 
-    /**
-     * @param ByteStringObject $chunk
-     */
-    public function addChunk(ByteStringObject $chunk)
+    public function append(string $chunk): void
     {
-        $this->data[] = $chunk;
+        $this->add(new ByteStringObject($chunk));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getMajorType(): int
-    {
-        return self::MAJOR_TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdditionalInformation(): int
-    {
-        return self::ADDITIONAL_INFORMATION;
-    }
-
-    /**
-     * @return string
-     */
     public function getValue(): string
     {
         $result = '';
-        foreach ($this->data as $object) {
-            $result .= $object->getValue();
+        foreach ($this->chunks as $chunk) {
+            $result .= $chunk->getValue();
         }
 
         return $result;
@@ -78,34 +51,28 @@ final class ByteStringWithChunkObject implements CBORObject
     public function getLength(): int
     {
         $length = 0;
-        foreach ($this->data as $object) {
-            $length += $object->getLength();
+        foreach ($this->chunks as $chunk) {
+            $length += $chunk->getLength();
         }
 
         return $length;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false): string
     {
         $result = '';
-        foreach ($this->data as $object) {
-            $result .= $object->getNormalizedData($ignoreTags);
+        foreach ($this->chunks as $chunk) {
+            $result .= $chunk->getNormalizedData($ignoreTags);
         }
 
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString(): string
     {
-        $result = chr(self::MAJOR_TYPE << 5 | self::ADDITIONAL_INFORMATION);
-        foreach ($this->data as $object) {
-            $result .= $object->__toString();
+        $result = parent::__toString();
+        foreach ($this->chunks as $chunk) {
+            $result .= (string) $chunk;
         }
         $result .= hex2bin('FF');
 

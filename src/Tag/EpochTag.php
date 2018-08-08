@@ -18,33 +18,21 @@ use CBOR\TagObject as Base;
 
 final class EpochTag extends Base
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getTagId(): int
     {
         return 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function create(CBORObject $object): Base
     {
         return new self(0, null, $object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {

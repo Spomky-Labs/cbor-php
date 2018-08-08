@@ -22,9 +22,6 @@ class OtherObjectManager
      */
     private $classes = [];
 
-    /**
-     * @param string $class
-     */
     public function add(string $class)
     {
         foreach ($class::supportedAdditionalInformation() as $ai) {
@@ -35,21 +32,13 @@ class OtherObjectManager
         }
     }
 
-    /**
-     * @param int $value
-     *
-     * @return string
-     */
     public function getClassForValue(int $value): string
     {
         return array_key_exists($value, $this->classes) ? $this->classes[$value] : GenericObject::class;
     }
 
     /**
-     * @param int         $value
      * @param null|string $data
-     *
-     * @return OtherObject
      */
     public function createObjectForValue(int $value, ?string $data): OtherObject
     {

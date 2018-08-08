@@ -23,25 +23,16 @@ use CBOR\TextStringWithChunkObject;
 
 final class Base64UrlEncodingTag extends Base
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getTagId(): int
     {
         return 21;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function create(CBORObject $object): Base
     {
         if (!$object instanceof ByteStringObject && !$object instanceof ByteStringWithChunkObject && !$object instanceof TextStringObject && !$object instanceof TextStringWithChunkObject) {
@@ -51,9 +42,6 @@ final class Base64UrlEncodingTag extends Base
         return new self(21, null, $object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {

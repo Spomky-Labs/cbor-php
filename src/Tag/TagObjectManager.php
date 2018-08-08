@@ -23,9 +23,6 @@ class TagObjectManager
      */
     private $classes = [];
 
-    /**
-     * @param string $class
-     */
     public function add(string $class)
     {
         if ($class::getTagId() < 0) {
@@ -34,23 +31,11 @@ class TagObjectManager
         $this->classes[$class::getTagId()] = $class;
     }
 
-    /**
-     * @param int $value
-     *
-     * @return string
-     */
     public function getClassForValue(int $value): string
     {
         return array_key_exists($value, $this->classes) ? $this->classes[$value] : GenericTag::class;
     }
 
-    /**
-     * @param int         $additionalInformation
-     * @param null|string $data
-     * @param CBORObject  $object
-     *
-     * @return TagObject
-     */
     public function createObjectForValue(int $additionalInformation, ?string $data, CBORObject $object): TagObject
     {
         $value = $additionalInformation;

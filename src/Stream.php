@@ -15,10 +15,5 @@ namespace CBOR;
 
 interface Stream
 {
-    /**
-     * @param int $length
-     *
-     * @return string
-     */
     public function read(int $length): string;
 }

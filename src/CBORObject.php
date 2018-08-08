@@ -15,25 +15,14 @@ namespace CBOR;
 
 interface CBORObject
 {
-    /**
-     * @return int
-     */
     public function getMajorType(): int;
 
-    /**
-     * @return int
-     */
     public function getAdditionalInformation(): int;
 
     /**
-     * @param bool $ignoreTags
-     *
      * @return mixed|null
      */
     public function getNormalizedData(bool $ignoreTags = false);
 
-    /**
-     * @return string
-     */
     public function __toString(): string;
 }

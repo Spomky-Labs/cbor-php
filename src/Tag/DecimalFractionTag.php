@@ -21,28 +21,19 @@ use CBOR\UnsignedIntegerObject;
 
 final class DecimalFractionTag extends Base
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getTagId(): int
     {
         return 4;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
-        return new self($additionalInformation, $data, $object);
+        return new self($object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function create(CBORObject $object): Base
+    public function __construct(CBORObject $object)
     {
-        if (!$object instanceof ListObject || count($object) !== 2) {
+        if (!$object instanceof ListObject || 2 !== \count($object)) {
             throw new \InvalidArgumentException('This tag only accepts a ListObject object that contains an exponent and a mantissa.');
         }
         $e = $object->get(0);
@@ -54,32 +45,25 @@ final class DecimalFractionTag extends Base
             throw new \InvalidArgumentException('The mantissa must be a Positive or Negative Signed Integer or an Unsigned Integer object.');
         }
 
-        return new self(4, null, $object);
+        parent::__construct(4, null, $object);
     }
 
-    /**
-     * @param CBORObject $e
-     * @param CBORObject $m
-     *
-     * @return Base
-     */
     public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Base
     {
-        $object = ListObject::create([$e, $m]);
+        $object = new ListObject();
+        $object->add($e);
+        $object->add($m);
 
-        return self::create($object);
+        return new self($object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        if (!$this->object instanceof ListObject || count($this->object) !== 2) {
+        if (!$this->object instanceof ListObject || 2 !== \count($this->object)) {
             return $this->object->getNormalizedData($ignoreTags);
         }
         $e = $this->object->get(0);

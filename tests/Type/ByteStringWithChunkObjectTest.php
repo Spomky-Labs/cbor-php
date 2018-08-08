@@ -28,28 +28,28 @@ final class ByteStringWithChunkObjectTest extends BaseTestCase
      */
     public function aByteStringWithChunkObjectCanBeCreated(array $chunks, int $expectedLength, string $expectedValue, string $expectedEncodedObject)
     {
-        $object = ByteStringWithChunkObject::create();
+        $object = new ByteStringWithChunkObject();
         foreach ($chunks as $chunk) {
-            $object->addChunk(ByteStringObject::create($chunk));
+            $object->append($chunk);
         }
 
-        self::assertEquals(0b010, $object->getMajorType());
-        self::assertEquals(0b00011111, $object->getAdditionalInformation());
-        self::assertEquals($expectedValue, $object->getValue());
-        self::assertEquals($expectedLength, $object->getLength());
-        self::assertEquals($expectedValue, $object->getNormalizedData());
+        static::assertEquals(0b010, $object->getMajorType());
+        static::assertEquals(0b00011111, $object->getAdditionalInformation());
+        static::assertEquals($expectedValue, $object->getValue());
+        static::assertEquals($expectedLength, $object->getLength());
+        static::assertEquals($expectedValue, $object->getNormalizedData());
 
         $binary = (string) $object;
-        self::assertEquals(hex2bin($expectedEncodedObject), $binary);
+        static::assertEquals(hex2bin($expectedEncodedObject), $binary);
 
         $stream = new StringStream($binary);
         $decoded = $this->getDecoder()->decode($stream);
 
-        self::assertEquals(0b010, $decoded->getMajorType());
-        self::assertEquals(0b00011111, $decoded->getAdditionalInformation());
-        self::assertEquals($expectedValue, $decoded->getValue());
-        self::assertEquals($expectedLength, $decoded->getLength());
-        self::assertEquals($expectedValue, $decoded->getNormalizedData());
+        static::assertEquals(0b010, $decoded->getMajorType());
+        static::assertEquals(0b00011111, $decoded->getAdditionalInformation());
+        static::assertEquals($expectedValue, $decoded->getValue());
+        static::assertEquals($expectedLength, $decoded->getLength());
+        static::assertEquals($expectedValue, $decoded->getNormalizedData());
     }
 
     public function getData(): array

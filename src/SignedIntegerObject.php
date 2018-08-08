@@ -13,58 +13,23 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class SignedIntegerObject implements CBORObject
+final class SignedIntegerObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b001;
 
-    /**
-     * @var int
-     */
-    private $additionalInformation;
-
-    /**
-     * @var null|mixed
-     */
     private $data;
 
-    /**
-     * CBORObject constructor.
-     *
-     * @param int         $additionalInformation
-     * @param null|string $data
-     */
-    private function __construct(int $additionalInformation, ?string $data)
+    public function __construct(int $additionalInformation, ?string $data)
     {
-        $this->additionalInformation = $additionalInformation;
+        parent::__construct(self::MAJOR_TYPE, $additionalInformation);
         $this->data = $data;
     }
 
-    /**
-     * @param int         $additionalInformation
-     * @param null|string $data
-     *
-     * @return SignedIntegerObject
-     */
     public static function createObjectForValue(int $additionalInformation, ?string $data): self
     {
         return new self($additionalInformation, $data);
     }
 
-    /**
-     * @param int $value
-     *
-     * @return SignedIntegerObject
-     */
-    public static function create(int $value): self
-    {
-        return self::createFromGmpValue(gmp_init($value));
-    }
-
-    /**
-     * @param \GMP $value
-     *
-     * @return SignedIntegerObject
-     */
     public static function createFromGmpValue(\GMP $value): self
     {
         if (gmp_cmp($value, gmp_init(0)) >= 0) {
@@ -98,37 +63,15 @@ final class SignedIntegerObject implements CBORObject
         return new self($ai, $data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getMajorType(): int
-    {
-        return self::MAJOR_TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdditionalInformation(): int
-    {
-        return $this->additionalInformation;
-    }
-
-    /**
-     * @return string
-     */
     public function getValue(): string
     {
         return $this->getNormalizedData();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false): string
     {
         if (null === $this->data) {
-            return strval(-1 - $this->additionalInformation);
+            return \strval(-1 - $this->additionalInformation);
         }
 
         $result = gmp_init(bin2hex($this->data), 16);
@@ -138,12 +81,9 @@ final class SignedIntegerObject implements CBORObject
         return gmp_strval($result, 10);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString(): string
     {
-        $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
+        $result = parent::__toString();
         if (null !== $this->data) {
             $result .= $this->data;
         }

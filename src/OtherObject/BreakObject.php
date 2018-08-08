@@ -17,33 +17,21 @@ use CBOR\OtherObject as Base;
 
 final class BreakObject extends Base
 {
-    /**
-     * {@inheritdoc}
-     */
+    public function __construct()
+    {
+        parent::__construct(0b00011111, null);
+    }
+
     public static function supportedAdditionalInformation(): array
     {
         return [0b00011111];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {
-        return new self($additionalInformation, $data);
+        return new self();
     }
 
-    /**
-     * @return BreakObject
-     */
-    public static function create(): Base
-    {
-        return new self(0b00011111, null);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false): bool
     {
         return false;

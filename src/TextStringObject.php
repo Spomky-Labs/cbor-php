@@ -13,66 +13,23 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class TextStringObject implements CBORObject
+final class TextStringObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b011;
 
-    /**
-     * @var int
-     */
-    private $additionalInformation;
-
-    /**
-     * @var null|string
-     */
     private $length;
 
-    /**
-     * @var string
-     */
     private $data;
 
-    /**
-     * CBORObject constructor.
-     *
-     * @param string $data
-     */
-    private function __construct(string $data)
+    public function __construct(string $data)
     {
-        list($this->additionalInformation, $this->length) = LengthCalculator::getLengthOfString($data);
+        list($additionalInformation, $length) = LengthCalculator::getLengthOfString($data);
 
+        parent::__construct(self::MAJOR_TYPE, $additionalInformation);
         $this->data = $data;
+        $this->length = $length;
     }
 
-    /**
-     * @param string $data
-     *
-     * @return TextStringObject
-     */
-    public static function create(string $data): self
-    {
-        return new self($data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMajorType(): int
-    {
-        return self::MAJOR_TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdditionalInformation(): int
-    {
-        return $this->additionalInformation;
-    }
-
-    /**
-     * @return string
-     */
     public function getValue(): string
     {
         return $this->data;
@@ -83,20 +40,14 @@ final class TextStringObject implements CBORObject
         return mb_strlen($this->data, 'utf8');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false): string
     {
         return $this->data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString(): string
     {
-        $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
+        $result = parent::__toString();
         if (null !== $this->length) {
             $result .= $this->length;
         }

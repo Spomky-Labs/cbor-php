@@ -24,15 +24,12 @@ final class UnsignedIntegerTest extends BaseTestCase
      */
     public function createOnValidValue(int $intValue, string $expectedIntValue, int $expectedMajorType, $expectedAdditionalInformation)
     {
-        $unsignedInteger = UnsignedIntegerObject::create($intValue);
-        $this->assertEquals($expectedIntValue, $unsignedInteger->getValue());
-        $this->assertEquals($expectedMajorType, $unsignedInteger->getMajorType());
-        $this->assertEquals($expectedAdditionalInformation, $unsignedInteger->getAdditionalInformation());
+        $unsignedInteger = UnsignedIntegerObject::createFromGmpValue(gmp_init($intValue));
+        static::assertEquals($expectedIntValue, $unsignedInteger->getValue());
+        static::assertEquals($expectedMajorType, $unsignedInteger->getMajorType());
+        static::assertEquals($expectedAdditionalInformation, $unsignedInteger->getAdditionalInformation());
     }
 
-    /**
-     * @return array
-     */
     public function getValidValue(): array
     {
         return [
@@ -70,7 +67,7 @@ final class UnsignedIntegerTest extends BaseTestCase
      */
     public function ceateOnNegativeValue()
     {
-        UnsignedIntegerObject::create(-1);
+        UnsignedIntegerObject::createFromGmpValue(gmp_init(-1));
     }
 
     /**
@@ -80,27 +77,21 @@ final class UnsignedIntegerTest extends BaseTestCase
      */
     public function createOnOutOfRangeValue()
     {
-        UnsignedIntegerObject::create(4294967296);
+        UnsignedIntegerObject::createFromGmpValue(gmp_init(4294967296));
     }
 
     /**
      * @test
      * @dataProvider getDataSet
-     *
-     * @param string $data
-     * @param string $expectedNormalizedData
      */
     public function anUnsignedIntegerCanBeParsed(string $data, string $expectedNormalizedData)
     {
         $stream = new StringStream(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
-        self::assertEquals($data, bin2hex((string) $object));
-        self::assertEquals($expectedNormalizedData, $object->getNormalizedData());
+        static::assertEquals($data, bin2hex((string) $object));
+        static::assertEquals($expectedNormalizedData, $object->getNormalizedData());
     }
 
-    /**
-     * @return array
-     */
     public function getDataSet(): array
     {
         return [

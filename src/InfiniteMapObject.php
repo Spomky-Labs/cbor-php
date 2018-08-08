@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class InfiniteMapObject implements CBORObject, \Countable, \IteratorAggregate
+final class InfiniteMapObject extends AbstractCBORObject implements \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b101;
     private const ADDITIONAL_INFORMATION = 0b00011111;
@@ -23,75 +23,26 @@ final class InfiniteMapObject implements CBORObject, \Countable, \IteratorAggreg
      */
     private $data = [];
 
-    /**
-     * CBORObject constructor.
-     *
-     * @param MapItem[] $data
-     */
-    private function __construct(array $data)
+    public function __construct()
     {
-        array_map(function ($item) {
-            if (!$item instanceof MapItem) {
-                throw new \InvalidArgumentException('The list must contain only MapItem.');
-            }
-        }, $data);
-        $this->data = $data;
+        parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
     }
 
-    /**
-     * @param MapItem[] $data
-     *
-     * @return InfiniteMapObject
-     */
-    public static function create(array $data = []): self
+    public function append(CBORObject $key, CBORObject $value): void
     {
-        return new self($data);
+        $this->data[] = new MapItem($key, $value);
     }
 
-    /**
-     * @param CBORObject $key
-     * @param CBORObject $value
-     */
-    public function append(CBORObject $key, CBORObject $value)
+    public function count(): int
     {
-        $this->data[] = MapItem::create($key, $value);
+        return \count($this->data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getMajorType(): int
-    {
-        return self::MAJOR_TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function count()
-    {
-        return count($this->data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdditionalInformation(): int
-    {
-        return self::ADDITIONAL_INFORMATION;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
         $result = [];
@@ -102,15 +53,12 @@ final class InfiniteMapObject implements CBORObject, \Countable, \IteratorAggreg
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString(): string
     {
-        $result = chr(self::MAJOR_TYPE << 5 | self::ADDITIONAL_INFORMATION);
+        $result = parent::__toString();
         foreach ($this->data as $object) {
-            $result .= $object->getKey()->__toString();
-            $result .= $object->getValue()->__toString();
+            $result .= (string) $object->getKey();
+            $result .= (string) $object->getValue();
         }
         $result .= hex2bin('FF');
 

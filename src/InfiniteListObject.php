@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class InfiniteListObject implements CBORObject, \Countable, \IteratorAggregate
+final class InfiniteListObject extends AbstractCBORObject implements \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b100;
     private const ADDITIONAL_INFORMATION = 0b00011111;
@@ -23,40 +23,11 @@ final class InfiniteListObject implements CBORObject, \Countable, \IteratorAggre
      */
     private $data = [];
 
-    /**
-     * InfiniteListObject constructor.
-     */
-    private function __construct()
+    public function __construct()
     {
+        parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
     }
 
-    /**
-     * @return InfiniteListObject
-     */
-    public static function create(): self
-    {
-        return new self();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMajorType(): int
-    {
-        return self::MAJOR_TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdditionalInformation(): int
-    {
-        return self::ADDITIONAL_INFORMATION;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
         return array_map(function (CBORObject $item) use ($ignoreTags) {
@@ -64,38 +35,26 @@ final class InfiniteListObject implements CBORObject, \Countable, \IteratorAggre
         }, $this->data);
     }
 
-    /**
-     * @param CBORObject $item
-     */
-    public function append(CBORObject $item)
+    public function add(CBORObject $item): void
     {
         $this->data[] = $item;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function count()
+    public function count(): int
     {
-        return count($this->data);
+        return \count($this->data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString(): string
     {
-        $result = chr(self::MAJOR_TYPE << 5 | self::ADDITIONAL_INFORMATION);
+        $result = parent::__toString();
         foreach ($this->data as $object) {
-            $result .= $object->__toString();
+            $result .= (string) $object;
         }
         $result .= hex2bin('FF');
 

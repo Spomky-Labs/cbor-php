@@ -21,28 +21,19 @@ use CBOR\UnsignedIntegerObject;
 
 final class BigFloatTag extends Base
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getTagId(): int
     {
         return 5;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function create(CBORObject $object): Base
     {
-        if (!$object instanceof ListObject || count($object) !== 2) {
+        if (!$object instanceof ListObject || 2 !== \count($object)) {
             throw new \InvalidArgumentException('This tag only accepts a ListObject object that contains an exponent and a mantissa.');
         }
         $e = $object->get(0);
@@ -57,29 +48,22 @@ final class BigFloatTag extends Base
         return new self(5, null, $object);
     }
 
-    /**
-     * @param CBORObject $e
-     * @param CBORObject $m
-     *
-     * @return Base
-     */
     public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Base
     {
-        $object = ListObject::create([$e, $m]);
+        $object = new ListObject();
+        $object->add($e);
+        $object->add($m);
 
         return self::create($object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        if (!$this->object instanceof ListObject || count($this->object) !== 2) {
+        if (!$this->object instanceof ListObject || 2 !== \count($this->object)) {
             return $this->object->getNormalizedData($ignoreTags);
         }
         $e = $this->object->get(0);

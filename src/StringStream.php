@@ -15,17 +15,15 @@ namespace CBOR;
 
 final class StringStream implements Stream
 {
+    /**
+     * @var resource
+     */
     private $resource;
 
-    /**
-     * StringStream constructor.
-     *
-     * @param string $data
-     */
     public function __construct(string $data)
     {
         $resource = fopen('php://memory', 'r+');
-        if (is_bool($this->resource)) {
+        if (\is_bool($this->resource)) {
             throw new \InvalidArgumentException('Unable to crate a stream using this string.');
         }
         fwrite($resource, $data);

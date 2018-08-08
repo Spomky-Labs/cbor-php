@@ -17,33 +17,21 @@ use CBOR\OtherObject as Base;
 
 final class TrueObject extends Base
 {
-    /**
-     * {@inheritdoc}
-     */
+    public function __construct()
+    {
+        parent::__construct(21, null);
+    }
+
     public static function supportedAdditionalInformation(): array
     {
         return [21];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {
-        return new self($additionalInformation, $data);
+        return new self();
     }
 
-    /**
-     * @return TrueObject
-     */
-    public static function create(): Base
-    {
-        return new self(21, null);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false): bool
     {
         return true;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class TextStringWithChunkObject implements CBORObject
+final class TextStringWithChunkObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b011;
     private const ADDITIONAL_INFORMATION = 0b00011111;
@@ -23,48 +23,21 @@ final class TextStringWithChunkObject implements CBORObject
      */
     private $data = [];
 
-    /**
-     * CBORObject constructor.
-     */
-    private function __construct()
+    public function __construct()
     {
+        parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
     }
 
-    /**
-     * @return TextStringWithChunkObject
-     */
-    public static function create(): self
-    {
-        return new self();
-    }
-
-    /**
-     * @param TextStringObject $chunk
-     */
-    public function addChunk(TextStringObject $chunk)
+    public function add(TextStringObject $chunk)
     {
         $this->data[] = $chunk;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getMajorType(): int
+    public function append(string $chunk)
     {
-        return self::MAJOR_TYPE;
+        $this->add(new TextStringObject($chunk));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdditionalInformation(): int
-    {
-        return self::ADDITIONAL_INFORMATION;
-    }
-
-    /**
-     * @return string
-     */
     public function getValue(): string
     {
         $result = '';
@@ -85,9 +58,6 @@ final class TextStringWithChunkObject implements CBORObject
         return $length;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false): string
     {
         $result = '';
@@ -98,14 +68,11 @@ final class TextStringWithChunkObject implements CBORObject
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString(): string
     {
-        $result = chr(self::MAJOR_TYPE << 5 | self::ADDITIONAL_INFORMATION);
+        $result = parent::__toString();
         foreach ($this->data as $object) {
-            $result .= $object->__toString();
+            $result .= (string) $object;
         }
         $result .= hex2bin('FF');
 

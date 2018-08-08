@@ -13,73 +13,40 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-class ListObject implements CBORObject, \Countable, \IteratorAggregate
+class ListObject extends AbstractCBORObject implements \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b100;
 
     /**
-     * @var int
-     */
-    private $additionalInformation;
-
-    /**
      * @var CBORObject[]
      */
-    private $data;
+    private $data = [];
 
-    /**
-     * @var null|string
-     */
     private $length;
 
     /**
-     * CBORObject constructor.
-     *
      * @param CBORObject[] $data
      */
-    private function __construct(array $data)
+    public function __construct(array $data = [])
     {
-        list($this->additionalInformation, $this->length) = LengthCalculator::getLengthOfArray($data);
+        list($additionalInformation, $length) = LengthCalculator::getLengthOfArray($data);
         array_map(function ($item) {
             if (!$item instanceof CBORObject) {
-                throw new \InvalidArgumentException('The list must contain only CBORObjects.');
+                throw new \InvalidArgumentException('The list must contain only CBORObject objects.');
             }
         }, $data);
+
+        parent::__construct(self::MAJOR_TYPE, $additionalInformation);
         $this->data = $data;
+        $this->length = $length;
     }
 
-    /**
-     * @param CBORObject[] $data
-     *
-     * @return ListObject
-     */
-    public static function create(array $data = []): self
-    {
-        return new self($data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function add(CBORObject $object): void
     {
         $this->data[] = $object;
         list($this->additionalInformation, $this->length) = LengthCalculator::getLengthOfArray($this->data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getMajorType(): int
-    {
-        return self::MAJOR_TYPE;
-    }
-
-    /**
-     * @param int $index
-     *
-     * @return CBORObject
-     */
     public function get(int $index): CBORObject
     {
         if (!array_key_exists($index, $this->data)) {
@@ -89,17 +56,6 @@ class ListObject implements CBORObject, \Countable, \IteratorAggregate
         return $this->data[$index];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdditionalInformation(): int
-    {
-        return $this->additionalInformation;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
         return array_map(function (CBORObject $item) use ($ignoreTags) {
@@ -107,33 +63,24 @@ class ListObject implements CBORObject, \Countable, \IteratorAggregate
         }, $this->data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function count()
+    public function count(): int
     {
-        return count($this->data);
+        return \count($this->data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Iterator
     {
         return new \ArrayIterator($this->data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString(): string
     {
-        $result = chr(self::MAJOR_TYPE << 5 | $this->additionalInformation);
+        $result = parent::__toString();
         if (null !== $this->length) {
             $result .= $this->length;
         }
         foreach ($this->data as $object) {
-            $result .= $object->__toString();
+            $result .= (string) $object;
         }
 
         return $result;

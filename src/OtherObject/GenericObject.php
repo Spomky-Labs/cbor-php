@@ -17,25 +17,16 @@ use CBOR\OtherObject as Base;
 
 final class GenericObject extends Base
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function supportedAdditionalInformation(): array
     {
         return [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {
         return new self($additionalInformation, $data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         return $this->data;
