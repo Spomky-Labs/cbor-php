@@ -19,6 +19,8 @@ matrix:
 before_script:
     - mkdir -p build/logs
     - composer self-update
+    - composer require --dev --no-update phpunit/phpunit "^7.0"
+    - composer require --dev --no-update php-coveralls/php-coveralls "^2.0"
     - if [[ $deps = low ]]; then composer update --no-interaction --prefer-lowest ; fi
     - if [[ !$deps ]]; then composer install --no-interaction ; fi
 
@@ -26,8 +28,4 @@ script:
     - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_success:
-    - ./vendor/bin/infection --threads=4
     - ./vendor/bin/php-coveralls --no-interaction
-
-after_script:
-    - ./vendor/bin/phpstan analyse --level max ./src
