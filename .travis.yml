@@ -24,9 +24,9 @@ before_script:
 
 script:
     - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-    - ./vendor/bin/infection --threads=4
 
 after_success:
+    - ./vendor/bin/infection --threads=4
     - ./vendor/bin/php-coveralls --no-interaction
 
 after_script:

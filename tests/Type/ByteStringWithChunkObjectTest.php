@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace CBOR\Test\Type;
 
-use CBOR\ByteStringObject;
 use CBOR\ByteStringWithChunkObject;
 use CBOR\StringStream;
 

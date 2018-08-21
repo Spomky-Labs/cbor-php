@@ -37,9 +37,6 @@ class OtherObjectManager
         return array_key_exists($value, $this->classes) ? $this->classes[$value] : GenericObject::class;
     }
 
-    /**
-     * @param null|string $data
-     */
     public function createObjectForValue(int $value, ?string $data): OtherObject
     {
         /** @var OtherObject $class */

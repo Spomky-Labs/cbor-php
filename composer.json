@@ -2,10 +2,15 @@
     "name": "spomky-labs/cbor-php",
     "type": "library",
     "license": "MIT",
+    "keywords": ["CBOR", "Concise Binary Object Representation", "RFC7049"],
     "description": "CBOR Encoder/Decoder for PHP",
     "authors": [
         {
-            "name": "Spomky"
+            "name": "Florent Morselli",
+            "homepage": "https://github.com/Spomky"
+        },{
+            "name": "All contributors",
+            "homepage": "https://github.com/Spomky-Labs/cbor-php/contributors"
         }
     ],
     "autoload": {

@@ -58,9 +58,6 @@ final class Decoder
         return $this->processFinite($stream, $mt, $ai, $val);
     }
 
-    /**
-     * @param null|string $val
-     */
     private function processFinite(Stream $stream, int $mt, int $ai, ?string $val): CBORObject
     {
         switch ($mt) {
