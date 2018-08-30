@@ -49,6 +49,6 @@ final class LengthCalculator
 
     private static function fixHexLength(string $data): string
     {
-        return mb_strlen($data, '8bit') % 2 === 0? '0'.$data : $data;
+        return mb_strlen($data, '8bit') % 2 === 0? $data : '0'.$data;
     }
 }
