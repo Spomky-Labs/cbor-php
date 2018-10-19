@@ -9,7 +9,7 @@ CBOR for PHP
 [![Latest Stable Version](https://poser.pugx.org/spomky-labs/cbor-php/v/stable.png)](https://packagist.org/packages/spomky-labs/cbor-php)
 [![Total Downloads](https://poser.pugx.org/spomky-labs/cbor-php/downloads.png)](https://packagist.org/packages/spomky-labs/cbor-php)
 [![Latest Unstable Version](https://poser.pugx.org/spomky-labs/cbor-php/v/unstable.png)](https://packagist.org/packages/spomky-labs/cbor-php)
-[![License](https://poser.pugx.org/spomky-labs/cbor-php/license.png)](https://packagist.org/packages/spomky-labs/cbor-php)
+[![License](https://poser.pugx.org/spomky-labs/cbor-php/license.png)](https://packagist.org/packages/spomky-labs/cbor-php) [![GuardRails badge](https://badges.production.guardrails.io/Spomky-Labs/cbor-php.svg)](https://www.guardrails.io)
 
 # Scope
 
