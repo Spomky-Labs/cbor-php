@@ -21,6 +21,14 @@ Install the library with Composer: `composer require spomky-labs/cbor-php`.
 
 This project follows the [semantic versioning](http://semver.org/) strictly.
 
+# Support
+
+I bring solutions to your problems and answer your questions.
+
+If you really love that project and the work I have done or if you want I prioritize your issues, then you can help me out for a couple of :beers: or more!
+
+[![Become a Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/FlorentMorselli)
+
 # Documentation
 
 ## Object Creation
