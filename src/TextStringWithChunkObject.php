@@ -28,12 +28,12 @@ final class TextStringWithChunkObject extends AbstractCBORObject
         parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
     }
 
-    public function add(TextStringObject $chunk)
+    public function add(TextStringObject $chunk): void
     {
         $this->data[] = $chunk;
     }
 
-    public function append(string $chunk)
+    public function append(string $chunk): void
     {
         $this->add(new TextStringObject($chunk));
     }
@@ -74,7 +74,7 @@ final class TextStringWithChunkObject extends AbstractCBORObject
         foreach ($this->data as $object) {
             $result .= (string) $object;
         }
-        $result .= hex2bin('FF');
+        $result .= \Safe\hex2bin('FF');
 
         return $result;
     }

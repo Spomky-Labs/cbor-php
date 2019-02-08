@@ -21,9 +21,9 @@ final class FloatTest extends BaseTestCase
      * @test
      * @dataProvider getDataSet
      */
-    public function aFloatCanBeParsed(string $data)
+    public function aFloatCanBeParsed(string $data): void
     {
-        $stream = new StringStream(hex2bin($data));
+        $stream = new StringStream(\Safe\hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         $object->getNormalizedData();
         static::assertEquals($data, bin2hex((string) $object));

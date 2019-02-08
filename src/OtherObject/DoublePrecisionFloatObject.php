@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR\OtherObject;
 
+use Assert\Assertion;
 use CBOR\OtherObject as Base;
 
 final class DoublePrecisionFloatObject extends Base
@@ -41,7 +42,9 @@ final class DoublePrecisionFloatObject extends Base
 
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        $single = gmp_init(bin2hex($this->data), 16);
+        $data = $this->data;
+        Assertion::string($data, 'Invalid data');
+        $single = gmp_init(bin2hex($data), 16);
         $exp = gmp_intval($this->bitwiseAnd($this->rightShift($single, 52), gmp_init('7ff', 16)));
         $mant = gmp_intval($this->bitwiseAnd($single, gmp_init('fffffffffffff', 16)));
         $sign = gmp_intval($this->rightShift($single, 63));
@@ -54,28 +57,34 @@ final class DoublePrecisionFloatObject extends Base
             $val = 0 === $mant ? INF : NAN;
         }
 
-        return $sign ? -$val : $val;
+        return 1 === $sign ? -$val : $val;
     }
 
     public function getExponent(): int
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
+        $data = $this->data;
+        Assertion::string($data, 'Invalid data');
+        $single = gmp_intval(gmp_init(bin2hex($data), 16));
 
         return ($single >> 52) & 0x7ff;
     }
 
     public function getMantissa(): int
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
+        $data = $this->data;
+        Assertion::string($data, 'Invalid data');
+        $single = gmp_intval(gmp_init(bin2hex($data), 16));
 
         return $single & 0x7fffff;
     }
 
     public function getSign(): int
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
+        $data = $this->data;
+        Assertion::string($data, 'Invalid data');
+        $single = gmp_intval(gmp_init(bin2hex($data), 16));
 
-        return $single >> 63 ? -1 : 1;
+        return 1 === ($single >> 63) ? -1 : 1;
     }
 
     private function rightShift(\GMP $number, int $positions): \GMP

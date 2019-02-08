@@ -26,7 +26,7 @@ final class TextStringWithChunkObjectTest extends BaseTestCase
      * @test
      * @dataProvider getData
      */
-    public function aTextStringWithChunkObjectCanBeCreated(array $chunks, int $expectedLength, string $expectedValue, string $expectedEncodedObject)
+    public function aTextStringWithChunkObjectCanBeCreated(array $chunks, int $expectedLength, string $expectedValue, string $expectedEncodedObject): void
     {
         $object = new TextStringWithChunkObject();
         foreach ($chunks as $chunk) {
@@ -40,11 +40,12 @@ final class TextStringWithChunkObjectTest extends BaseTestCase
         static::assertEquals($expectedValue, $object->getNormalizedData());
 
         $binary = (string) $object;
-        static::assertEquals(hex2bin($expectedEncodedObject), $binary);
+        static::assertEquals(\Safe\hex2bin($expectedEncodedObject), $binary);
 
         $stream = new StringStream($binary);
         $decoded = $this->getDecoder()->decode($stream);
 
+        static::assertInstanceOf(TextStringWithChunkObject::class, $decoded);
         static::assertEquals(0b011, $decoded->getMajorType());
         static::assertEquals(0b00011111, $decoded->getAdditionalInformation());
         static::assertEquals($expectedValue, $decoded->getValue());

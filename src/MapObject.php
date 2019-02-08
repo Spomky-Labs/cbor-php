@@ -22,6 +22,9 @@ final class MapObject extends AbstractCBORObject implements \Countable, \Iterato
      */
     private $data = [];
 
+    /**
+     * @var int|null
+     */
     private $length;
 
     /**

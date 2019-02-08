@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR\OtherObject;
 
+use Assert\Assertion;
 use CBOR\OtherObject as Base;
 
 final class SinglePrecisionFloatObject extends Base
@@ -41,7 +42,9 @@ final class SinglePrecisionFloatObject extends Base
 
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
+        $data = $this->data;
+        Assertion::string($data, 'Invalid data');
+        $single = gmp_intval(gmp_init(bin2hex($data), 16));
         $exp = ($single >> 23) & 0xff;
         $mant = $single & 0x7fffff;
 
@@ -53,27 +56,33 @@ final class SinglePrecisionFloatObject extends Base
             $val = 0 === $mant ? INF : NAN;
         }
 
-        return $single >> 31 ? -$val : $val;
+        return 1 === ($single >> 31) ? -$val : $val;
     }
 
     public function getExponent(): int
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
+        $data = $this->data;
+        Assertion::string($data, 'Invalid data');
+        $single = gmp_intval(gmp_init(bin2hex($data), 16));
 
         return ($single >> 23) & 0xff;
     }
 
     public function getMantissa(): int
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
+        $data = $this->data;
+        Assertion::string($data, 'Invalid data');
+        $single = gmp_intval(gmp_init(bin2hex($data), 16));
 
         return $single & 0x7fffff;
     }
 
     public function getSign(): int
     {
-        $single = gmp_intval(gmp_init(bin2hex($this->data), 16));
+        $data = $this->data;
+        Assertion::string($data, 'Invalid data');
+        $single = gmp_intval(gmp_init(bin2hex($data), 16));
 
-        return $single >> 31 ? -1 : 1;
+        return 1 === ($single >> 31) ? -1 : 1;
     }
 }

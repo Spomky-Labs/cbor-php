@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR\OtherObject;
 
+use Assert\Assertion;
 use CBOR\OtherObject as Base;
 
 final class HalfPrecisionFloatObject extends Base
@@ -41,7 +42,9 @@ final class HalfPrecisionFloatObject extends Base
 
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        $half = gmp_intval(gmp_init(bin2hex($this->data), 16));
+        $data = $this->data;
+        Assertion::string($data, 'Invalid data');
+        $half = gmp_intval(gmp_init(bin2hex($data), 16));
         $exp = ($half >> 10) & 0x1f;
         $mant = $half & 0x3ff;
 
@@ -53,27 +56,33 @@ final class HalfPrecisionFloatObject extends Base
             $val = 0 === $mant ? INF : NAN;
         }
 
-        return $half >> 15 ? -$val : $val;
+        return 1 === ($half >> 15) ? -$val : $val;
     }
 
     public function getExponent(): int
     {
-        $half = gmp_intval(gmp_init(bin2hex($this->data), 16));
+        $data = $this->data;
+        Assertion::string($data, 'Invalid data');
+        $half = gmp_intval(gmp_init(bin2hex($data), 16));
 
         return ($half >> 10) & 0x1f;
     }
 
     public function getMantissa(): int
     {
-        $half = gmp_intval(gmp_init(bin2hex($this->data), 16));
+        $data = $this->data;
+        Assertion::string($data, 'Invalid data');
+        $half = gmp_intval(gmp_init(bin2hex($data), 16));
 
         return $half & 0x3ff;
     }
 
     public function getSign(): int
     {
-        $half = gmp_intval(gmp_init(bin2hex($this->data), 16));
+        $data = $this->data;
+        Assertion::string($data, 'Invalid data');
+        $half = gmp_intval(gmp_init(bin2hex($data), 16));
 
-        return $half >> 15 ? -1 : 1;
+        return 1 === ($half >> 15) ? -1 : 1;
     }
 }

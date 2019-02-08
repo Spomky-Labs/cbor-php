@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR\Tag;
 
+use Assert\Assertion;
 use CBOR\CBORObject;
 use CBOR\TagObject;
 
@@ -23,7 +24,7 @@ class TagObjectManager
      */
     private $classes = [];
 
-    public function add(string $class)
+    public function add(string $class): void
     {
         if ($class::getTagId() < 0) {
             throw new \InvalidArgumentException('Invalid tag ID.');
@@ -40,6 +41,7 @@ class TagObjectManager
     {
         $value = $additionalInformation;
         if ($additionalInformation >= 24) {
+            Assertion::string($data, 'Invalid data');
             $value = gmp_intval(gmp_init(bin2hex($data), 16));
         }
         /** @var TagObject $class */

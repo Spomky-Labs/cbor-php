@@ -15,7 +15,14 @@ namespace CBOR;
 
 abstract class AbstractCBORObject implements CBORObject
 {
+    /**
+     * @var int
+     */
     private $majorType;
+
+    /**
+     * @var int
+     */
     protected $additionalInformation;
 
     public function __construct(int $majorType, int $additionalInformation)

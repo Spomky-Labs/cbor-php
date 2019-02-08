@@ -74,7 +74,7 @@ final class ByteStringWithChunkObject extends AbstractCBORObject
         foreach ($this->chunks as $chunk) {
             $result .= (string) $chunk;
         }
-        $result .= hex2bin('FF');
+        $result .= \Safe\hex2bin('FF');
 
         return $result;
     }

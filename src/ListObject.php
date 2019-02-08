@@ -22,6 +22,9 @@ class ListObject extends AbstractCBORObject implements \Countable, \IteratorAggr
      */
     private $data = [];
 
+    /**
+     * @var int|null
+     */
     private $length;
 
     /**

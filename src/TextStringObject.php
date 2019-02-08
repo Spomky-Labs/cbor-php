@@ -17,8 +17,14 @@ final class TextStringObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b011;
 
+    /**
+     * @var int|null
+     */
     private $length;
 
+    /**
+     * @var string
+     */
     private $data;
 
     public function __construct(string $data)

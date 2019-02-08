@@ -25,7 +25,7 @@ final class TextStringObjectTest extends BaseTestCase
      * @test
      * @dataProvider getData
      */
-    public function aTextStringObjectCanBeCreated(string $string, int $expectedAdditionalInformation, int $expectedLength, string $expectedEncodedObject)
+    public function aTextStringObjectCanBeCreated(string $string, int $expectedAdditionalInformation, int $expectedLength, string $expectedEncodedObject): void
     {
         $object = new TextStringObject($string);
 
@@ -36,11 +36,12 @@ final class TextStringObjectTest extends BaseTestCase
         static::assertEquals($string, $object->getNormalizedData());
 
         $binary = (string) $object;
-        static::assertEquals(hex2bin($expectedEncodedObject), $binary);
+        static::assertEquals(\Safe\hex2bin($expectedEncodedObject), $binary);
 
         $stream = new StringStream($binary);
         $decoded = $this->getDecoder()->decode($stream);
 
+        static::assertInstanceOf(TextStringObject::class, $decoded);
         static::assertEquals(0b011, $decoded->getMajorType());
         static::assertEquals($expectedAdditionalInformation, $decoded->getAdditionalInformation());
         static::assertEquals($string, $decoded->getValue());
