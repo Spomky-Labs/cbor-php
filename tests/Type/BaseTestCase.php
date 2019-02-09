@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 class BaseTestCase extends TestCase
 {
     /**
-     * @var null|Decoder
+     * @var Decoder|null
      */
     private $decoder;
 

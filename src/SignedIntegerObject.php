@@ -17,6 +17,9 @@ final class SignedIntegerObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b001;
 
+    /**
+     * @var string|null
+     */
     private $data;
 
     public function __construct(int $additionalInformation, ?string $data)
@@ -46,15 +49,15 @@ final class SignedIntegerObject extends AbstractCBORObject
                 break;
             case gmp_cmp($computed_value, gmp_init('FF', 16)) < 0:
                 $ai = 24;
-                $data = hex2bin(str_pad(gmp_strval($computed_value, 16), 2, '0', STR_PAD_LEFT));
+                $data = \Safe\hex2bin(str_pad(gmp_strval($computed_value, 16), 2, '0', STR_PAD_LEFT));
                 break;
             case gmp_cmp($computed_value, gmp_init('FFFF', 16)) < 0:
                 $ai = 25;
-                $data = hex2bin(str_pad(gmp_strval($computed_value, 16), 4, '0', STR_PAD_LEFT));
+                $data = \Safe\hex2bin(str_pad(gmp_strval($computed_value, 16), 4, '0', STR_PAD_LEFT));
                 break;
             case gmp_cmp($computed_value, gmp_init('FFFFFFFF', 16)) < 0:
                 $ai = 26;
-                $data = hex2bin(str_pad(gmp_strval($computed_value, 16), 8, '0', STR_PAD_LEFT));
+                $data = \Safe\hex2bin(str_pad(gmp_strval($computed_value, 16), 8, '0', STR_PAD_LEFT));
                 break;
             default:
                 throw new \InvalidArgumentException('Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.');
@@ -71,7 +74,7 @@ final class SignedIntegerObject extends AbstractCBORObject
     public function getNormalizedData(bool $ignoreTags = false): string
     {
         if (null === $this->data) {
-            return \strval(-1 - $this->additionalInformation);
+            return (string) (-1 - $this->additionalInformation);
         }
 
         $result = gmp_init(bin2hex($this->data), 16);

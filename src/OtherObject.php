@@ -17,6 +17,9 @@ abstract class OtherObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b111;
 
+    /**
+     * @var string|null
+     */
     protected $data;
 
     /**

@@ -22,7 +22,7 @@ final class UnsignedIntegerTest extends BaseTestCase
      * @test
      * @dataProvider getValidValue
      */
-    public function createOnValidValue(int $intValue, string $expectedIntValue, int $expectedMajorType, $expectedAdditionalInformation)
+    public function createOnValidValue(int $intValue, string $expectedIntValue, int $expectedMajorType, int $expectedAdditionalInformation): void
     {
         $unsignedInteger = UnsignedIntegerObject::createFromGmpValue(gmp_init($intValue));
         static::assertEquals($expectedIntValue, $unsignedInteger->getValue());
@@ -65,7 +65,7 @@ final class UnsignedIntegerTest extends BaseTestCase
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage The value must be a positive integer.
      */
-    public function ceateOnNegativeValue()
+    public function ceateOnNegativeValue(): void
     {
         UnsignedIntegerObject::createFromGmpValue(gmp_init(-1));
     }
@@ -75,7 +75,7 @@ final class UnsignedIntegerTest extends BaseTestCase
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.
      */
-    public function createOnOutOfRangeValue()
+    public function createOnOutOfRangeValue(): void
     {
         UnsignedIntegerObject::createFromGmpValue(gmp_init(4294967296));
     }
@@ -84,9 +84,9 @@ final class UnsignedIntegerTest extends BaseTestCase
      * @test
      * @dataProvider getDataSet
      */
-    public function anUnsignedIntegerCanBeParsed(string $data, string $expectedNormalizedData)
+    public function anUnsignedIntegerCanBeParsed(string $data, string $expectedNormalizedData): void
     {
-        $stream = new StringStream(hex2bin($data));
+        $stream = new StringStream(\Safe\hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         static::assertEquals($data, bin2hex((string) $object));
         static::assertEquals($expectedNormalizedData, $object->getNormalizedData());

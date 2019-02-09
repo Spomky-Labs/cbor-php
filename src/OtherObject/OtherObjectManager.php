@@ -22,7 +22,7 @@ class OtherObjectManager
      */
     private $classes = [];
 
-    public function add(string $class)
+    public function add(string $class): void
     {
         foreach ($class::supportedAdditionalInformation() as $ai) {
             if ($ai < 0) {

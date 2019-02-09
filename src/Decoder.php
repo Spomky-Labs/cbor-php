@@ -19,8 +19,14 @@ use CBOR\Tag\TagObjectManager;
 
 final class Decoder
 {
+    /**
+     * @var TagObjectManager
+     */
     private $tagObjectManager;
 
+    /**
+     * @var OtherObjectManager
+     */
     private $otherTypeManager;
 
     public function __construct(TagObjectManager $tagObjectManager, OtherObjectManager $otherTypeManager)
@@ -50,7 +56,7 @@ final class Decoder
             case 0b00011100: //28
             case 0b00011101: //29
             case 0b00011110: //30
-                throw new \InvalidArgumentException(sprintf('Cannot parse the data. Found invalid Additional Information "%s" (%d).', str_pad(decbin($ai), 5, '0', STR_PAD_LEFT), $ai));
+                throw new \InvalidArgumentException(\Safe\sprintf('Cannot parse the data. Found invalid Additional Information "%s" (%d).', str_pad(decbin($ai), 5, '0', STR_PAD_LEFT), $ai));
             case 0b00011111: //31
                 return $this->processInfinite($stream, $mt, $breakable);
         }
@@ -94,7 +100,7 @@ final class Decoder
             case 0b111: //7
                 return $this->otherTypeManager->createObjectForValue($ai, $val);
             default:
-                throw new \RuntimeException(sprintf('Unsupported major type "%s" (%d).', str_pad(decbin($mt), 5, '0', STR_PAD_LEFT), $mt)); // Should never append
+                throw new \RuntimeException(\Safe\sprintf('Unsupported major type "%s" (%d).', str_pad(decbin($mt), 5, '0', STR_PAD_LEFT), $mt)); // Should never append
         }
     }
 
@@ -145,7 +151,7 @@ final class Decoder
             case 0b001: //1
             case 0b110: //6
             default:
-                throw new \InvalidArgumentException(sprintf('Cannot parse the data. Found infinite length for Major Type "%s" (%d).', str_pad(decbin($mt), 5, '0', STR_PAD_LEFT), $mt));
+                throw new \InvalidArgumentException(\Safe\sprintf('Cannot parse the data. Found infinite length for Major Type "%s" (%d).', str_pad(decbin($mt), 5, '0', STR_PAD_LEFT), $mt));
         }
     }
 }

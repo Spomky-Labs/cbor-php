@@ -60,7 +60,7 @@ final class InfiniteMapObject extends AbstractCBORObject implements \Countable, 
             $result .= (string) $object->getKey();
             $result .= (string) $object->getValue();
         }
-        $result .= hex2bin('FF');
+        $result .= \Safe\hex2bin('FF');
 
         return $result;
     }

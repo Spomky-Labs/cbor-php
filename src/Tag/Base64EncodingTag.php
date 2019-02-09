@@ -51,6 +51,6 @@ final class Base64EncodingTag extends Base
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        return base64_decode($this->object->getNormalizedData($ignoreTags), true);
+        return \Safe\base64_decode($this->object->getNormalizedData($ignoreTags), true);
     }
 }

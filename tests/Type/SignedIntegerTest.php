@@ -22,7 +22,7 @@ final class SignedIntegerTest extends BaseTestCase
      * @test
      * @dataProvider getValidValue
      */
-    public function createOnValidValue(int $intValue, string $expectedIntValue, int $expectedMajorType, $expectedAdditionalInformation)
+    public function createOnValidValue(int $intValue, string $expectedIntValue, int $expectedMajorType, int $expectedAdditionalInformation): void
     {
         $unsignedInteger = SignedIntegerObject::createFromGmpValue(gmp_init($intValue));
         static::assertEquals($expectedIntValue, $unsignedInteger->getValue());
@@ -71,7 +71,7 @@ final class SignedIntegerTest extends BaseTestCase
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage The value must be a negative integer.
      */
-    public function ceateOnNegativeValue()
+    public function ceateOnNegativeValue(): void
     {
         SignedIntegerObject::createFromGmpValue(gmp_init(1));
     }
@@ -81,7 +81,7 @@ final class SignedIntegerTest extends BaseTestCase
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.
      */
-    public function createOnOutOfRangeValue()
+    public function createOnOutOfRangeValue(): void
     {
         SignedIntegerObject::createFromGmpValue(gmp_init(-4294967297));
     }
@@ -90,9 +90,9 @@ final class SignedIntegerTest extends BaseTestCase
      * @test
      * @dataProvider getDataSet
      */
-    public function anUnsignedIntegerCanBeEncodedAndDecoded(string $data, string $expectedNormalizedData)
+    public function anUnsignedIntegerCanBeEncodedAndDecoded(string $data, string $expectedNormalizedData): void
     {
-        $stream = new StringStream(hex2bin($data));
+        $stream = new StringStream(\Safe\hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         $object->getNormalizedData();
         static::assertEquals($data, bin2hex((string) $object));

@@ -56,7 +56,7 @@ final class InfiniteListObject extends AbstractCBORObject implements \Countable,
         foreach ($this->data as $object) {
             $result .= (string) $object;
         }
-        $result .= hex2bin('FF');
+        $result .= \Safe\hex2bin('FF');
 
         return $result;
     }
