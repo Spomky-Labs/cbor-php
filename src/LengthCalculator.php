@@ -37,11 +37,11 @@ final class LengthCalculator
             case $length < 0xFF:
                 return [24, \chr($length)];
             case $length < 0xFFFF:
-                return [25, \Safe\hex2bin(static::fixHexLength(gmp_strval(gmp_init($length))))];
+                return [25, \Safe\hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
             case $length < 0xFFFFFFFF:
-                return [26, \Safe\hex2bin(static::fixHexLength(gmp_strval(gmp_init($length))))];
+                return [26, \Safe\hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
             case -1 === gmp_cmp(gmp_init($length), gmp_init('FFFFFFFFFFFFFFFF', 16)):
-                return [27, \Safe\hex2bin(static::fixHexLength(gmp_strval(gmp_init($length))))];
+                return [27, \Safe\hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
             default:
                 return [31, null];
         }

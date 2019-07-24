@@ -34,7 +34,7 @@ class TagObjectManager
 
     public function getClassForValue(int $value): string
     {
-        return array_key_exists($value, $this->classes) ? $this->classes[$value] : GenericTag::class;
+        return \array_key_exists($value, $this->classes) ? $this->classes[$value] : GenericTag::class;
     }
 
     public function createObjectForValue(int $additionalInformation, ?string $data, CBORObject $object): TagObject

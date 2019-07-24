@@ -34,7 +34,7 @@ class OtherObjectManager
 
     public function getClassForValue(int $value): string
     {
-        return array_key_exists($value, $this->classes) ? $this->classes[$value] : GenericObject::class;
+        return \array_key_exists($value, $this->classes) ? $this->classes[$value] : GenericObject::class;
     }
 
     public function createObjectForValue(int $value, ?string $data): OtherObject

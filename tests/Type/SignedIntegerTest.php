@@ -68,21 +68,21 @@ final class SignedIntegerTest extends BaseTestCase
 
     /**
      * @test
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage The value must be a negative integer.
      */
     public function ceateOnNegativeValue(): void
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The value must be a negative integer.');
         SignedIntegerObject::createFromGmpValue(gmp_init(1));
     }
 
     /**
      * @test
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.
      */
     public function createOnOutOfRangeValue(): void
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.');
         SignedIntegerObject::createFromGmpValue(gmp_init(-4294967297));
     }
 

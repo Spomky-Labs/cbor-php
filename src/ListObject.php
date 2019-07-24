@@ -52,7 +52,7 @@ class ListObject extends AbstractCBORObject implements \Countable, \IteratorAggr
 
     public function get(int $index): CBORObject
     {
-        if (!array_key_exists($index, $this->data)) {
+        if (!\array_key_exists($index, $this->data)) {
             throw new \InvalidArgumentException('Index not found.');
         }
 

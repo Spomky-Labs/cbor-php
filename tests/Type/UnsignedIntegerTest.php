@@ -62,21 +62,21 @@ final class UnsignedIntegerTest extends BaseTestCase
 
     /**
      * @test
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage The value must be a positive integer.
      */
     public function ceateOnNegativeValue(): void
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The value must be a positive integer.');
         UnsignedIntegerObject::createFromGmpValue(gmp_init(-1));
     }
 
     /**
      * @test
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.
      */
     public function createOnOutOfRangeValue(): void
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.');
         UnsignedIntegerObject::createFromGmpValue(gmp_init(4294967296));
     }
 
