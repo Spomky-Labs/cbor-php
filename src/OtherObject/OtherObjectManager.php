@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace CBOR\OtherObject;
 
 use CBOR\OtherObject;
+use InvalidArgumentException;
 
 class OtherObjectManager
 {
@@ -26,7 +27,7 @@ class OtherObjectManager
     {
         foreach ($class::supportedAdditionalInformation() as $ai) {
             if ($ai < 0) {
-                throw new \InvalidArgumentException('Invalid additional information.');
+                throw new InvalidArgumentException('Invalid additional information.');
             }
             $this->classes[$ai] = $class;
         }

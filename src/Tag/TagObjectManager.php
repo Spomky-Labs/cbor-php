@@ -16,6 +16,7 @@ namespace CBOR\Tag;
 use Assert\Assertion;
 use CBOR\CBORObject;
 use CBOR\TagObject;
+use InvalidArgumentException;
 
 class TagObjectManager
 {
@@ -27,7 +28,7 @@ class TagObjectManager
     public function add(string $class): void
     {
         if ($class::getTagId() < 0) {
-            throw new \InvalidArgumentException('Invalid tag ID.');
+            throw new InvalidArgumentException('Invalid tag ID.');
         }
         $this->classes[$class::getTagId()] = $class;
     }

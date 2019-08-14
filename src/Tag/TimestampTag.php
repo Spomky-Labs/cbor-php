@@ -19,6 +19,7 @@ use CBOR\OtherObject\HalfPrecisionFloatObject;
 use CBOR\OtherObject\SinglePrecisionFloatObject;
 use CBOR\TagObject as Base;
 use CBOR\UnsignedIntegerObject;
+use InvalidArgumentException;
 
 final class TimestampTag extends Base
 {
@@ -35,7 +36,7 @@ final class TimestampTag extends Base
     public static function create(CBORObject $object): Base
     {
         if (!$object instanceof UnsignedIntegerObject && !$object instanceof HalfPrecisionFloatObject && !$object instanceof SinglePrecisionFloatObject && !$object instanceof DoublePrecisionFloatObject) {
-            throw new \InvalidArgumentException('This tag only accepts a Byte String object.');
+            throw new InvalidArgumentException('This tag only accepts a Byte String object.');
         }
 
         return new self(1, null, $object);

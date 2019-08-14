@@ -25,7 +25,7 @@ final class SignedIntegerTest extends BaseTestCase
      */
     public function createOnValidValue(int $intValue, string $expectedIntValue, int $expectedMajorType, int $expectedAdditionalInformation): void
     {
-        $unsignedInteger = SignedIntegerObject::createFromGmpValue(gmp_init($intValue));
+        $unsignedInteger = SignedIntegerObject::create($intValue);
         static::assertEquals($expectedIntValue, $unsignedInteger->getValue());
         static::assertEquals($expectedMajorType, $unsignedInteger->getMajorType());
         static::assertEquals($expectedAdditionalInformation, $unsignedInteger->getAdditionalInformation());
@@ -74,7 +74,7 @@ final class SignedIntegerTest extends BaseTestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('The value must be a negative integer.');
-        SignedIntegerObject::createFromGmpValue(gmp_init(1));
+        SignedIntegerObject::create(1);
     }
 
     /**
@@ -84,7 +84,7 @@ final class SignedIntegerTest extends BaseTestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.');
-        SignedIntegerObject::createFromGmpValue(gmp_init(-4294967297));
+        SignedIntegerObject::create(-4294967297);
     }
 
     /**
