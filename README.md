@@ -48,9 +48,9 @@ Each object have at least:
 
 use CBOR\UnsignedIntegerObject;
 
-$object = UnsignedIntegerObject::createFromGmpValue(gmp_init(10));
-$object = UnsignedIntegerObject::createFromGmpValue(gmp_init(1000));
-$object = UnsignedIntegerObject::createFromGmpValue(gmp_init(10000));
+$object = UnsignedIntegerObject::create(10);
+$object = UnsignedIntegerObject::create(1000);
+$object = UnsignedIntegerObject::create(10000);
 
 $longInteger = gmp_init('0AFFEBFF', 16);
 $object = UnsignedIntegerObject::createFromGmpValue($longInteger);
@@ -67,9 +67,9 @@ echo bin2hex((string)$object); // 1a0affebff
 
 use CBOR\SignedIntegerObject;
 
-$object = SignedIntegerObject::createFromGmpValue(gmp_init(-10));
-$object = SignedIntegerObject::createFromGmpValue(gmp_init(-1000));
-$object = SignedIntegerObject::createFromGmpValue(gmp_init(-10000));
+$object = SignedIntegerObject::create(-10);
+$object = SignedIntegerObject::create(-1000);
+$object = SignedIntegerObject::create(-10000);
 ```
 
 **Note: the method `getNormalizedData()` will always return the integer as a string. This is needed to avoid lack of 64 bits integer support on PHP**
@@ -136,7 +136,7 @@ $object->add(new TextStringObject('(｡◕‿◕｡)⚡'));
 // Create an Infinite List with several items
 $object = new InfiniteListObject();
 $object->add(new TextStringObject('(｡◕‿◕｡)⚡'));
-$object->add(UnsignedIntegerObject::createFromGmpValue(gmp_init(25)));
+$object->add(UnsignedIntegerObject::create(25));
 ```
 
 ### Map / Infinite Map (Major Type 5)
@@ -162,12 +162,12 @@ use CBOR\SignedIntegerObject;
 
 // Create a Map with a single item
 $object = new MapObject();
-$object->add(UnsignedIntegerObject::createFromGmpValue(gmp_init(25)),new TextStringObject('(｡◕‿◕｡)⚡'));
+$object->add(UnsignedIntegerObject::create(25),new TextStringObject('(｡◕‿◕｡)⚡'));
 
 // Create an Infinite Map with several items
 $object = new InfiniteMapObject();
-$object->append(new ByteStringObject('A'), SignedIntegerObject::createFromGmpValue(gmp_init(-652)));
-$object->append(UnsignedIntegerObject::createFromGmpValue(gmp_init(25)), new TextStringObject('(｡◕‿◕｡)⚡'));
+$object->append(new ByteStringObject('A'), SignedIntegerObject::create(-652));
+$object->append(UnsignedIntegerObject::create(25), new TextStringObject('(｡◕‿◕｡)⚡'));
 ```
 
 ### Tags (Major Type 6)
@@ -195,7 +195,7 @@ use CBOR\Tag\TimestampTag;
 use CBOR\UnsignedIntegerObject;
 
 // Create an unsigned object that represents the current timestamp
-$object = UnsignedIntegerObject::createFromGmpValue(gmp_init(time()); // e.g. 1525873787
+$object = UnsignedIntegerObject::create(time()); // e.g. 1525873787
 
 //We tag the object with the Timestamp Tag
 $taggedObject = TimestampTag::create($object); // Returns a \DateTimeImmutable object with timestamp at 1525873787
@@ -261,21 +261,21 @@ $object->add(
         new FalseObject(),
         new DecimalFractionTag(
             new ListObject([
-                SignedIntegerObject::createFromGmpValue(gmp_init(-2)),
-                UnsignedIntegerObject::createFromGmpValue(gmp_init(1234)),
+                SignedIntegerObject::create(-2),
+                UnsignedIntegerObject::create(1234),
             ])
         ),
     ])
 );
 
 $object->add(
-    UnsignedIntegerObject::createFromGmpValue(gmp_init(2000)),
+    UnsignedIntegerObject::create(2000),
     new NullObject()
 );
 $object->add(
     new TextStringObject('date'),
     TimestampTag::create(
-        UnsignedIntegerObject::createFromGmpValue(gmp_init(1577836800))
+        UnsignedIntegerObject::create(1577836800)
     )
 );
 ```

@@ -15,7 +15,6 @@ namespace CBOR\OtherObject;
 
 use CBOR\OtherObject;
 use InvalidArgumentException;
-use RuntimeException;
 
 class OtherObjectManager
 {

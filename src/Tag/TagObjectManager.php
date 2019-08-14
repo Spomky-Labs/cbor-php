@@ -17,7 +17,6 @@ use Assert\Assertion;
 use CBOR\CBORObject;
 use CBOR\TagObject;
 use InvalidArgumentException;
-use RuntimeException;
 
 class TagObjectManager
 {

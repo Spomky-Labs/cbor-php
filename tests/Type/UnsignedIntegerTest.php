@@ -25,7 +25,7 @@ final class UnsignedIntegerTest extends BaseTestCase
      */
     public function createOnValidValue(int $intValue, string $expectedIntValue, int $expectedMajorType, int $expectedAdditionalInformation): void
     {
-        $unsignedInteger = UnsignedIntegerObject::createFromGmpValue(gmp_init($intValue));
+        $unsignedInteger = UnsignedIntegerObject::create($intValue);
         static::assertEquals($expectedIntValue, $unsignedInteger->getValue());
         static::assertEquals($expectedMajorType, $unsignedInteger->getMajorType());
         static::assertEquals($expectedAdditionalInformation, $unsignedInteger->getAdditionalInformation());
@@ -68,7 +68,7 @@ final class UnsignedIntegerTest extends BaseTestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('The value must be a positive integer.');
-        UnsignedIntegerObject::createFromGmpValue(gmp_init(-1));
+        UnsignedIntegerObject::create(-1);
     }
 
     /**
@@ -78,7 +78,7 @@ final class UnsignedIntegerTest extends BaseTestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.');
-        UnsignedIntegerObject::createFromGmpValue(gmp_init(4294967296));
+        UnsignedIntegerObject::create(4294967296);
     }
 
     /**

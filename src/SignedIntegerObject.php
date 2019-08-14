@@ -36,6 +36,11 @@ final class SignedIntegerObject extends AbstractCBORObject
         return new self($additionalInformation, $data);
     }
 
+    public static function create(int $value): self
+    {
+        return self::createFromGmpValue(gmp_init($value));
+    }
+
     public static function createFromGmpValue(\GMP $value): self
     {
         if (gmp_cmp($value, gmp_init(0)) >= 0) {
