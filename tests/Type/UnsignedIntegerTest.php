@@ -15,7 +15,6 @@ namespace CBOR\Test\Type;
 
 use CBOR\StringStream;
 use CBOR\UnsignedIntegerObject;
-use function Safe\hex2bin;
 
 final class UnsignedIntegerTest extends BaseTestCase
 {

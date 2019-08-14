@@ -20,7 +20,6 @@ use CBOR\TagObject as Base;
 use CBOR\TextStringObject;
 use CBOR\TextStringWithChunkObject;
 use InvalidArgumentException;
-use function Safe\base64_decode;
 
 final class Base64EncodingTag extends Base
 {
@@ -53,6 +52,11 @@ final class Base64EncodingTag extends Base
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        return base64_decode($this->object->getNormalizedData($ignoreTags), true);
+        $result = \base64_decode($this->object->getNormalizedData($ignoreTags), true);
+        if (false === $result) {
+            throw new InvalidArgumentException('Unable to decode the data');
+        }
+
+        return $result;
     }
 }

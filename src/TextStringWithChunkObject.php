@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-use function Safe\hex2bin;
+use InvalidArgumentException;
 
 final class TextStringWithChunkObject extends AbstractCBORObject
 {
@@ -76,7 +76,11 @@ final class TextStringWithChunkObject extends AbstractCBORObject
         foreach ($this->data as $object) {
             $result .= (string) $object;
         }
-        $result .= hex2bin('FF');
+        $bin = hex2bin('FF');
+        if (false === $bin) {
+            throw new InvalidArgumentException('Unable to convert the data');
+        }
+        $result .= $bin;
 
         return $result;
     }

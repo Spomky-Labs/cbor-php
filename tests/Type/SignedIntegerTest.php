@@ -15,7 +15,6 @@ namespace CBOR\Test\Type;
 
 use CBOR\SignedIntegerObject;
 use CBOR\StringStream;
-use function Safe\hex2bin;
 
 final class SignedIntegerTest extends BaseTestCase
 {

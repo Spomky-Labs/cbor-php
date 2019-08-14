@@ -27,7 +27,6 @@
         "php": "^7.1|^8.0",
         "spomky-labs/base64url": "^1.0|^2.0",
         "ext-gmp": "*",
-        "thecodingmachine/safe": "^0.1.13",
         "beberlei/assert": "^3.2"
     },
     "require-dev": {
@@ -38,7 +37,6 @@
         "phpstan/phpstan-phpunit": "^0.11",
         "phpstan/phpstan-strict-rules": "^0.11",
         "phpunit/phpunit": "^7.5|^8.0",
-        "thecodingmachine/phpstan-safe-rule": "^0.1.2",
         "rector/rector": "^0.5"
     },
     "suggest": {

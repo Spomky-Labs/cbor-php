@@ -14,11 +14,7 @@ declare(strict_types=1);
 namespace CBOR;
 
 use InvalidArgumentException;
-use function Safe\fopen;
-use function Safe\fread;
-use function Safe\fwrite;
-use function Safe\rewind;
-use function Safe\sprintf;
+use RuntimeException;
 
 final class StringStream implements Stream
 {
@@ -29,9 +25,18 @@ final class StringStream implements Stream
 
     public function __construct(string $data)
     {
-        $resource = fopen('php://memory', 'r+');
-        fwrite($resource, $data);
-        rewind($resource);
+        $resource = fopen('php://memory', 'rb+');
+        if (false === $resource) {
+            throw new RuntimeException('Unable to open the memory');
+        }
+        $result = fwrite($resource, $data);
+        if (false === $result) {
+            throw new RuntimeException('Unable to write the memory');
+        }
+        $result = rewind($resource);
+        if (false === $result) {
+            throw new RuntimeException('Unable to rewind the memory');
+        }
         $this->resource = $resource;
     }
 
@@ -41,6 +46,9 @@ final class StringStream implements Stream
             return '';
         }
         $data = fread($this->resource, $length);
+        if (false === $data) {
+            throw new RuntimeException('Unable to read the memory');
+        }
         if (mb_strlen($data, '8bit') !== $length) {
             throw new InvalidArgumentException(sprintf('Out of range. Expected: %d, read: %d.', $length, mb_strlen($data, '8bit')));
         }
