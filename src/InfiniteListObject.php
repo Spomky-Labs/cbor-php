@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use function Safe\hex2bin;
+
 final class InfiniteListObject extends AbstractCBORObject implements \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b100;
@@ -56,7 +58,7 @@ final class InfiniteListObject extends AbstractCBORObject implements \Countable,
         foreach ($this->data as $object) {
             $result .= (string) $object;
         }
-        $result .= \Safe\hex2bin('FF');
+        $result .= hex2bin('FF');
 
         return $result;
     }

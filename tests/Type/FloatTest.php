@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace CBOR\Test\Type;
 
 use CBOR\StringStream;
+use function Safe\hex2bin;
 
 final class FloatTest extends BaseTestCase
 {
@@ -23,7 +24,7 @@ final class FloatTest extends BaseTestCase
      */
     public function aFloatCanBeParsed(string $data): void
     {
-        $stream = new StringStream(\Safe\hex2bin($data));
+        $stream = new StringStream(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         $object->getNormalizedData();
         static::assertEquals($data, bin2hex((string) $object));

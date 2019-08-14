@@ -15,6 +15,7 @@ namespace CBOR\Test\Type;
 
 use CBOR\StringStream;
 use CBOR\TextStringObject;
+use function Safe\hex2bin;
 
 /**
  * @covers \CBOR\TextStringObject
@@ -36,7 +37,7 @@ final class TextStringObjectTest extends BaseTestCase
         static::assertEquals($string, $object->getNormalizedData());
 
         $binary = (string) $object;
-        static::assertEquals(\Safe\hex2bin($expectedEncodedObject), $binary);
+        static::assertEquals(hex2bin($expectedEncodedObject), $binary);
 
         $stream = new StringStream($binary);
         $decoded = $this->getDecoder()->decode($stream);

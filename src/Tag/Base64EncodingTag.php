@@ -19,6 +19,7 @@ use CBOR\CBORObject;
 use CBOR\TagObject as Base;
 use CBOR\TextStringObject;
 use CBOR\TextStringWithChunkObject;
+use function Safe\base64_decode;
 
 final class Base64EncodingTag extends Base
 {
@@ -51,6 +52,6 @@ final class Base64EncodingTag extends Base
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        return \Safe\base64_decode($this->object->getNormalizedData($ignoreTags), true);
+        return base64_decode($this->object->getNormalizedData($ignoreTags), true);
     }
 }

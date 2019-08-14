@@ -13,6 +13,12 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use function Safe\fopen;
+use function Safe\fread;
+use function Safe\fwrite;
+use function Safe\rewind;
+use function Safe\sprintf;
+
 final class StringStream implements Stream
 {
     /**
@@ -22,9 +28,9 @@ final class StringStream implements Stream
 
     public function __construct(string $data)
     {
-        $resource = \Safe\fopen('php://memory', 'r+');
-        \Safe\fwrite($resource, $data);
-        \Safe\rewind($resource);
+        $resource = fopen('php://memory', 'r+');
+        fwrite($resource, $data);
+        rewind($resource);
         $this->resource = $resource;
     }
 
@@ -33,9 +39,9 @@ final class StringStream implements Stream
         if (0 === $length) {
             return '';
         }
-        $data = \Safe\fread($this->resource, $length);
+        $data = fread($this->resource, $length);
         if (mb_strlen($data, '8bit') !== $length) {
-            throw new \InvalidArgumentException(\Safe\sprintf('Out of range. Expected: %d, read: %d.', $length, mb_strlen($data, '8bit')));
+            throw new \InvalidArgumentException(sprintf('Out of range. Expected: %d, read: %d.', $length, mb_strlen($data, '8bit')));
         }
 
         return $data;

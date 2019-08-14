@@ -16,6 +16,7 @@ namespace CBOR\Test\Type;
 use CBOR\StringStream;
 use CBOR\TextStringObject;
 use CBOR\TextStringWithChunkObject;
+use function Safe\hex2bin;
 
 /**
  * @covers \CBOR\TextStringWithChunkObject
@@ -40,7 +41,7 @@ final class TextStringWithChunkObjectTest extends BaseTestCase
         static::assertEquals($expectedValue, $object->getNormalizedData());
 
         $binary = (string) $object;
-        static::assertEquals(\Safe\hex2bin($expectedEncodedObject), $binary);
+        static::assertEquals(hex2bin($expectedEncodedObject), $binary);
 
         $stream = new StringStream($binary);
         $decoded = $this->getDecoder()->decode($stream);

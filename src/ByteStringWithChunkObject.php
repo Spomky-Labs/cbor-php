@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use function Safe\hex2bin;
+
 final class ByteStringWithChunkObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b010;
@@ -74,7 +76,7 @@ final class ByteStringWithChunkObject extends AbstractCBORObject
         foreach ($this->chunks as $chunk) {
             $result .= (string) $chunk;
         }
-        $result .= \Safe\hex2bin('FF');
+        $result .= hex2bin('FF');
 
         return $result;
     }

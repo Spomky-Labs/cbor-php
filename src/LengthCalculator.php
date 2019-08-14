@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use function Safe\hex2bin;
+
 final class LengthCalculator
 {
     public static function getLengthOfString(string $data): array
@@ -37,11 +39,11 @@ final class LengthCalculator
             case $length < 0xFF:
                 return [24, \chr($length)];
             case $length < 0xFFFF:
-                return [25, \Safe\hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
+                return [25, hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
             case $length < 0xFFFFFFFF:
-                return [26, \Safe\hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
+                return [26, hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
             case -1 === gmp_cmp(gmp_init($length), gmp_init('FFFFFFFFFFFFFFFF', 16)):
-                return [27, \Safe\hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
+                return [27, hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
             default:
                 return [31, null];
         }
@@ -49,6 +51,6 @@ final class LengthCalculator
 
     private static function fixHexLength(string $data): string
     {
-        return 0 === (mb_strlen($data, '8bit') % 2) ? $data : '0'.$data;
+        return str_pad($data, 2 ** ceil(log(mb_strlen($data, '8bit'), 2)), '0', STR_PAD_LEFT);
     }
 }

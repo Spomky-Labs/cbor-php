@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use function Safe\hex2bin;
+
 final class InfiniteMapObject extends AbstractCBORObject implements \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b101;
@@ -60,7 +62,7 @@ final class InfiniteMapObject extends AbstractCBORObject implements \Countable, 
             $result .= (string) $object->getKey();
             $result .= (string) $object->getValue();
         }
-        $result .= \Safe\hex2bin('FF');
+        $result .= hex2bin('FF');
 
         return $result;
     }

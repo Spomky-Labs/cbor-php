@@ -15,6 +15,7 @@ namespace CBOR\Test\Type;
 
 use CBOR\SignedIntegerObject;
 use CBOR\StringStream;
+use function Safe\hex2bin;
 
 final class SignedIntegerTest extends BaseTestCase
 {
@@ -92,7 +93,7 @@ final class SignedIntegerTest extends BaseTestCase
      */
     public function anUnsignedIntegerCanBeEncodedAndDecoded(string $data, string $expectedNormalizedData): void
     {
-        $stream = new StringStream(\Safe\hex2bin($data));
+        $stream = new StringStream(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         $object->getNormalizedData();
         static::assertEquals($data, bin2hex((string) $object));

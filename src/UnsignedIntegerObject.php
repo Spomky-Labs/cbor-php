@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use function Safe\hex2bin;
+
 final class UnsignedIntegerObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b000;
@@ -46,15 +48,15 @@ final class UnsignedIntegerObject extends AbstractCBORObject
                 break;
             case gmp_cmp($value, gmp_init('FF', 16)) < 0:
                 $ai = 24;
-                $data = \Safe\hex2bin(str_pad(gmp_strval($value, 16), 2, '0', STR_PAD_LEFT));
+                $data = hex2bin(str_pad(gmp_strval($value, 16), 2, '0', STR_PAD_LEFT));
                 break;
             case gmp_cmp($value, gmp_init('FFFF', 16)) < 0:
                 $ai = 25;
-                $data = \Safe\hex2bin(str_pad(gmp_strval($value, 16), 4, '0', STR_PAD_LEFT));
+                $data = hex2bin(str_pad(gmp_strval($value, 16), 4, '0', STR_PAD_LEFT));
                 break;
             case gmp_cmp($value, gmp_init('FFFFFFFF', 16)) < 0:
                 $ai = 26;
-                $data = \Safe\hex2bin(str_pad(gmp_strval($value, 16), 8, '0', STR_PAD_LEFT));
+                $data = hex2bin(str_pad(gmp_strval($value, 16), 8, '0', STR_PAD_LEFT));
                 break;
             default:
                 throw new \InvalidArgumentException('Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.');

@@ -15,6 +15,7 @@ namespace CBOR\Test\Type;
 
 use CBOR\StringStream;
 use CBOR\UnsignedIntegerObject;
+use function Safe\hex2bin;
 
 final class UnsignedIntegerTest extends BaseTestCase
 {
@@ -86,7 +87,7 @@ final class UnsignedIntegerTest extends BaseTestCase
      */
     public function anUnsignedIntegerCanBeParsed(string $data, string $expectedNormalizedData): void
     {
-        $stream = new StringStream(\Safe\hex2bin($data));
+        $stream = new StringStream(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         static::assertEquals($data, bin2hex((string) $object));
         static::assertEquals($expectedNormalizedData, $object->getNormalizedData());

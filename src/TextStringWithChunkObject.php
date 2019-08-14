@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use function Safe\hex2bin;
+
 final class TextStringWithChunkObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b011;
@@ -74,7 +76,7 @@ final class TextStringWithChunkObject extends AbstractCBORObject
         foreach ($this->data as $object) {
             $result .= (string) $object;
         }
-        $result .= \Safe\hex2bin('FF');
+        $result .= hex2bin('FF');
 
         return $result;
     }
