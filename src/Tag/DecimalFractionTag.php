@@ -18,6 +18,8 @@ use CBOR\ListObject;
 use CBOR\SignedIntegerObject;
 use CBOR\TagObject as Base;
 use CBOR\UnsignedIntegerObject;
+use InvalidArgumentException;
+use RuntimeException;
 
 final class DecimalFractionTag extends Base
 {
@@ -33,16 +35,19 @@ final class DecimalFractionTag extends Base
 
     public function __construct(CBORObject $object)
     {
+        if (!\extension_loaded('bcmath')) {
+            throw new RuntimeException('The extension "bcmath" is required to use this tag');
+        }
         if (!$object instanceof ListObject || 2 !== \count($object)) {
-            throw new \InvalidArgumentException('This tag only accepts a ListObject object that contains an exponent and a mantissa.');
+            throw new InvalidArgumentException('This tag only accepts a ListObject object that contains an exponent and a mantissa.');
         }
         $e = $object->get(0);
         if (!$e instanceof UnsignedIntegerObject && !$e instanceof SignedIntegerObject) {
-            throw new \InvalidArgumentException('The exponent must be a Signed Integer or an Unsigned Integer object.');
+            throw new InvalidArgumentException('The exponent must be a Signed Integer or an Unsigned Integer object.');
         }
         $m = $object->get(1);
         if (!$m instanceof UnsignedIntegerObject && !$m instanceof SignedIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof PositiveBigIntegerTag) {
-            throw new \InvalidArgumentException('The mantissa must be a Positive or Negative Signed Integer or an Unsigned Integer object.');
+            throw new InvalidArgumentException('The mantissa must be a Positive or Negative Signed Integer or an Unsigned Integer object.');
         }
 
         parent::__construct(4, null, $object);

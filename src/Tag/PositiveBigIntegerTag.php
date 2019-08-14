@@ -16,6 +16,7 @@ namespace CBOR\Tag;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\TagObject as Base;
+use InvalidArgumentException;
 
 final class PositiveBigIntegerTag extends Base
 {
@@ -32,7 +33,7 @@ final class PositiveBigIntegerTag extends Base
     public static function create(CBORObject $object): Base
     {
         if (!$object instanceof ByteStringObject) {
-            throw new \InvalidArgumentException('This tag only accepts a Byte String object.');
+            throw new InvalidArgumentException('This tag only accepts a Byte String object.');
         }
 
         return new self(2, null, $object);

@@ -15,6 +15,7 @@ namespace CBOR\OtherObject;
 
 use Assert\Assertion;
 use CBOR\OtherObject as Base;
+use InvalidArgumentException;
 
 final class HalfPrecisionFloatObject extends Base
 {
@@ -34,7 +35,7 @@ final class HalfPrecisionFloatObject extends Base
     public static function create(string $value): self
     {
         if (4 !== mb_strlen($value, '8bit')) {
-            throw new \InvalidArgumentException('The value is not a valid half precision floating point');
+            throw new InvalidArgumentException('The value is not a valid half precision floating point');
         }
 
         return new self(25, $value);

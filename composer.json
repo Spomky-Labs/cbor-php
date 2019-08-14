@@ -27,7 +27,6 @@
         "php": "^7.1|^8.0",
         "spomky-labs/base64url": "^1.0|^2.0",
         "ext-gmp": "*",
-        "ext-bcmath": "*",
         "thecodingmachine/safe": "^0.1.13",
         "beberlei/assert": "^3.2"
     },
@@ -41,6 +40,9 @@
         "phpunit/phpunit": "^7.5|^8.0",
         "thecodingmachine/phpstan-safe-rule": "^0.1.2",
         "rector/rector": "^0.5"
+    },
+    "suggest": {
+        "ext-bcmath": "BCMath extension needed to handle the Big Float and Decimal Fraction Tags"
     },
     "extra": {
         "branch-alias": {

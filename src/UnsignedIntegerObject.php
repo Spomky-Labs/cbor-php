@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use InvalidArgumentException;
 use function Safe\hex2bin;
 
 final class UnsignedIntegerObject extends AbstractCBORObject
@@ -38,7 +39,7 @@ final class UnsignedIntegerObject extends AbstractCBORObject
     public static function createFromGmpValue(\GMP $value): self
     {
         if (gmp_cmp($value, gmp_init(0)) < 0) {
-            throw new \InvalidArgumentException('The value must be a positive integer.');
+            throw new InvalidArgumentException('The value must be a positive integer.');
         }
 
         switch (true) {
@@ -59,7 +60,7 @@ final class UnsignedIntegerObject extends AbstractCBORObject
                 $data = hex2bin(str_pad(gmp_strval($value, 16), 8, '0', STR_PAD_LEFT));
                 break;
             default:
-                throw new \InvalidArgumentException('Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.');
+                throw new InvalidArgumentException('Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.');
         }
 
         return new self($ai, $data);

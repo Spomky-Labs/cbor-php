@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use InvalidArgumentException;
+
 class ListObject extends AbstractCBORObject implements \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b100;
@@ -35,7 +37,7 @@ class ListObject extends AbstractCBORObject implements \Countable, \IteratorAggr
         list($additionalInformation, $length) = LengthCalculator::getLengthOfArray($data);
         array_map(function ($item) {
             if (!$item instanceof CBORObject) {
-                throw new \InvalidArgumentException('The list must contain only CBORObject objects.');
+                throw new InvalidArgumentException('The list must contain only CBORObject objects.');
             }
         }, $data);
 
@@ -53,7 +55,7 @@ class ListObject extends AbstractCBORObject implements \Countable, \IteratorAggr
     public function get(int $index): CBORObject
     {
         if (!\array_key_exists($index, $this->data)) {
-            throw new \InvalidArgumentException('Index not found.');
+            throw new InvalidArgumentException('Index not found.');
         }
 
         return $this->data[$index];

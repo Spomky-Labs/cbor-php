@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace CBOR\OtherObject;
 
 use CBOR\OtherObject as Base;
+use InvalidArgumentException;
 
 final class SimpleObject extends Base
 {
@@ -47,7 +48,7 @@ final class SimpleObject extends Base
             case $value < 256:
                 return new self(24, \chr($value));
             default:
-                throw new \InvalidArgumentException('The value is not a valid simple value');
+                throw new InvalidArgumentException('The value is not a valid simple value');
         }
     }
 }

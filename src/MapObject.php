@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use InvalidArgumentException;
+
 final class MapObject extends AbstractCBORObject implements \Countable, \IteratorAggregate
 {
     private const MAJOR_TYPE = 0b101;
@@ -35,7 +37,7 @@ final class MapObject extends AbstractCBORObject implements \Countable, \Iterato
         list($additionalInformation, $length) = LengthCalculator::getLengthOfArray($data);
         array_map(function ($item) {
             if (!$item instanceof MapItem) {
-                throw new \InvalidArgumentException('The list must contain only MapItem objects.');
+                throw new InvalidArgumentException('The list must contain only MapItem objects.');
             }
         }, $data);
 

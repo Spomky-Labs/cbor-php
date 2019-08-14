@@ -77,6 +77,10 @@ final class FloatTest extends BaseTestCase
                 'fb7ff8000000000000',
             ], [
                 'fbfff0000000000000',
+            ], [
+                'c5822003',
+            ], [
+                'c48221196ab3',
             ],
         ];
     }

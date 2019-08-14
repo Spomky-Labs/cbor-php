@@ -20,6 +20,7 @@ use CBOR\CBORObject;
 use CBOR\TagObject as Base;
 use CBOR\TextStringObject;
 use CBOR\TextStringWithChunkObject;
+use InvalidArgumentException;
 
 final class Base64UrlEncodingTag extends Base
 {
@@ -36,7 +37,7 @@ final class Base64UrlEncodingTag extends Base
     public static function create(CBORObject $object): Base
     {
         if (!$object instanceof ByteStringObject && !$object instanceof ByteStringWithChunkObject && !$object instanceof TextStringObject && !$object instanceof TextStringWithChunkObject) {
-            throw new \InvalidArgumentException('This tag only accepts Byte String, Infinite Byte String, Text String or Infinite Text String objects.');
+            throw new InvalidArgumentException('This tag only accepts Byte String, Infinite Byte String, Text String or Infinite Text String objects.');
         }
 
         return new self(21, null, $object);
