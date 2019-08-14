@@ -28,9 +28,6 @@ class TagObjectManager
 
     public function add(string $class): void
     {
-        if (!method_exists($class, 'getTagId')) {
-            throw new RuntimeException('Invalid class.');
-        }
         if ($class::getTagId() < 0) {
             throw new InvalidArgumentException('Invalid tag ID.');
         }
