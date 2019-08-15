@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-use function Safe\hex2bin;
+use InvalidArgumentException;
 
 final class LengthCalculator
 {
@@ -39,14 +39,24 @@ final class LengthCalculator
             case $length < 0xFF:
                 return [24, \chr($length)];
             case $length < 0xFFFF:
-                return [25, hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
+                return [25, self::hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
             case $length < 0xFFFFFFFF:
-                return [26, hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
+                return [26, self::hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
             case -1 === gmp_cmp(gmp_init($length), gmp_init('FFFFFFFFFFFFFFFF', 16)):
-                return [27, hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
+                return [27, self::hex2bin(static::fixHexLength(gmp_strval(gmp_init($length), 16)))];
             default:
                 return [31, null];
         }
+    }
+
+    private static function hex2bin(string $data): string
+    {
+        $result = hex2bin($data);
+        if (false === $result) {
+            throw new InvalidArgumentException('Unable to convert the data');
+        }
+
+        return $result;
     }
 
     private static function fixHexLength(string $data): string

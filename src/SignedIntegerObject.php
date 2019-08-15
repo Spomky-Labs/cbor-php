@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace CBOR;
 
 use InvalidArgumentException;
-use function Safe\hex2bin;
 
 final class SignedIntegerObject extends AbstractCBORObject
 {
@@ -57,15 +56,15 @@ final class SignedIntegerObject extends AbstractCBORObject
                 break;
             case gmp_cmp($computed_value, gmp_init('FF', 16)) < 0:
                 $ai = 24;
-                $data = hex2bin(str_pad(gmp_strval($computed_value, 16), 2, '0', STR_PAD_LEFT));
+                $data = self::hex2bin(str_pad(gmp_strval($computed_value, 16), 2, '0', STR_PAD_LEFT));
                 break;
             case gmp_cmp($computed_value, gmp_init('FFFF', 16)) < 0:
                 $ai = 25;
-                $data = hex2bin(str_pad(gmp_strval($computed_value, 16), 4, '0', STR_PAD_LEFT));
+                $data = self::hex2bin(str_pad(gmp_strval($computed_value, 16), 4, '0', STR_PAD_LEFT));
                 break;
             case gmp_cmp($computed_value, gmp_init('FFFFFFFF', 16)) < 0:
                 $ai = 26;
-                $data = hex2bin(str_pad(gmp_strval($computed_value, 16), 8, '0', STR_PAD_LEFT));
+                $data = self::hex2bin(str_pad(gmp_strval($computed_value, 16), 8, '0', STR_PAD_LEFT));
                 break;
             default:
                 throw new InvalidArgumentException('Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.');
@@ -97,6 +96,16 @@ final class SignedIntegerObject extends AbstractCBORObject
         $result = parent::__toString();
         if (null !== $this->data) {
             $result .= $this->data;
+        }
+
+        return $result;
+    }
+
+    private static function hex2bin(string $data): string
+    {
+        $result = hex2bin($data);
+        if (false === $result) {
+            throw new InvalidArgumentException('Unable to convert the data');
         }
 
         return $result;

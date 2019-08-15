@@ -15,7 +15,6 @@ namespace CBOR\Test\Type;
 
 use CBOR\StringStream;
 use CBOR\TextStringObject;
-use function Safe\hex2bin;
 
 /**
  * @covers \CBOR\TextStringObject

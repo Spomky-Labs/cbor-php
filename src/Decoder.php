@@ -18,7 +18,6 @@ use CBOR\OtherObject\OtherObjectManager;
 use CBOR\Tag\TagObjectManager;
 use InvalidArgumentException;
 use RuntimeException;
-use function Safe\sprintf;
 
 final class Decoder
 {

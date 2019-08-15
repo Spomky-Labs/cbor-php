@@ -16,7 +16,6 @@ namespace CBOR\Test\Type;
 use CBOR\StringStream;
 use CBOR\TextStringObject;
 use CBOR\TextStringWithChunkObject;
-use function Safe\hex2bin;
 
 /**
  * @covers \CBOR\TextStringWithChunkObject

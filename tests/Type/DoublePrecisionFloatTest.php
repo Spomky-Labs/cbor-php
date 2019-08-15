@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace CBOR\Test\Type;
 
 use CBOR\OtherObject\DoublePrecisionFloatObject;
-use function Safe\hex2bin;
 
 final class DoublePrecisionFloatTest extends BaseTestCase
 {

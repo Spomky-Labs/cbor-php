@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-use function Safe\hex2bin;
+use InvalidArgumentException;
 
 final class InfiniteMapObject extends AbstractCBORObject implements \Countable, \IteratorAggregate
 {
@@ -62,7 +62,11 @@ final class InfiniteMapObject extends AbstractCBORObject implements \Countable, 
             $result .= (string) $object->getKey();
             $result .= (string) $object->getValue();
         }
-        $result .= hex2bin('FF');
+        $bin = hex2bin('FF');
+        if (false === $bin) {
+            throw new InvalidArgumentException('Unable to convert the data');
+        }
+        $result .= $bin;
 
         return $result;
     }
