@@ -4,6 +4,8 @@ parameters:
         - src
     ignoreErrors:
         - '#Method CBOR\\OtherObject\\DoublePrecisionFloatObject::rightShift\(\) should return GMP but returns resource\.#'
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
 includes:
     - vendor/phpstan/phpstan-strict-rules/rules.neon
     - vendor/phpstan/phpstan-phpunit/extension.neon
