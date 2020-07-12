@@ -36,7 +36,7 @@ final class SimpleObject extends Base
             return $this->getAdditionalInformation();
         }
 
-        return Utils::hexToInt($this->data);
+        return Utils::binToInt($this->data);
     }
 
     /**

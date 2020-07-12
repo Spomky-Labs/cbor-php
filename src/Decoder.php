@@ -75,16 +75,16 @@ final class Decoder
             case 0b001: //1
                 return SignedIntegerObject::createObjectForValue($ai, $val);
             case 0b010: //2
-                $length = null === $val ? $ai : Utils::hexToInt($val);
+                $length = null === $val ? $ai : Utils::binToInt($val);
 
                 return new ByteStringObject($stream->read($length));
             case 0b011: //3
-                $length = null === $val ? $ai : Utils::hexToInt($val);
+                $length = null === $val ? $ai : Utils::binToInt($val);
 
                 return new TextStringObject($stream->read($length));
             case 0b100: //4
                 $object = new ListObject();
-                $nbItems = null === $val ? $ai : Utils::hexToInt($val);
+                $nbItems = null === $val ? $ai : Utils::binToInt($val);
                 for ($i = 0; $i < $nbItems; ++$i) {
                     $object->add($this->process($stream));
                 }
@@ -92,7 +92,7 @@ final class Decoder
                 return $object;
             case 0b101: //5
                 $object = new MapObject();
-                $nbItems = null === $val ? $ai : Utils::hexToInt($val);
+                $nbItems = null === $val ? $ai : Utils::binToInt($val);
                 for ($i = 0; $i < $nbItems; ++$i) {
                     $object->add($this->process($stream), $this->process($stream));
                 }

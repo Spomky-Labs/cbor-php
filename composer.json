@@ -25,7 +25,6 @@
     },
     "require": {
         "php": ">=7.1",
-        "ext-gmp": "*",
         "spomky-labs/base64url": "^1.0|^2.0",
         "beberlei/assert": "^3.2",
         "brick/math": "^0.8.15"

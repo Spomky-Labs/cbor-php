@@ -15,8 +15,21 @@ namespace CBOR;
 
 use Brick\Math\BigInteger;
 
+/**
+ * @internal
+ */
 abstract class Utils
 {
+    public static function binToInt(string $value): int
+    {
+        return self::binToBigInteger($value)->toInt();
+    }
+
+    public static function binToBigInteger(string $value): BigInteger
+    {
+        return self::hexToBigInteger(bin2hex($value));
+    }
+
     public static function hexToInt(string $value): int
     {
         return self::hexToBigInteger($value)->toInt();
@@ -24,7 +37,7 @@ abstract class Utils
 
     public static function hexToBigInteger(string $value): BigInteger
     {
-        return BigInteger::fromBase(bin2hex($value), 16);
+        return BigInteger::fromBase($value, 16);
     }
 
     public static function hexToString(string $value): string

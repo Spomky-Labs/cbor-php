@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace CBOR\OtherObject;
 
 use Assert\Assertion;
+use Brick\Math\BigInteger;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
 use InvalidArgumentException;
@@ -44,11 +45,9 @@ final class HalfPrecisionFloatObject extends Base
 
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        $data = $this->data;
-        Assertion::string($data, 'Invalid data');
-        $half = Utils::hexToInt($data);
-        $exp = ($half >> 10) & 0x1f;
-        $mant = $half & 0x3ff;
+        $exp = $this->getExponent();
+        $mant = $this->getMantissa();
+        $sign = $this->getSign();
 
         if (0 === $exp) {
             $val = $mant * 2 ** (-24);
@@ -58,33 +57,31 @@ final class HalfPrecisionFloatObject extends Base
             $val = 0 === $mant ? INF : NAN;
         }
 
-        return 1 === ($half >> 15) ? -$val : $val;
+        return $sign * $val;
     }
 
     public function getExponent(): int
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $half = Utils::hexToInt($data);
 
-        return ($half >> 10) & 0x1f;
+        return Utils::binToBigInteger($data)->shiftedRight(10)->and(Utils::hexToBigInteger('1f'))->toInt();
     }
 
     public function getMantissa(): int
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $half = Utils::hexToInt($data);
 
-        return $half & 0x3ff;
+        return Utils::binToBigInteger($data)->and(Utils::hexToBigInteger('3ff'))->toInt();
     }
 
     public function getSign(): int
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $half = Utils::hexToInt($data);
+        $sign = Utils::binToBigInteger($data)->shiftedRight(15);
 
-        return 1 === ($half >> 15) ? -1 : 1;
+        return $sign->isEqualTo(BigInteger::one()) ? -1 : 1;
     }
 }

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace CBOR\OtherObject;
 
 use Assert\Assertion;
+use Brick\Math\BigInteger;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
-use GMP;
 use InvalidArgumentException;
 
 final class DoublePrecisionFloatObject extends Base
@@ -45,12 +45,9 @@ final class DoublePrecisionFloatObject extends Base
 
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        $data = $this->data;
-        Assertion::string($data, 'Invalid data');
-        $single = gmp_init(bin2hex($data), 16);
-        $exp = gmp_intval($this->bitwiseAnd($this->rightShift($single, 52), gmp_init('7ff', 16)));
-        $mant = gmp_intval($this->bitwiseAnd($single, gmp_init('fffffffffffff', 16)));
-        $sign = gmp_intval($this->rightShift($single, 63));
+        $exp = $this->getExponent();
+        $mant = $this->getMantissa();
+        $sign = $this->getSign();
 
         if (0 === $exp) {
             $val = $mant * 2 ** (-(1022 + 52));
@@ -60,43 +57,31 @@ final class DoublePrecisionFloatObject extends Base
             $val = 0 === $mant ? INF : NAN;
         }
 
-        return 1 === $sign ? -$val : $val;
+        return $sign * $val;
     }
 
     public function getExponent(): int
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $single = Utils::hexToInt($data);
 
-        return ($single >> 52) & 0x7ff;
+        return Utils::binToBigInteger($data)->shiftedRight(52)->and(Utils::hexToBigInteger('7ff'))->toInt();
     }
 
     public function getMantissa(): int
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $single = Utils::hexToInt($data);
 
-        return $single & 0x7fffff;
+        return Utils::binToBigInteger($data)->and(Utils::hexToBigInteger('fffffffffffff'))->toInt();
     }
 
     public function getSign(): int
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $single = Utils::hexToInt($data);
+        $sign = Utils::binToBigInteger($data)->shiftedRight(63);
 
-        return 1 === ($single >> 63) ? -1 : 1;
-    }
-
-    private function rightShift(GMP $number, int $positions): GMP
-    {
-        return gmp_div($number, gmp_pow(gmp_init(2, 10), $positions));
-    }
-
-    private function bitwiseAnd(GMP $first, GMP $other): GMP
-    {
-        return gmp_and($first, $other);
+        return $sign->isEqualTo(BigInteger::one()) ? -1 : 1;
     }
 }

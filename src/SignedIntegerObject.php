@@ -106,7 +106,7 @@ final class SignedIntegerObject extends AbstractCBORObject
             return (string) (-1 - $this->additionalInformation);
         }
 
-        $result = Utils::hexToBigInteger($this->data);
+        $result = Utils::binToBigInteger($this->data);
         $minusOne = BigInteger::of(-1);
 
         return $minusOne->minus($result)->toBase(10);

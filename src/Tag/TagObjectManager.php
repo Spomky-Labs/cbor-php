@@ -45,7 +45,7 @@ class TagObjectManager
         $value = $additionalInformation;
         if ($additionalInformation >= 24) {
             Assertion::string($data, 'Invalid data');
-            $value = Utils::hexToInt($data);
+            $value = Utils::binToInt($data);
         }
         /** @var TagObject $class */
         $class = $this->getClassForValue($value);
