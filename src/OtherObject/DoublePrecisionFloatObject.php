@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace CBOR\OtherObject;
 
-use Assert\Assertion;
 use Brick\Math\BigInteger;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
@@ -63,7 +62,7 @@ final class DoublePrecisionFloatObject extends Base
     public function getExponent(): int
     {
         $data = $this->data;
-        Assertion::string($data, 'Invalid data');
+        Utils::assertString($data, 'Invalid data');
 
         return Utils::binToBigInteger($data)->shiftedRight(52)->and(Utils::hexToBigInteger('7ff'))->toInt();
     }
@@ -71,7 +70,7 @@ final class DoublePrecisionFloatObject extends Base
     public function getMantissa(): int
     {
         $data = $this->data;
-        Assertion::string($data, 'Invalid data');
+        Utils::assertString($data, 'Invalid data');
 
         return Utils::binToBigInteger($data)->and(Utils::hexToBigInteger('fffffffffffff'))->toInt();
     }
@@ -79,7 +78,7 @@ final class DoublePrecisionFloatObject extends Base
     public function getSign(): int
     {
         $data = $this->data;
-        Assertion::string($data, 'Invalid data');
+        Utils::assertString($data, 'Invalid data');
         $sign = Utils::binToBigInteger($data)->shiftedRight(63);
 
         return $sign->isEqualTo(BigInteger::one()) ? -1 : 1;

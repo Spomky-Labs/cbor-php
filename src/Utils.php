@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace CBOR;
 
 use Brick\Math\BigInteger;
+use InvalidArgumentException;
+use function is_string;
 
 /**
  * @internal
@@ -48,5 +50,22 @@ abstract class Utils
     public static function intToHex(int $value): string
     {
         return BigInteger::of($value)->toBase(16);
+    }
+
+    public static function decode(string $data): string
+    {
+        $decoded = base64_decode(strtr($data, '-_', '+/'), true);
+        if (false === $decoded) {
+            throw new InvalidArgumentException('Invalid data provided');
+        }
+
+        return $decoded;
+    }
+
+    public static function assertString($data, ?string $message = null): void
+    {
+        if (!is_string($data)) {
+            throw new InvalidArgumentException($message);
+        }
     }
 }

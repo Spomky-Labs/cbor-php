@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace CBOR\Tag;
 
 use function array_key_exists;
-use Assert\Assertion;
 use CBOR\CBORObject;
 use CBOR\TagObject;
 use CBOR\Utils;
@@ -44,7 +43,7 @@ class TagObjectManager
     {
         $value = $additionalInformation;
         if ($additionalInformation >= 24) {
-            Assertion::string($data, 'Invalid data');
+            Utils::assertString($data, 'Invalid data');
             $value = Utils::binToInt($data);
         }
         /** @var TagObject $class */

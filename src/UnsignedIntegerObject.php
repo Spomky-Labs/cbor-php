@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace CBOR;
 
 use Brick\Math\BigInteger;
-use GMP;
 use InvalidArgumentException;
 
 final class UnsignedIntegerObject extends AbstractCBORObject
@@ -64,39 +63,6 @@ final class UnsignedIntegerObject extends AbstractCBORObject
         $integer = BigInteger::of($value);
 
         return self::createBigInteger($integer);
-    }
-
-    /**
-     * @deprecated Deprecated since v1.1 and will be removed in v2.0. Please use "create" or "createFromString" instead
-     */
-    public static function createFromGmpValue(GMP $value): self
-    {
-        if (gmp_cmp($value, gmp_init(0)) < 0) {
-            throw new InvalidArgumentException('The value must be a positive integer.');
-        }
-
-        switch (true) {
-            case gmp_cmp($value, gmp_init(24)) < 0:
-                $ai = gmp_intval($value);
-                $data = null;
-                break;
-            case gmp_cmp($value, gmp_init('FF', 16)) < 0:
-                $ai = 24;
-                $data = self::hex2bin(str_pad(gmp_strval($value, 16), 2, '0', STR_PAD_LEFT));
-                break;
-            case gmp_cmp($value, gmp_init('FFFF', 16)) < 0:
-                $ai = 25;
-                $data = self::hex2bin(str_pad(gmp_strval($value, 16), 4, '0', STR_PAD_LEFT));
-                break;
-            case gmp_cmp($value, gmp_init('FFFFFFFF', 16)) < 0:
-                $ai = 26;
-                $data = self::hex2bin(str_pad(gmp_strval($value, 16), 8, '0', STR_PAD_LEFT));
-                break;
-            default:
-                throw new InvalidArgumentException('Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.');
-        }
-
-        return new self($ai, $data);
     }
 
     public function getMajorType(): int

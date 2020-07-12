@@ -24,9 +24,7 @@
         }
     },
     "require": {
-        "php": ">=7.1",
-        "spomky-labs/base64url": "^1.0|^2.0",
-        "beberlei/assert": "^3.2",
+        "php": ">=7.3",
         "brick/math": "^0.8.15"
     },
     "require-dev": {
@@ -36,7 +34,7 @@
         "phpstan/phpstan-deprecation-rules": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
         "phpstan/phpstan-strict-rules": "^0.12",
-        "phpunit/phpunit": "^7.5|^8.0"
+        "phpunit/phpunit": "^9.0"
     },
     "suggest": {
         "ext-gmp": "GMP or BCMath extensions will drastically improve the library performance",
