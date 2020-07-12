@@ -32,7 +32,7 @@ abstract class Utils
         return BigInteger::fromBase(bin2hex($value), 16)->toBase(10);
     }
 
-    public static function intToHex(int $value)
+    public static function intToHex(int $value): string
     {
         return BigInteger::of($value)->toBase(16);
     }
