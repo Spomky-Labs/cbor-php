@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Spomky-Labs
+ * Copyright (c) 2018-2020 Spomky-Labs
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -15,6 +15,7 @@ namespace CBOR\OtherObject;
 
 use Assert\Assertion;
 use CBOR\OtherObject as Base;
+use CBOR\Utils;
 use InvalidArgumentException;
 
 final class HalfPrecisionFloatObject extends Base
@@ -45,7 +46,7 @@ final class HalfPrecisionFloatObject extends Base
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $half = gmp_intval(gmp_init(bin2hex($data), 16));
+        $half = Utils::hexToInt($data);
         $exp = ($half >> 10) & 0x1f;
         $mant = $half & 0x3ff;
 
@@ -64,7 +65,7 @@ final class HalfPrecisionFloatObject extends Base
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $half = gmp_intval(gmp_init(bin2hex($data), 16));
+        $half = Utils::hexToInt($data);
 
         return ($half >> 10) & 0x1f;
     }
@@ -73,7 +74,7 @@ final class HalfPrecisionFloatObject extends Base
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $half = gmp_intval(gmp_init(bin2hex($data), 16));
+        $half = Utils::hexToInt($data);
 
         return $half & 0x3ff;
     }
@@ -82,7 +83,7 @@ final class HalfPrecisionFloatObject extends Base
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $half = gmp_intval(gmp_init(bin2hex($data), 16));
+        $half = Utils::hexToInt($data);
 
         return 1 === ($half >> 15) ? -1 : 1;
     }

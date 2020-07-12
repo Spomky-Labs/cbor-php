@@ -51,9 +51,7 @@ use CBOR\UnsignedIntegerObject;
 $object = UnsignedIntegerObject::create(10);
 $object = UnsignedIntegerObject::create(1000);
 $object = UnsignedIntegerObject::create(10000);
-
-$longInteger = gmp_init('0AFFEBFF', 16);
-$object = UnsignedIntegerObject::createFromGmpValue($longInteger);
+$object = UnsignedIntegerObject::createFromHex('0AFFEBFF');
 
 echo bin2hex((string)$object); // 1a0affebff
 ```

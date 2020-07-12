@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2018 Spomky-Labs
+ * Copyright (c) 2018-2020 Spomky-Labs
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -15,6 +15,8 @@ namespace CBOR\OtherObject;
 
 use Assert\Assertion;
 use CBOR\OtherObject as Base;
+use CBOR\Utils;
+use GMP;
 use InvalidArgumentException;
 
 final class DoublePrecisionFloatObject extends Base
@@ -65,7 +67,7 @@ final class DoublePrecisionFloatObject extends Base
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $single = gmp_intval(gmp_init(bin2hex($data), 16));
+        $single = Utils::hexToInt($data);
 
         return ($single >> 52) & 0x7ff;
     }
@@ -74,7 +76,7 @@ final class DoublePrecisionFloatObject extends Base
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $single = gmp_intval(gmp_init(bin2hex($data), 16));
+        $single = Utils::hexToInt($data);
 
         return $single & 0x7fffff;
     }
@@ -83,17 +85,17 @@ final class DoublePrecisionFloatObject extends Base
     {
         $data = $this->data;
         Assertion::string($data, 'Invalid data');
-        $single = gmp_intval(gmp_init(bin2hex($data), 16));
+        $single = Utils::hexToInt($data);
 
         return 1 === ($single >> 63) ? -1 : 1;
     }
 
-    private function rightShift(\GMP $number, int $positions): \GMP
+    private function rightShift(GMP $number, int $positions): GMP
     {
         return gmp_div($number, gmp_pow(gmp_init(2, 10), $positions));
     }
 
-    private function bitwiseAnd(\GMP $first, \GMP $other): \GMP
+    private function bitwiseAnd(GMP $first, GMP $other): GMP
     {
         return gmp_and($first, $other);
     }
