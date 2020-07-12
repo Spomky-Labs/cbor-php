@@ -40,7 +40,7 @@
     },
     "suggest": {
         "ext-gmp": "GMP or BCMath extensions will drastically improve the library performance",
-        "ext-bcmath": "GMP or BCMath extensions will drastically improve the library performance"
+        "ext-bcmath": "GMP or BCMath extensions will drastically improve the library performance. BCMath extension needed to handle the Big Float and Decimal Fraction Tags"
     },
     "extra": {
         "branch-alias": {
