@@ -13,6 +13,8 @@ cache:
         - vendor
 
 before_script:
+    - wget -O phpunit https://phar.phpunit.de/phpunit-9.phar
+    - chmod +x phpunit
     - mkdir -p build/logs
 
 before_install:
@@ -21,7 +23,7 @@ before_install:
 install: travis_retry composer install
 
 script:
-    - ./vendor/bin/phpunit
+    - ./phpunit
 
 jobs:
     allow_failures:
@@ -31,12 +33,16 @@ jobs:
         - stage: Metrics and quality
           env: COVERAGE
           before_script:
+              - wget -O phpunit https://phar.phpunit.de/phpunit-9.phar
+              - chmod +x phpunit
+              - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.2.0/php-coveralls.phar
+              - chmod +x php-coveralls.phar
               - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{.disabled,}
               - if [[ ! $(php -m | grep -si xdebug) ]]; then echo "xdebug required for coverage"; exit 1; fi
           script:
-              - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+              - ./phpunit --coverage-clover build/logs/clover.xml
           after_script:
-              - ./vendor/bin/php-coveralls --no-interaction
+              - ./php-coveralls --no-interaction
 
         - stage: Metrics and quality
           env: STATIC_ANALYSIS
