@@ -41,7 +41,7 @@ Each object have at least:
 * can be converted into a binary string: `$object->__toString();` or `(string) $object`.
 * a method `getNormalizedData($ignoreTags = false)` that converts the object into its normalized representation. Tags can be ignored with the first argument set to `true`.
 
-### Unsigned Integer (Major Type 0)
+### Positive Integer (Major Type 0)
 
 ```php
 <?php
@@ -58,7 +58,7 @@ echo bin2hex((string)$object); // 1a0affebff
 
 **Note: the method `getNormalizedData()` will always return the integer as a string. This is needed to avoid lack of 64 bits integer support on PHP**
 
-### Signed Integer (Major Type 1)
+### Negative Integer (Major TypFe 1)
 
 ```php
 <?php
@@ -72,20 +72,20 @@ $object = SignedIntegerObject::create(-10000);
 
 **Note: the method `getNormalizedData()` will always return the integer as a string. This is needed to avoid lack of 64 bits integer support on PHP**
 
-### Byte String / Infinite Byte String (Major Type 2)
+### Byte String / Indefinite Length Byte String (Major Type 2)
 
-Byte String and Infinite Byte String objects have the same major type but are handled by two different classes in this library.
+Byte String and Indefinite Length Byte String objects have the same major type but are handled by two different classes in this library.
 
 ```php
 <?php
 
 use CBOR\ByteStringObject; // Byte String
-use CBOR\ByteStringWithChunkObject; // Infinite Byte String
+use CBOR\ByteStringWithChunkObject; // Indefinite Length Byte String
 
 // Create a Byte String with value "Hello"
 $object = new ByteStringObject('Hello');
 
-// Create an Infinite Byte String with value "Hello" ("He" + "" + "ll" + "o")
+// Create an Indefinite Length Byte String with value "Hello" ("He" + "" + "ll" + "o")
 $object = new ByteStringWithChunkObject();
 $object->append('He');
 $object->append('');
@@ -93,20 +93,20 @@ $object->append('ll');
 $object->append('o');
 ```
 
-### Text String / Infinite Text String (Major Type 3)
+### Text String / Indefinite Length Text String (Major Type 3)
 
-Text String and Infinite Text String objects have the same major type but are handled by two different classes in this library.
+Text String and Indefinite Length Text String objects have the same major type but are handled by two different classes in this library.
 
 ```php
 <?php
 
 use CBOR\TextStringObject; // Text String
-use CBOR\TextStringWithChunkObject; // Infinite Text String
+use CBOR\TextStringWithChunkObject; // Indefinite Length Text String
 
 // Create a Text String with value "(｡◕‿◕｡)⚡"
 $object = new TextStringObject('(｡◕‿◕｡)⚡');
 
-// Create an Infinite Text String with value "(｡◕‿◕｡)⚡" ("(｡◕" + "" + "‿◕" + "｡)⚡")
+// Create an Indefinite Length Text String with value "(｡◕‿◕｡)⚡" ("(｡◕" + "" + "‿◕" + "｡)⚡")
 $object = new TextStringWithChunkObject();
 $object->append('(｡◕');
 $object->append('');
@@ -114,16 +114,16 @@ $object->append('‿◕');
 $object->append('｡)⚡');
 ```
 
-### List / Infinite List (Major Type 4)
+### List / Indefinite Length List (Major Type 4)
 
-List and Infinite List objects have the same major type but are handled by two different classes in this library.
+List and Indefinite Length List objects have the same major type but are handled by two different classes in this library.
 Items in the List object can be any of CBOR Object type.
 
 ```php
 <?php
 
 use CBOR\ListObject; // List
-use CBOR\InfiniteListObject; // Infinite List
+use CBOR\InfiniteListObject; // Indefinite Length List
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
 
@@ -131,28 +131,28 @@ use CBOR\UnsignedIntegerObject;
 $object = new ListObject();
 $object->add(new TextStringObject('(｡◕‿◕｡)⚡'));
 
-// Create an Infinite List with several items
+// Create an Indefinite Length List with several items
 $object = new InfiniteListObject();
 $object->add(new TextStringObject('(｡◕‿◕｡)⚡'));
 $object->add(UnsignedIntegerObject::create(25));
 ```
 
-### Map / Infinite Map (Major Type 5)
+### Map / Indefinite Length Map (Major Type 5)
 
-Map and Infinite Map objects have the same major type but are handled by two different classes in this library.
+Map and Indefinite Length Map objects have the same major type but are handled by two different classes in this library.
 Keys and values in the Map object can be any of CBOR Object type.
 
 **However, be really careful with keys. Please follow the recommendation hereunder:**
 
 * Keys should not be duplicated
-* Keys should be of type Unsigned Integer, Signed Integer, (Infinite)Byte String or (Infinite)Text String. Other types may cause errors.
+* Keys should be of type Positive or Negative Integer Integer, (Indefinite Length)Byte String or (Indefinite Length)Text String. Other types may cause errors.
 
 ```php
 <?php
 
 use CBOR\MapObject; // Map
 use CBOR\MapItem; // Map
-use CBOR\InfiniteMapObject; // Infinite Map
+use CBOR\InfiniteMapObject; // Indefinite Length Map
 use CBOR\ByteStringObject;
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
@@ -162,7 +162,7 @@ use CBOR\SignedIntegerObject;
 $object = new MapObject();
 $object->add(UnsignedIntegerObject::create(25),new TextStringObject('(｡◕‿◕｡)⚡'));
 
-// Create an Infinite Map with several items
+// Create an Indefinite Length Map with several items
 $object = new InfiniteMapObject();
 $object->append(new ByteStringObject('A'), SignedIntegerObject::create(-652));
 $object->append(UnsignedIntegerObject::create(25), new TextStringObject('(｡◕‿◕｡)⚡'));
@@ -318,7 +318,7 @@ $otherObjectManager->add(OtherObject\FalseObject::class);
 $otherObjectManager->add(OtherObject\TrueObject::class);
 $otherObjectManager->add(OtherObject\NullObject::class);
 $otherObjectManager->add(OtherObject\UndefinedObject::class);
-$otherObjectManager->add(OtherObject\SimpleValueObject::class);
+$otherObjectManager->add(OtherObject\SimpleObject::class);
 $otherObjectManager->add(OtherObject\HalfPrecisionFloatObject::class);
 $otherObjectManager->add(OtherObject\SinglePrecisionFloatObject::class);
 $otherObjectManager->add(OtherObject\DoublePrecisionFloatObject::class);
