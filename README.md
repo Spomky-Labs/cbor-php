@@ -1,15 +1,16 @@
 CBOR for PHP
 ============
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Spomky-Labs/cbor-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Spomky-Labs/cbor-php/?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/Spomky-Labs/cbor-php/badge.svg?branch=master)](https://coveralls.io/github/Spomky-Labs/cbor-php?branch=master)
+![Build Status](https://github.com/Spomky-Labs/cbor-php/workflows/Unit%20and%20Functional%20Tests/badge.svg)
+![Build Status](https://github.com/Spomky-Labs/cbor-php/workflows/Mutation%20Testing/badge.svg)
 
-[![Build Status](https://travis-ci.org/Spomky-Labs/cbor-php.svg?branch=master)](https://travis-ci.org/Spomky-Labs/cbor-php)
+![Coding Standards](https://github.com/Spomky-Labs/cbor-php/workflows/Coding%20Standards/badge.svg)
+![Static Analyze](https://github.com/Spomky-Labs/cbor-php/workflows/Static%20Analyze/badge.svg)
 
-[![Latest Stable Version](https://poser.pugx.org/spomky-labs/cbor-php/v/stable.png)](https://packagist.org/packages/spomky-labs/cbor-php)
-[![Total Downloads](https://poser.pugx.org/spomky-labs/cbor-php/downloads.png)](https://packagist.org/packages/spomky-labs/cbor-php)
-[![Latest Unstable Version](https://poser.pugx.org/spomky-labs/cbor-php/v/unstable.png)](https://packagist.org/packages/spomky-labs/cbor-php)
-[![License](https://poser.pugx.org/spomky-labs/cbor-php/license.png)](https://packagist.org/packages/spomky-labs/cbor-php)
+[![Latest Stable Version](https://poser.pugx.org/Spomky-Labs/cbor-php/v)](//packagist.org/packages/Spomky-Labs/cbor-php)
+[![Total Downloads](https://poser.pugx.org/Spomky-Labs/cbor-php/downloads)](//packagist.org/packages/Spomky-Labs/cbor-php)
+[![Latest Unstable Version](https://poser.pugx.org/Spomky-Labs/cbor-php/v/unstable)](//packagist.org/packages/Spomky-Labs/cbor-php)
+[![License](https://poser.pugx.org/Spomky-Labs/cbor-php/license)](//packagist.org/packages/Spomky-Labs/cbor-php)
 
 # Scope
 
@@ -25,7 +26,11 @@ This project follows the [semantic versioning](http://semver.org/) strictly.
 
 I bring solutions to your problems and answer your questions.
 
-If you really love that project and the work I have done or if you want I prioritize your issues, then you can help me out for a couple of :beers: or more!
+If you really love that project, and the work I have done or if you want I prioritize your issues, then you can help me out for a couple of :beers: or more!
+
+[Become a sponsor](https://github.com/sponsors/Spomky)
+
+Or
 
 [![Become a Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/FlorentMorselli)
 
@@ -41,72 +46,72 @@ Each object have at least:
 * can be converted into a binary string: `$object->__toString();` or `(string) $object`.
 * a method `getNormalizedData($ignoreTags = false)` that converts the object into its normalized representation. Tags can be ignored with the first argument set to `true`.
 
-### Unsigned Integer (Major Type 0)
+### Positive Integer (Major Type 0)
 
 ```php
 <?php
 
-use CBOR\UnsignedIntegerObject;
+use CBOR\PositiveIntegerObject;
 
-$object = UnsignedIntegerObject::create(10);
-$object = UnsignedIntegerObject::create(1000);
-$object = UnsignedIntegerObject::create(10000);
-$object = UnsignedIntegerObject::createFromHex('0AFFEBFF');
+$object = PositiveIntegerObject::create(10);
+$object = PositiveIntegerObject::create(1000);
+$object = PositiveIntegerObject::create(10000);
+$object = PositiveIntegerObject::createFromHex('0AFFEBFF');
 
 echo bin2hex((string)$object); // 1a0affebff
 ```
 
-**Note: the method `getNormalizedData()` will always return the integer as a string. This is needed to avoid lack of 64 bits integer support on PHP**
+**Note: the method `getNormalizedData()` will always return integers as strings. This is needed to avoid lack of 64 bits integer support on PHP**
 
-### Signed Integer (Major Type 1)
+### Negative Integer (Major Type 1)
 
 ```php
 <?php
 
-use CBOR\SignedIntegerObject;
+use CBOR\NegativeIntegerObject;
 
-$object = SignedIntegerObject::create(-10);
-$object = SignedIntegerObject::create(-1000);
-$object = SignedIntegerObject::create(-10000);
+$object = NegativeIntegerObject::create(-10);
+$object = NegativeIntegerObject::create(-1000);
+$object = NegativeIntegerObject::create(-10000);
 ```
 
-**Note: the method `getNormalizedData()` will always return the integer as a string. This is needed to avoid lack of 64 bits integer support on PHP**
+**Note: the method `getNormalizedData()` will always return integers as strings. This is needed to avoid lack of 64 bits integer support on PHP**
 
-### Byte String / Infinite Byte String (Major Type 2)
+### Byte String / Indefinite Length Byte String (Major Type 2)
 
-Byte String and Infinite Byte String objects have the same major type but are handled by two different classes in this library.
+Byte String and Indefinite Length Byte String objects have the same major type but are handled by two different classes in this library.
 
 ```php
 <?php
 
 use CBOR\ByteStringObject; // Byte String
-use CBOR\ByteStringWithChunkObject; // Infinite Byte String
+use CBOR\IndefiniteLengthByteStringObject; // Indefinite Length Byte String
 
 // Create a Byte String with value "Hello"
 $object = new ByteStringObject('Hello');
 
-// Create an Infinite Byte String with value "Hello" ("He" + "" + "ll" + "o")
-$object = new ByteStringWithChunkObject();
+// Create an Indefinite Length Byte String with value "Hello" ("He" + "" + "ll" + "o")
+$object = new IndefiniteLengthByteStringObject();
 $object->append('He');
 $object->append('');
 $object->append('ll');
 $object->append('o');
 ```
 
-### Text String / Infinite Text String (Major Type 3)
+### Text String / Indefinite Length Text String (Major Type 3)
 
-Text String and Infinite Text String objects have the same major type but are handled by two different classes in this library.
+Text String and Indefinite Length Text String objects have the same major type but are handled by two different classes in this library.
 
 ```php
 <?php
 
 use CBOR\TextStringObject; // Text String
-use CBOR\TextStringWithChunkObject; // Infinite Text String
+use CBOR\TextStringWithChunkObject; // Indefinite Length Text String
 
 // Create a Text String with value "(｡◕‿◕｡)⚡"
 $object = new TextStringObject('(｡◕‿◕｡)⚡');
 
-// Create an Infinite Text String with value "(｡◕‿◕｡)⚡" ("(｡◕" + "" + "‿◕" + "｡)⚡")
+// Create an Indefinite Length Text String with value "(｡◕‿◕｡)⚡" ("(｡◕" + "" + "‿◕" + "｡)⚡")
 $object = new TextStringWithChunkObject();
 $object->append('(｡◕');
 $object->append('');
@@ -114,9 +119,9 @@ $object->append('‿◕');
 $object->append('｡)⚡');
 ```
 
-### List / Infinite List (Major Type 4)
+### List / Indefinite Length List (Major Type 4)
 
-List and Infinite List objects have the same major type but are handled by two different classes in this library.
+List and Indefinite Length List objects have the same major type but are handled by two different classes in this library.
 Items in the List object can be any of CBOR Object type.
 
 ```php
@@ -125,7 +130,7 @@ Items in the List object can be any of CBOR Object type.
 use CBOR\ListObject; // List
 use CBOR\IndefiniteLengthListObject; // Infinite List
 use CBOR\TextStringObject;
-use CBOR\UnsignedIntegerObject;
+use CBOR\PositiveIntegerObject;
 
 // Create a List with a single item
 $object = new ListObject();
@@ -134,44 +139,43 @@ $object->add(new TextStringObject('(｡◕‿◕｡)⚡'));
 // Create an Infinite List with several items
 $object = new IndefiniteLengthListObject();
 $object->add(new TextStringObject('(｡◕‿◕｡)⚡'));
-$object->add(UnsignedIntegerObject::create(25));
+$object->add(PositiveIntegerObject::create(25));
 ```
 
-### Map / Infinite Map (Major Type 5)
+### Map / Indefinite Length Map (Major Type 5)
 
-Map and Infinite Map objects have the same major type but are handled by two different classes in this library.
+Map and Indefinite Length Map objects have the same major type but are handled by two different classes in this library.
 Keys and values in the Map object can be any of CBOR Object type.
 
 **However, be really careful with keys. Please follow the recommendation hereunder:**
 
 * Keys should not be duplicated
-* Keys should be of type Unsigned Integer, Signed Integer, (Infinite)Byte String or (Infinite)Text String. Other types may cause errors.
+* Keys should be of type Positive or Negative Integer, (Indefinite Length)Byte String or (Indefinite Length)Text String. Other types may cause errors.
 
 ```php
 <?php
 
 use CBOR\MapObject; // Map
-use CBOR\MapItem; // Map
 use CBOR\IndefiniteLengthMapObject; // Infinite Map
 use CBOR\ByteStringObject;
 use CBOR\TextStringObject;
-use CBOR\UnsignedIntegerObject;
-use CBOR\SignedIntegerObject;
+use CBOR\PositiveIntegerObject;
+use CBOR\NegativeIntegerObject;
 
 // Create a Map with a single item
 $object = new MapObject();
-$object->add(UnsignedIntegerObject::create(25),new TextStringObject('(｡◕‿◕｡)⚡'));
+$object->add(PositiveIntegerObject::create(25),new TextStringObject('(｡◕‿◕｡)⚡'));
 
 // Create an Infinite Map with several items
 $object = new IndefiniteLengthMapObject();
-$object->append(new ByteStringObject('A'), SignedIntegerObject::create(-652));
-$object->append(UnsignedIntegerObject::create(25), new TextStringObject('(｡◕‿◕｡)⚡'));
+$object->append(new ByteStringObject('A'), NegativeIntegerObject::create(-652));
+$object->append(PositiveIntegerObject::create(25), new TextStringObject('(｡◕‿◕｡)⚡'));
 ```
 
 ### Tags (Major Type 6)
 
 This library can support any kind of tags.
-It comes with some of thew described in the specification:
+It comes with some of the thew described in the specification:
 
 * Base 16 encoding
 * Base 64 encoding
@@ -190,10 +194,10 @@ This library provides a `CBOR\Tag\GenericTag` class that can be used for any oth
 <?php
 
 use CBOR\Tag\TimestampTag;
-use CBOR\UnsignedIntegerObject;
+use CBOR\PositiveIntegerObject;
 
 // Create an unsigned object that represents the current timestamp
-$object = UnsignedIntegerObject::create(time()); // e.g. 1525873787
+$object = PositiveIntegerObject::create(time()); // e.g. 1525873787
 
 //We tag the object with the Timestamp Tag
 $taggedObject = TimestampTag::create($object); // Returns a \DateTimeImmutable object with timestamp at 1525873787
@@ -202,7 +206,7 @@ $taggedObject = TimestampTag::create($object); // Returns a \DateTimeImmutable o
 ### Other Objects (Major Type 7)
 
 This library can support any kind of "other objects".
-It comes with some of thew described in the specification:
+It comes with some of the thew described in the specification:
 
 * False
 * True
@@ -243,8 +247,8 @@ $object->getNormalizedData(); // 'undefined'
 use CBOR\MapObject;
 use CBOR\TextStringObject;
 use CBOR\ListObject;
-use CBOR\SignedIntegerObject;
-use CBOR\UnsignedIntegerObject;
+use CBOR\NegativeIntegerObject;
+use CBOR\PositiveIntegerObject;
 use CBOR\OtherObject\TrueObject;
 use CBOR\OtherObject\FalseObject;
 use CBOR\OtherObject\NullObject;
@@ -259,21 +263,21 @@ $object->add(
         new FalseObject(),
         new DecimalFractionTag(
             new ListObject([
-                SignedIntegerObject::create(-2),
-                UnsignedIntegerObject::create(1234),
+                NegativeIntegerObject::create(-2),
+                PositiveIntegerObject::create(1234),
             ])
         ),
     ])
 );
 
 $object->add(
-    UnsignedIntegerObject::create(2000),
+    PositiveIntegerObject::create(2000),
     new NullObject()
 );
 $object->add(
     new TextStringObject('date'),
     TimestampTag::create(
-        UnsignedIntegerObject::create(1577836800)
+        PositiveIntegerObject::create(1577836800)
     )
 );
 ```
@@ -324,7 +328,7 @@ $otherObjectManager->add(OtherObject\SinglePrecisionFloatObject::class);
 $otherObjectManager->add(OtherObject\DoublePrecisionFloatObject::class);
 
 $tagManager = new Tag\TagObjectManager();
-$tagManager->add(Tag\EpochTag::class);
+$tagManager->add(Tag\DatetimeTag::class);
 $tagManager->add(Tag\TimestampTag::class);
 $tagManager->add(Tag\PositiveBigIntegerTag::class);
 $tagManager->add(Tag\NegativeBigIntegerTag::class);
