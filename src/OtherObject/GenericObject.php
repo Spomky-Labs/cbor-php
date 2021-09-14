@@ -27,7 +27,7 @@ final class GenericObject extends Base
         return new self($additionalInformation, $data);
     }
 
-    public function getNormalizedData(bool $ignoreTags = false): ?string
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         return $this->data;
     }

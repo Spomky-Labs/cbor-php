@@ -39,7 +39,7 @@ final class DoublePrecisionFloatObject extends Base
         return new self(27, $value);
     }
 
-    public function getNormalizedData(bool $ignoreTags = false): float
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         $exp = $this->getExponent();
         $mant = $this->getMantissa();
