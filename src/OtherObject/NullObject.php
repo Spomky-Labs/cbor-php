@@ -23,7 +23,7 @@ final class NullObject extends Base
         return new self();
     }
 
-    public function getNormalizedData(bool $ignoreTags = false): mixed
+    public function getNormalizedData(bool $ignoreTags = false)
     {
     }
 }

@@ -12,7 +12,6 @@ use CBOR\UnsignedIntegerObject;
 use function count;
 use function extension_loaded;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 use RuntimeException;
 
 final class DecimalFractionTag extends Base
@@ -37,13 +36,11 @@ final class DecimalFractionTag extends Base
         parent::__construct(4, null, $object);
     }
 
-    #[Pure]
     public static function getTagId(): int
     {
         return 4;
     }
 
-    #[Pure]
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($object);
@@ -58,7 +55,7 @@ final class DecimalFractionTag extends Base
         return new self($object);
     }
 
-    public function getNormalizedData(bool $ignoreTags = false): mixed
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
             return $this->object->getNormalizedData($ignoreTags);

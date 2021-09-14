@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CBOR;
 
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 
 /**
  * @final
@@ -20,7 +19,6 @@ class IndefiniteLengthByteStringObject extends AbstractCBORObject
      */
     private array $chunks = [];
 
-    #[Pure]
     public function __construct()
     {
         parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
@@ -51,7 +49,6 @@ class IndefiniteLengthByteStringObject extends AbstractCBORObject
         $this->add(new ByteStringObject($chunk));
     }
 
-    #[Pure]
     public function getValue(): string
     {
         $result = '';
@@ -62,7 +59,6 @@ class IndefiniteLengthByteStringObject extends AbstractCBORObject
         return $result;
     }
 
-    #[Pure]
     public function getLength(): int
     {
         $length = 0;
@@ -73,7 +69,6 @@ class IndefiniteLengthByteStringObject extends AbstractCBORObject
         return $length;
     }
 
-    #[Pure]
     public function getNormalizedData(bool $ignoreTags = false): string
     {
         $result = '';

@@ -33,7 +33,7 @@ final class HalfPrecisionFloatObject extends Base
         return new self(25, $value);
     }
 
-    public function getNormalizedData(bool $ignoreTags = false): mixed
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         $exp = $this->getExponent();
         $mant = $this->getMantissa();

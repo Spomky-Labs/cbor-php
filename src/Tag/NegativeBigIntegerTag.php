@@ -9,21 +9,18 @@ use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\TagObject as Base;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 
 final class NegativeBigIntegerTag extends Base
 {
-    #[Pure]
-     public static function getTagId(): int
-     {
-         return 3;
-     }
+    public static function getTagId(): int
+    {
+        return 3;
+    }
 
-    #[Pure]
-     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
-     {
-         return new self($additionalInformation, $data, $object);
-     }
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
+    {
+        return new self($additionalInformation, $data, $object);
+    }
 
     public static function create(CBORObject $object): Base
     {
@@ -34,7 +31,7 @@ final class NegativeBigIntegerTag extends Base
         return new self(3, null, $object);
     }
 
-    public function getNormalizedData(bool $ignoreTags = false): mixed
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
             return $this->object->getNormalizedData($ignoreTags);

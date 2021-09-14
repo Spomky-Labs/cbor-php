@@ -12,18 +12,14 @@ use CBOR\TagObject as Base;
 use CBOR\UnsignedIntegerObject;
 use DateTimeImmutable;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
-use function strval;
 
 final class TimestampTag extends Base
 {
-    #[Pure]
     public static function getTagId(): int
     {
         return 1;
     }
 
-    #[Pure]
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);
@@ -38,18 +34,18 @@ final class TimestampTag extends Base
         return new self(1, null, $object);
     }
 
-    public function getNormalizedData(bool $ignoreTags = false): mixed
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
             return $this->object->getNormalizedData($ignoreTags);
         }
         switch (true) {
             case $this->object instanceof UnsignedIntegerObject:
-                return DateTimeImmutable::createFromFormat('U', strval($this->object->getNormalizedData($ignoreTags)));
+                return DateTimeImmutable::createFromFormat('U', (string) $this->object->getNormalizedData($ignoreTags));
             case $this->object instanceof HalfPrecisionFloatObject:
             case $this->object instanceof SinglePrecisionFloatObject:
             case $this->object instanceof DoublePrecisionFloatObject:
-                return DateTimeImmutable::createFromFormat('U.u', strval($this->object->getNormalizedData($ignoreTags)));
+                return DateTimeImmutable::createFromFormat('U.u', (string) $this->object->getNormalizedData($ignoreTags));
             default:
                 return $this->object->getNormalizedData($ignoreTags);
         }

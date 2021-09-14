@@ -23,7 +23,7 @@ final class UndefinedObject extends Base
         return new self();
     }
 
-    public function getNormalizedData(bool $ignoreTags = false): mixed
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         return 'undefined';
     }

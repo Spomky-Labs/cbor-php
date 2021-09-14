@@ -14,5 +14,5 @@ interface CBORObject extends Stringable
 
     public function getAdditionalInformation(): int;
 
-    public function getNormalizedData(bool $ignoreTags = false): mixed;
+    public function getNormalizedData(bool $ignoreTags = false);
 }

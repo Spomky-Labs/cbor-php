@@ -21,7 +21,7 @@ final class SimpleObject extends Base
         return new self($additionalInformation, $data);
     }
 
-    public function getNormalizedData(bool $ignoreTags = false): mixed
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         if (null === $this->data) {
             return $this->getAdditionalInformation();

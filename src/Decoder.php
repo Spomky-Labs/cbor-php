@@ -8,7 +8,6 @@ use CBOR\OtherObject\BreakObject;
 use CBOR\OtherObject\OtherObjectManager;
 use CBOR\Tag\TagObjectManager;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 use function ord;
 use RuntimeException;
 
@@ -17,7 +16,6 @@ final class Decoder
     private TagObjectManager $tagObjectManager;
     private OtherObjectManager $otherTypeManager;
 
-    #[Pure]
     public function __construct(TagObjectManager $tagObjectManager, OtherObjectManager $otherTypeManager)
     {
         $this->tagObjectManager = $tagObjectManager;

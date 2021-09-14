@@ -10,7 +10,6 @@ use Countable;
 use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
-use JetBrains\PhpStorm\Pure;
 
 /**
  * @final
@@ -25,7 +24,6 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
      */
     private array $data = [];
 
-    #[Pure]
     public function __construct()
     {
         parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);

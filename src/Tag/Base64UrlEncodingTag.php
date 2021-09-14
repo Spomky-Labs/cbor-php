@@ -12,17 +12,14 @@ use CBOR\TextStringObject;
 use CBOR\TextStringWithChunkObject;
 use CBOR\Utils;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 
 final class Base64UrlEncodingTag extends Base
 {
-    #[Pure]
     public static function getTagId(): int
     {
         return 21;
     }
 
-    #[Pure]
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);
@@ -37,7 +34,7 @@ final class Base64UrlEncodingTag extends Base
         return new self(21, null, $object);
     }
 
-    public function getNormalizedData(bool $ignoreTags = false): mixed
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
             return $this->object->getNormalizedData($ignoreTags);

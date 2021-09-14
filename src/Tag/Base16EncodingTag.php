@@ -11,17 +11,14 @@ use CBOR\TagObject as Base;
 use CBOR\TextStringObject;
 use CBOR\TextStringWithChunkObject;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 
 final class Base16EncodingTag extends Base
 {
-    #[Pure]
     public static function getTagId(): int
     {
         return 23;
     }
 
-    #[Pure]
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);
@@ -36,7 +33,7 @@ final class Base16EncodingTag extends Base
         return new self(23, null, $object);
     }
 
-    public function getNormalizedData(bool $ignoreTags = false): mixed
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
             return $this->object->getNormalizedData($ignoreTags);

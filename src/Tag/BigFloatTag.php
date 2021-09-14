@@ -12,7 +12,6 @@ use CBOR\UnsignedIntegerObject;
 use function count;
 use function extension_loaded;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 use RuntimeException;
 
 final class BigFloatTag extends Base
@@ -25,13 +24,11 @@ final class BigFloatTag extends Base
         parent::__construct($additionalInformation, $data, $object);
     }
 
-    #[Pure]
     public static function getTagId(): int
     {
         return 5;
     }
 
-    #[Pure]
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($additionalInformation, $data, $object);
@@ -63,7 +60,7 @@ final class BigFloatTag extends Base
         return self::create($object);
     }
 
-    public function getNormalizedData(bool $ignoreTags = false): mixed
+    public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
             return $this->object->getNormalizedData($ignoreTags);

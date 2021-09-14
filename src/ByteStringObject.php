@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-use JetBrains\PhpStorm\Pure;
-
 final class ByteStringObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b010;
@@ -22,7 +20,6 @@ final class ByteStringObject extends AbstractCBORObject
         $this->value = $data;
     }
 
-    #[Pure]
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -34,19 +31,16 @@ final class ByteStringObject extends AbstractCBORObject
         return $result;
     }
 
-    #[Pure]
     public function getValue(): string
     {
         return $this->value;
     }
 
-    #[Pure]
     public function getLength(): int
     {
         return mb_strlen($this->value, '8bit');
     }
 
-    #[Pure]
     public function getNormalizedData(bool $ignoreTags = false): string
     {
         return $this->value;

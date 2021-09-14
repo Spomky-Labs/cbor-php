@@ -6,7 +6,6 @@ namespace CBOR;
 
 use Brick\Math\BigInteger;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 
 final class UnsignedIntegerObject extends AbstractCBORObject
 {
@@ -14,7 +13,6 @@ final class UnsignedIntegerObject extends AbstractCBORObject
 
     private ?string $data;
 
-    #[Pure]
     public function __construct(int $additionalInformation, ?string $data)
     {
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
@@ -31,7 +29,6 @@ final class UnsignedIntegerObject extends AbstractCBORObject
         return $result;
     }
 
-    #[Pure]
     public static function createObjectForValue(int $additionalInformation, ?string $data): self
     {
         return new self($additionalInformation, $data);
@@ -56,13 +53,11 @@ final class UnsignedIntegerObject extends AbstractCBORObject
         return self::createBigInteger($integer);
     }
 
-    #[Pure]
     public function getMajorType(): int
     {
         return self::MAJOR_TYPE;
     }
 
-    #[Pure]
     public function getValue(): string
     {
         return $this->getNormalizedData();

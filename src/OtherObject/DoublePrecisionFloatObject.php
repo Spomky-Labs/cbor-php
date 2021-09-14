@@ -8,17 +8,14 @@ use Brick\Math\BigInteger;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 
 final class DoublePrecisionFloatObject extends Base
 {
-    #[Pure]
     public static function supportedAdditionalInformation(): array
     {
         return [27];
     }
 
-    #[Pure]
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {
         return new self($additionalInformation, $data);

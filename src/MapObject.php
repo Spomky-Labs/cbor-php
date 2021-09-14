@@ -10,7 +10,6 @@ use Countable;
 use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
-use JetBrains\PhpStorm\Pure;
 
 final class MapObject extends AbstractCBORObject implements Countable, IteratorAggregate
 {
@@ -39,7 +38,6 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         $this->length = $length;
     }
 
-    #[Pure]
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -60,7 +58,6 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
     }
 
-    #[Pure]
     public function count(): int
     {
         return count($this->data);

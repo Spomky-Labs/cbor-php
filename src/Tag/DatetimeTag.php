@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace CBOR\Tag;
 
-use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\TagObject as Base;
-use CBOR\Utils;
-use InvalidArgumentException;
+use DateTimeImmutable;
 
-final class PositiveBigIntegerTag extends Base
+/**
+ * @final
+ */
+class DatetimeTag extends Base
 {
     public static function getTagId(): int
     {
-        return 2;
+        return 0;
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
@@ -24,11 +25,7 @@ final class PositiveBigIntegerTag extends Base
 
     public static function create(CBORObject $object): Base
     {
-        if (!$object instanceof ByteStringObject) {
-            throw new InvalidArgumentException('This tag only accepts a Byte String object.');
-        }
-
-        return new self(2, null, $object);
+        return new self(0, null, $object);
     }
 
     public function getNormalizedData(bool $ignoreTags = false)
@@ -37,10 +34,11 @@ final class PositiveBigIntegerTag extends Base
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        if (!$this->object instanceof ByteStringObject) {
-            return $this->object->getNormalizedData($ignoreTags);
+        $result = DateTimeImmutable::createFromFormat(DATE_RFC3339, $this->object->getNormalizedData($ignoreTags));
+        if (false !== $result) {
+            return $result;
         }
 
-        return Utils::hexToString($this->object->getValue());
+        return DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.uP', $this->object->getNormalizedData($ignoreTags));
     }
 }

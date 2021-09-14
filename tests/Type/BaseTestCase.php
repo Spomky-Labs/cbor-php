@@ -36,7 +36,7 @@ class BaseTestCase extends TestCase
             $otherObjectManager->add(OtherObject\DoublePrecisionFloatObject::class);
 
             $tagObjectManager = new TagObjectManager();
-            $tagObjectManager->add(Tag\EpochTag::class);
+            $tagObjectManager->add(Tag\DatetimeTag::class);
             $tagObjectManager->add(Tag\TimestampTag::class);
             $tagObjectManager->add(Tag\PositiveBigIntegerTag::class);
             $tagObjectManager->add(Tag\NegativeBigIntegerTag::class);

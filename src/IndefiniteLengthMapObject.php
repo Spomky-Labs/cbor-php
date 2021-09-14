@@ -10,7 +10,6 @@ use Countable;
 use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
-use JetBrains\PhpStorm\Pure;
 
 /**
  * @final
@@ -25,7 +24,6 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
      */
     private array $data = [];
 
-    #[Pure]
     public function __construct()
     {
         parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
@@ -52,7 +50,6 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
         $this->data[] = new MapItem($key, $value);
     }
 
-    #[Pure]
     public function count(): int
     {
         return count($this->data);
