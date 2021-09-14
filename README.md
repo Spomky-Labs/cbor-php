@@ -136,12 +136,12 @@ use CBOR\PositiveIntegerObject;
 
 // Create a List with a single item
 $object = ListObject::create()
-    ->add(new TextStringObject('(｡◕‿◕｡)⚡'))
+    ->add(TextStringObject::create('(｡◕‿◕｡)⚡'))
 ;
 
 // Create an Infinite List with several items
 $object = IndefiniteLengthListObject::create()
-    ->add(new TextStringObject('(｡◕‿◕｡)⚡'))
+    ->add(TextStringObject::create('(｡◕‿◕｡)⚡'))
     ->add(PositiveIntegerObject::create(25))
 ;
 ```
@@ -168,13 +168,13 @@ use CBOR\NegativeIntegerObject;
 
 // Create a Map with a single item
 $object = MapObject::create()
-    ->add(PositiveIntegerObject::create(25),new TextStringObject('(｡◕‿◕｡)⚡'))
+    ->add(PositiveIntegerObject::create(25), TextStringObject::create('(｡◕‿◕｡)⚡'))
 ;
 
 // Create an Infinite Map with several items
 $object = IndefiniteLengthMapObject::create()
-    ->append(new ByteStringObject('A'), NegativeIntegerObject::create(-652))
-    ->append(PositiveIntegerObject::create(25), new TextStringObject('(｡◕‿◕｡)⚡'))
+    ->append(ByteStringObject::create('A'), NegativeIntegerObject::create(-652))
+    ->append(PositiveIntegerObject::create(25), TextStringObject::create('(｡◕‿◕｡)⚡'))
 ;
 ```
 
