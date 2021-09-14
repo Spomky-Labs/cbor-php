@@ -22,7 +22,7 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
     /**
      * @var MapItem[]
      */
-    private array $data = [];
+    private $data = [];
 
     public function __construct()
     {

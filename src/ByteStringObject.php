@@ -8,8 +8,15 @@ final class ByteStringObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b010;
 
-    private string $value;
-    private ?int $length;
+    /**
+     * @var string
+     */
+    private $value;
+
+    /**
+     * @var int|null
+     */
+    private $length;
 
     public function __construct(string $data)
     {

@@ -13,8 +13,15 @@ use RuntimeException;
 
 final class Decoder
 {
-    private TagObjectManager $tagObjectManager;
-    private OtherObjectManager $otherTypeManager;
+    /**
+     * @var TagObjectManager
+     */
+    private $tagObjectManager;
+
+    /**
+     * @var OtherObjectManager
+     */
+    private $otherTypeManager;
 
     public function __construct(TagObjectManager $tagObjectManager, OtherObjectManager $otherTypeManager)
     {

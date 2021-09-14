@@ -8,8 +8,14 @@ use function chr;
 
 abstract class AbstractCBORObject implements CBORObject
 {
-    protected int $additionalInformation;
-    private int $majorType;
+    /**
+     * @var int
+     */
+    protected $additionalInformation;
+    /**
+     * @var int
+     */
+    private $majorType;
 
     public function __construct(int $majorType, int $additionalInformation)
     {

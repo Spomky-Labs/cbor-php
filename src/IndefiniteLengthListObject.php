@@ -22,7 +22,7 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
     /**
      * @var CBORObject[]
      */
-    private array $data = [];
+    private $data = [];
 
     public function __construct()
     {
