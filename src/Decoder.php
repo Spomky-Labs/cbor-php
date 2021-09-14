@@ -111,7 +111,7 @@ final class Decoder
     {
         switch ($mt) {
             case 0b010: //2
-                $object = new ByteStringWithChunkObject();
+                $object = new IndefiniteLengthByteStringObject();
                 while (!($it = $this->process($stream, true)) instanceof BreakObject) {
                     if (!$it instanceof ByteStringObject) {
                         throw new RuntimeException('Unable to parse the data. Infinite Byte String object can only get Byte String objects.');
@@ -131,14 +131,14 @@ final class Decoder
 
                 return $object;
             case 0b100: //4
-                $object = new InfiniteListObject();
+                $object = new IndefiniteLengthListObject();
                 while (!($it = $this->process($stream, true)) instanceof BreakObject) {
                     $object->add($it);
                 }
 
                 return $object;
             case 0b101: //5
-                $object = new InfiniteMapObject();
+                $object = new IndefiniteLengthMapObject();
                 while (!($it = $this->process($stream, true)) instanceof BreakObject) {
                     $object->append($it, $this->process($stream));
                 }

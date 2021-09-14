@@ -62,10 +62,13 @@ abstract class Utils
         return $decoded;
     }
 
+    /**
+     * @param mixed $data
+     */
     public static function assertString($data, ?string $message = null): void
     {
         if (!is_string($data)) {
-            throw new InvalidArgumentException($message);
+            throw new InvalidArgumentException($message ?? '');
         }
     }
 }

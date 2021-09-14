@@ -13,23 +13,23 @@ declare(strict_types=1);
 
 namespace CBOR\Test\Type;
 
-use CBOR\ByteStringWithChunkObject;
+use CBOR\IndefiniteLengthByteStringObject;
 use CBOR\StringStream;
 
 /**
- * @covers \CBOR\ByteStringWithChunkObject
+ * @covers \CBOR\IndefiniteLengthByteStringObject
  *
  * @internal
  */
-final class ByteStringWithChunkObjectTest extends BaseTestCase
+final class IndefiniteLengthByteStringObjectTest extends BaseTestCase
 {
     /**
      * @test
      * @dataProvider getData
      */
-    public function aByteStringWithChunkObjectCanBeCreated(array $chunks, int $expectedLength, string $expectedValue, string $expectedEncodedObject): void
+    public function aIndefiniteLengthByteStringObjectCanBeCreated(array $chunks, int $expectedLength, string $expectedValue, string $expectedEncodedObject): void
     {
-        $object = new ByteStringWithChunkObject();
+        $object = new IndefiniteLengthByteStringObject();
         foreach ($chunks as $chunk) {
             $object->append($chunk);
         }
@@ -46,7 +46,7 @@ final class ByteStringWithChunkObjectTest extends BaseTestCase
         $stream = new StringStream($binary);
         $decoded = $this->getDecoder()->decode($stream);
 
-        static::assertInstanceOf(ByteStringWithChunkObject::class, $decoded);
+        static::assertInstanceOf(IndefiniteLengthByteStringObject::class, $decoded);
         static::assertEquals(0b010, $decoded->getMajorType());
         static::assertEquals(0b00011111, $decoded->getAdditionalInformation());
         static::assertEquals($expectedValue, $decoded->getValue());
