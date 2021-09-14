@@ -17,8 +17,8 @@ use CBOR\CBORObject;
 use CBOR\OtherObject\DoublePrecisionFloatObject;
 use CBOR\OtherObject\HalfPrecisionFloatObject;
 use CBOR\OtherObject\SinglePrecisionFloatObject;
-use CBOR\TagObject as Base;
 use CBOR\PositiveIntegerObject;
+use CBOR\TagObject as Base;
 use DateTimeImmutable;
 use InvalidArgumentException;
 

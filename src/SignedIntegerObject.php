@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-use Brick\Math\BigInteger;
-use InvalidArgumentException;
-
 /**
  * @deprecated Will be removed in v3.0. Please use NegativeIntegerObject instead
  */
