@@ -14,7 +14,7 @@ CBOR for PHP
 
 # Scope
 
-This library will help you to decode and create objects using the Concise Binary Object Representation (CBOR - [RFC7049](https://tools.ietf.org/html/rfc7049)).
+This library will help you to decode and create objects using the Concise Binary Object Representation (CBOR - [RFC8949](https://tools.ietf.org/html/rfc8949)).
 
 # Installation
 
@@ -38,7 +38,7 @@ Or
 
 ## Object Creation
 
-This library supports all Major Types defined in the RFC7049 and has capabilities to support any kind of Tags (Major Type 6) and Other Objects (Major Type 7).
+This library supports all Major Types defined in the RFC8949 and has capabilities to support any kind of Tags (Major Type 6) and Other Objects (Major Type 7).
 
 Each object have at least:
 
@@ -51,12 +51,12 @@ Each object have at least:
 ```php
 <?php
 
-use CBOR\PositiveIntegerObject;
+use CBOR\UnsignedIntegerObject;
 
-$object = PositiveIntegerObject::create(10);
-$object = PositiveIntegerObject::create(1000);
-$object = PositiveIntegerObject::create(10000);
-$object = PositiveIntegerObject::createFromHex('0AFFEBFF');
+$object = UnsignedIntegerObject::create(10);
+$object = UnsignedIntegerObject::create(1000);
+$object = UnsignedIntegerObject::create(10000);
+$object = UnsignedIntegerObject::createFromHex('0AFFEBFF');
 
 echo bin2hex((string)$object); // 1a0affebff
 ```
@@ -132,7 +132,7 @@ Items in the List object can be any of CBOR Object type.
 use CBOR\ListObject; // List
 use CBOR\IndefiniteLengthListObject; // Infinite List
 use CBOR\TextStringObject;
-use CBOR\PositiveIntegerObject;
+use CBOR\UnsignedIntegerObject;
 
 // Create a List with a single item
 $object = ListObject::create()
@@ -142,7 +142,7 @@ $object = ListObject::create()
 // Create an Infinite List with several items
 $object = IndefiniteLengthListObject::create()
     ->add(TextStringObject::create('(｡◕‿◕｡)⚡'))
-    ->add(PositiveIntegerObject::create(25))
+    ->add(UnsignedIntegerObject::create(25))
 ;
 ```
 
@@ -163,18 +163,18 @@ use CBOR\MapObject; // Map
 use CBOR\IndefiniteLengthMapObject; // Infinite Map
 use CBOR\ByteStringObject;
 use CBOR\TextStringObject;
-use CBOR\PositiveIntegerObject;
+use CBOR\UnsignedIntegerObject;
 use CBOR\NegativeIntegerObject;
 
 // Create a Map with a single item
 $object = MapObject::create()
-    ->add(PositiveIntegerObject::create(25), TextStringObject::create('(｡◕‿◕｡)⚡'))
+    ->add(UnsignedIntegerObject::create(25), TextStringObject::create('(｡◕‿◕｡)⚡'))
 ;
 
 // Create an Infinite Map with several items
 $object = IndefiniteLengthMapObject::create()
     ->append(ByteStringObject::create('A'), NegativeIntegerObject::create(-652))
-    ->append(PositiveIntegerObject::create(25), TextStringObject::create('(｡◕‿◕｡)⚡'))
+    ->append(UnsignedIntegerObject::create(25), TextStringObject::create('(｡◕‿◕｡)⚡'))
 ;
 ```
 
@@ -200,10 +200,10 @@ This library provides a `CBOR\Tag\GenericTag` class that can be used for any oth
 <?php
 
 use CBOR\Tag\TimestampTag;
-use CBOR\PositiveIntegerObject;
+use CBOR\UnsignedIntegerObject;
 
 // Create an unsigned object that represents the current timestamp
-$object = PositiveIntegerObject::create(time()); // e.g. 1525873787
+$object = UnsignedIntegerObject::create(time()); // e.g. 1525873787
 
 //We tag the object with the Timestamp Tag
 $taggedObject = TimestampTag::create($object); // Returns a \DateTimeImmutable object with timestamp at 1525873787
@@ -255,7 +255,7 @@ use CBOR\OtherObject\UndefinedObject;
 use CBOR\TextStringObject;
 use CBOR\ListObject;
 use CBOR\NegativeIntegerObject;
-use CBOR\PositiveIntegerObject;
+use CBOR\UnsignedIntegerObject;
 use CBOR\OtherObject\TrueObject;
 use CBOR\OtherObject\FalseObject;
 use CBOR\OtherObject\NullObject;
@@ -271,17 +271,17 @@ $object = MapObject::create()
             UndefinedObject::create(),
             DecimalFractionTag::createFromExponentAndMantissa(
                 NegativeIntegerObject::create(-2),
-                PositiveIntegerObject::create(1234)
+                UnsignedIntegerObject::create(1234)
             ),
         ])
     )
     ->add(
-        PositiveIntegerObject::create(2000),
+        UnsignedIntegerObject::create(2000),
         NullObject::create()
     )
     ->add(
         TextStringObject::create('date'),
-        TimestampTag::create(PositiveIntegerObject::create(1577836800))
+        TimestampTag::create(UnsignedIntegerObject::create(1577836800))
     )
 ;
 ```

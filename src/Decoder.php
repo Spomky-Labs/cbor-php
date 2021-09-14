@@ -76,7 +76,7 @@ final class Decoder
     {
         switch ($mt) {
             case 0b000: //0
-                return PositiveIntegerObject::createObjectForValue($ai, $val);
+                return UnsignedIntegerObject::createObjectForValue($ai, $val);
             case 0b001: //1
                 return NegativeIntegerObject::createObjectForValue($ai, $val);
             case 0b010: //2

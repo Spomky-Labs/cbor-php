@@ -16,8 +16,8 @@ namespace CBOR\Tag;
 use CBOR\CBORObject;
 use CBOR\ListObject;
 use CBOR\NegativeIntegerObject;
-use CBOR\PositiveIntegerObject;
 use CBOR\TagObject as Base;
+use CBOR\UnsignedIntegerObject;
 use function count;
 use function extension_loaded;
 use InvalidArgumentException;
@@ -34,11 +34,11 @@ final class DecimalFractionTag extends Base
             throw new InvalidArgumentException('This tag only accepts a ListObject object that contains an exponent and a mantissa.');
         }
         $e = $object->get(0);
-        if (!$e instanceof PositiveIntegerObject && !$e instanceof NegativeIntegerObject) {
+        if (!$e instanceof UnsignedIntegerObject && !$e instanceof NegativeIntegerObject) {
             throw new InvalidArgumentException('The exponent must be a Signed Integer or an Unsigned Integer object.');
         }
         $m = $object->get(1);
-        if (!$m instanceof PositiveIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof PositiveBigIntegerTag) {
+        if (!$m instanceof UnsignedIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof PositiveBigIntegerTag) {
             throw new InvalidArgumentException('The mantissa must be a Positive or Negative Signed Integer or an Unsigned Integer object.');
         }
 
@@ -76,10 +76,10 @@ final class DecimalFractionTag extends Base
         $e = $this->object->get(0);
         $m = $this->object->get(1);
 
-        if (!$e instanceof PositiveIntegerObject && !$e instanceof NegativeIntegerObject) {
+        if (!$e instanceof UnsignedIntegerObject && !$e instanceof NegativeIntegerObject) {
             return $this->object->getNormalizedData($ignoreTags);
         }
-        if (!$m instanceof PositiveIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof PositiveBigIntegerTag) {
+        if (!$m instanceof UnsignedIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof PositiveBigIntegerTag) {
             return $this->object->getNormalizedData($ignoreTags);
         }
 
