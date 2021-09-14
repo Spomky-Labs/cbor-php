@@ -31,14 +31,15 @@
     "require-dev": {
         "ekino/phpstan-banned-code": "^0.5.0",
         "infection/infection": "^0.25.1",
-        "roave/security-advisories": "dev-latest",
+        "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-beberlei-assert": "^0.12",
         "phpstan/phpstan-deprecation-rules": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
         "phpstan/phpstan-strict-rules": "^0.12",
         "phpunit/phpunit": "^9.5",
-        "phpstan/extension-installer": "^1.1"
+        "rector/rector": "^0.11.53",
+        "roave/security-advisories": "dev-latest"
     },
     "config": {
         "sort-packages": true
