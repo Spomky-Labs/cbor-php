@@ -71,9 +71,9 @@ final class Decoder
     {
         switch ($mt) {
             case 0b000: //0
-                return UnsignedIntegerObject::createObjectForValue($ai, $val);
+                return PositiveIntegerObject::createObjectForValue($ai, $val);
             case 0b001: //1
-                return SignedIntegerObject::createObjectForValue($ai, $val);
+                return NegativeIntegerObject::createObjectForValue($ai, $val);
             case 0b010: //2
                 $length = null === $val ? $ai : Utils::binToInt($val);
 

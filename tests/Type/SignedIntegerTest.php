@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR\Test\Type;
 
-use CBOR\SignedIntegerObject;
+use CBOR\NegativeIntegerObject;
 use CBOR\StringStream;
 
 /**
@@ -27,7 +27,7 @@ final class SignedIntegerTest extends BaseTestCase
      */
     public function createOnValidValue(int $intValue, string $expectedIntValue, int $expectedMajorType, int $expectedAdditionalInformation): void
     {
-        $unsignedInteger = SignedIntegerObject::create($intValue);
+        $unsignedInteger = NegativeIntegerObject::create($intValue);
         static::assertEquals($expectedIntValue, $unsignedInteger->getValue());
         static::assertEquals($expectedMajorType, $unsignedInteger->getMajorType());
         static::assertEquals($expectedAdditionalInformation, $unsignedInteger->getAdditionalInformation());
@@ -76,7 +76,7 @@ final class SignedIntegerTest extends BaseTestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('The value must be a negative integer.');
-        SignedIntegerObject::create(1);
+        NegativeIntegerObject::create(1);
     }
 
     /**
@@ -86,7 +86,7 @@ final class SignedIntegerTest extends BaseTestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.');
-        SignedIntegerObject::create(-4294967297);
+        NegativeIntegerObject::create(-4294967297);
     }
 
     /**

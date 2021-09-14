@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CBOR\Test\Type;
 
 use CBOR\StringStream;
-use CBOR\UnsignedIntegerObject;
+use CBOR\PositiveIntegerObject;
 
 /**
  * @internal
@@ -27,7 +27,7 @@ final class UnsignedIntegerTest extends BaseTestCase
      */
     public function createOnValidValue(int $intValue, string $expectedIntValue, int $expectedMajorType, int $expectedAdditionalInformation): void
     {
-        $unsignedInteger = UnsignedIntegerObject::create($intValue);
+        $unsignedInteger = PositiveIntegerObject::create($intValue);
         static::assertEquals($expectedIntValue, $unsignedInteger->getValue());
         static::assertEquals($expectedMajorType, $unsignedInteger->getMajorType());
         static::assertEquals($expectedAdditionalInformation, $unsignedInteger->getAdditionalInformation());
@@ -70,7 +70,7 @@ final class UnsignedIntegerTest extends BaseTestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('The value must be a positive integer.');
-        UnsignedIntegerObject::create(-1);
+        PositiveIntegerObject::create(-1);
     }
 
     /**
@@ -80,7 +80,7 @@ final class UnsignedIntegerTest extends BaseTestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.');
-        UnsignedIntegerObject::create(4294967296);
+        PositiveIntegerObject::create(4294967296);
     }
 
     /**
