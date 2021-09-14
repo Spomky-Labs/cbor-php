@@ -8,8 +8,15 @@ abstract class TagObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b110;
 
-    protected ?string $data;
-    protected CBORObject $object;
+    /**
+     * @var string|null
+     */
+    protected $data;
+
+    /**
+     * @var CBORObject
+     */
+    protected $object;
 
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {

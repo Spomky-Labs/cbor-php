@@ -11,7 +11,10 @@ final class SignedIntegerObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b001;
 
-    private ?string $data;
+    /**
+     * @var string|null
+     */
+    private $data;
 
     public function __construct(int $additionalInformation, ?string $data)
     {

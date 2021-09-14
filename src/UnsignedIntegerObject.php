@@ -11,7 +11,10 @@ final class UnsignedIntegerObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b000;
 
-    private ?string $data;
+    /**
+     * @var string|null
+     */
+    private $data;
 
     public function __construct(int $additionalInformation, ?string $data)
     {

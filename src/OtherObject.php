@@ -8,7 +8,10 @@ abstract class OtherObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b111;
 
-    protected ?string $data;
+    /**
+     * @var string|null
+     */
+    protected $data;
 
     public function __construct(int $additionalInformation, ?string $data)
     {

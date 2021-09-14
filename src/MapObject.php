@@ -18,8 +18,12 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     /**
      * @var MapItem[]
      */
-    private array $data;
-    private ?int $length;
+    private $data;
+
+    /**
+     * @var int|null
+     */
+    private $length;
 
     /**
      * @param MapItem[] $data

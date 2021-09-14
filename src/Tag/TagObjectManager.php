@@ -15,7 +15,7 @@ class TagObjectManager
     /**
      * @var string[]
      */
-    private array $classes = [];
+    private $classes = [];
 
     public function add(string $class): void
     {

@@ -6,8 +6,15 @@ namespace CBOR;
 
 class MapItem
 {
-    private CBORObject $key;
-    private CBORObject $value;
+    /**
+     * @var CBORObject
+     */
+    private $key;
+
+    /**
+     * @var CBORObject
+     */
+    private $value;
 
     public function __construct(CBORObject $key, CBORObject $value)
     {
