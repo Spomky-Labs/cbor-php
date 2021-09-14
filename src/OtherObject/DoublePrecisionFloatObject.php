@@ -2,37 +2,28 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\OtherObject;
 
 use Brick\Math\BigInteger;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Pure;
 
 final class DoublePrecisionFloatObject extends Base
 {
+    #[Pure]
     public static function supportedAdditionalInformation(): array
     {
         return [27];
     }
 
+    #[Pure]
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {
         return new self($additionalInformation, $data);
     }
 
-    /**
-     * @return DoublePrecisionFloatObject
-     */
     public static function create(string $value): self
     {
         if (8 !== mb_strlen($value, '8bit')) {
@@ -42,7 +33,7 @@ final class DoublePrecisionFloatObject extends Base
         return new self(27, $value);
     }
 
-    public function getNormalizedData(bool $ignoreTags = false)
+    public function getNormalizedData(bool $ignoreTags = false): float
     {
         $exp = $this->getExponent();
         $mant = $this->getMantissa();

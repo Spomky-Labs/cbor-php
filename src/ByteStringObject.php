@@ -2,40 +2,27 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
+
+use JetBrains\PhpStorm\Pure;
 
 final class ByteStringObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b010;
 
-    /**
-     * @var string
-     */
-    private $value;
-
-    /**
-     * @var int|null
-     */
-    private $length;
+    private string $value;
+    private ?int $length;
 
     public function __construct(string $data)
     {
-        list($additionalInformation, $length) = LengthCalculator::getLengthOfString($data);
+        [$additionalInformation, $length] = LengthCalculator::getLengthOfString($data);
 
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
         $this->length = $length;
         $this->value = $data;
     }
 
+    #[Pure]
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -47,16 +34,19 @@ final class ByteStringObject extends AbstractCBORObject
         return $result;
     }
 
+    #[Pure]
     public function getValue(): string
     {
         return $this->value;
     }
 
+    #[Pure]
     public function getLength(): int
     {
         return mb_strlen($this->value, '8bit');
     }
 
+    #[Pure]
     public function getNormalizedData(bool $ignoreTags = false): string
     {
         return $this->value;

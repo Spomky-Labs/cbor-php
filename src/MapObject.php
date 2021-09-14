@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use ArrayIterator;
@@ -19,6 +10,7 @@ use Countable;
 use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
+use JetBrains\PhpStorm\Pure;
 
 final class MapObject extends AbstractCBORObject implements Countable, IteratorAggregate
 {
@@ -27,19 +19,15 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     /**
      * @var MapItem[]
      */
-    private $data = [];
-
-    /**
-     * @var int|null
-     */
-    private $length;
+    private array $data;
+    private ?int $length;
 
     /**
      * @param MapItem[] $data
      */
     public function __construct(array $data = [])
     {
-        list($additionalInformation, $length) = LengthCalculator::getLengthOfArray($data);
+        [$additionalInformation, $length] = LengthCalculator::getLengthOfArray($data);
         array_map(static function ($item): void {
             if (!$item instanceof MapItem) {
                 throw new InvalidArgumentException('The list must contain only MapItem objects.');
@@ -51,6 +39,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         $this->length = $length;
     }
 
+    #[Pure]
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -58,8 +47,8 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
             $result .= $this->length;
         }
         foreach ($this->data as $object) {
-            $result .= (string) $object->getKey();
-            $result .= (string) $object->getValue();
+            $result .= $object->getKey()->__toString();
+            $result .= $object->getValue()->__toString();
         }
 
         return $result;
@@ -68,9 +57,10 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     public function add(CBORObject $key, CBORObject $value): void
     {
         $this->data[] = new MapItem($key, $value);
-        list($this->additionalInformation, $this->length) = LengthCalculator::getLengthOfArray($this->data);
+        [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
     }
 
+    #[Pure]
     public function count(): int
     {
         return count($this->data);

@@ -5,17 +5,22 @@ declare(strict_types=1);
 namespace CBOR;
 
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Pure;
 
-final class TextStringWithChunkObject extends AbstractCBORObject
+/**
+ * @final
+ */
+class IndefiniteLengthByteStringObject extends AbstractCBORObject
 {
-    private const MAJOR_TYPE = 0b011;
+    private const MAJOR_TYPE = 0b010;
     private const ADDITIONAL_INFORMATION = 0b00011111;
 
     /**
-     * @var TextStringObject[]
+     * @var ByteStringObject[]
      */
-    private $data = [];
+    private array $chunks = [];
 
+    #[Pure]
     public function __construct()
     {
         parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
@@ -24,8 +29,8 @@ final class TextStringWithChunkObject extends AbstractCBORObject
     public function __toString(): string
     {
         $result = parent::__toString();
-        foreach ($this->data as $object) {
-            $result .= (string) $object;
+        foreach ($this->chunks as $chunk) {
+            $result .= $chunk->__toString();
         }
         $bin = hex2bin('FF');
         if (false === $bin) {
@@ -36,41 +41,44 @@ final class TextStringWithChunkObject extends AbstractCBORObject
         return $result;
     }
 
-    public function add(TextStringObject $chunk): void
+    public function add(ByteStringObject $chunk): void
     {
-        $this->data[] = $chunk;
+        $this->chunks[] = $chunk;
     }
 
     public function append(string $chunk): void
     {
-        $this->add(new TextStringObject($chunk));
+        $this->add(new ByteStringObject($chunk));
     }
 
+    #[Pure]
     public function getValue(): string
     {
         $result = '';
-        foreach ($this->data as $object) {
-            $result .= $object->getValue();
+        foreach ($this->chunks as $chunk) {
+            $result .= $chunk->getValue();
         }
 
         return $result;
     }
 
+    #[Pure]
     public function getLength(): int
     {
         $length = 0;
-        foreach ($this->data as $object) {
-            $length += $object->getLength();
+        foreach ($this->chunks as $chunk) {
+            $length += $chunk->getLength();
         }
 
         return $length;
     }
 
+    #[Pure]
     public function getNormalizedData(bool $ignoreTags = false): string
     {
         $result = '';
-        foreach ($this->data as $object) {
-            $result .= $object->getNormalizedData($ignoreTags);
+        foreach ($this->chunks as $chunk) {
+            $result .= $chunk->getNormalizedData($ignoreTags);
         }
 
         return $result;

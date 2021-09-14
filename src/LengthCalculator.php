@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use Brick\Math\BigInteger;
@@ -36,20 +27,14 @@ final class LengthCalculator
 
     private static function computeLength(int $length): array
     {
-        switch (true) {
-            case $length < 24:
-                return [$length, null];
-            case $length < 0xFF:
-                return [24, chr($length)];
-            case $length < 0xFFFF:
-                return [25, self::hex2bin(static::fixHexLength(Utils::intToHex($length)))];
-            case $length < 0xFFFFFFFF:
-                return [26, self::hex2bin(static::fixHexLength(Utils::intToHex($length)))];
-            case BigInteger::of($length)->isLessThan(BigInteger::fromBase('FFFFFFFFFFFFFFFF', 16)):
-                return [27, self::hex2bin(static::fixHexLength(Utils::intToHex($length)))];
-            default:
-                return [31, null];
-        }
+        return match (true) {
+            $length < 24 => [$length, null],
+            $length < 0xFF => [24, chr($length)],
+            $length < 0xFFFF => [25, self::hex2bin(static::fixHexLength(Utils::intToHex($length)))],
+            $length < 0xFFFFFFFF => [26, self::hex2bin(static::fixHexLength(Utils::intToHex($length)))],
+            BigInteger::of($length)->isLessThan(BigInteger::fromBase('FFFFFFFFFFFFFFFF', 16)) => [27, self::hex2bin(self::fixHexLength(Utils::intToHex($length)))],
+            default => [31, null],
+        };
     }
 
     private static function hex2bin(string $data): string

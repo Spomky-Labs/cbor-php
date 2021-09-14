@@ -123,7 +123,7 @@ Items in the List object can be any of CBOR Object type.
 <?php
 
 use CBOR\ListObject; // List
-use CBOR\InfiniteListObject; // Infinite List
+use CBOR\IndefiniteLengthListObject; // Infinite List
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
 
@@ -132,7 +132,7 @@ $object = new ListObject();
 $object->add(new TextStringObject('(｡◕‿◕｡)⚡'));
 
 // Create an Infinite List with several items
-$object = new InfiniteListObject();
+$object = new IndefiniteLengthListObject();
 $object->add(new TextStringObject('(｡◕‿◕｡)⚡'));
 $object->add(UnsignedIntegerObject::create(25));
 ```
@@ -152,7 +152,7 @@ Keys and values in the Map object can be any of CBOR Object type.
 
 use CBOR\MapObject; // Map
 use CBOR\MapItem; // Map
-use CBOR\InfiniteMapObject; // Infinite Map
+use CBOR\IndefiniteLengthMapObject; // Infinite Map
 use CBOR\ByteStringObject;
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
@@ -163,7 +163,7 @@ $object = new MapObject();
 $object->add(UnsignedIntegerObject::create(25),new TextStringObject('(｡◕‿◕｡)⚡'));
 
 // Create an Infinite Map with several items
-$object = new InfiniteMapObject();
+$object = new IndefiniteLengthMapObject();
 $object->append(new ByteStringObject('A'), SignedIntegerObject::create(-652));
 $object->append(UnsignedIntegerObject::create(25), new TextStringObject('(｡◕‿◕｡)⚡'));
 ```

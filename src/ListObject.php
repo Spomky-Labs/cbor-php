@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use function array_key_exists;
@@ -40,7 +31,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
      */
     public function __construct(array $data = [])
     {
-        list($additionalInformation, $length) = LengthCalculator::getLengthOfArray($data);
+        [$additionalInformation, $length] = LengthCalculator::getLengthOfArray($data);
         array_map(static function ($item): void {
             if (!$item instanceof CBORObject) {
                 throw new InvalidArgumentException('The list must contain only CBORObject objects.');
@@ -68,7 +59,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
     public function add(CBORObject $object): void
     {
         $this->data[] = $object;
-        list($this->additionalInformation, $this->length) = LengthCalculator::getLengthOfArray($this->data);
+        [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
     }
 
     public function get(int $index): CBORObject

@@ -1,18 +1,13 @@
 <?php
 
-$header = 'The MIT License (MIT)
-
-Copyright (c) 2018-2020 Spomky-Labs
-
-This software may be modified and distributed under the terms
-of the MIT license.  See the LICENSE file for details.';
+$header = '';
 
 $finder = PhpCsFixer\Finder::create()
     ->in('src')
     ->in('tests')
 ;
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setRules([
         '@PSR1' => true,
         '@PSR2' => true,
@@ -51,11 +46,10 @@ return PhpCsFixer\Config::create()
             'comment_type' => 'all_multiline',
         ],
         'php_unit_test_annotation' => [
-            'case' => 'snake',
             'style' => 'annotation',
         ],
         'php_unit_test_case_static_method_calls' => true,
-        'method_chaining_indentation' => true,
+        'method_chaining_indentation' => false,
         'php_unit_expectation' => true,
         'php_unit_test_class_requires_covers' => false,
         'global_namespace_import' => [

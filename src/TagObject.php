@@ -2,31 +2,18 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
+
+use JetBrains\PhpStorm\Pure;
 
 abstract class TagObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b110;
 
-    /**
-     * @var string|null
-     */
-    protected $data;
+    protected ?string $data;
+    protected CBORObject $object;
 
-    /**
-     * @var CBORObject
-     */
-    protected $object;
-
+    #[Pure]
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
@@ -34,6 +21,7 @@ abstract class TagObject extends AbstractCBORObject
         $this->object = $object;
     }
 
+    #[Pure]
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -45,10 +33,13 @@ abstract class TagObject extends AbstractCBORObject
         return $result;
     }
 
+    #[Pure]
     abstract public static function getTagId(): int;
 
+    #[Pure]
     abstract public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): self;
 
+    #[Pure]
     public function getValue(): CBORObject
     {
         return $this->object;

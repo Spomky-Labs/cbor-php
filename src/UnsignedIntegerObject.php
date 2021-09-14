@@ -2,29 +2,19 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use Brick\Math\BigInteger;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Pure;
 
 final class UnsignedIntegerObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = 0b000;
 
-    /**
-     * @var string|null
-     */
-    private $data;
+    private ?string $data;
 
+    #[Pure]
     public function __construct(int $additionalInformation, ?string $data)
     {
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
@@ -41,6 +31,7 @@ final class UnsignedIntegerObject extends AbstractCBORObject
         return $result;
     }
 
+    #[Pure]
     public static function createObjectForValue(int $additionalInformation, ?string $data): self
     {
         return new self($additionalInformation, $data);
@@ -65,16 +56,13 @@ final class UnsignedIntegerObject extends AbstractCBORObject
         return self::createBigInteger($integer);
     }
 
+    #[Pure]
     public function getMajorType(): int
     {
         return self::MAJOR_TYPE;
     }
 
-    public function getAdditionalInformation(): int
-    {
-        return $this->additionalInformation;
-    }
-
+    #[Pure]
     public function getValue(): string
     {
         return $this->getNormalizedData();

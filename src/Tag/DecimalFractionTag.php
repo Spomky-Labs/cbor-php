@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\Tag;
 
 use CBOR\CBORObject;
@@ -21,6 +12,7 @@ use CBOR\UnsignedIntegerObject;
 use function count;
 use function extension_loaded;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Pure;
 use RuntimeException;
 
 final class DecimalFractionTag extends Base
@@ -45,11 +37,13 @@ final class DecimalFractionTag extends Base
         parent::__construct(4, null, $object);
     }
 
+    #[Pure]
     public static function getTagId(): int
     {
         return 4;
     }
 
+    #[Pure]
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
     {
         return new self($object);
@@ -64,7 +58,7 @@ final class DecimalFractionTag extends Base
         return new self($object);
     }
 
-    public function getNormalizedData(bool $ignoreTags = false)
+    public function getNormalizedData(bool $ignoreTags = false): mixed
     {
         if ($ignoreTags) {
             return $this->object->getNormalizedData($ignoreTags);

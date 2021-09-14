@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\Test\Type;
 
 use CBOR\StringStream;
@@ -66,7 +57,7 @@ final class UnsignedIntegerTest extends BaseTestCase
     /**
      * @test
      */
-    public function ceateOnNegativeValue(): void
+    public function createOnNegativeValue(): void
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('The value must be a positive integer.');

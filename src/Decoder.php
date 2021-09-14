@@ -2,36 +2,22 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use CBOR\OtherObject\BreakObject;
 use CBOR\OtherObject\OtherObjectManager;
 use CBOR\Tag\TagObjectManager;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Pure;
 use function ord;
 use RuntimeException;
 
 final class Decoder
 {
-    /**
-     * @var TagObjectManager
-     */
-    private $tagObjectManager;
+    private TagObjectManager $tagObjectManager;
+    private OtherObjectManager $otherTypeManager;
 
-    /**
-     * @var OtherObjectManager
-     */
-    private $otherTypeManager;
-
+    #[Pure]
     public function __construct(TagObjectManager $tagObjectManager, OtherObjectManager $otherTypeManager)
     {
         $this->tagObjectManager = $tagObjectManager;
