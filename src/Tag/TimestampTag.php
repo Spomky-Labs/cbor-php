@@ -21,7 +21,6 @@ use CBOR\TagObject as Base;
 use CBOR\UnsignedIntegerObject;
 use DateTimeImmutable;
 use InvalidArgumentException;
-use function strval;
 
 final class TimestampTag extends Base
 {
@@ -51,11 +50,11 @@ final class TimestampTag extends Base
         }
         switch (true) {
             case $this->object instanceof UnsignedIntegerObject:
-                return DateTimeImmutable::createFromFormat('U', strval($this->object->getNormalizedData($ignoreTags)));
+                return DateTimeImmutable::createFromFormat('U', (string)$this->object->getNormalizedData($ignoreTags));
             case $this->object instanceof HalfPrecisionFloatObject:
             case $this->object instanceof SinglePrecisionFloatObject:
             case $this->object instanceof DoublePrecisionFloatObject:
-                return DateTimeImmutable::createFromFormat('U.u', strval($this->object->getNormalizedData($ignoreTags)));
+                return DateTimeImmutable::createFromFormat('U.u', (string)$this->object->getNormalizedData($ignoreTags));
             default:
                 return $this->object->getNormalizedData($ignoreTags);
         }

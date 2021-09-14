@@ -324,7 +324,7 @@ $otherObjectManager->add(OtherObject\SinglePrecisionFloatObject::class);
 $otherObjectManager->add(OtherObject\DoublePrecisionFloatObject::class);
 
 $tagManager = new Tag\TagObjectManager();
-$tagManager->add(Tag\EpochTag::class);
+$tagManager->add(Tag\DatetimeTag::class);
 $tagManager->add(Tag\TimestampTag::class);
 $tagManager->add(Tag\PositiveBigIntegerTag::class);
 $tagManager->add(Tag\NegativeBigIntegerTag::class);
