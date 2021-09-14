@@ -2,17 +2,12 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" backupStaticAttributes="false" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" processIsolation="false" stopOnFailure="false" bootstrap="vendor/autoload.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
   <coverage>
     <include>
-      <directory suffix=".php">./</directory>
+      <directory suffix=".php">./src</directory>
     </include>
-    <exclude>
-      <directory>./doc</directory>
-      <directory>./vendor</directory>
-      <directory>./tests/</directory>
-    </exclude>
   </coverage>
   <testsuites>
     <testsuite name="CBOR Test Suite">
-      <directory>./tests/</directory>
+      <directory suffix="Test.php">./tests/</directory>
     </testsuite>
   </testsuites>
   <php>

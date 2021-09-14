@@ -89,7 +89,7 @@ final class UnsignedIntegerTest extends BaseTestCase
      */
     public function anUnsignedIntegerCanBeParsed(string $data, string $expectedNormalizedData): void
     {
-        $stream = new StringStream(hex2bin($data));
+        $stream = StringStream::create(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         static::assertEquals($data, bin2hex((string) $object));
         static::assertEquals($expectedNormalizedData, $object->getNormalizedData());

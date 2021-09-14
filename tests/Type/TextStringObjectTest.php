@@ -29,7 +29,7 @@ final class TextStringObjectTest extends BaseTestCase
      */
     public function aTextStringObjectCanBeCreated(string $string, int $expectedAdditionalInformation, int $expectedLength, string $expectedEncodedObject): void
     {
-        $object = new TextStringObject($string);
+        $object = TextStringObject::create($string);
 
         static::assertEquals(0b011, $object->getMajorType());
         static::assertEquals($expectedAdditionalInformation, $object->getAdditionalInformation());
@@ -40,7 +40,7 @@ final class TextStringObjectTest extends BaseTestCase
         $binary = (string) $object;
         static::assertEquals(hex2bin($expectedEncodedObject), $binary);
 
-        $stream = new StringStream($binary);
+        $stream = StringStream::create($binary);
         $decoded = $this->getDecoder()->decode($stream);
 
         static::assertInstanceOf(TextStringObject::class, $decoded);

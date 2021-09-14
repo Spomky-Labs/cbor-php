@@ -37,7 +37,7 @@ final class DatetimeTagTest extends TestCase
     {
         $buildTestEntry = static function (string $datetime, string $timestamp): array {
             return [
-                new TextStringObject($datetime),
+                TextStringObject::create($datetime),
                 $timestamp,
             ];
         };

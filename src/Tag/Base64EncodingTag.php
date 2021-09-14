@@ -16,9 +16,9 @@ namespace CBOR\Tag;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthByteStringObject;
+use CBOR\IndefiniteLengthTextStringObject;
 use CBOR\TagObject as Base;
 use CBOR\TextStringObject;
-use CBOR\TextStringWithChunkObject;
 use InvalidArgumentException;
 
 final class Base64EncodingTag extends Base
@@ -35,7 +35,7 @@ final class Base64EncodingTag extends Base
 
     public static function create(CBORObject $object): Base
     {
-        if (!$object instanceof ByteStringObject && !$object instanceof IndefiniteLengthByteStringObject && !$object instanceof TextStringObject && !$object instanceof TextStringWithChunkObject) {
+        if (!$object instanceof ByteStringObject && !$object instanceof IndefiniteLengthByteStringObject && !$object instanceof TextStringObject && !$object instanceof IndefiniteLengthTextStringObject) {
             throw new InvalidArgumentException('This tag only accepts Byte String, Infinite Byte String, Text String or Infinite Text String objects.');
         }
 
@@ -48,7 +48,7 @@ final class Base64EncodingTag extends Base
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        if (!$this->object instanceof ByteStringObject && !$this->object instanceof IndefiniteLengthByteStringObject && !$this->object instanceof TextStringObject && !$this->object instanceof TextStringWithChunkObject) {
+        if (!$this->object instanceof ByteStringObject && !$this->object instanceof IndefiniteLengthByteStringObject && !$this->object instanceof TextStringObject && !$this->object instanceof IndefiniteLengthTextStringObject) {
             return $this->object->getNormalizedData($ignoreTags);
         }
 

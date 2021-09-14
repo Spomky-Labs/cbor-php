@@ -29,7 +29,7 @@ final class ByteStringObjectTest extends BaseTestCase
      */
     public function aByteStringObjectCanBeCreated(string $string, int $expectedAdditionalInformation, int $expectedLength, string $expectedEncodedObject): void
     {
-        $object = new ByteStringObject($string);
+        $object = ByteStringObject::create($string);
 
         static::assertEquals(0b010, $object->getMajorType());
         static::assertEquals($expectedAdditionalInformation, $object->getAdditionalInformation());
@@ -40,7 +40,7 @@ final class ByteStringObjectTest extends BaseTestCase
         $binary = (string) $object;
         static::assertEquals(hex2bin($expectedEncodedObject), $binary);
 
-        $stream = new StringStream($binary);
+        $stream = StringStream::create($binary);
         $decoded = $this->getDecoder()->decode($stream);
 
         static::assertInstanceOf(ByteStringObject::class, $decoded);

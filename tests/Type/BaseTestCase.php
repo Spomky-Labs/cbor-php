@@ -33,32 +33,31 @@ class BaseTestCase extends TestCase
     protected function getDecoder(): Decoder
     {
         if (null === $this->decoder) {
-            $otherObjectManager = new OtherObjectManager();
-            $otherObjectManager->add(OtherObject\BreakObject::class);
-            $otherObjectManager->add(OtherObject\SimpleObject::class);
-            $otherObjectManager->add(OtherObject\FalseObject::class);
-            $otherObjectManager->add(OtherObject\TrueObject::class);
-            $otherObjectManager->add(OtherObject\NullObject::class);
-            $otherObjectManager->add(OtherObject\UndefinedObject::class);
-            $otherObjectManager->add(OtherObject\HalfPrecisionFloatObject::class);
-            $otherObjectManager->add(OtherObject\SinglePrecisionFloatObject::class);
-            $otherObjectManager->add(OtherObject\DoublePrecisionFloatObject::class);
+            $otherObjectManager = OtherObjectManager::create()
+                ->add(OtherObject\BreakObject::class)
+                ->add(OtherObject\SimpleObject::class)
+                ->add(OtherObject\FalseObject::class)
+                ->add(OtherObject\TrueObject::class)
+                ->add(OtherObject\NullObject::class)
+                ->add(OtherObject\UndefinedObject::class)
+                ->add(OtherObject\HalfPrecisionFloatObject::class)
+                ->add(OtherObject\SinglePrecisionFloatObject::class)
+                ->add(OtherObject\DoublePrecisionFloatObject::class)
+            ;
 
-            $tagObjectManager = new TagObjectManager();
-            $tagObjectManager->add(Tag\DatetimeTag::class);
-            $tagObjectManager->add(Tag\TimestampTag::class);
-            $tagObjectManager->add(Tag\PositiveBigIntegerTag::class);
-            $tagObjectManager->add(Tag\NegativeBigIntegerTag::class);
-            $tagObjectManager->add(Tag\DecimalFractionTag::class);
-            $tagObjectManager->add(Tag\BigFloatTag::class);
-            $tagObjectManager->add(Tag\Base64UrlEncodingTag::class);
-            $tagObjectManager->add(Tag\Base64EncodingTag::class);
-            $tagObjectManager->add(Tag\Base16EncodingTag::class);
+            $tagObjectManager = TagObjectManager::create()
+                ->add(Tag\DatetimeTag::class)
+                ->add(Tag\TimestampTag::class)
+                ->add(Tag\PositiveBigIntegerTag::class)
+                ->add(Tag\NegativeBigIntegerTag::class)
+                ->add(Tag\DecimalFractionTag::class)
+                ->add(Tag\BigFloatTag::class)
+                ->add(Tag\Base64UrlEncodingTag::class)
+                ->add(Tag\Base64EncodingTag::class)
+                ->add(Tag\Base16EncodingTag::class)
+            ;
 
-            $this->decoder = new Decoder(
-                $tagObjectManager,
-                $otherObjectManager
-            );
+            $this->decoder = Decoder::create($tagObjectManager, $otherObjectManager);
         }
 
         return $this->decoder;

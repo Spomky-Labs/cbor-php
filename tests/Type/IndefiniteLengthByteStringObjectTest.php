@@ -29,7 +29,7 @@ final class IndefiniteLengthByteStringObjectTest extends BaseTestCase
      */
     public function aIndefiniteLengthByteStringObjectCanBeCreated(array $chunks, int $expectedLength, string $expectedValue, string $expectedEncodedObject): void
     {
-        $object = new IndefiniteLengthByteStringObject();
+        $object = IndefiniteLengthByteStringObject::create();
         foreach ($chunks as $chunk) {
             $object->append($chunk);
         }
@@ -43,7 +43,7 @@ final class IndefiniteLengthByteStringObjectTest extends BaseTestCase
         $binary = (string) $object;
         static::assertEquals(hex2bin($expectedEncodedObject), $binary);
 
-        $stream = new StringStream($binary);
+        $stream = StringStream::create($binary);
         $decoded = $this->getDecoder()->decode($stream);
 
         static::assertInstanceOf(IndefiniteLengthByteStringObject::class, $decoded);

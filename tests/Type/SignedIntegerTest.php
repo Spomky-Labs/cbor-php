@@ -95,7 +95,7 @@ final class SignedIntegerTest extends BaseTestCase
      */
     public function anUnsignedIntegerCanBeEncodedAndDecoded(string $data, string $expectedNormalizedData): void
     {
-        $stream = new StringStream(hex2bin($data));
+        $stream = StringStream::create(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
         $object->getNormalizedData();
         static::assertEquals($data, bin2hex((string) $object));

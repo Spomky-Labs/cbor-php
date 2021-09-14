@@ -107,13 +107,13 @@ Text String and Indefinite Length Text String objects have the same major type b
 <?php
 
 use CBOR\TextStringObject; // Text String
-use CBOR\TextStringWithChunkObject; // Indefinite Length Text String
+use CBOR\IndefiniteLengthTextStringObject; // Indefinite Length Text String
 
 // Create a Text String with value "(｡◕‿◕｡)⚡"
 $object = TextStringObject::create('(｡◕‿◕｡)⚡');
 
 // Create an Indefinite Length Text String with value "(｡◕‿◕｡)⚡" ("(｡◕" + "" + "‿◕" + "｡)⚡")
-$object = TextStringWithChunkObject::create()
+$object = IndefiniteLengthTextStringObject::create()
     ->append('(｡◕')
     ->append('')
     ->append('‿◕')

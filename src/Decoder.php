@@ -126,7 +126,7 @@ final class Decoder
 
                 return $object;
             case 0b011: //3
-                $object = new TextStringWithChunkObject();
+                $object = new IndefiniteLengthTextStringObject();
                 while (!($it = $this->process($stream, true)) instanceof BreakObject) {
                     if (!$it instanceof TextStringObject) {
                         throw new RuntimeException('Unable to parse the data. Infinite Text String object can only get Text String objects.');
