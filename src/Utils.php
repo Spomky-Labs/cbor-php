@@ -63,7 +63,7 @@ abstract class Utils
     }
 
     /**
-     * @param mixed $data
+     * @param mixed|null $data
      */
     public static function assertString($data, ?string $message = null): void
     {
