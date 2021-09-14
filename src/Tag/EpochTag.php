@@ -45,6 +45,6 @@ final class EpochTag extends Base
             return $result;
         }
         
-        return DateTimeImmutable::createFromFormat(DATE_RFC3339_EXTENDED, $this->object->getNormalizedData($ignoreTags));
+        return DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.uP', $this->object->getNormalizedData($ignoreTags));
     }
 }
