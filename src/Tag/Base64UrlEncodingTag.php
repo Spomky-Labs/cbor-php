@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace CBOR\Tag;
 
 use CBOR\ByteStringObject;
-use CBOR\IndefiniteLengthByteStringObject;
 use CBOR\CBORObject;
+use CBOR\IndefiniteLengthByteStringObject;
 use CBOR\TagObject as Base;
 use CBOR\TextStringObject;
 use CBOR\TextStringWithChunkObject;
