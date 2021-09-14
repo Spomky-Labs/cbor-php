@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-use Stringable;
-
-interface CBORObject extends Stringable
+interface CBORObject
 {
     public function __toString(): string;
 
