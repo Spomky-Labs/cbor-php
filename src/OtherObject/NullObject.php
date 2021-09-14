@@ -22,6 +22,11 @@ final class NullObject extends Base
         parent::__construct(22, null);
     }
 
+    public static function create(): self
+    {
+        return new self();
+    }
+
     public static function supportedAdditionalInformation(): array
     {
         return [22];

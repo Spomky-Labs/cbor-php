@@ -88,14 +88,15 @@ use CBOR\ByteStringObject; // Byte String
 use CBOR\IndefiniteLengthByteStringObject; // Indefinite Length Byte String
 
 // Create a Byte String with value "Hello"
-$object = new ByteStringObject('Hello');
+$object = ByteStringObject::create('Hello');
 
 // Create an Indefinite Length Byte String with value "Hello" ("He" + "" + "ll" + "o")
-$object = new IndefiniteLengthByteStringObject();
-$object->append('He');
-$object->append('');
-$object->append('ll');
-$object->append('o');
+$object = IndefiniteLengthByteStringObject::create()
+    ->append('He')
+    ->append('')
+    ->append('ll')
+    ->append('o')
+;
 ```
 
 ### Text String / Indefinite Length Text String (Major Type 3)
@@ -109,14 +110,15 @@ use CBOR\TextStringObject; // Text String
 use CBOR\TextStringWithChunkObject; // Indefinite Length Text String
 
 // Create a Text String with value "(｡◕‿◕｡)⚡"
-$object = new TextStringObject('(｡◕‿◕｡)⚡');
+$object = TextStringObject::create('(｡◕‿◕｡)⚡');
 
 // Create an Indefinite Length Text String with value "(｡◕‿◕｡)⚡" ("(｡◕" + "" + "‿◕" + "｡)⚡")
-$object = new TextStringWithChunkObject();
-$object->append('(｡◕');
-$object->append('');
-$object->append('‿◕');
-$object->append('｡)⚡');
+$object = TextStringWithChunkObject::create()
+    ->append('(｡◕')
+    ->append('')
+    ->append('‿◕')
+    ->append('｡)⚡')
+;
 ```
 
 ### List / Indefinite Length List (Major Type 4)
@@ -133,13 +135,15 @@ use CBOR\TextStringObject;
 use CBOR\PositiveIntegerObject;
 
 // Create a List with a single item
-$object = new ListObject();
-$object->add(new TextStringObject('(｡◕‿◕｡)⚡'));
+$object = ListObject::create()
+    ->add(new TextStringObject('(｡◕‿◕｡)⚡'))
+;
 
 // Create an Infinite List with several items
-$object = new IndefiniteLengthListObject();
-$object->add(new TextStringObject('(｡◕‿◕｡)⚡'));
-$object->add(PositiveIntegerObject::create(25));
+$object = IndefiniteLengthListObject::create()
+    ->add(new TextStringObject('(｡◕‿◕｡)⚡'))
+    ->add(PositiveIntegerObject::create(25))
+;
 ```
 
 ### Map / Indefinite Length Map (Major Type 5)
@@ -163,13 +167,15 @@ use CBOR\PositiveIntegerObject;
 use CBOR\NegativeIntegerObject;
 
 // Create a Map with a single item
-$object = new MapObject();
-$object->add(PositiveIntegerObject::create(25),new TextStringObject('(｡◕‿◕｡)⚡'));
+$object = MapObject::create()
+    ->add(PositiveIntegerObject::create(25),new TextStringObject('(｡◕‿◕｡)⚡'))
+;
 
 // Create an Infinite Map with several items
-$object = new IndefiniteLengthMapObject();
-$object->append(new ByteStringObject('A'), NegativeIntegerObject::create(-652));
-$object->append(PositiveIntegerObject::create(25), new TextStringObject('(｡◕‿◕｡)⚡'));
+$object = IndefiniteLengthMapObject::create()
+    ->append(new ByteStringObject('A'), NegativeIntegerObject::create(-652))
+    ->append(PositiveIntegerObject::create(25), new TextStringObject('(｡◕‿◕｡)⚡'))
+;
 ```
 
 ### Tags (Major Type 6)
@@ -229,13 +235,13 @@ use CBOR\OtherObject\FalseObject;
 use CBOR\OtherObject\NullObject;
 use CBOR\OtherObject\UndefinedObject;
 
-$object = new FalseObject();
+$object = FalseObject::create();
 $object->getNormalizedData(); // false
 
-$object = new NullObject();
+$object = NullObject::create();
 $object->getNormalizedData(); // null
 
-$object = new UndefinedObject();
+$object = UndefinedObject::create();
 $object->getNormalizedData(); // 'undefined'
 ```
 
@@ -245,6 +251,7 @@ $object->getNormalizedData(); // 'undefined'
 <?php
 
 use CBOR\MapObject;
+use CBOR\OtherObject\UndefinedObject;
 use CBOR\TextStringObject;
 use CBOR\ListObject;
 use CBOR\NegativeIntegerObject;
@@ -255,31 +262,28 @@ use CBOR\OtherObject\NullObject;
 use CBOR\Tag\DecimalFractionTag;
 use CBOR\Tag\TimestampTag;
 
-$object = new MapObject();
-$object->add(
-    new TextStringObject('(｡◕‿◕｡)⚡'),
-    new ListObject([
-        new TrueObject(),
-        new FalseObject(),
-        new DecimalFractionTag(
-            new ListObject([
+$object = MapObject::create()
+    ->add(
+        TextStringObject::create('(｡◕‿◕｡)⚡'),
+        ListObject::create([
+            TrueObject::create(),
+            FalseObject::create(),
+            UndefinedObject::create(),
+            DecimalFractionTag::createFromExponentAndMantissa(
                 NegativeIntegerObject::create(-2),
-                PositiveIntegerObject::create(1234),
-            ])
-        ),
-    ])
-);
-
-$object->add(
-    PositiveIntegerObject::create(2000),
-    new NullObject()
-);
-$object->add(
-    new TextStringObject('date'),
-    TimestampTag::create(
-        PositiveIntegerObject::create(1577836800)
+                PositiveIntegerObject::create(1234)
+            ),
+        ])
     )
-);
+    ->add(
+        PositiveIntegerObject::create(2000),
+        NullObject::create()
+    )
+    ->add(
+        TextStringObject::create('date'),
+        TimestampTag::create(PositiveIntegerObject::create(1577836800))
+    )
+;
 ```
 
 The encoded result will be `0xa37428efbda1e29795e280bfe29795efbda129e29aa183f5f4c482211904d21907d0f66464617465c11a5e0be100`.
@@ -316,29 +320,31 @@ use CBOR\Decoder;
 use CBOR\OtherObject;
 use CBOR\Tag;
 
-$otherObjectManager = new OtherObject\OtherObjectManager();
-$otherObjectManager->add(OtherObject\SimpleObject::class);
-$otherObjectManager->add(OtherObject\FalseObject::class);
-$otherObjectManager->add(OtherObject\TrueObject::class);
-$otherObjectManager->add(OtherObject\NullObject::class);
-$otherObjectManager->add(OtherObject\UndefinedObject::class);
-$otherObjectManager->add(OtherObject\SimpleValueObject::class);
-$otherObjectManager->add(OtherObject\HalfPrecisionFloatObject::class);
-$otherObjectManager->add(OtherObject\SinglePrecisionFloatObject::class);
-$otherObjectManager->add(OtherObject\DoublePrecisionFloatObject::class);
+$otherObjectManager = OtherObject\OtherObjectManager::create()
+    ->add(OtherObject\SimpleObject::class)
+    ->add(OtherObject\FalseObject::class)
+    ->add(OtherObject\TrueObject::class)
+    ->add(OtherObject\NullObject::class)
+    ->add(OtherObject\UndefinedObject::class)
+    ->add(OtherObject\SimpleValueObject::class)
+    ->add(OtherObject\HalfPrecisionFloatObject::class)
+    ->add(OtherObject\SinglePrecisionFloatObject::class)
+    ->add(OtherObject\DoublePrecisionFloatObject::class)
+;
 
-$tagManager = new Tag\TagObjectManager();
-$tagManager->add(Tag\DatetimeTag::class);
-$tagManager->add(Tag\TimestampTag::class);
-$tagManager->add(Tag\PositiveBigIntegerTag::class);
-$tagManager->add(Tag\NegativeBigIntegerTag::class);
-$tagManager->add(Tag\DecimalFractionTag::class);
-$tagManager->add(Tag\BigFloatTag::class);
-$tagManager->add(Tag\Base64UrlEncodingTag::class);
-$tagManager->add(Tag\Base64EncodingTag::class);
-$tagManager->add(Tag\Base16EncodingTag::class);
+$tagManager = Tag\TagObjectManager::create()
+    ->add(Tag\DatetimeTag::class)
+    ->add(Tag\TimestampTag::class)
+    ->add(Tag\PositiveBigIntegerTag::class)
+    ->add(Tag\NegativeBigIntegerTag::class)
+    ->add(Tag\DecimalFractionTag::class)
+    ->add(Tag\BigFloatTag::class)
+    ->add(Tag\Base64UrlEncodingTag::class)
+    ->add(Tag\Base64EncodingTag::class)
+    ->add(Tag\Base16EncodingTag::class)
+;
 
-$decoder = new Decoder($tagManager, $otherObjectManager);
+$decoder = Decoder::create($tagManager, $otherObjectManager);
 ```
 
 Then, the decoder will read the data you want to load.
@@ -354,7 +360,7 @@ use CBOR\StringStream;
 $data = hex2bin('fb3fd5555555555555');
 
 // String Stream
-$stream = new StringStream($data);
+$stream = StringStream::create($data);
 
 // Load the data
 $object = $decoder->decode($stream); // Return a CBOR\OtherObject\DoublePrecisionFloatObject class with normalized value ~0.3333 (1/3)

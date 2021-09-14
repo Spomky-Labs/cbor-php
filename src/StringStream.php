@@ -40,6 +40,11 @@ final class StringStream implements Stream
         $this->resource = $resource;
     }
 
+    public static function create(string $data): self
+    {
+        return new self($data);
+    }
+
     public function read(int $length): string
     {
         if (0 === $length) {

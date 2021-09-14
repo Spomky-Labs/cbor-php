@@ -24,7 +24,12 @@ class OtherObjectManager
      */
     private $classes = [];
 
-    public function add(string $class): void
+    public static function create(): self
+    {
+        return new self();
+    }
+
+    public function add(string $class): self
     {
         foreach ($class::supportedAdditionalInformation() as $ai) {
             if ($ai < 0) {
@@ -32,6 +37,8 @@ class OtherObjectManager
             }
             $this->classes[$ai] = $class;
         }
+
+        return $this;
     }
 
     public function getClassForValue(int $value): string

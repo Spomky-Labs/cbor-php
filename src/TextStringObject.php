@@ -36,6 +36,11 @@ final class TextStringObject extends AbstractCBORObject
         $this->length = $length;
     }
 
+    public static function create(string $data): self
+    {
+        return new self($data);
+    }
+
     public function __toString(): string
     {
         $result = parent::__toString();

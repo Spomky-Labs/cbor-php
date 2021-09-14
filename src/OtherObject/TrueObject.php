@@ -22,6 +22,11 @@ final class TrueObject extends Base
         parent::__construct(21, null);
     }
 
+    public static function create(): self
+    {
+        return new self();
+    }
+
     public static function supportedAdditionalInformation(): array
     {
         return [21];

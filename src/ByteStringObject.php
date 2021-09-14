@@ -36,6 +36,11 @@ final class ByteStringObject extends AbstractCBORObject
         $this->value = $data;
     }
 
+    public static function create(string $data): self
+    {
+        return new self($data);
+    }
+
     public function __toString(): string
     {
         $result = parent::__toString();

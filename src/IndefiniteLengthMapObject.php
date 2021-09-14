@@ -38,6 +38,11 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
         parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
     }
 
+    public static function create(): self
+    {
+        return new self();
+    }
+
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -54,9 +59,11 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
         return $result;
     }
 
-    public function append(CBORObject $key, CBORObject $value): void
+    public function append(CBORObject $key, CBORObject $value): self
     {
         $this->data[] = new MapItem($key, $value);
+
+        return $this;
     }
 
     public function count(): int

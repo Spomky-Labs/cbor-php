@@ -38,6 +38,11 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
         parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
     }
 
+    public static function create(): self
+    {
+        return new self();
+    }
+
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -60,9 +65,11 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
         }, $this->data);
     }
 
-    public function add(CBORObject $item): void
+    public function add(CBORObject $item): self
     {
         $this->data[] = $item;
+
+        return $this;
     }
 
     public function count(): int

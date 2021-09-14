@@ -33,6 +33,11 @@ class IndefiniteLengthByteStringObject extends AbstractCBORObject
         parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
     }
 
+    public static function create(): self
+    {
+        return new self();
+    }
+
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -48,14 +53,18 @@ class IndefiniteLengthByteStringObject extends AbstractCBORObject
         return $result;
     }
 
-    public function add(ByteStringObject $chunk): void
+    public function add(ByteStringObject $chunk): self
     {
         $this->chunks[] = $chunk;
+
+        return $this;
     }
 
-    public function append(string $chunk): void
+    public function append(string $chunk): self
     {
         $this->add(new ByteStringObject($chunk));
+
+        return $this;
     }
 
     public function getValue(): string

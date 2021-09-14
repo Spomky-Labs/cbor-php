@@ -51,6 +51,11 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         $this->length = $length;
     }
 
+    public static function create(array $data = []): self
+    {
+        return new self($data);
+    }
+
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -65,10 +70,12 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         return $result;
     }
 
-    public function add(CBORObject $key, CBORObject $value): void
+    public function add(CBORObject $key, CBORObject $value): self
     {
         $this->data[] = new MapItem($key, $value);
         [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
+
+        return $this;
     }
 
     public function count(): int

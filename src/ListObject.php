@@ -52,6 +52,11 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         $this->length = $length;
     }
 
+    public static function create(array $data = []): self
+    {
+        return new self($data);
+    }
+
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -65,10 +70,12 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         return $result;
     }
 
-    public function add(CBORObject $object): void
+    public function add(CBORObject $object): self
     {
         $this->data[] = $object;
         [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
+
+        return $this;
     }
 
     public function get(int $index): CBORObject

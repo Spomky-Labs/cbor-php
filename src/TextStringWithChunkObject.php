@@ -30,6 +30,11 @@ final class TextStringWithChunkObject extends AbstractCBORObject
         parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
     }
 
+    public static function create(): self
+    {
+        return new self();
+    }
+
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -45,14 +50,18 @@ final class TextStringWithChunkObject extends AbstractCBORObject
         return $result;
     }
 
-    public function add(TextStringObject $chunk): void
+    public function add(TextStringObject $chunk): self
     {
         $this->data[] = $chunk;
+
+        return $this;
     }
 
-    public function append(string $chunk): void
+    public function append(string $chunk): self
     {
         $this->add(new TextStringObject($chunk));
+
+        return $this;
     }
 
     public function getValue(): string

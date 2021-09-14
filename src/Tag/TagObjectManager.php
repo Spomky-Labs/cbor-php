@@ -26,12 +26,19 @@ class TagObjectManager
      */
     private $classes = [];
 
-    public function add(string $class): void
+    public static function create(): self
+    {
+        return new self();
+    }
+
+    public function add(string $class): self
     {
         if ($class::getTagId() < 0) {
             throw new InvalidArgumentException('Invalid tag ID.');
         }
         $this->classes[$class::getTagId()] = $class;
+
+        return $this;
     }
 
     public function getClassForValue(int $value): string

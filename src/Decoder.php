@@ -38,6 +38,11 @@ final class Decoder
         $this->otherTypeManager = $otherTypeManager;
     }
 
+    public static function create(TagObjectManager $tagObjectManager, OtherObjectManager $otherTypeManager): self
+    {
+        return new self($tagObjectManager, $otherTypeManager);
+    }
+
     public function decode(Stream $stream): CBORObject
     {
         return $this->process($stream);

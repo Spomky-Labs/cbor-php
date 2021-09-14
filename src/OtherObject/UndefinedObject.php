@@ -22,6 +22,11 @@ final class UndefinedObject extends Base
         parent::__construct(23, null);
     }
 
+    public static function create(): self
+    {
+        return new self();
+    }
+
     public static function supportedAdditionalInformation(): array
     {
         return [23];

@@ -22,6 +22,11 @@ final class BreakObject extends Base
         parent::__construct(0b00011111, null);
     }
 
+    public static function create(): self
+    {
+        return new self();
+    }
+
     public static function supportedAdditionalInformation(): array
     {
         return [0b00011111];
