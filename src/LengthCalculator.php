@@ -21,7 +21,6 @@ use InvalidArgumentException;
 final class LengthCalculator
 {
     /**
-     * @param string $data
      * @return array{int, null|string}
      */
     public static function getLengthOfString(string $data): array
@@ -33,6 +32,7 @@ final class LengthCalculator
 
     /**
      * @param array<int|string, mixed> $data
+     *
      * @return array{int, null|string}
      */
     public static function getLengthOfArray(array $data): array

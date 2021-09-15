@@ -55,7 +55,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     }
 
     /**
-     * @param  MapItem[] $data
+     * @param MapItem[] $data
      */
     public static function create(array $data = []): self
     {
