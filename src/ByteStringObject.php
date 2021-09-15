@@ -23,7 +23,7 @@ final class ByteStringObject extends AbstractCBORObject
     private $value;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     private $length;
 

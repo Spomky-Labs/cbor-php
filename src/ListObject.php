@@ -21,6 +21,9 @@ use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
 
+/**
+ * @phpstan-implements IteratorAggregate<int, CBORObject>
+ */
 class ListObject extends AbstractCBORObject implements Countable, IteratorAggregate
 {
     private const MAJOR_TYPE = 0b100;
@@ -31,7 +34,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
     private $data;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     private $length;
 
@@ -52,6 +55,9 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         $this->length = $length;
     }
 
+    /**
+     * @param CBORObject[] $data
+     */
     public static function create(array $data = []): self
     {
         return new self($data);
@@ -87,9 +93,12 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         return $this->data[$index];
     }
 
+    /**
+     * @return array<int|string, mixed>
+     */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
-        return array_map(function (CBORObject $item) use ($ignoreTags) {
+        return array_map(static function (CBORObject $item) use ($ignoreTags) {
             return $item->getNormalizedData($ignoreTags);
         }, $this->data);
     }
@@ -99,6 +108,9 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         return count($this->data);
     }
 
+    /**
+     * @return Iterator<int, CBORObject>
+     */
     public function getIterator(): Iterator
     {
         return new ArrayIterator($this->data);

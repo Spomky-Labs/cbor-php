@@ -21,6 +21,7 @@ use Iterator;
 use IteratorAggregate;
 
 /**
+ * @phpstan-implements IteratorAggregate<int, CBORObject>
  * @final
  */
 class IndefiniteLengthListObject extends AbstractCBORObject implements Countable, IteratorAggregate
@@ -58,6 +59,9 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
         return $result;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
         return array_map(static function (CBORObject $item) use ($ignoreTags) {
@@ -77,6 +81,9 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
         return count($this->data);
     }
 
+    /**
+     * @return Iterator<int, CBORObject>
+     */
     public function getIterator(): Iterator
     {
         return new ArrayIterator($this->data);

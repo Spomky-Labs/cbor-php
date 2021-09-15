@@ -20,6 +20,10 @@ use InvalidArgumentException;
 
 final class LengthCalculator
 {
+    /**
+     * @param string $data
+     * @return array{int, null|string}
+     */
     public static function getLengthOfString(string $data): array
     {
         $length = mb_strlen($data, '8bit');
@@ -27,6 +31,10 @@ final class LengthCalculator
         return self::computeLength($length);
     }
 
+    /**
+     * @param array<int|string, mixed> $data
+     * @return array{int, null|string}
+     */
     public static function getLengthOfArray(array $data): array
     {
         $length = count($data);
@@ -34,6 +42,9 @@ final class LengthCalculator
         return self::computeLength($length);
     }
 
+    /**
+     * @return array{int, null|string}
+     */
     private static function computeLength(int $length): array
     {
         switch (true) {

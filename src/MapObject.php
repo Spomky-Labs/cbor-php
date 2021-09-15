@@ -20,6 +20,9 @@ use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
 
+/**
+ * @phpstan-implements IteratorAggregate<int, MapItem>
+ */
 final class MapObject extends AbstractCBORObject implements Countable, IteratorAggregate
 {
     private const MAJOR_TYPE = 0b101;
@@ -30,7 +33,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     private $data;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     private $length;
 
@@ -51,6 +54,9 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         $this->length = $length;
     }
 
+    /**
+     * @param  MapItem[] $data
+     */
     public static function create(array $data = []): self
     {
         return new self($data);
@@ -83,11 +89,17 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         return count($this->data);
     }
 
+    /**
+     * @return Iterator<int, MapItem>
+     */
     public function getIterator(): Iterator
     {
         return new ArrayIterator($this->data);
     }
 
+    /**
+     * @return array<int|string, mixed>
+     */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
         $result = [];

@@ -21,6 +21,7 @@ use Iterator;
 use IteratorAggregate;
 
 /**
+ * @phpstan-implements IteratorAggregate<int, MapItem>
  * @final
  */
 class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable, IteratorAggregate
@@ -71,11 +72,17 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
         return count($this->data);
     }
 
+    /**
+     * @return Iterator<int, MapItem>
+     */
     public function getIterator(): Iterator
     {
         return new ArrayIterator($this->data);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
         $result = [];
