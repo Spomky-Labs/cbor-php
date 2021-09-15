@@ -78,7 +78,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
 
     public function add(CBORObject $key, CBORObject $value): self
     {
-        $this->data[] = new MapItem($key, $value);
+        $this->data[] = MapItem::create($key, $value);
         [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
 
         return $this;

@@ -32,7 +32,7 @@ final class InvalidTypeTest extends BaseTestCase
         $this->expectException($class);
         $this->expectExceptionMessage($expectedError);
 
-        $stream = new StringStream(hex2bin($item));
+        $stream = StringStream::create(hex2bin($item));
         $this->getDecoder()->decode($stream);
     }
 

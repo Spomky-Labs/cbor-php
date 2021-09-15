@@ -62,7 +62,7 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
 
     public function append(CBORObject $key, CBORObject $value): self
     {
-        $this->data[] = new MapItem($key, $value);
+        $this->data[] = MapItem::create($key, $value);
 
         return $this;
     }

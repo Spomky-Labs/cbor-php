@@ -57,9 +57,10 @@ final class DecimalFractionTag extends Base
 
     public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Base
     {
-        $object = new ListObject();
-        $object->add($e);
-        $object->add($m);
+        $object = ListObject::create()
+            ->add($e)
+            ->add($m)
+        ;
 
         return new self($object);
     }

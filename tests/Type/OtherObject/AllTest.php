@@ -41,7 +41,7 @@ final class AllTest extends BaseTestCase
         static::assertEquals(CBORObject::OBJECT_FALSE, $object->getAdditionalInformation());
         static::assertNull($object->getContent());
 
-        $stream = new StringStream($object->__toString());
+        $stream = StringStream::create($object->__toString());
         $decoded = $this->getDecoder()->decode($stream);
 
         static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
@@ -59,7 +59,7 @@ final class AllTest extends BaseTestCase
         static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
         static::assertEquals(CBORObject::OBJECT_TRUE, $object->getAdditionalInformation());
 
-        $stream = new StringStream($object->__toString());
+        $stream = StringStream::create($object->__toString());
         $decoded = $this->getDecoder()->decode($stream);
 
         static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
@@ -77,7 +77,7 @@ final class AllTest extends BaseTestCase
         static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
         static::assertEquals(CBORObject::OBJECT_NULL, $object->getAdditionalInformation());
 
-        $stream = new StringStream($object->__toString());
+        $stream = StringStream::create($object->__toString());
         $decoded = $this->getDecoder()->decode($stream);
 
         static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
@@ -95,7 +95,7 @@ final class AllTest extends BaseTestCase
         static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
         static::assertEquals(CBORObject::OBJECT_UNDEFINED, $object->getAdditionalInformation());
 
-        $stream = new StringStream($object->__toString());
+        $stream = StringStream::create($object->__toString());
         $decoded = $this->getDecoder()->decode($stream);
 
         static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
@@ -126,7 +126,7 @@ final class AllTest extends BaseTestCase
         static::assertEquals($value, $object->getAdditionalInformation());
         static::assertNull($object->getContent());
 
-        $stream = new StringStream($object->__toString());
+        $stream = StringStream::create($object->__toString());
         $decoded = $this->getDecoder()->decode($stream);
 
         static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
@@ -146,7 +146,7 @@ final class AllTest extends BaseTestCase
         static::assertEquals(CBORObject::OBJECT_SIMPLE_VALUE, $object->getAdditionalInformation());
         static::assertEquals(chr($value), $object->getContent());
 
-        $stream = new StringStream($object->__toString());
+        $stream = StringStream::create($object->__toString());
         $decoded = $this->getDecoder()->decode($stream);
 
         static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());

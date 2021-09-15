@@ -62,7 +62,7 @@ class IndefiniteLengthByteStringObject extends AbstractCBORObject
 
     public function append(string $chunk): self
     {
-        $this->add(new ByteStringObject($chunk));
+        $this->add(ByteStringObject::create($chunk));
 
         return $this;
     }

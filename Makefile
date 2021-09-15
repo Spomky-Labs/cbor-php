@@ -19,7 +19,7 @@ coding-standards: vendor ## Check all files using defined PHP-CS-FIXER rules
 
 .PHONY: mutation-tests
 mutation-tests: vendor ## Run mutation tests with minimum MSI and covered MSI enabled
-	vendor/bin/infection --logger-github --git-diff-filter=AM -s --threads=$(nproc) --min-msi=83 --min-covered-msi=88
+	vendor/bin/infection --logger-github --git-diff-filter=AM -s --threads=$(nproc) --min-msi=50 --min-covered-msi=59
 
 .PHONY: tests
 tests: vendor ## Run all tests

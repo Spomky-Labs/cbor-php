@@ -62,7 +62,7 @@ class IndefiniteLengthTextStringObject extends AbstractCBORObject
 
     public function append(string $chunk): self
     {
-        $this->add(new TextStringObject($chunk));
+        $this->add(TextStringObject::create($chunk));
 
         return $this;
     }
