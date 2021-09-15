@@ -19,7 +19,7 @@ final class TrueObject extends Base
 {
     public function __construct()
     {
-        parent::__construct(21, null);
+        parent::__construct(self::OBJECT_TRUE, null);
     }
 
     public static function create(): self
@@ -29,7 +29,7 @@ final class TrueObject extends Base
 
     public static function supportedAdditionalInformation(): array
     {
-        return [21];
+        return [self::OBJECT_TRUE];
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base

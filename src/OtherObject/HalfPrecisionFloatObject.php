@@ -22,7 +22,7 @@ final class HalfPrecisionFloatObject extends Base
 {
     public static function supportedAdditionalInformation(): array
     {
-        return [25];
+        return [self::OBJECT_HALF_PRECISION_FLOAT];
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
@@ -39,7 +39,7 @@ final class HalfPrecisionFloatObject extends Base
             throw new InvalidArgumentException('The value is not a valid half precision floating point');
         }
 
-        return new self(25, $value);
+        return new self(self::OBJECT_HALF_PRECISION_FLOAT, $value);
     }
 
     /**

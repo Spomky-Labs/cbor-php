@@ -34,6 +34,16 @@ interface CBORObject
     public const FUTURE_USE_2 = 0b00011101;
     public const FUTURE_USE_3 = 0b00011110;
 
+    public const OBJECT_FALSE = 20;
+    public const OBJECT_TRUE = 21;
+    public const OBJECT_NULL = 22;
+    public const OBJECT_UNDEFINED = 23;
+    public const OBJECT_SIMPLE_VALUE = 24;
+    public const OBJECT_HALF_PRECISION_FLOAT = 25;
+    public const OBJECT_SINGLE_PRECISION_FLOAT = 26;
+    public const OBJECT_DOUBLE_PRECISION_FLOAT = 27;
+    public const OBJECT_BREAK = 0b00011111;
+
     public const TAG_STANDARD_DATETIME = 0;
     public const TAG_EPOCH_DATETIME = 1;
     public const TAG_UNSIGNED_BIG_NUM = 2;

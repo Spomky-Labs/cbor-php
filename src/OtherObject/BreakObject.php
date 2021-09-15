@@ -19,7 +19,7 @@ final class BreakObject extends Base
 {
     public function __construct()
     {
-        parent::__construct(0b00011111, null);
+        parent::__construct(self::OBJECT_BREAK, null);
     }
 
     public static function create(): self
@@ -29,7 +29,7 @@ final class BreakObject extends Base
 
     public static function supportedAdditionalInformation(): array
     {
-        return [0b00011111];
+        return [self::OBJECT_BREAK];
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base

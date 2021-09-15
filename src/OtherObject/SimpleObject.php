@@ -23,7 +23,7 @@ final class SimpleObject extends Base
 {
     public static function supportedAdditionalInformation(): array
     {
-        return range(0, 31);
+        return range(0, 19);
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base

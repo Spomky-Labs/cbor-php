@@ -22,7 +22,7 @@ final class SinglePrecisionFloatObject extends Base
 {
     public static function supportedAdditionalInformation(): array
     {
-        return [26];
+        return [self::OBJECT_SINGLE_PRECISION_FLOAT];
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
@@ -39,7 +39,7 @@ final class SinglePrecisionFloatObject extends Base
             throw new InvalidArgumentException('The value is not a valid single precision floating point');
         }
 
-        return new self(26, $value);
+        return new self(self::OBJECT_SINGLE_PRECISION_FLOAT, $value);
     }
 
     /**

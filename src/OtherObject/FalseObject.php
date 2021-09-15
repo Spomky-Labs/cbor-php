@@ -19,7 +19,7 @@ final class FalseObject extends Base
 {
     public function __construct()
     {
-        parent::__construct(20, null);
+        parent::__construct(self::OBJECT_FALSE, null);
     }
 
     public static function create(): self
@@ -29,7 +29,7 @@ final class FalseObject extends Base
 
     public static function supportedAdditionalInformation(): array
     {
-        return [20];
+        return [self::OBJECT_FALSE];
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base

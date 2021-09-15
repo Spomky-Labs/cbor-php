@@ -19,7 +19,7 @@ final class UndefinedObject extends Base
 {
     public function __construct()
     {
-        parent::__construct(23, null);
+        parent::__construct(self::OBJECT_UNDEFINED, null);
     }
 
     public static function create(): self
@@ -29,7 +29,7 @@ final class UndefinedObject extends Base
 
     public static function supportedAdditionalInformation(): array
     {
-        return [23];
+        return [self::OBJECT_UNDEFINED];
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base

@@ -19,7 +19,7 @@ final class NullObject extends Base
 {
     public function __construct()
     {
-        parent::__construct(22, null);
+        parent::__construct(self::OBJECT_NULL, null);
     }
 
     public static function create(): self
@@ -29,7 +29,7 @@ final class NullObject extends Base
 
     public static function supportedAdditionalInformation(): array
     {
-        return [22];
+        return [self::OBJECT_NULL];
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
