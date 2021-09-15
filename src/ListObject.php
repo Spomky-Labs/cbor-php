@@ -26,7 +26,7 @@ use IteratorAggregate;
  */
 class ListObject extends AbstractCBORObject implements Countable, IteratorAggregate
 {
-    private const MAJOR_TYPE = 0b100;
+    private const MAJOR_TYPE = self::MAJOR_TYPE_LIST;
 
     /**
      * @var CBORObject[]

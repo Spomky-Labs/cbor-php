@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR\Test\Type;
 
+use CBOR\CBORObject;
 use CBOR\IndefiniteLengthTextStringObject;
 use CBOR\StringStream;
 use CBOR\TextStringObject;
@@ -35,8 +36,8 @@ final class IndefiniteLengthTextStringObjectTest extends BaseTestCase
             $object->add(TextStringObject::create($chunk));
         }
 
-        static::assertEquals(0b011, $object->getMajorType());
-        static::assertEquals(0b00011111, $object->getAdditionalInformation());
+        static::assertEquals(CBORObject::MAJOR_TYPE_TEXT_STRING, $object->getMajorType());
+        static::assertEquals(CBORObject::LENGTH_INDEFINITE, $object->getAdditionalInformation());
         static::assertEquals($expectedValue, $object->getValue());
         static::assertEquals($expectedLength, $object->getLength());
         static::assertEquals($expectedValue, $object->getNormalizedData());
@@ -48,8 +49,8 @@ final class IndefiniteLengthTextStringObjectTest extends BaseTestCase
         $decoded = $this->getDecoder()->decode($stream);
 
         static::assertInstanceOf(IndefiniteLengthTextStringObject::class, $decoded);
-        static::assertEquals(0b011, $decoded->getMajorType());
-        static::assertEquals(0b00011111, $decoded->getAdditionalInformation());
+        static::assertEquals(CBORObject::MAJOR_TYPE_TEXT_STRING, $decoded->getMajorType());
+        static::assertEquals(CBORObject::LENGTH_INDEFINITE, $decoded->getAdditionalInformation());
         static::assertEquals($expectedValue, $decoded->getValue());
         static::assertEquals($expectedLength, $decoded->getLength());
         static::assertEquals($expectedValue, $decoded->getNormalizedData());

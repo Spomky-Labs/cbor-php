@@ -18,7 +18,7 @@ use InvalidArgumentException;
 
 final class UnsignedIntegerObject extends AbstractCBORObject
 {
-    private const MAJOR_TYPE = 0b000;
+    private const MAJOR_TYPE = self::MAJOR_TYPE_UNSIGNED_INTEGER;
 
     /**
      * @var string|null

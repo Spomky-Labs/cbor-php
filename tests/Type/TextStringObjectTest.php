@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR\Test\Type;
 
+use CBOR\CBORObject;
 use CBOR\StringStream;
 use CBOR\TextStringObject;
 
@@ -31,7 +32,7 @@ final class TextStringObjectTest extends BaseTestCase
     {
         $object = TextStringObject::create($string);
 
-        static::assertEquals(0b011, $object->getMajorType());
+        static::assertEquals(CBORObject::MAJOR_TYPE_TEXT_STRING, $object->getMajorType());
         static::assertEquals($expectedAdditionalInformation, $object->getAdditionalInformation());
         static::assertEquals($string, $object->getValue());
         static::assertEquals($expectedLength, $object->getLength());
@@ -44,7 +45,7 @@ final class TextStringObjectTest extends BaseTestCase
         $decoded = $this->getDecoder()->decode($stream);
 
         static::assertInstanceOf(TextStringObject::class, $decoded);
-        static::assertEquals(0b011, $decoded->getMajorType());
+        static::assertEquals(CBORObject::MAJOR_TYPE_TEXT_STRING, $decoded->getMajorType());
         static::assertEquals($expectedAdditionalInformation, $decoded->getAdditionalInformation());
         static::assertEquals($string, $decoded->getValue());
         static::assertEquals($expectedLength, $decoded->getLength());

@@ -21,7 +21,7 @@ use InvalidArgumentException;
  */
 class NegativeIntegerObject extends AbstractCBORObject
 {
-    private const MAJOR_TYPE = 0b001;
+    private const MAJOR_TYPE = self::MAJOR_TYPE_NEGATIVE_INTEGER;
 
     /**
      * @var string|null

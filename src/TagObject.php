@@ -15,7 +15,7 @@ namespace CBOR;
 
 abstract class TagObject extends AbstractCBORObject
 {
-    private const MAJOR_TYPE = 0b110;
+    private const MAJOR_TYPE = self::MAJOR_TYPE_TAG;
 
     /**
      * @var string|null

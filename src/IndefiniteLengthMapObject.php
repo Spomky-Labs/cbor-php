@@ -26,8 +26,8 @@ use IteratorAggregate;
  */
 class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable, IteratorAggregate
 {
-    private const MAJOR_TYPE = 0b101;
-    private const ADDITIONAL_INFORMATION = 0b00011111;
+    private const MAJOR_TYPE = self::MAJOR_TYPE_MAP;
+    private const ADDITIONAL_INFORMATION = self::LENGTH_INDEFINITE;
 
     /**
      * @var MapItem[]

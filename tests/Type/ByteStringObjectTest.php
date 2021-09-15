@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace CBOR\Test\Type;
 
 use CBOR\ByteStringObject;
+use CBOR\CBORObject;
 use CBOR\StringStream;
 
 /**
@@ -31,7 +32,7 @@ final class ByteStringObjectTest extends BaseTestCase
     {
         $object = ByteStringObject::create($string);
 
-        static::assertEquals(0b010, $object->getMajorType());
+        static::assertEquals(CBORObject::MAJOR_TYPE_BYTE_STRING, $object->getMajorType());
         static::assertEquals($expectedAdditionalInformation, $object->getAdditionalInformation());
         static::assertEquals($string, $object->getValue());
         static::assertEquals($expectedLength, $object->getLength());
@@ -44,7 +45,7 @@ final class ByteStringObjectTest extends BaseTestCase
         $decoded = $this->getDecoder()->decode($stream);
 
         static::assertInstanceOf(ByteStringObject::class, $decoded);
-        static::assertEquals(0b010, $decoded->getMajorType());
+        static::assertEquals(CBORObject::MAJOR_TYPE_BYTE_STRING, $decoded->getMajorType());
         static::assertEquals($expectedAdditionalInformation, $decoded->getAdditionalInformation());
         static::assertEquals($string, $decoded->getValue());
         static::assertEquals($expectedLength, $decoded->getLength());

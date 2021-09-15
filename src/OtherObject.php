@@ -15,7 +15,7 @@ namespace CBOR;
 
 abstract class OtherObject extends AbstractCBORObject
 {
-    private const MAJOR_TYPE = 0b111;
+    private const MAJOR_TYPE = self::MAJOR_TYPE_OTHER_TYPE;
 
     /**
      * @var string|null

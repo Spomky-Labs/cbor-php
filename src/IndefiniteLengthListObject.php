@@ -26,8 +26,8 @@ use IteratorAggregate;
  */
 class IndefiniteLengthListObject extends AbstractCBORObject implements Countable, IteratorAggregate
 {
-    private const MAJOR_TYPE = 0b100;
-    private const ADDITIONAL_INFORMATION = 0b00011111;
+    private const MAJOR_TYPE = self::MAJOR_TYPE_LIST;
+    private const ADDITIONAL_INFORMATION = self::LENGTH_INDEFINITE;
 
     /**
      * @var CBORObject[]

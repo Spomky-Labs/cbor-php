@@ -2,3 +2,4 @@
 /composer.lock
 /*cache
 /build
+/infection-log

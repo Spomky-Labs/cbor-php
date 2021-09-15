@@ -25,7 +25,7 @@ use IteratorAggregate;
  */
 final class MapObject extends AbstractCBORObject implements Countable, IteratorAggregate
 {
-    private const MAJOR_TYPE = 0b101;
+    private const MAJOR_TYPE = self::MAJOR_TYPE_MAP;
 
     /**
      * @var MapItem[]

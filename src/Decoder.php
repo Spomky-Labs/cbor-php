@@ -45,27 +45,27 @@ final class Decoder
 
     public function decode(Stream $stream): CBORObject
     {
-        return $this->process($stream);
+        return $this->process($stream, false);
     }
 
-    private function process(Stream $stream, bool $breakable = false): CBORObject
+    private function process(Stream $stream, bool $breakable): CBORObject
     {
         $ib = ord($stream->read(1));
         $mt = $ib >> 5;
         $ai = $ib & 0b00011111;
         $val = null;
         switch ($ai) {
-            case 0b00011000: //24
-            case 0b00011001: //25
-            case 0b00011010: //26
-            case 0b00011011: //27
+            case CBORObject::LENGTH_1_BYTE: //24
+            case CBORObject::LENGTH_2_BYTES: //25
+            case CBORObject::LENGTH_4_BYTES: //26
+            case CBORObject::LENGTH_8_BYTES: //27
                 $val = $stream->read(2 ** ($ai & 0b00000111));
                 break;
-            case 0b00011100: //28
-            case 0b00011101: //29
-            case 0b00011110: //30
-                throw new InvalidArgumentException(sprintf('Cannot parse the data. Found invalid Additional Information "%s" (%d).', str_pad(decbin($ai), 5, '0', STR_PAD_LEFT), $ai));
-            case 0b00011111: //31
+            case CBORObject::FUTURE_USE_1: //28
+            case CBORObject::FUTURE_USE_2: //29
+            case CBORObject::FUTURE_USE_3: //30
+                throw new InvalidArgumentException(sprintf('Cannot parse the data. Found invalid Additional Information "%s" (%d).', str_pad(decbin($ai), 8, '0', STR_PAD_LEFT), $ai));
+            case CBORObject::LENGTH_INDEFINITE: //31
                 return $this->processInfinite($stream, $mt, $breakable);
         }
 
@@ -75,37 +75,37 @@ final class Decoder
     private function processFinite(Stream $stream, int $mt, int $ai, ?string $val): CBORObject
     {
         switch ($mt) {
-            case 0b000: //0
+            case CBORObject::MAJOR_TYPE_UNSIGNED_INTEGER: //0
                 return UnsignedIntegerObject::createObjectForValue($ai, $val);
-            case 0b001: //1
+            case CBORObject::MAJOR_TYPE_NEGATIVE_INTEGER: //1
                 return NegativeIntegerObject::createObjectForValue($ai, $val);
-            case 0b010: //2
+            case CBORObject::MAJOR_TYPE_BYTE_STRING: //2
                 $length = null === $val ? $ai : Utils::binToInt($val);
 
                 return new ByteStringObject($stream->read($length));
-            case 0b011: //3
+            case CBORObject::MAJOR_TYPE_TEXT_STRING: //3
                 $length = null === $val ? $ai : Utils::binToInt($val);
 
                 return new TextStringObject($stream->read($length));
-            case 0b100: //4
+            case CBORObject::MAJOR_TYPE_LIST: //4
                 $object = new ListObject();
                 $nbItems = null === $val ? $ai : Utils::binToInt($val);
                 for ($i = 0; $i < $nbItems; ++$i) {
-                    $object->add($this->process($stream));
+                    $object->add($this->process($stream, false));
                 }
 
                 return $object;
-            case 0b101: //5
+            case CBORObject::MAJOR_TYPE_MAP: //5
                 $object = new MapObject();
                 $nbItems = null === $val ? $ai : Utils::binToInt($val);
                 for ($i = 0; $i < $nbItems; ++$i) {
-                    $object->add($this->process($stream), $this->process($stream));
+                    $object->add($this->process($stream, false), $this->process($stream, false));
                 }
 
                 return $object;
-            case 0b110: //6
-                return $this->tagObjectManager->createObjectForValue($ai, $val, $this->process($stream));
-            case 0b111: //7
+            case CBORObject::MAJOR_TYPE_TAG: //6
+                return $this->tagObjectManager->createObjectForValue($ai, $val, $this->process($stream, false));
+            case CBORObject::MAJOR_TYPE_OTHER_TYPE: //7
                 return $this->otherTypeManager->createObjectForValue($ai, $val);
             default:
                 throw new RuntimeException(sprintf('Unsupported major type "%s" (%d).', str_pad(decbin($mt), 5, '0', STR_PAD_LEFT), $mt)); // Should never append
@@ -115,7 +115,7 @@ final class Decoder
     private function processInfinite(Stream $stream, int $mt, bool $breakable): CBORObject
     {
         switch ($mt) {
-            case 0b010: //2
+            case CBORObject::MAJOR_TYPE_BYTE_STRING: //2
                 $object = new IndefiniteLengthByteStringObject();
                 while (!($it = $this->process($stream, true)) instanceof BreakObject) {
                     if (!$it instanceof ByteStringObject) {
@@ -125,7 +125,7 @@ final class Decoder
                 }
 
                 return $object;
-            case 0b011: //3
+            case CBORObject::MAJOR_TYPE_TEXT_STRING: //3
                 $object = new IndefiniteLengthTextStringObject();
                 while (!($it = $this->process($stream, true)) instanceof BreakObject) {
                     if (!$it instanceof TextStringObject) {
@@ -135,29 +135,29 @@ final class Decoder
                 }
 
                 return $object;
-            case 0b100: //4
+            case CBORObject::MAJOR_TYPE_LIST: //4
                 $object = new IndefiniteLengthListObject();
                 while (!($it = $this->process($stream, true)) instanceof BreakObject) {
                     $object->add($it);
                 }
 
                 return $object;
-            case 0b101: //5
+            case CBORObject::MAJOR_TYPE_MAP: //5
                 $object = new IndefiniteLengthMapObject();
                 while (!($it = $this->process($stream, true)) instanceof BreakObject) {
-                    $object->append($it, $this->process($stream));
+                    $object->append($it, $this->process($stream, false));
                 }
 
                 return $object;
-            case 0b111: //7
+            case CBORObject::MAJOR_TYPE_OTHER_TYPE: //7
                 if (!$breakable) {
                     throw new InvalidArgumentException('Cannot parse the data. No enclosing indefinite.');
                 }
 
                 return new BreakObject();
-            case 0b000: //0
-            case 0b001: //1
-            case 0b110: //6
+            case CBORObject::MAJOR_TYPE_UNSIGNED_INTEGER: //0
+            case CBORObject::MAJOR_TYPE_NEGATIVE_INTEGER: //1
+            case CBORObject::MAJOR_TYPE_TAG: //6
             default:
                 throw new InvalidArgumentException(sprintf('Cannot parse the data. Found infinite length for Major Type "%s" (%d).', str_pad(decbin($mt), 5, '0', STR_PAD_LEFT), $mt));
         }

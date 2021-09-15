@@ -15,7 +15,7 @@ namespace CBOR;
 
 final class TextStringObject extends AbstractCBORObject
 {
-    private const MAJOR_TYPE = 0b011;
+    private const MAJOR_TYPE = self::MAJOR_TYPE_TEXT_STRING;
 
     /**
      * @var string|null

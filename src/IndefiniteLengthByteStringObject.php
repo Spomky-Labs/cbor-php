@@ -20,8 +20,8 @@ use InvalidArgumentException;
  */
 class IndefiniteLengthByteStringObject extends AbstractCBORObject
 {
-    private const MAJOR_TYPE = 0b010;
-    private const ADDITIONAL_INFORMATION = 0b00011111;
+    private const MAJOR_TYPE = self::MAJOR_TYPE_BYTE_STRING;
+    private const ADDITIONAL_INFORMATION = self::LENGTH_INDEFINITE;
 
     /**
      * @var ByteStringObject[]
