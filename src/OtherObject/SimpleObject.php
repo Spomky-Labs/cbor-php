@@ -17,7 +17,6 @@ use CBOR\OtherObject as Base;
 use CBOR\Utils;
 use function chr;
 use InvalidArgumentException;
-use function ord;
 
 final class SimpleObject extends Base
 {
@@ -28,7 +27,7 @@ final class SimpleObject extends Base
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {
-        if (null !== $data && ord($data) < 32) {
+        if (null !== $data && $additionalInformation < 32) {
             throw new InvalidArgumentException('Invalid simple value. Content data should not be present.');
         }
 
@@ -58,7 +57,7 @@ final class SimpleObject extends Base
             case $value < 256:
                 return new self(24, chr($value));
             default:
-                throw new InvalidArgumentException('The value is not a valid simple value');
+                throw new InvalidArgumentException('The value is not a valid simple value.');
         }
     }
 }

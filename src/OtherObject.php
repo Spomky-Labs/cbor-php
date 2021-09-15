@@ -38,6 +38,11 @@ abstract class OtherObject extends AbstractCBORObject
         return $result;
     }
 
+    public function getContent(): ?string
+    {
+        return $this->data;
+    }
+
     /**
      * @return int[]
      */
