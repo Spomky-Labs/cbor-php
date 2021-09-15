@@ -17,19 +17,27 @@ use CBOR\OtherObject as Base;
 use CBOR\Utils;
 use function chr;
 use InvalidArgumentException;
+use function ord;
 
 final class SimpleObject extends Base
 {
     public static function supportedAdditionalInformation(): array
     {
-        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 24];
+        return range(0, 31);
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {
+        if (null !== $data && ord($data) < 32) {
+            throw new InvalidArgumentException('Invalid simple value. Content data should not be present.');
+        }
+
         return new self($additionalInformation, $data);
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if (null === $this->data) {
@@ -45,7 +53,7 @@ final class SimpleObject extends Base
     public static function create(int $value): self
     {
         switch (true) {
-            case $value < 24:
+            case $value < 32:
                 return new self($value, null);
             case $value < 256:
                 return new self(24, chr($value));

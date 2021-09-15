@@ -35,7 +35,7 @@ final class BigFloatTag extends Base
 
     public static function getTagId(): int
     {
-        return 5;
+        return self::TAG_BIG_FLOAT;
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
@@ -53,11 +53,11 @@ final class BigFloatTag extends Base
             throw new InvalidArgumentException('The exponent must be a Signed Integer or an Unsigned Integer object.');
         }
         $m = $object->get(1);
-        if (!$m instanceof UnsignedIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof PositiveBigIntegerTag) {
+        if (!$m instanceof UnsignedIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof UnsignedBigIntegerTag) {
             throw new InvalidArgumentException('The mantissa must be a Positive or Negative Signed Integer or an Unsigned Integer object.');
         }
 
-        return new self(5, null, $object);
+        return new self(self::TAG_BIG_FLOAT, null, $object);
     }
 
     public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Base
@@ -69,6 +69,9 @@ final class BigFloatTag extends Base
         return self::create($object);
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
@@ -84,7 +87,7 @@ final class BigFloatTag extends Base
         if (!$e instanceof UnsignedIntegerObject && !$e instanceof NegativeIntegerObject) {
             return $this->object->getNormalizedData($ignoreTags);
         }
-        if (!$m instanceof UnsignedIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof PositiveBigIntegerTag) {
+        if (!$m instanceof UnsignedIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof UnsignedBigIntegerTag) {
             return $this->object->getNormalizedData($ignoreTags);
         }
 

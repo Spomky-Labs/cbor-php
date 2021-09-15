@@ -16,6 +16,7 @@ namespace CBOR\Test\Type;
 use Brick\Math\Exception\IntegerOverflowException;
 use CBOR\StringStream;
 use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * @internal
@@ -32,7 +33,7 @@ final class InvalidTypeTest extends BaseTestCase
         $this->expectExceptionMessage($expectedError);
 
         $stream = new StringStream(hex2bin($item));
-        dump($this->getDecoder()->decode($stream)->getNormalizedData());
+        $this->getDecoder()->decode($stream);
     }
 
     /**
@@ -76,16 +77,69 @@ final class InvalidTypeTest extends BaseTestCase
             ['a100', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
             ['a2000000', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
             ['c0', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
-            // ['5f41007f6100', \InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
-            // ['9f9f0102bfbf01020102819f9f80009f9f9f9f9fffffffff9f819f819f9fffffff', \InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
-            // ['1c1d1e3c3d3e5c5d5e7c7d7e9c9d9ebcbdbedcdddefcfdfe', \InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011100" (28).'],
-            // ['f800f801f818f81f', \InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011100" (28).'],
-            // ['5f00ff5f21ff5f6100ff5f80ff5fa0ff5fc000ff5fe0ff7f4100ff', 'RuntimeException', 'Unable to parse the data. Infinite Byte String object can only get Byte String objects.'],
-            // ['5f5f4100ffff7f7f6100ffff', 'RuntimeException', 'Unable to parse the data. Infinite Byte String object can only get Byte String objects.'],
-            // ['ff', \InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
-            // ['81ff8200ffa1ffa1ff00a100ffa20000ff9f81ff9f829f819f9fffffffff', \InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
-            // ['bf00ff', \InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
-            // ['bf000000ff', \InvalidArgumentException::class, 'Out of range. Expected: 8, read: 3.'],
+            ['5f4100', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
+            ['7f6100', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
+            ['9f', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
+            ['9f0102', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
+            ['bf', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
+            ['bf01020102', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
+            ['819f', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
+            ['9f8000', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
+            ['9f9f9f9f9fffffffff', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
+            ['9f819f819f9fffffff', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
+            ['1c', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011100" (28).'],
+            ['1d', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011101" (29).'],
+            ['1e', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011110" (30).'],
+            ['3c', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011100" (28).'],
+            ['3d', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011101" (29).'],
+            ['3e', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011110" (30).'],
+            ['5c', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011100" (28).'],
+            ['5d', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011101" (29).'],
+            ['5e', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011110" (30).'],
+            ['7c', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011100" (28).'],
+            ['7d', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011101" (29).'],
+            ['7e', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011110" (30).'],
+            ['9c', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011100" (28).'],
+            ['9d', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011101" (29).'],
+            ['9e', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011110" (30).'],
+            ['bc', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011100" (28).'],
+            ['bd', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011101" (29).'],
+            ['be', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011110" (30).'],
+            ['dc', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011100" (28).'],
+            ['dd', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011101" (29).'],
+            ['de', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011110" (30).'],
+            ['fc', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011100" (28).'],
+            ['fd', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011101" (29).'],
+            ['fe', InvalidArgumentException::class, 'Cannot parse the data. Found invalid Additional Information "00011110" (30).'],
+            ['f800', InvalidArgumentException::class, 'Invalid simple value. Content data should not be present.'],
+            ['f801', InvalidArgumentException::class, 'Invalid simple value. Content data should not be present.'],
+            ['f818', InvalidArgumentException::class, 'Invalid simple value. Content data should not be present.'],
+            ['f81f', InvalidArgumentException::class, 'Invalid simple value. Content data should not be present.'],
+            ['5f00ff', RuntimeException::class, 'Unable to parse the data. Infinite Byte String object can only get Byte String objects.'],
+            ['5f21ff', RuntimeException::class, 'Unable to parse the data. Infinite Byte String object can only get Byte String objects.'],
+            ['5f6100ff', RuntimeException::class, 'Unable to parse the data. Infinite Byte String object can only get Byte String objects.'],
+            ['5f80ff', RuntimeException::class, 'Unable to parse the data. Infinite Byte String object can only get Byte String objects.'],
+            ['5fa0ff', RuntimeException::class, 'Unable to parse the data. Infinite Byte String object can only get Byte String objects.'],
+            ['5fc000ff', InvalidArgumentException::class, 'This tag only accepts a Byte String object.'],
+            ['5fe0ff', RuntimeException::class, 'Unable to parse the data. Infinite Byte String object can only get Byte String objects.'],
+            ['7f4100ff', RuntimeException::class, 'Unable to parse the data. Infinite Text String object can only get Text String objects.'],
+            ['5f5f4100', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'],
+            ['ffff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
+            ['7f7f6100ffff', RuntimeException::class, 'Unable to parse the data. Infinite Text String object can only get Text String objects.'],
+            ['ff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
+            ['81ff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
+            ['8200ff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
+            ['a1ff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
+            ['a1ff00', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
+            ['a100ff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
+            ['a20000ff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
+            ['9f81ff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
+            ['9f829f819f9fffffffff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
+            ['bf00ff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
+            ['bf000000ff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'],
+            ['1f', InvalidArgumentException::class, 'Cannot parse the data. Found infinite length for Major Type "00000" (0).'],
+            ['3f', InvalidArgumentException::class, 'Cannot parse the data. Found infinite length for Major Type "00001" (1).'],
+            ['df', InvalidArgumentException::class, 'Cannot parse the data. Found infinite length for Major Type "00110" (6).'],
         ];
     }
 }

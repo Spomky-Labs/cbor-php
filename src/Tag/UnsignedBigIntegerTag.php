@@ -16,16 +16,27 @@ namespace CBOR\Tag;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthByteStringObject;
-use CBOR\IndefiniteLengthTextStringObject;
 use CBOR\TagObject as Base;
-use CBOR\TextStringObject;
+use CBOR\Utils;
 use InvalidArgumentException;
 
-final class Base64EncodingTag extends Base
+/**
+ * @final
+ */
+class UnsignedBigIntegerTag extends Base
 {
+    public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
+    {
+        if (!$object instanceof ByteStringObject && !$object instanceof IndefiniteLengthByteStringObject) {
+            throw new InvalidArgumentException('This tag only accepts a Byte String object.');
+        }
+
+        parent::__construct($additionalInformation, $data, $object);
+    }
+
     public static function getTagId(): int
     {
-        return self::TAG_ENCODED_BASE64;
+        return self::TAG_UNSIGNED_BIG_NUM;
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
@@ -35,7 +46,7 @@ final class Base64EncodingTag extends Base
 
     public static function create(CBORObject $object): Base
     {
-        return new self(self::TAG_ENCODED_BASE64, null, $object);
+        return new self(self::TAG_UNSIGNED_BIG_NUM, null, $object);
     }
 
     /**
@@ -47,15 +58,10 @@ final class Base64EncodingTag extends Base
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        if (!$this->object instanceof ByteStringObject && !$this->object instanceof IndefiniteLengthByteStringObject && !$this->object instanceof TextStringObject && !$this->object instanceof IndefiniteLengthTextStringObject) {
+        if (!$this->object instanceof ByteStringObject) {
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        $result = base64_decode($this->object->getNormalizedData($ignoreTags), true);
-        if (false === $result) {
-            throw new InvalidArgumentException('Unable to decode the data');
-        }
-
-        return $result;
+        return Utils::hexToString($this->object->getValue());
     }
 }

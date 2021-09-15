@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace CBOR\Tag;
 
 use CBOR\CBORObject;
+use CBOR\NegativeIntegerObject;
 use CBOR\OtherObject\DoublePrecisionFloatObject;
 use CBOR\OtherObject\HalfPrecisionFloatObject;
 use CBOR\OtherObject\SinglePrecisionFloatObject;
@@ -24,9 +25,17 @@ use InvalidArgumentException;
 
 final class TimestampTag extends Base
 {
+    public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
+    {
+        if (!$object instanceof UnsignedIntegerObject && !$object instanceof NegativeIntegerObject && !$object instanceof HalfPrecisionFloatObject && !$object instanceof SinglePrecisionFloatObject && !$object instanceof DoublePrecisionFloatObject) {
+            throw new InvalidArgumentException('This tag only accepts integer-based or float-based objects.');
+        }
+        parent::__construct($additionalInformation, $data, $object);
+    }
+
     public static function getTagId(): int
     {
-        return 1;
+        return self::TAG_EPOCH_DATETIME;
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
@@ -36,13 +45,12 @@ final class TimestampTag extends Base
 
     public static function create(CBORObject $object): Base
     {
-        if (!$object instanceof UnsignedIntegerObject && !$object instanceof HalfPrecisionFloatObject && !$object instanceof SinglePrecisionFloatObject && !$object instanceof DoublePrecisionFloatObject) {
-            throw new InvalidArgumentException('This tag only accepts a Byte String object.');
-        }
-
         return new self(1, null, $object);
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
@@ -50,6 +58,7 @@ final class TimestampTag extends Base
         }
         switch (true) {
             case $this->object instanceof UnsignedIntegerObject:
+            case $this->object instanceof NegativeIntegerObject:
                 return DateTimeImmutable::createFromFormat('U', (string) $this->object->getNormalizedData($ignoreTags));
             case $this->object instanceof HalfPrecisionFloatObject:
             case $this->object instanceof SinglePrecisionFloatObject:

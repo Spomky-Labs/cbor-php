@@ -35,21 +35,13 @@ final class OtherTest extends BaseTestCase
     public function getDataSet(): array
     {
         return [
-            [
-                'f4',
-            ], [
-                'f5',
-            ], [
-                'f6',
-            ], [
-                'f7',
-            ], [
-                'f0',
-            ], [
-                'f818',
-            ], [
-                'f8ff',
-            ],
+            ['f4'],
+            ['f5'],
+            ['f6'],
+            ['f7'],
+            ['f0'],
+            ['f820'],
+            ['f8ff'],
         ];
     }
 }

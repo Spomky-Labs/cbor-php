@@ -20,13 +20,12 @@ use CBOR\IndefiniteLengthTextStringObject;
 use CBOR\TagObject as Base;
 use CBOR\TextStringObject;
 use CBOR\Utils;
-use InvalidArgumentException;
 
 final class Base64UrlEncodingTag extends Base
 {
     public static function getTagId(): int
     {
-        return 21;
+        return self::TAG_ENCODED_BASE64_URL;
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
@@ -36,13 +35,12 @@ final class Base64UrlEncodingTag extends Base
 
     public static function create(CBORObject $object): Base
     {
-        if (!$object instanceof ByteStringObject && !$object instanceof IndefiniteLengthByteStringObject && !$object instanceof TextStringObject && !$object instanceof IndefiniteLengthTextStringObject) {
-            throw new InvalidArgumentException('This tag only accepts Byte String, Infinite Byte String, Text String or Infinite Text String objects.');
-        }
-
-        return new self(21, null, $object);
+        return new self(self::TAG_ENCODED_BASE64_URL, null, $object);
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {

@@ -44,17 +44,27 @@ class BaseTestCase extends TestCase
                 ->add(OtherObject\SinglePrecisionFloatObject::class)
                 ->add(OtherObject\DoublePrecisionFloatObject::class)
             ;
-
             $tagObjectManager = TagObjectManager::create()
                 ->add(Tag\DatetimeTag::class)
                 ->add(Tag\TimestampTag::class)
-                ->add(Tag\PositiveBigIntegerTag::class)
+
+                ->add(Tag\UnsignedBigIntegerTag::class)
                 ->add(Tag\NegativeBigIntegerTag::class)
+
                 ->add(Tag\DecimalFractionTag::class)
                 ->add(Tag\BigFloatTag::class)
+
                 ->add(Tag\Base64UrlEncodingTag::class)
                 ->add(Tag\Base64EncodingTag::class)
                 ->add(Tag\Base16EncodingTag::class)
+                ->add(Tag\CBOREncodingTag::class)
+
+                ->add(Tag\UriTag::class)
+                ->add(Tag\Base64UrlTag::class)
+                ->add(Tag\Base64Tag::class)
+                ->add(Tag\MimeTag::class)
+
+                ->add(Tag\CBORTag::class)
             ;
 
             $this->decoder = Decoder::create($tagObjectManager, $otherObjectManager);

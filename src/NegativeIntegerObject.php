@@ -63,11 +63,6 @@ class NegativeIntegerObject extends AbstractCBORObject
 
     public function getValue(): string
     {
-        return $this->getNormalizedData();
-    }
-
-    public function getNormalizedData(bool $ignoreTags = false): string
-    {
         if (null === $this->data) {
             return (string) (-1 - $this->additionalInformation);
         }
@@ -76,6 +71,14 @@ class NegativeIntegerObject extends AbstractCBORObject
         $minusOne = BigInteger::of(-1);
 
         return $minusOne->minus($result)->toBase(10);
+    }
+
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
+    public function getNormalizedData(bool $ignoreTags = false): string
+    {
+        return $this->getValue();
     }
 
     private static function createBigInteger(BigInteger $integer): self

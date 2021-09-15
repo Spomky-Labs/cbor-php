@@ -13,9 +13,14 @@ declare(strict_types=1);
 
 namespace CBOR\Test\Type\Tag;
 
+use CBOR\ByteStringObject;
 use CBOR\CBORObject;
+use CBOR\NegativeIntegerObject;
 use CBOR\Tag\DatetimeTag;
+use CBOR\Tag\TimestampTag;
 use CBOR\TextStringObject;
+use CBOR\UnsignedIntegerObject;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,15 +30,74 @@ final class DatetimeTagTest extends TestCase
 {
     /**
      * @test
-     * @dataProvider getValidValue
+     * @dataProvider getDatetimes
      */
-    public function createAndNormalize(CBORObject $object, string $expectedTimestamp): void
+    public function createValidDatetimeTag(CBORObject $object, string $expectedTimestamp): void
     {
         $tag = DatetimeTag::create($object);
         static::assertEquals($expectedTimestamp, $tag->getNormalizedData()->format('U.u'));
     }
 
-    public function getValidValue(): array
+    /**
+     * @test
+     */
+    public function createInvalidDatetimeTag(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('This tag only accepts a Byte String object.');
+
+        DatetimeTag::create(
+            ByteStringObject::create('data')
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function createValidTimestampTagWithUnsignedInteger(): void
+    {
+        $tag = TimestampTag::create(
+            UnsignedIntegerObject::create(0)
+        );
+        static::assertEquals('0.000000', $tag->getNormalizedData()->format('U.u'));
+    }
+
+    /**
+     * @test
+     */
+    public function createValidTimestampTagWithNegativeInteger(): void
+    {
+        $tag = TimestampTag::create(
+            NegativeIntegerObject::create(-10)
+        );
+        static::assertEquals('-10.000000', $tag->getNormalizedData()->format('U.u'));
+    }
+
+    /**
+     * @test
+     */
+    public function createValidTimestampTagWithHalfPrecisionFloat(): void
+    {
+        static::markTestSkipped('To be done');
+    }
+
+    /**
+     * @test
+     */
+    public function createValidTimestampTagWithSinglePrecisionFloat(): void
+    {
+        static::markTestSkipped('To be done');
+    }
+
+    /**
+     * @test
+     */
+    public function createValidTimestampTagWithDoublePrecisionFloat(): void
+    {
+        static::markTestSkipped('To be done');
+    }
+
+    public function getDatetimes(): array
     {
         $buildTestEntry = static function (string $datetime, string $timestamp): array {
             return [

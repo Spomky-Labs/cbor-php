@@ -44,7 +44,7 @@ Each object have at least:
 
 * a static method `create`. This method will correctly instantiate the object.
 * can be converted into a binary string: `$object->__toString();` or `(string) $object`.
-* a method `getNormalizedData($ignoreTags = false)` that converts the object into its normalized representation. Tags can be ignored with the first argument set to `true`.
+* ~~a method `getNormalizedData($ignoreTags = false)` that converts the object into its normalized representation. Tags can be ignored with the first argument set to `true`.~~ (deprecated in v2.1)
 
 ### Positive Integer (Major Type 0)
 
@@ -61,8 +61,6 @@ $object = UnsignedIntegerObject::createFromHex('0AFFEBFF');
 echo bin2hex((string)$object); // 1a0affebff
 ```
 
-**Note: the method `getNormalizedData()` will always return integers as strings. This is needed to avoid lack of 64 bits integer support on PHP**
-
 ### Negative Integer (Major Type 1)
 
 ```php
@@ -74,8 +72,6 @@ $object = NegativeIntegerObject::create(-10);
 $object = NegativeIntegerObject::create(-1000);
 $object = NegativeIntegerObject::create(-10000);
 ```
-
-**Note: the method `getNormalizedData()` will always return integers as strings. This is needed to avoid lack of 64 bits integer support on PHP**
 
 ### Byte String / Indefinite Length Byte String (Major Type 2)
 
@@ -236,13 +232,8 @@ use CBOR\OtherObject\NullObject;
 use CBOR\OtherObject\UndefinedObject;
 
 $object = FalseObject::create();
-$object->getNormalizedData(); // false
-
 $object = NullObject::create();
-$object->getNormalizedData(); // null
-
 $object = UndefinedObject::create();
-$object->getNormalizedData(); // 'undefined'
 ```
 
 ## Example
@@ -334,7 +325,7 @@ $otherObjectManager = OtherObject\OtherObjectManager::create()
 $tagManager = Tag\TagObjectManager::create()
     ->add(Tag\DatetimeTag::class)
     ->add(Tag\TimestampTag::class)
-    ->add(Tag\PositiveBigIntegerTag::class)
+    ->add(Tag\UnsignedBigIntegerTag::class)
     ->add(Tag\NegativeBigIntegerTag::class)
     ->add(Tag\DecimalFractionTag::class)
     ->add(Tag\BigFloatTag::class)

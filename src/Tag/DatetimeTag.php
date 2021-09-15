@@ -14,17 +14,28 @@ declare(strict_types=1);
 namespace CBOR\Tag;
 
 use CBOR\CBORObject;
+use CBOR\IndefiniteLengthTextStringObject;
 use CBOR\TagObject as Base;
+use CBOR\TextStringObject;
 use DateTimeImmutable;
+use InvalidArgumentException;
 
 /**
  * @final
  */
 class DatetimeTag extends Base
 {
+    public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
+    {
+        if (!$object instanceof TextStringObject && !$object instanceof IndefiniteLengthTextStringObject) {
+            throw new InvalidArgumentException('This tag only accepts a Byte String object.');
+        }
+        parent::__construct($additionalInformation, $data, $object);
+    }
+
     public static function getTagId(): int
     {
-        return 0;
+        return self::TAG_STANDARD_DATETIME;
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
@@ -34,9 +45,12 @@ class DatetimeTag extends Base
 
     public static function create(CBORObject $object): Base
     {
-        return new self(0, null, $object);
+        return new self(self::TAG_STANDARD_DATETIME, null, $object);
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {

@@ -94,6 +94,8 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
     }
 
     /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     *
      * @return array<int|string, mixed>
      */
     public function getNormalizedData(bool $ignoreTags = false): array

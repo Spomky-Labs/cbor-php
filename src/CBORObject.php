@@ -34,6 +34,22 @@ interface CBORObject
     public const FUTURE_USE_2 = 0b00011101;
     public const FUTURE_USE_3 = 0b00011110;
 
+    public const TAG_STANDARD_DATETIME = 0;
+    public const TAG_EPOCH_DATETIME = 1;
+    public const TAG_UNSIGNED_BIG_NUM = 2;
+    public const TAG_NEGATIVE_BIG_NUM = 3;
+    public const TAG_DECIMAL_FRACTION = 4;
+    public const TAG_BIG_FLOAT = 5;
+    public const TAG_ENCODED_BASE64_URL = 21;
+    public const TAG_ENCODED_BASE64 = 22;
+    public const TAG_ENCODED_BASE16 = 23;
+    public const TAG_ENCODED_CBOR = 24;
+    public const TAG_URI = 32;
+    public const TAG_BASE64_URL = 33;
+    public const TAG_BASE64 = 34;
+    public const TAG_MIME = 36;
+    public const TAG_CBOR = 55799;
+
     public function __toString(): string;
 
     public function getMajorType(): int;
@@ -41,6 +57,8 @@ interface CBORObject
     public function getAdditionalInformation(): int;
 
     /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     *
      * @return mixed|null
      */
     public function getNormalizedData(bool $ignoreTags = false);

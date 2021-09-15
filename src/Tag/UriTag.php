@@ -13,19 +13,26 @@ declare(strict_types=1);
 
 namespace CBOR\Tag;
 
-use CBOR\ByteStringObject;
 use CBOR\CBORObject;
-use CBOR\IndefiniteLengthByteStringObject;
 use CBOR\IndefiniteLengthTextStringObject;
 use CBOR\TagObject as Base;
 use CBOR\TextStringObject;
 use InvalidArgumentException;
 
-final class Base64EncodingTag extends Base
+final class UriTag extends Base
 {
+    public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
+    {
+        if (!$object instanceof TextStringObject && !$object instanceof IndefiniteLengthTextStringObject) {
+            throw new InvalidArgumentException('This tag only accepts a Text String object.');
+        }
+
+        parent::__construct($additionalInformation, $data, $object);
+    }
+
     public static function getTagId(): int
     {
-        return self::TAG_ENCODED_BASE64;
+        return self::TAG_URI;
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
@@ -35,7 +42,7 @@ final class Base64EncodingTag extends Base
 
     public static function create(CBORObject $object): Base
     {
-        return new self(self::TAG_ENCODED_BASE64, null, $object);
+        return new self(self::TAG_URI, null, $object);
     }
 
     /**
@@ -43,19 +50,6 @@ final class Base64EncodingTag extends Base
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        if ($ignoreTags) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-
-        if (!$this->object instanceof ByteStringObject && !$this->object instanceof IndefiniteLengthByteStringObject && !$this->object instanceof TextStringObject && !$this->object instanceof IndefiniteLengthTextStringObject) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-
-        $result = base64_decode($this->object->getNormalizedData($ignoreTags), true);
-        if (false === $result) {
-            throw new InvalidArgumentException('Unable to decode the data');
-        }
-
-        return $result;
+        return $this->object->getNormalizedData($ignoreTags);
     }
 }

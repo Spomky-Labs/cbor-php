@@ -16,11 +16,11 @@ namespace CBOR\Tag;
 use CBOR\CBORObject;
 use CBOR\TagObject as Base;
 
-final class GenericTag extends Base
+final class CBORTag extends Base
 {
     public static function getTagId(): int
     {
-        return -1;
+        return self::TAG_CBOR;
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
@@ -28,11 +28,16 @@ final class GenericTag extends Base
         return new self($additionalInformation, $data, $object);
     }
 
+    public static function create(CBORObject $object): Base
+    {
+        return new self(self::TAG_CBOR, null, $object);
+    }
+
     /**
      * @deprecated The method will be removed on v3.0. No replacement
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        return $this->object;
+        return $this->object->getNormalizedData($ignoreTags);
     }
 }

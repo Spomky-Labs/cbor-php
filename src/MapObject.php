@@ -98,6 +98,8 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     }
 
     /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     *
      * @return array<int|string, mixed>
      */
     public function getNormalizedData(bool $ignoreTags = false): array

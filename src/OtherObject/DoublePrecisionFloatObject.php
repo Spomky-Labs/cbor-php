@@ -39,6 +39,9 @@ final class DoublePrecisionFloatObject extends Base
         return new self(27, $value);
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         $exp = $this->getExponent();

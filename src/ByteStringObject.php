@@ -62,6 +62,9 @@ final class ByteStringObject extends AbstractCBORObject
         return mb_strlen($this->value, '8bit');
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
     public function getNormalizedData(bool $ignoreTags = false): string
     {
         return $this->value;

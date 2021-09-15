@@ -72,11 +72,6 @@ final class UnsignedIntegerObject extends AbstractCBORObject
 
     public function getValue(): string
     {
-        return $this->getNormalizedData();
-    }
-
-    public function getNormalizedData(bool $ignoreTags = false): string
-    {
         if (null === $this->data) {
             return (string) $this->additionalInformation;
         }
@@ -84,6 +79,14 @@ final class UnsignedIntegerObject extends AbstractCBORObject
         $integer = BigInteger::fromBase(bin2hex($this->data), 16);
 
         return $integer->toBase(10);
+    }
+
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
+    public function getNormalizedData(bool $ignoreTags = false): string
+    {
+        return $this->getValue();
     }
 
     private static function createBigInteger(BigInteger $integer): self

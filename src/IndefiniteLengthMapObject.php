@@ -67,6 +67,9 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
         return $this;
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
     public function count(): int
     {
         return count($this->data);
@@ -81,6 +84,8 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
     }
 
     /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     *
      * @return mixed[]
      */
     public function getNormalizedData(bool $ignoreTags = false): array

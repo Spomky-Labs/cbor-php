@@ -37,6 +37,9 @@ final class NullObject extends Base
         return new self();
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
     }

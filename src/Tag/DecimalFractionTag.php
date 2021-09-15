@@ -38,16 +38,16 @@ final class DecimalFractionTag extends Base
             throw new InvalidArgumentException('The exponent must be a Signed Integer or an Unsigned Integer object.');
         }
         $m = $object->get(1);
-        if (!$m instanceof UnsignedIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof PositiveBigIntegerTag) {
+        if (!$m instanceof UnsignedIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof UnsignedBigIntegerTag) {
             throw new InvalidArgumentException('The mantissa must be a Positive or Negative Signed Integer or an Unsigned Integer object.');
         }
 
-        parent::__construct(4, null, $object);
+        parent::__construct(self::TAG_DECIMAL_FRACTION, null, $object);
     }
 
     public static function getTagId(): int
     {
-        return 4;
+        return self::TAG_DECIMAL_FRACTION;
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
@@ -64,6 +64,9 @@ final class DecimalFractionTag extends Base
         return new self($object);
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
     public function getNormalizedData(bool $ignoreTags = false)
     {
         if ($ignoreTags) {
@@ -79,7 +82,7 @@ final class DecimalFractionTag extends Base
         if (!$e instanceof UnsignedIntegerObject && !$e instanceof NegativeIntegerObject) {
             return $this->object->getNormalizedData($ignoreTags);
         }
-        if (!$m instanceof UnsignedIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof PositiveBigIntegerTag) {
+        if (!$m instanceof UnsignedIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof UnsignedBigIntegerTag) {
             return $this->object->getNormalizedData($ignoreTags);
         }
 

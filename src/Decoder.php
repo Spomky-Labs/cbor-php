@@ -82,13 +82,13 @@ final class Decoder
             case CBORObject::MAJOR_TYPE_BYTE_STRING: //2
                 $length = null === $val ? $ai : Utils::binToInt($val);
 
-                return new ByteStringObject($stream->read($length));
+                return ByteStringObject::create($stream->read($length));
             case CBORObject::MAJOR_TYPE_TEXT_STRING: //3
                 $length = null === $val ? $ai : Utils::binToInt($val);
 
-                return new TextStringObject($stream->read($length));
+                return TextStringObject::create($stream->read($length));
             case CBORObject::MAJOR_TYPE_LIST: //4
-                $object = new ListObject();
+                $object = ListObject::create();
                 $nbItems = null === $val ? $ai : Utils::binToInt($val);
                 for ($i = 0; $i < $nbItems; ++$i) {
                     $object->add($this->process($stream, false));
@@ -96,7 +96,7 @@ final class Decoder
 
                 return $object;
             case CBORObject::MAJOR_TYPE_MAP: //5
-                $object = new MapObject();
+                $object = MapObject::create();
                 $nbItems = null === $val ? $ai : Utils::binToInt($val);
                 for ($i = 0; $i < $nbItems; ++$i) {
                     $object->add($this->process($stream, false), $this->process($stream, false));
@@ -116,7 +116,7 @@ final class Decoder
     {
         switch ($mt) {
             case CBORObject::MAJOR_TYPE_BYTE_STRING: //2
-                $object = new IndefiniteLengthByteStringObject();
+                $object = IndefiniteLengthByteStringObject::create();
                 while (!($it = $this->process($stream, true)) instanceof BreakObject) {
                     if (!$it instanceof ByteStringObject) {
                         throw new RuntimeException('Unable to parse the data. Infinite Byte String object can only get Byte String objects.');
@@ -126,7 +126,7 @@ final class Decoder
 
                 return $object;
             case CBORObject::MAJOR_TYPE_TEXT_STRING: //3
-                $object = new IndefiniteLengthTextStringObject();
+                $object = IndefiniteLengthTextStringObject::create();
                 while (!($it = $this->process($stream, true)) instanceof BreakObject) {
                     if (!$it instanceof TextStringObject) {
                         throw new RuntimeException('Unable to parse the data. Infinite Text String object can only get Text String objects.');
@@ -136,14 +136,14 @@ final class Decoder
 
                 return $object;
             case CBORObject::MAJOR_TYPE_LIST: //4
-                $object = new IndefiniteLengthListObject();
+                $object = IndefiniteLengthListObject::create();
                 while (!($it = $this->process($stream, true)) instanceof BreakObject) {
                     $object->add($it);
                 }
 
                 return $object;
             case CBORObject::MAJOR_TYPE_MAP: //5
-                $object = new IndefiniteLengthMapObject();
+                $object = IndefiniteLengthMapObject::create();
                 while (!($it = $this->process($stream, true)) instanceof BreakObject) {
                     $object->append($it, $this->process($stream, false));
                 }
@@ -154,7 +154,7 @@ final class Decoder
                     throw new InvalidArgumentException('Cannot parse the data. No enclosing indefinite.');
                 }
 
-                return new BreakObject();
+                return BreakObject::create();
             case CBORObject::MAJOR_TYPE_UNSIGNED_INTEGER: //0
             case CBORObject::MAJOR_TYPE_NEGATIVE_INTEGER: //1
             case CBORObject::MAJOR_TYPE_TAG: //6

@@ -87,6 +87,9 @@ class IndefiniteLengthTextStringObject extends AbstractCBORObject
         return $length;
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
     public function getNormalizedData(bool $ignoreTags = false): string
     {
         $result = '';

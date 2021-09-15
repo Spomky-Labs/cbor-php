@@ -62,6 +62,9 @@ final class TextStringObject extends AbstractCBORObject
         return mb_strlen($this->data, 'utf8');
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. No replacement
+     */
     public function getNormalizedData(bool $ignoreTags = false): string
     {
         return $this->data;
