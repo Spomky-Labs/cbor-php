@@ -4,3 +4,36 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
     paths:
         - src
+    ignoreErrors:
+        -
+            message: '#Parameter .* of static method CBOR\\Utils\:\:binToBigInteger\(\) expects string, string\|null given\.#'
+            count: 3
+            path: src/OtherObject/SinglePrecisionFloatObject.php
+        -
+            message: '#Parameter .* of static method CBOR\\Utils\:\:binToBigInteger\(\) expects string, string\|null given\.#'
+            count: 3
+            path: src/OtherObject/DoublePrecisionFloatObject.php
+        -
+            message: '#Parameter .* of static method CBOR\\Utils\:\:binToBigInteger\(\) expects string, string\|null given\.#'
+            count: 3
+            path: src/OtherObject/HalfPrecisionFloatObject.php
+        -
+            message: '#Parameter .* of static method CBOR\\Utils\:\:binToInt\(\) expects string, string\|null given\.#'
+            count: 1
+            path: src/Tag/TagObjectManager.php
+        -
+            message: '#Instanceof between CBOR\\CBORObject and CBOR\\CBORObject will always evaluate to true\.#'
+            count: 1
+            path: src/ListObject.php
+        -
+            message: '#Instanceof between CBOR\\MapItem and CBOR\\MapItem will always evaluate to true\.#'
+            count: 1
+            path: src/MapObject.php
+        -
+            message: '#Casting to string something that.*s already string\.#'
+            count: 1
+            path: src/Tag/TimestampTag.php
+        -
+            message: '#Method CBOR\\OtherObject\\NullObject\:\:getNormalizedData\(\) should return mixed but return statement is missing\.#'
+            count: 1
+            path: src/OtherObject/NullObject.php
