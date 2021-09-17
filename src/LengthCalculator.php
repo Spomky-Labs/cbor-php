@@ -53,11 +53,11 @@ final class LengthCalculator
             case $length < 0xFF:
                 return [24, chr($length)];
             case $length < 0xFFFF:
-                return [25, self::hex2bin(static::fixHexLength(Utils::intToHex($length)))];
+                return [25, self::hex2bin(dechex($length))];
             case $length < 0xFFFFFFFF:
-                return [26, self::hex2bin(static::fixHexLength(Utils::intToHex($length)))];
+                return [26, self::hex2bin(dechex($length))];
             case BigInteger::of($length)->isLessThan(BigInteger::fromBase('FFFFFFFFFFFFFFFF', 16)):
-                return [27, self::hex2bin(static::fixHexLength(Utils::intToHex($length)))];
+                return [27, self::hex2bin(dechex($length))];
             default:
                 return [31, null];
         }
@@ -65,16 +65,12 @@ final class LengthCalculator
 
     private static function hex2bin(string $data): string
     {
+        $data = str_pad($data, (int) (2 ** ceil(log(mb_strlen($data, '8bit'), 2))), '0', STR_PAD_LEFT);
         $result = hex2bin($data);
         if (false === $result) {
             throw new InvalidArgumentException('Unable to convert the data');
         }
 
         return $result;
-    }
-
-    private static function fixHexLength(string $data): string
-    {
-        return str_pad($data, (int) (2 ** ceil(log(mb_strlen($data, '8bit'), 2))), '0', STR_PAD_LEFT);
     }
 }

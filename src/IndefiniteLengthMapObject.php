@@ -16,7 +16,6 @@ namespace CBOR;
 use ArrayIterator;
 use function count;
 use Countable;
-use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
 
@@ -51,11 +50,7 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
             $result .= (string) $object->getKey();
             $result .= (string) $object->getValue();
         }
-        $bin = hex2bin('FF');
-        if (false === $bin) {
-            throw new InvalidArgumentException('Unable to convert the data');
-        }
-        $result .= $bin;
+        $result .= "\xFF";
 
         return $result;
     }

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-use InvalidArgumentException;
-
 /**
  * @final
  */
@@ -44,11 +42,7 @@ class IndefiniteLengthByteStringObject extends AbstractCBORObject
         foreach ($this->chunks as $chunk) {
             $result .= $chunk->__toString();
         }
-        $bin = hex2bin('FF');
-        if (false === $bin) {
-            throw new InvalidArgumentException('Unable to convert the data');
-        }
-        $result .= $bin;
+        $result .= "\xFF";
 
         return $result;
     }

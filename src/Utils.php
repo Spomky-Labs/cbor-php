@@ -47,11 +47,6 @@ abstract class Utils
         return BigInteger::fromBase(bin2hex($value), 16)->toBase(10);
     }
 
-    public static function intToHex(int $value): string
-    {
-        return BigInteger::of($value)->toBase(16);
-    }
-
     public static function decode(string $data): string
     {
         $decoded = base64_decode(strtr($data, '-_', '+/'), true);
