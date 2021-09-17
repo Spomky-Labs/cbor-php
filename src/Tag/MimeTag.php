@@ -15,11 +15,11 @@ namespace CBOR\Tag;
 
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthTextStringObject;
-use CBOR\TagObject as Base;
+use CBOR\Tag;
 use CBOR\TextStringObject;
 use InvalidArgumentException;
 
-final class MimeTag extends Base
+final class MimeTag extends Tag
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -35,12 +35,12 @@ final class MimeTag extends Base
         return self::TAG_MIME;
     }
 
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    public static function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Tag
     {
         return new self(self::TAG_MIME, null, $object);
     }

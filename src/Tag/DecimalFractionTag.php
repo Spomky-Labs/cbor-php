@@ -16,14 +16,14 @@ namespace CBOR\Tag;
 use CBOR\CBORObject;
 use CBOR\ListObject;
 use CBOR\NegativeIntegerObject;
-use CBOR\TagObject as Base;
+use CBOR\Tag;
 use CBOR\UnsignedIntegerObject;
 use function count;
 use function extension_loaded;
 use InvalidArgumentException;
 use RuntimeException;
 
-final class DecimalFractionTag extends Base
+final class DecimalFractionTag extends Tag
 {
     public function __construct(CBORObject $object)
     {
@@ -50,12 +50,12 @@ final class DecimalFractionTag extends Base
         return self::TAG_DECIMAL_FRACTION;
     }
 
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
     {
         return new self($object);
     }
 
-    public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Base
+    public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Tag
     {
         $object = ListObject::create()
             ->add($e)

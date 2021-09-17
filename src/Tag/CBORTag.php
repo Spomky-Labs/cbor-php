@@ -14,21 +14,21 @@ declare(strict_types=1);
 namespace CBOR\Tag;
 
 use CBOR\CBORObject;
-use CBOR\TagObject as Base;
+use CBOR\Tag;
 
-final class CBORTag extends Base
+final class CBORTag extends Tag
 {
     public static function getTagId(): int
     {
         return self::TAG_CBOR;
     }
 
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    public static function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Tag
     {
         return new self(self::TAG_CBOR, null, $object);
     }

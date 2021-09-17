@@ -16,14 +16,14 @@ namespace CBOR\Tag;
 use CBOR\CBORObject;
 use CBOR\ListObject;
 use CBOR\NegativeIntegerObject;
-use CBOR\TagObject as Base;
+use CBOR\Tag;
 use CBOR\UnsignedIntegerObject;
 use function count;
 use function extension_loaded;
 use InvalidArgumentException;
 use RuntimeException;
 
-final class BigFloatTag extends Base
+final class BigFloatTag extends Tag
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -51,17 +51,17 @@ final class BigFloatTag extends Base
         return self::TAG_BIG_FLOAT;
     }
 
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    public static function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Tag
     {
         return new self(self::TAG_BIG_FLOAT, null, $object);
     }
 
-    public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Base
+    public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Tag
     {
         $object = ListObject::create()
             ->add($e)

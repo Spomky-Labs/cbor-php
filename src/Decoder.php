@@ -13,32 +13,29 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-use CBOR\OtherObject\BreakObject;
-use CBOR\OtherObject\OtherObjectManager;
-use CBOR\Tag\TagObjectManager;
 use InvalidArgumentException;
 use function ord;
 use RuntimeException;
 
-final class Decoder
+final class Decoder implements DecoderInterface
 {
     /**
-     * @var TagObjectManager
+     * @var Tag\TagManagerInterface
      */
     private $tagObjectManager;
 
     /**
-     * @var OtherObjectManager
+     * @var OtherObject\OtherObjectManagerInterface
      */
     private $otherTypeManager;
 
-    public function __construct(TagObjectManager $tagObjectManager, OtherObjectManager $otherTypeManager)
+    public function __construct(?Tag\TagManagerInterface $tagObjectManager = null, ?OtherObject\OtherObjectManagerInterface $otherTypeManager = null)
     {
-        $this->tagObjectManager = $tagObjectManager;
-        $this->otherTypeManager = $otherTypeManager;
+        $this->tagObjectManager = $tagObjectManager ?? $this->generateTagManager();
+        $this->otherTypeManager = $otherTypeManager ?? $this->generateOtherObjectManager();
     }
 
-    public static function create(TagObjectManager $tagObjectManager, OtherObjectManager $otherTypeManager): self
+    public static function create(?Tag\TagManagerInterface $tagObjectManager = null, ?OtherObject\OtherObjectManagerInterface $otherTypeManager = null): self
     {
         return new self($tagObjectManager, $otherTypeManager);
     }
@@ -117,7 +114,7 @@ final class Decoder
         switch ($mt) {
             case CBORObject::MAJOR_TYPE_BYTE_STRING: //2
                 $object = IndefiniteLengthByteStringObject::create();
-                while (!($it = $this->process($stream, true)) instanceof BreakObject) {
+                while (!($it = $this->process($stream, true)) instanceof OtherObject\BreakObject) {
                     if (!$it instanceof ByteStringObject) {
                         throw new RuntimeException('Unable to parse the data. Infinite Byte String object can only get Byte String objects.');
                     }
@@ -127,7 +124,7 @@ final class Decoder
                 return $object;
             case CBORObject::MAJOR_TYPE_TEXT_STRING: //3
                 $object = IndefiniteLengthTextStringObject::create();
-                while (!($it = $this->process($stream, true)) instanceof BreakObject) {
+                while (!($it = $this->process($stream, true)) instanceof OtherObject\BreakObject) {
                     if (!$it instanceof TextStringObject) {
                         throw new RuntimeException('Unable to parse the data. Infinite Text String object can only get Text String objects.');
                     }
@@ -137,14 +134,14 @@ final class Decoder
                 return $object;
             case CBORObject::MAJOR_TYPE_LIST: //4
                 $object = IndefiniteLengthListObject::create();
-                while (!($it = $this->process($stream, true)) instanceof BreakObject) {
+                while (!($it = $this->process($stream, true)) instanceof OtherObject\BreakObject) {
                     $object->add($it);
                 }
 
                 return $object;
             case CBORObject::MAJOR_TYPE_MAP: //5
                 $object = IndefiniteLengthMapObject::create();
-                while (!($it = $this->process($stream, true)) instanceof BreakObject) {
+                while (!($it = $this->process($stream, true)) instanceof OtherObject\BreakObject) {
                     $object->append($it, $this->process($stream, false));
                 }
 
@@ -154,12 +151,53 @@ final class Decoder
                     throw new InvalidArgumentException('Cannot parse the data. No enclosing indefinite.');
                 }
 
-                return BreakObject::create();
+                return OtherObject\BreakObject::create();
             case CBORObject::MAJOR_TYPE_UNSIGNED_INTEGER: //0
             case CBORObject::MAJOR_TYPE_NEGATIVE_INTEGER: //1
             case CBORObject::MAJOR_TYPE_TAG: //6
             default:
                 throw new InvalidArgumentException(sprintf('Cannot parse the data. Found infinite length for Major Type "%s" (%d).', str_pad(decbin($mt), 5, '0', STR_PAD_LEFT), $mt));
         }
+    }
+
+    private function generateTagManager(): Tag\TagManagerInterface
+    {
+        return Tag\TagManager::create()
+            ->add(Tag\DatetimeTag::class)
+            ->add(Tag\TimestampTag::class)
+
+            ->add(Tag\UnsignedBigIntegerTag::class)
+            ->add(Tag\NegativeBigIntegerTag::class)
+
+            ->add(Tag\DecimalFractionTag::class)
+            ->add(Tag\BigFloatTag::class)
+
+            ->add(Tag\Base64UrlEncodingTag::class)
+            ->add(Tag\Base64EncodingTag::class)
+            ->add(Tag\Base16EncodingTag::class)
+            ->add(Tag\CBOREncodingTag::class)
+
+            ->add(Tag\UriTag::class)
+            ->add(Tag\Base64UrlTag::class)
+            ->add(Tag\Base64Tag::class)
+            ->add(Tag\MimeTag::class)
+
+            ->add(Tag\CBORTag::class)
+        ;
+    }
+
+    private function generateOtherObjectManager(): OtherObject\OtherObjectManagerInterface
+    {
+        return OtherObject\OtherObjectManager::create()
+            ->add(OtherObject\BreakObject::class)
+            ->add(OtherObject\SimpleObject::class)
+            ->add(OtherObject\FalseObject::class)
+            ->add(OtherObject\TrueObject::class)
+            ->add(OtherObject\NullObject::class)
+            ->add(OtherObject\UndefinedObject::class)
+            ->add(OtherObject\HalfPrecisionFloatObject::class)
+            ->add(OtherObject\SinglePrecisionFloatObject::class)
+            ->add(OtherObject\DoublePrecisionFloatObject::class)
+            ;
     }
 }

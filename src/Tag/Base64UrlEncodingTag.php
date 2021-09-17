@@ -17,23 +17,23 @@ use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthByteStringObject;
 use CBOR\IndefiniteLengthTextStringObject;
-use CBOR\TagObject as Base;
+use CBOR\Tag;
 use CBOR\TextStringObject;
 use CBOR\Utils;
 
-final class Base64UrlEncodingTag extends Base
+final class Base64UrlEncodingTag extends Tag
 {
     public static function getTagId(): int
     {
         return self::TAG_ENCODED_BASE64_URL;
     }
 
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    public static function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Tag
     {
         return new self(self::TAG_ENCODED_BASE64_URL, null, $object);
     }

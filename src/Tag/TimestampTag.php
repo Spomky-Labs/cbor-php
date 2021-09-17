@@ -18,12 +18,12 @@ use CBOR\NegativeIntegerObject;
 use CBOR\OtherObject\DoublePrecisionFloatObject;
 use CBOR\OtherObject\HalfPrecisionFloatObject;
 use CBOR\OtherObject\SinglePrecisionFloatObject;
-use CBOR\TagObject as Base;
+use CBOR\Tag;
 use CBOR\UnsignedIntegerObject;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
-final class TimestampTag extends Base
+final class TimestampTag extends Tag
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -38,12 +38,12 @@ final class TimestampTag extends Base
         return self::TAG_EPOCH_DATETIME;
     }
 
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    public static function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Tag
     {
         return new self(1, null, $object);
     }

@@ -16,14 +16,14 @@ namespace CBOR\Tag;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthByteStringObject;
-use CBOR\TagObject as Base;
+use CBOR\Tag;
 use CBOR\Utils;
 use InvalidArgumentException;
 
 /**
  * @final
  */
-class UnsignedBigIntegerTag extends Base
+class UnsignedBigIntegerTag extends Tag
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -39,12 +39,12 @@ class UnsignedBigIntegerTag extends Base
         return self::TAG_UNSIGNED_BIG_NUM;
     }
 
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    public static function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Tag
     {
         return new self(self::TAG_UNSIGNED_BIG_NUM, null, $object);
     }

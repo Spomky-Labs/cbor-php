@@ -17,7 +17,7 @@ use function array_key_exists;
 use CBOR\OtherObject;
 use InvalidArgumentException;
 
-class OtherObjectManager
+class OtherObjectManager implements OtherObjectManagerInterface
 {
     /**
      * @var string[]

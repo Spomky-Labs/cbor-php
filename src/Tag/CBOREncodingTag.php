@@ -16,10 +16,10 @@ namespace CBOR\Tag;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthByteStringObject;
-use CBOR\TagObject as Base;
+use CBOR\Tag;
 use InvalidArgumentException;
 
-final class CBOREncodingTag extends Base
+final class CBOREncodingTag extends Tag
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -35,12 +35,12 @@ final class CBOREncodingTag extends Base
         return self::TAG_ENCODED_CBOR;
     }
 
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    public static function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Tag
     {
         return new self(self::TAG_ENCODED_CBOR, null, $object);
     }

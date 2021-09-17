@@ -15,7 +15,7 @@ namespace CBOR\Tag;
 
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthTextStringObject;
-use CBOR\TagObject as Base;
+use CBOR\Tag;
 use CBOR\TextStringObject;
 use DateTimeImmutable;
 use InvalidArgumentException;
@@ -23,7 +23,7 @@ use InvalidArgumentException;
 /**
  * @final
  */
-class DatetimeTag extends Base
+class DatetimeTag extends Tag
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -38,12 +38,12 @@ class DatetimeTag extends Base
         return self::TAG_STANDARD_DATETIME;
     }
 
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    public static function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Tag
     {
         return new self(self::TAG_STANDARD_DATETIME, null, $object);
     }

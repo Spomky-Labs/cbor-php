@@ -11,11 +11,11 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace CBOR;
+namespace CBOR\OtherObject;
 
-/**
- * @deprecated Will be removed in v3.0. Please use Tag instead
- */
-abstract class TagObject extends Tag
+use CBOR\OtherObject;
+
+interface OtherObjectManagerInterface
 {
+    public function createObjectForValue(int $value, ?string $data): OtherObject;
 }

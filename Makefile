@@ -2,7 +2,7 @@
 it: coding-standards tests static-analyse performance-tests mutation-tests
 
 .PHONY: code-coverage
-code-coverage: vendor ## Show test coverage rates
+code-coverage: vendor ## Show test coverage rates (console)
 	vendor/bin/phpunit --coverage-text
 
 .PHONY: code-coverage-html
@@ -11,15 +11,11 @@ code-coverage-html: vendor ## Show test coverage rates (HTML)
 
 .PHONY: fix-coding-standards
 fix-coding-standards: vendor ## Fix all files using defined PHP-CS-FIXER rules
-	vendor/bin/php-cs-fixer fix --diff --verbose
+	vendor/bin/php-cs-fixer fix
 
 .PHONY: coding-standards
 coding-standards: vendor ## Check all files using defined PHP-CS-FIXER rules
 	vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --using-cache=no
-
-.PHONY: mutation-tests
-mutation-tests: vendor ## Run mutation tests with minimum MSI and covered MSI enabled
-	vendor/bin/infection --logger-github --git-diff-filter=AM -s --threads=$(nproc) --min-msi=50 --min-covered-msi=59
 
 .PHONY: tests
 tests: vendor ## Run all tests
@@ -30,20 +26,16 @@ vendor: composer.json composer.lock
 	composer install
 
 .PHONY: tu
-tu: vendor ## Run all unit tests
+tu: vendor ## Run only unit tests
 	vendor/bin/phpunit --color --group Unit
 
 .PHONY: tf
-tf: vendor ## Run all functional tests
+tf: vendor ## Run only functional tests
 	vendor/bin/phpunit --color --group Functional
 
 .PHONY: static-analyse
 static-analyse: vendor ## Run static analyse
 	vendor/bin/phpstan analyse
-
-.PHONY: performance-tests
-performance-tests: vendor ## Run performance test suite
-	vendor/bin/phpbench run -l dots --report aggregate
 
 .PHONY: rector
 rector: vendor ## Check all files using Rector

@@ -17,7 +17,7 @@ use CBOR\Decoder;
 use CBOR\OtherObject;
 use CBOR\OtherObject\OtherObjectManager;
 use CBOR\Tag;
-use CBOR\Tag\TagObjectManager;
+use CBOR\Tag\TagManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,7 +44,7 @@ class BaseTestCase extends TestCase
                 ->add(OtherObject\SinglePrecisionFloatObject::class)
                 ->add(OtherObject\DoublePrecisionFloatObject::class)
             ;
-            $tagObjectManager = TagObjectManager::create()
+            $tagObjectManager = TagManager::create()
                 ->add(Tag\DatetimeTag::class)
                 ->add(Tag\TimestampTag::class)
 

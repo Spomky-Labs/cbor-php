@@ -17,10 +17,10 @@ use Brick\Math\BigInteger;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthByteStringObject;
-use CBOR\TagObject as Base;
+use CBOR\Tag;
 use InvalidArgumentException;
 
-final class NegativeBigIntegerTag extends Base
+final class NegativeBigIntegerTag extends Tag
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -36,12 +36,12 @@ final class NegativeBigIntegerTag extends Base
         return self::TAG_NEGATIVE_BIG_NUM;
     }
 
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Base
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    public static function create(CBORObject $object): Base
+    public static function create(CBORObject $object): Tag
     {
         return new self(self::TAG_NEGATIVE_BIG_NUM, null, $object);
     }

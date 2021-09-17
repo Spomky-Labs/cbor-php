@@ -322,7 +322,7 @@ $otherObjectManager = OtherObject\OtherObjectManager::create()
     ->add(OtherObject\DoublePrecisionFloatObject::class)
 ;
 
-$tagManager = Tag\TagObjectManager::create()
+$tagManager = Tag\TagManager::create()
     ->add(Tag\DatetimeTag::class)
     ->add(Tag\TimestampTag::class)
     ->add(Tag\UnsignedBigIntegerTag::class)
