@@ -42,7 +42,9 @@ final class MimeTag extends Tag
 
     public static function create(CBORObject $object): Tag
     {
-        return new self(self::TAG_MIME, null, $object);
+        [$ai, $data] = self::determineComponents(self::TAG_MIME);
+
+        return new self($ai, $data, $object);
     }
 
     /**

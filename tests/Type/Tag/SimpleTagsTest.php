@@ -39,7 +39,8 @@ final class SimpleTagsTest extends TestCase
 
         static::assertInstanceOf(TextStringObject::class, $tag->getValue());
         static::assertEquals(CBORObject::MAJOR_TYPE_TAG, $tag->getMajorType());
-        static::assertEquals(CBORObject::TAG_URI, $tag->getAdditionalInformation());
+        static::assertEquals(CBORObject::LENGTH_1_BYTE, $tag->getAdditionalInformation());
+        static::assertEquals(hex2bin(dechex(CBORObject::TAG_URI)), $tag->getData());
     }
 
     /**
@@ -65,7 +66,8 @@ final class SimpleTagsTest extends TestCase
 
         static::assertInstanceOf(TextStringObject::class, $tag->getValue());
         static::assertEquals(CBORObject::MAJOR_TYPE_TAG, $tag->getMajorType());
-        static::assertEquals(CBORObject::TAG_BASE64, $tag->getAdditionalInformation());
+        static::assertEquals(CBORObject::LENGTH_1_BYTE, $tag->getAdditionalInformation());
+        static::assertEquals(hex2bin(dechex(CBORObject::TAG_BASE64)), $tag->getData());
     }
 
     /**
@@ -91,7 +93,8 @@ final class SimpleTagsTest extends TestCase
 
         static::assertInstanceOf(TextStringObject::class, $tag->getValue());
         static::assertEquals(CBORObject::MAJOR_TYPE_TAG, $tag->getMajorType());
-        static::assertEquals(CBORObject::TAG_BASE64_URL, $tag->getAdditionalInformation());
+        static::assertEquals(CBORObject::LENGTH_1_BYTE, $tag->getAdditionalInformation());
+        static::assertEquals(hex2bin(dechex(CBORObject::TAG_BASE64_URL)), $tag->getData());
     }
 
     /**
@@ -117,6 +120,7 @@ final class SimpleTagsTest extends TestCase
 
         static::assertInstanceOf(ByteStringObject::class, $tag->getValue());
         static::assertEquals(CBORObject::MAJOR_TYPE_TAG, $tag->getMajorType());
-        static::assertEquals(CBORObject::TAG_CBOR, $tag->getAdditionalInformation());
+        static::assertEquals(CBORObject::LENGTH_2_BYTES, $tag->getAdditionalInformation());
+        static::assertEquals(hex2bin(dechex(CBORObject::TAG_CBOR)), $tag->getData());
     }
 }

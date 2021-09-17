@@ -45,7 +45,9 @@ class DatetimeTag extends Tag
 
     public static function create(CBORObject $object): Tag
     {
-        return new self(self::TAG_STANDARD_DATETIME, null, $object);
+        [$ai, $data] = self::determineComponents(self::TAG_STANDARD_DATETIME);
+
+        return new self($ai, $data, $object);
     }
 
     /**

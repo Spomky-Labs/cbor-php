@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use InvalidArgumentException;
+
 abstract class Tag extends AbstractCBORObject
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_TAG;
@@ -45,6 +47,11 @@ abstract class Tag extends AbstractCBORObject
         return $result;
     }
 
+    public function getData(): ?string
+    {
+        return $this->data;
+    }
+
     abstract public static function getTagId(): int;
 
     abstract public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): self;
@@ -52,5 +59,36 @@ abstract class Tag extends AbstractCBORObject
     public function getValue(): CBORObject
     {
         return $this->object;
+    }
+
+    /**
+     * @return array{int, null|string}
+     */
+    protected static function determineComponents(int $tag): array
+    {
+        switch (true) {
+            case $tag < 0:
+                throw new InvalidArgumentException('The value must be a positive integer.');
+            case $tag < 24:
+                return [$tag, null];
+            case $tag < 0xFF:
+                return [24, self::hex2bin(dechex($tag))];
+            case $tag < 0xFFFF:
+                return [25, self::hex2bin(dechex($tag))];
+            case $tag < 0xFFFFFFFF:
+                return [26, self::hex2bin(dechex($tag))];
+            default:
+                throw new InvalidArgumentException('Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.');
+        }
+    }
+
+    private static function hex2bin(string $data): string
+    {
+        $result = hex2bin($data);
+        if (false === $result) {
+            throw new InvalidArgumentException('Unable to convert the data');
+        }
+
+        return $result;
     }
 }

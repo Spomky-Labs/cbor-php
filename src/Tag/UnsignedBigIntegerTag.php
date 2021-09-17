@@ -46,7 +46,9 @@ class UnsignedBigIntegerTag extends Tag
 
     public static function create(CBORObject $object): Tag
     {
-        return new self(self::TAG_UNSIGNED_BIG_NUM, null, $object);
+        [$ai, $data] = self::determineComponents(self::TAG_UNSIGNED_BIG_NUM);
+
+        return new self($ai, $data, $object);
     }
 
     /**

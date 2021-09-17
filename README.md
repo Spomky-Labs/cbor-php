@@ -278,31 +278,21 @@ $object = MapObject::create()
 ```
 
 The encoded result will be `0xa37428efbda1e29795e280bfe29795efbda129e29aa183f5f4c482211904d21907d0f66464617465c11a5e0be100`.
-The normalized result is:
-
-```php
-array:3 [
-  "(｡◕‿◕｡)⚡" => array:3 [
-    0 => true
-    1 => false
-    2 => "12.34"
-  ]
-  2000 => null
-  "date" => DateTimeImmutable @1577836800 {
-    date: 2020-01-01 00:00:00.0 +00:00
-  }
-]
-
-```
-
 
 ## Object Loading
 
 If you want to load a CBOR encoded string, you just have to instantiate a `CBOR\Decoder` class.
-This class needs the following arguments:
+This class does not need any argument.
 
-* A `Tag` manager: this manager will be able to identify the tags associated to the data and create it accordingly if the tag ID is supported.
-* An `Other Object` manager: this manager will be able to identify all other objects and create it accordingly if supported.
+```php
+<?php
+
+use CBOR\Decoder;
+
+$decoder = Decoder::create();
+```
+
+If needed, you can define custom sets of Tag and Other Object support managers.
 
 ```php
 <?php

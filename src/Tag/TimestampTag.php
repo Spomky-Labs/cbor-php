@@ -45,7 +45,9 @@ final class TimestampTag extends Tag
 
     public static function create(CBORObject $object): Tag
     {
-        return new self(1, null, $object);
+        [$ai, $data] = self::determineComponents(self::TAG_EPOCH_DATETIME);
+
+        return new self($ai, $data, $object);
     }
 
     /**

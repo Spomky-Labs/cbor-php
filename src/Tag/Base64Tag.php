@@ -42,7 +42,9 @@ final class Base64Tag extends Tag
 
     public static function create(CBORObject $object): Tag
     {
-        return new self(self::TAG_BASE64, null, $object);
+        [$ai, $data] = self::determineComponents(self::TAG_BASE64);
+
+        return new self($ai, $data, $object);
     }
 
     /**

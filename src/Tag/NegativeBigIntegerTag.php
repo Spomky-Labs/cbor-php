@@ -43,7 +43,9 @@ final class NegativeBigIntegerTag extends Tag
 
     public static function create(CBORObject $object): Tag
     {
-        return new self(self::TAG_NEGATIVE_BIG_NUM, null, $object);
+        [$ai, $data] = self::determineComponents(self::TAG_NEGATIVE_BIG_NUM);
+
+        return new self($ai, $data, $object);
     }
 
     /**

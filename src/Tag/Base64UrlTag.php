@@ -42,7 +42,9 @@ final class Base64UrlTag extends Tag
 
     public static function create(CBORObject $object): Tag
     {
-        return new self(self::TAG_BASE64_URL, null, $object);
+        [$ai, $data] = self::determineComponents(self::TAG_BASE64_URL);
+
+        return new self($ai, $data, $object);
     }
 
     /**

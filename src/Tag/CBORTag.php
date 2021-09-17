@@ -30,7 +30,9 @@ final class CBORTag extends Tag
 
     public static function create(CBORObject $object): Tag
     {
-        return new self(self::TAG_CBOR, null, $object);
+        [$ai, $data] = self::determineComponents(self::TAG_CBOR);
+
+        return new self($ai, $data, $object);
     }
 
     /**

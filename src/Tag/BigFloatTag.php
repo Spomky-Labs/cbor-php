@@ -58,7 +58,9 @@ final class BigFloatTag extends Tag
 
     public static function create(CBORObject $object): Tag
     {
-        return new self(self::TAG_BIG_FLOAT, null, $object);
+        [$ai, $data] = self::determineComponents(self::TAG_BIG_FLOAT);
+
+        return new self($ai, $data, $object);
     }
 
     public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Tag

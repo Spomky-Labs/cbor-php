@@ -42,7 +42,9 @@ final class UriTag extends Tag
 
     public static function create(CBORObject $object): Tag
     {
-        return new self(self::TAG_URI, null, $object);
+        [$ai, $data] = self::determineComponents(self::TAG_URI);
+
+        return new self($ai, $data, $object);
     }
 
     /**

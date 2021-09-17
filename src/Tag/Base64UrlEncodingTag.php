@@ -35,7 +35,9 @@ final class Base64UrlEncodingTag extends Tag
 
     public static function create(CBORObject $object): Tag
     {
-        return new self(self::TAG_ENCODED_BASE64_URL, null, $object);
+        [$ai, $data] = self::determineComponents(self::TAG_ENCODED_BASE64_URL);
+
+        return new self($ai, $data, $object);
     }
 
     /**

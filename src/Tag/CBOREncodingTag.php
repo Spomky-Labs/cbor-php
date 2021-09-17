@@ -42,7 +42,9 @@ final class CBOREncodingTag extends Tag
 
     public static function create(CBORObject $object): Tag
     {
-        return new self(self::TAG_ENCODED_CBOR, null, $object);
+        [$ai, $data] = self::determineComponents(self::TAG_ENCODED_CBOR);
+
+        return new self($ai, $data, $object);
     }
 
     /**

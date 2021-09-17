@@ -25,7 +25,7 @@ use RuntimeException;
 
 final class DecimalFractionTag extends Tag
 {
-    public function __construct(CBORObject $object)
+    public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
         if (!extension_loaded('bcmath')) {
             throw new RuntimeException('The extension "bcmath" is required to use this tag');
@@ -42,7 +42,14 @@ final class DecimalFractionTag extends Tag
             throw new InvalidArgumentException('The mantissa must be a Positive or Negative Signed Integer or an Unsigned Integer object.');
         }
 
-        parent::__construct(self::TAG_DECIMAL_FRACTION, null, $object);
+        parent::__construct($additionalInformation, $data, $object);
+    }
+
+    public static function create(CBORObject $object): self
+    {
+        [$ai, $data] = self::determineComponents(self::TAG_DECIMAL_FRACTION);
+
+        return new self($ai, $data, $object);
     }
 
     public static function getTagId(): int
@@ -52,7 +59,7 @@ final class DecimalFractionTag extends Tag
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
     {
-        return new self($object);
+        return new self($additionalInformation, $data, $object);
     }
 
     public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Tag
@@ -62,7 +69,7 @@ final class DecimalFractionTag extends Tag
             ->add($m)
         ;
 
-        return new self($object);
+        return self::create($object);
     }
 
     /**
