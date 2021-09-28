@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace CBOR\Tag;
 
 use CBOR\CBORObject;
+use CBOR\Normalizable;
 use CBOR\Tag;
 
-final class CBORTag extends Tag
+final class CBORTag extends Tag implements Normalizable
 {
     public static function getTagId(): int
     {
@@ -36,7 +37,15 @@ final class CBORTag extends Tag
     }
 
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @return mixed|CBORObject|null
+     */
+    public function normalize()
+    {
+        return $this->object instanceof Normalizable ? $this->object->normalize() : $this->object;
+    }
+
+    /**
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {

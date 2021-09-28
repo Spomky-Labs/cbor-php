@@ -16,6 +16,7 @@ namespace CBOR\Tag;
 use CBOR\CBORObject;
 use CBOR\ListObject;
 use CBOR\NegativeIntegerObject;
+use CBOR\Normalizable;
 use CBOR\Tag;
 use CBOR\UnsignedIntegerObject;
 use function count;
@@ -23,7 +24,7 @@ use function extension_loaded;
 use InvalidArgumentException;
 use RuntimeException;
 
-final class DecimalFractionTag extends Tag
+final class DecimalFractionTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -72,8 +73,25 @@ final class DecimalFractionTag extends Tag
         return self::create($object);
     }
 
+    public function normalize()
+    {
+        $e = $this->object->get(0);
+        $m = $this->object->get(1);
+
+        return rtrim(
+            bcmul(
+                $m->normalize(),
+                bcpow(
+                    '10',
+                    $e->normalize(),
+                    100),
+                100),
+            '0'
+        );
+    }
+
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
@@ -94,15 +112,6 @@ final class DecimalFractionTag extends Tag
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        return rtrim(
-            bcmul(
-                $m->getNormalizedData($ignoreTags),
-                bcpow(
-                    '10',
-                    $e->getNormalizedData($ignoreTags),
-                    100),
-                100),
-            '0'
-        );
+        return $this->normalize();
     }
 }

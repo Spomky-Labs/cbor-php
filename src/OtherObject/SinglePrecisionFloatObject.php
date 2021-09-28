@@ -43,20 +43,28 @@ final class SinglePrecisionFloatObject extends Base
     }
 
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        $exp = $this->getExponent();
-        $mant = $this->getMantissa();
+        return $this->normalize();
+    }
+
+    /**
+     * @return float|int
+     */
+    public function normalize()
+    {
+        $exponent = $this->getExponent();
+        $mantissa = $this->getMantissa();
         $sign = $this->getSign();
 
-        if (0 === $exp) {
-            $val = $mant * 2 ** (-(126 + 23));
-        } elseif (0b11111111 !== $exp) {
-            $val = ($mant + (1 << 23)) * 2 ** ($exp - (127 + 23));
+        if (0 === $exponent) {
+            $val = $mantissa * 2 ** (-(126 + 23));
+        } elseif (0b11111111 !== $exponent) {
+            $val = ($mantissa + (1 << 23)) * 2 ** ($exponent - (127 + 23));
         } else {
-            $val = 0 === $mant ? INF : NAN;
+            $val = 0 === $mantissa ? INF : NAN;
         }
 
         return $sign * $val;
@@ -82,7 +90,7 @@ final class SinglePrecisionFloatObject extends Base
     {
         $data = $this->data;
         Utils::assertString($data, 'Invalid data');
-        $sign = Utils::binToBigInteger($data)->shiftedRight(32);
+        $sign = Utils::binToBigInteger($data)->shiftedRight(31);
 
         return $sign->isEqualTo(BigInteger::one()) ? -1 : 1;
     }

@@ -15,11 +15,12 @@ namespace CBOR\Tag;
 
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthTextStringObject;
+use CBOR\Normalizable;
 use CBOR\Tag;
 use CBOR\TextStringObject;
 use InvalidArgumentException;
 
-final class UriTag extends Tag
+final class UriTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -47,11 +48,16 @@ final class UriTag extends Tag
         return new self($ai, $data, $object);
     }
 
+    public function normalize(): string
+    {
+        return $this->object->normalize();
+    }
+
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        return $this->object->getNormalizedData($ignoreTags);
+        return $this->normalize();
     }
 }

@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace CBOR\OtherObject;
 
+use CBOR\Normalizable;
 use CBOR\OtherObject as Base;
 
-final class FalseObject extends Base
+final class FalseObject extends Base implements Normalizable
 {
     public function __construct()
     {
@@ -37,11 +38,16 @@ final class FalseObject extends Base
         return new self();
     }
 
+    public function normalize(): bool
+    {
+        return false;
+    }
+
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false): bool
     {
-        return false;
+        return $this->normalize();
     }
 }

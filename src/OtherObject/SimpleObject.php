@@ -13,37 +13,56 @@ declare(strict_types=1);
 
 namespace CBOR\OtherObject;
 
+use CBOR\Normalizable;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
 use function chr;
 use InvalidArgumentException;
+use function ord;
 
-final class SimpleObject extends Base
+final class SimpleObject extends Base implements Normalizable
 {
     public static function supportedAdditionalInformation(): array
     {
-        return range(0, 19);
+        return array_merge(range(0, 19), [24]);
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {
-        if (null !== $data && $additionalInformation < 32) {
-            throw new InvalidArgumentException('Invalid simple value. Content data should not be present.');
+        if (24 === $additionalInformation) {
+            if (null === $data) {
+                throw new InvalidArgumentException('Invalid simple value. Content data is missing.');
+            }
+            if (1 !== mb_strlen($data, '8bit')) {
+                throw new InvalidArgumentException('Invalid simple value. Content data is too long.');
+            }
+            if (ord($data) < 32) {
+                throw new InvalidArgumentException('Invalid simple value. Content data must be between 32 and 255.');
+            }
+        } elseif ($additionalInformation < 20) {
+            if (null !== $data) {
+                throw new InvalidArgumentException('Invalid simple value. Content data should not be present.');
+            }
         }
 
         return new self($additionalInformation, $data);
     }
 
-    /**
-     * @deprecated The method will be removed on v3.0. No replacement
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
+    public function normalize(): int
     {
         if (null === $this->data) {
             return $this->getAdditionalInformation();
         }
 
         return Utils::binToInt($this->data);
+    }
+
+    /**
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
+     */
+    public function getNormalizedData(bool $ignoreTags = false): int
+    {
+        return $this->normalize();
     }
 
     /**

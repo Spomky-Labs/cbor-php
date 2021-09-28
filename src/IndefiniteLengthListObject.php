@@ -23,7 +23,7 @@ use IteratorAggregate;
  * @phpstan-implements IteratorAggregate<int, CBORObject>
  * @final
  */
-class IndefiniteLengthListObject extends AbstractCBORObject implements Countable, IteratorAggregate
+class IndefiniteLengthListObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_LIST;
     private const ADDITIONAL_INFORMATION = self::LENGTH_INDEFINITE;
@@ -55,15 +55,23 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
     }
 
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @return mixed[]
+     */
+    public function normalize(): array
+    {
+        return array_map(static function (CBORObject $object) {
+            return $object instanceof Normalizable ? $object->normalize() : $object;
+        }, $this->data);
+    }
+
+    /**
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      *
      * @return mixed[]
      */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
-        return array_map(static function (CBORObject $item) use ($ignoreTags) {
-            return $item->getNormalizedData($ignoreTags);
-        }, $this->data);
+        return $this->normalize();
     }
 
     public function add(CBORObject $item): self

@@ -16,6 +16,9 @@ namespace CBOR\Test\Type\Tag;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\NegativeIntegerObject;
+use CBOR\OtherObject\DoublePrecisionFloatObject;
+use CBOR\OtherObject\HalfPrecisionFloatObject;
+use CBOR\OtherObject\SinglePrecisionFloatObject;
 use CBOR\Tag\DatetimeTag;
 use CBOR\Tag\TimestampTag;
 use CBOR\TextStringObject;
@@ -78,7 +81,10 @@ final class DatetimeTagTest extends TestCase
      */
     public function createValidTimestampTagWithHalfPrecisionFloat(): void
     {
-        static::markTestSkipped('To be done');
+        $tag = TimestampTag::create(
+            HalfPrecisionFloatObject::create(hex2bin(base_convert('0011010101010101', 2, 16)))
+        );
+        static::assertEquals('0.333251', $tag->normalize()->format('U.u'));
     }
 
     /**
@@ -86,7 +92,10 @@ final class DatetimeTagTest extends TestCase
      */
     public function createValidTimestampTagWithSinglePrecisionFloat(): void
     {
-        static::markTestSkipped('To be done');
+        $tag = TimestampTag::create(
+            SinglePrecisionFloatObject::create(hex2bin(base_convert('00111111011111111111111111111111', 2, 16)))
+        );
+        static::assertEquals('0.999999', $tag->normalize()->format('U.u'));
     }
 
     /**
@@ -94,7 +103,10 @@ final class DatetimeTagTest extends TestCase
      */
     public function createValidTimestampTagWithDoublePrecisionFloat(): void
     {
-        static::markTestSkipped('To be done');
+        $tag = TimestampTag::create(
+            DoublePrecisionFloatObject::create(hex2bin(base_convert('0100000000001001001000011111101101010100010001000010110100011000', 2, 16)))
+        );
+        static::assertEquals('3.141592', $tag->normalize()->format('U.u'));
     }
 
     public function getDatetimes(): array

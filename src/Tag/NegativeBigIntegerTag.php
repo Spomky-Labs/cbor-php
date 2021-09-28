@@ -17,10 +17,11 @@ use Brick\Math\BigInteger;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthByteStringObject;
+use CBOR\Normalizable;
 use CBOR\Tag;
 use InvalidArgumentException;
 
-final class NegativeBigIntegerTag extends Tag
+final class NegativeBigIntegerTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -48,8 +49,16 @@ final class NegativeBigIntegerTag extends Tag
         return new self($ai, $data, $object);
     }
 
+    public function normalize(): string
+    {
+        $integer = BigInteger::fromBase(bin2hex($this->object->getValue()), 16);
+        $minusOne = BigInteger::of(-1);
+
+        return $minusOne->minus($integer)->toBase(10);
+    }
+
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {

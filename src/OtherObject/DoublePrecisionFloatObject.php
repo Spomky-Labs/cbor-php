@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace CBOR\OtherObject;
 
 use Brick\Math\BigInteger;
+use CBOR\Normalizable;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
 use InvalidArgumentException;
 
-final class DoublePrecisionFloatObject extends Base
+final class DoublePrecisionFloatObject extends Base implements Normalizable
 {
     public static function supportedAdditionalInformation(): array
     {
@@ -40,20 +41,28 @@ final class DoublePrecisionFloatObject extends Base
     }
 
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        $exp = $this->getExponent();
-        $mant = $this->getMantissa();
+        return $this->normalize();
+    }
+
+    /**
+     * @return float|int
+     */
+    public function normalize()
+    {
+        $exponent = $this->getExponent();
+        $mantissa = $this->getMantissa();
         $sign = $this->getSign();
 
-        if (0 === $exp) {
-            $val = $mant * 2 ** (-(1022 + 52));
-        } elseif (0b11111111111 !== $exp) {
-            $val = ($mant + (1 << 52)) * 2 ** ($exp - (1023 + 52));
+        if (0 === $exponent) {
+            $val = $mantissa * 2 ** (-(1022 + 52));
+        } elseif (0b11111111111 !== $exponent) {
+            $val = ($mantissa + (1 << 52)) * 2 ** ($exponent - (1023 + 52));
         } else {
-            $val = 0 === $mant ? INF : NAN;
+            $val = 0 === $mantissa ? INF : NAN;
         }
 
         return $sign * $val;

@@ -15,15 +15,17 @@ namespace CBOR\Tag;
 
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthTextStringObject;
+use CBOR\Normalizable;
 use CBOR\Tag;
 use CBOR\TextStringObject;
 use DateTimeImmutable;
+use DateTimeInterface;
 use InvalidArgumentException;
 
 /**
  * @final
  */
-class DatetimeTag extends Tag
+class DatetimeTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -50,8 +52,18 @@ class DatetimeTag extends Tag
         return new self($ai, $data, $object);
     }
 
+    public function normalize(): DateTimeInterface
+    {
+        $result = DateTimeImmutable::createFromFormat(DATE_RFC3339, $this->object->normalize());
+        if (false !== $result) {
+            return $result;
+        }
+
+        return DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.uP', $this->object->normalize());
+    }
+
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
@@ -59,11 +71,6 @@ class DatetimeTag extends Tag
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        $result = DateTimeImmutable::createFromFormat(DATE_RFC3339, $this->object->getNormalizedData($ignoreTags));
-        if (false !== $result) {
-            return $result;
-        }
-
-        return DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.uP', $this->object->getNormalizedData($ignoreTags));
+        return $this->normalize();
     }
 }

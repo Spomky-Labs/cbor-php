@@ -16,7 +16,7 @@ namespace CBOR;
 /**
  * @final
  */
-class IndefiniteLengthTextStringObject extends AbstractCBORObject
+class IndefiniteLengthTextStringObject extends AbstractCBORObject implements Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_TEXT_STRING;
     private const ADDITIONAL_INFORMATION = self::LENGTH_INDEFINITE;
@@ -81,16 +81,21 @@ class IndefiniteLengthTextStringObject extends AbstractCBORObject
         return $length;
     }
 
-    /**
-     * @deprecated The method will be removed on v3.0. No replacement
-     */
-    public function getNormalizedData(bool $ignoreTags = false): string
+    public function normalize(): string
     {
         $result = '';
         foreach ($this->data as $object) {
-            $result .= $object->getNormalizedData($ignoreTags);
+            $result .= $object->normalize();
         }
 
         return $result;
+    }
+
+    /**
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
+     */
+    public function getNormalizedData(bool $ignoreTags = false): string
+    {
+        return $this->normalize();
     }
 }

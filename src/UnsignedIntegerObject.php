@@ -16,7 +16,7 @@ namespace CBOR;
 use Brick\Math\BigInteger;
 use InvalidArgumentException;
 
-final class UnsignedIntegerObject extends AbstractCBORObject
+final class UnsignedIntegerObject extends AbstractCBORObject implements Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_UNSIGNED_INTEGER;
 
@@ -81,12 +81,17 @@ final class UnsignedIntegerObject extends AbstractCBORObject
         return $integer->toBase(10);
     }
 
+    public function normalize(): string
+    {
+        return $this->getValue();
+    }
+
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false): string
     {
-        return $this->getValue();
+        return $this->normalize();
     }
 
     private static function createBigInteger(BigInteger $integer): self

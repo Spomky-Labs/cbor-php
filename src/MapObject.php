@@ -23,7 +23,7 @@ use IteratorAggregate;
 /**
  * @phpstan-implements IteratorAggregate<int, MapItem>
  */
-final class MapObject extends AbstractCBORObject implements Countable, IteratorAggregate
+final class MapObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_MAP;
 
@@ -97,18 +97,28 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         return new ArrayIterator($this->data);
     }
 
+    public function normalize(): array
+    {
+        $result = [];
+        foreach ($this->data as $object) {
+            $keyObject = $object->getKey();
+            if (!$keyObject instanceof Normalizable) {
+                throw new InvalidArgumentException('Invalid key. Shall be normalizable');
+            }
+            $valueObject = $object->getValue();
+            $result[$keyObject->normalize()] = $valueObject instanceof Normalizable ? $valueObject->normalize() : $object;
+        }
+
+        return $result;
+    }
+
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      *
      * @return array<int|string, mixed>
      */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
-        $result = [];
-        foreach ($this->data as $object) {
-            $result[$object->getKey()->getNormalizedData($ignoreTags)] = $object->getValue()->getNormalizedData($ignoreTags);
-        }
-
-        return $result;
+        return $this->normalize();
     }
 }

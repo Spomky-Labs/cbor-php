@@ -19,7 +19,7 @@ use InvalidArgumentException;
 /**
  * @final
  */
-class NegativeIntegerObject extends AbstractCBORObject
+class NegativeIntegerObject extends AbstractCBORObject implements Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_NEGATIVE_INTEGER;
 
@@ -73,12 +73,17 @@ class NegativeIntegerObject extends AbstractCBORObject
         return $minusOne->minus($result)->toBase(10);
     }
 
+    public function normalize(): string
+    {
+        return $this->getValue();
+    }
+
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false): string
     {
-        return $this->getValue();
+        return $this->normalize();
     }
 
     private static function createBigInteger(BigInteger $integer): self

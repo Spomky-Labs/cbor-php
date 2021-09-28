@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace CBOR\OtherObject;
 
 use Brick\Math\BigInteger;
+use CBOR\Normalizable;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
 use InvalidArgumentException;
 
-final class HalfPrecisionFloatObject extends Base
+final class HalfPrecisionFloatObject extends Base implements Normalizable
 {
     public static function supportedAdditionalInformation(): array
     {
@@ -35,7 +36,7 @@ final class HalfPrecisionFloatObject extends Base
      */
     public static function create(string $value): self
     {
-        if (4 !== mb_strlen($value, '8bit')) {
+        if (2 !== mb_strlen($value, '8bit')) {
             throw new InvalidArgumentException('The value is not a valid half precision floating point');
         }
 
@@ -43,20 +44,28 @@ final class HalfPrecisionFloatObject extends Base
     }
 
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
-        $exp = $this->getExponent();
-        $mant = $this->getMantissa();
+        return $this->normalize();
+    }
+
+    /**
+     * @return float|int
+     */
+    public function normalize()
+    {
+        $exponent = $this->getExponent();
+        $mantissa = $this->getMantissa();
         $sign = $this->getSign();
 
-        if (0 === $exp) {
-            $val = $mant * 2 ** (-24);
-        } elseif (0b11111 !== $exp) {
-            $val = ($mant + (1 << 10)) * 2 ** ($exp - 25);
+        if (0 === $exponent) {
+            $val = $mantissa * 2 ** (-24);
+        } elseif (0b11111 !== $exponent) {
+            $val = ($mantissa + (1 << 10)) * 2 ** ($exponent - 25);
         } else {
-            $val = 0 === $mant ? INF : NAN;
+            $val = 0 === $mantissa ? INF : NAN;
         }
 
         return $sign * $val;

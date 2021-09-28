@@ -16,6 +16,7 @@ namespace CBOR\Tag;
 use CBOR\CBORObject;
 use CBOR\ListObject;
 use CBOR\NegativeIntegerObject;
+use CBOR\Normalizable;
 use CBOR\Tag;
 use CBOR\UnsignedIntegerObject;
 use function count;
@@ -23,7 +24,7 @@ use function extension_loaded;
 use InvalidArgumentException;
 use RuntimeException;
 
-final class BigFloatTag extends Tag
+final class BigFloatTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -73,8 +74,25 @@ final class BigFloatTag extends Tag
         return self::create($object);
     }
 
+    public function normalize()
+    {
+        $e = $this->object->get(0);
+        $m = $this->object->get(1);
+
+        return rtrim(
+            bcmul(
+                $m->normalize(),
+                bcpow(
+                    '2',
+                    $e->normalize(),
+                    100),
+                100),
+            '0'
+        );
+    }
+
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
@@ -85,25 +103,7 @@ final class BigFloatTag extends Tag
         if (!$this->object instanceof ListObject || 2 !== count($this->object)) {
             return $this->object->getNormalizedData($ignoreTags);
         }
-        $e = $this->object->get(0);
-        $m = $this->object->get(1);
 
-        if (!$e instanceof UnsignedIntegerObject && !$e instanceof NegativeIntegerObject) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-        if (!$m instanceof UnsignedIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof UnsignedBigIntegerTag) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-
-        return rtrim(
-            bcmul(
-                $m->getNormalizedData($ignoreTags),
-                bcpow(
-                    '2',
-                    $e->getNormalizedData($ignoreTags),
-                    100),
-                100),
-            '0'
-        );
+        return $this->normalize();
     }
 }

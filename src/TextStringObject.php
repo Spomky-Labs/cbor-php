@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-final class TextStringObject extends AbstractCBORObject
+final class TextStringObject extends AbstractCBORObject implements Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_TEXT_STRING;
 
@@ -63,9 +63,14 @@ final class TextStringObject extends AbstractCBORObject
     }
 
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false): string
+    {
+        return $this->normalize();
+    }
+
+    public function normalize()
     {
         return $this->data;
     }

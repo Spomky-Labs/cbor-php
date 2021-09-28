@@ -15,15 +15,17 @@ namespace CBOR\Tag;
 
 use CBOR\CBORObject;
 use CBOR\NegativeIntegerObject;
+use CBOR\Normalizable;
 use CBOR\OtherObject\DoublePrecisionFloatObject;
 use CBOR\OtherObject\HalfPrecisionFloatObject;
 use CBOR\OtherObject\SinglePrecisionFloatObject;
 use CBOR\Tag;
 use CBOR\UnsignedIntegerObject;
 use DateTimeImmutable;
+use DateTimeInterface;
 use InvalidArgumentException;
 
-final class TimestampTag extends Tag
+final class TimestampTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -50,8 +52,35 @@ final class TimestampTag extends Tag
         return new self($ai, $data, $object);
     }
 
+    public function normalize(): DateTimeInterface
+    {
+        $object = $this->object;
+
+        switch (true) {
+            case $object instanceof UnsignedIntegerObject:
+            case $object instanceof NegativeIntegerObject:
+                return DateTimeImmutable::createFromFormat('U', (string) $object->normalize());
+            case $object instanceof HalfPrecisionFloatObject:
+            case $object instanceof SinglePrecisionFloatObject:
+            case $object instanceof DoublePrecisionFloatObject:
+                $value = (string) $object->normalize();
+                $parts = explode('.', $value);
+                if (isset($parts[1])) {
+                    if (mb_strlen($parts[1], '8bit') > 6) {
+                        $parts[1] = mb_substr($parts[1], 0, 6, '8bit');
+                    } else {
+                        $parts[1] = str_pad($parts[1], 6, '0', STR_PAD_RIGHT);
+                    }
+                }
+
+                return DateTimeImmutable::createFromFormat('U.u', implode('.', $parts));
+            default:
+                throw new InvalidArgumentException('Unable to normalize the object');
+        }
+    }
+
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
@@ -61,11 +90,10 @@ final class TimestampTag extends Tag
         switch (true) {
             case $this->object instanceof UnsignedIntegerObject:
             case $this->object instanceof NegativeIntegerObject:
-                return DateTimeImmutable::createFromFormat('U', (string) $this->object->getNormalizedData($ignoreTags));
             case $this->object instanceof HalfPrecisionFloatObject:
             case $this->object instanceof SinglePrecisionFloatObject:
             case $this->object instanceof DoublePrecisionFloatObject:
-                return DateTimeImmutable::createFromFormat('U.u', (string) $this->object->getNormalizedData($ignoreTags));
+                return $this->normalize();
             default:
                 return $this->object->getNormalizedData($ignoreTags);
         }

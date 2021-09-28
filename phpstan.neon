@@ -32,6 +32,6 @@ parameters:
             count: 1
             path: src/Tag/TimestampTag.php
         -
-            message: '#Method CBOR\\OtherObject\\NullObject\:\:getNormalizedData\(\) should return mixed but return statement is missing\.#'
+            message: '#Method CBOR\\OtherObject\\NullObject\:\:normalize\(\) should return mixed but return statement is missing\.#'
             count: 1
             path: src/OtherObject/NullObject.php

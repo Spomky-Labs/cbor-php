@@ -16,6 +16,7 @@ namespace CBOR;
 use ArrayIterator;
 use function count;
 use Countable;
+use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
 
@@ -23,7 +24,7 @@ use IteratorAggregate;
  * @phpstan-implements IteratorAggregate<int, MapItem>
  * @final
  */
-class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable, IteratorAggregate
+class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_MAP;
     private const ADDITIONAL_INFORMATION = self::LENGTH_INDEFINITE;
@@ -79,17 +80,30 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
     }
 
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @return mixed[]
+     */
+    public function normalize(): array
+    {
+        $result = [];
+        foreach ($this->data as $object) {
+            $keyObject = $object->getKey();
+            if (!$keyObject instanceof Normalizable) {
+                throw new InvalidArgumentException('Invalid key. Shall be normalizable');
+            }
+            $valueObject = $object->getValue();
+            $result[$keyObject->normalize()] = $valueObject instanceof Normalizable ? $valueObject->normalize() : $object;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      *
      * @return mixed[]
      */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
-        $result = [];
-        foreach ($this->data as $object) {
-            $result[$object->getKey()->getNormalizedData($ignoreTags)] = $object->getValue()->getNormalizedData($ignoreTags);
-        }
-
-        return $result;
+        return $this->normalize();
     }
 }

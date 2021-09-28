@@ -16,6 +16,7 @@ namespace CBOR\Tag;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthByteStringObject;
+use CBOR\Normalizable;
 use CBOR\Tag;
 use CBOR\Utils;
 use InvalidArgumentException;
@@ -23,7 +24,7 @@ use InvalidArgumentException;
 /**
  * @final
  */
-class UnsignedBigIntegerTag extends Tag
+class UnsignedBigIntegerTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -51,8 +52,13 @@ class UnsignedBigIntegerTag extends Tag
         return new self($ai, $data, $object);
     }
 
+    public function normalize(): string
+    {
+        return Utils::hexToString($this->object->normalize());
+    }
+
     /**
-     * @deprecated The method will be removed on v3.0. No replacement
+     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {
