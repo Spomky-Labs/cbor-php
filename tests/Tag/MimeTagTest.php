@@ -11,7 +11,7 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace CBOR\Test\Type\Tag;
+namespace CBOR\Test\Tag;
 
 use CBOR\IndefiniteLengthTextStringObject;
 use CBOR\OtherObject\BreakObject;

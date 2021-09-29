@@ -32,4 +32,4 @@ jobs:
         run: git fetch --depth=1 origin $GITHUB_BASE_REF
 
       - name: Infection
-        run: make mutation-tests
+        run: make mutation-tests-github

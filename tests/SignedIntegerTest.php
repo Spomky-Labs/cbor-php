@@ -11,15 +11,15 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace CBOR\Test\Type;
+namespace CBOR\Test;
 
+use CBOR\NegativeIntegerObject;
 use CBOR\StringStream;
-use CBOR\UnsignedIntegerObject;
 
 /**
  * @internal
  */
-final class UnsignedIntegerTest extends BaseTestCase
+final class SignedIntegerTest extends BaseTestCase
 {
     /**
      * @test
@@ -27,7 +27,7 @@ final class UnsignedIntegerTest extends BaseTestCase
      */
     public function createOnValidValue(int $intValue, string $expectedIntValue, int $expectedMajorType, int $expectedAdditionalInformation): void
     {
-        $unsignedInteger = UnsignedIntegerObject::create($intValue);
+        $unsignedInteger = NegativeIntegerObject::create($intValue);
         static::assertEquals($expectedIntValue, $unsignedInteger->getValue());
         static::assertEquals($expectedMajorType, $unsignedInteger->getMajorType());
         static::assertEquals($expectedAdditionalInformation, $unsignedInteger->getAdditionalInformation());
@@ -37,28 +37,34 @@ final class UnsignedIntegerTest extends BaseTestCase
     {
         return [
             [
-                12345678,
-                '12345678',
-                0,
+                -12345678,
+                '-12345678',
+                1,
                 26,
             ],
             [
-                255,
-                '255',
-                0,
-                25,
-            ],
-            [
-                254,
-                '254',
-                0,
+                -255,
+                '-255',
+                1,
                 24,
             ],
             [
-                18,
-                '18',
-                0,
-                18,
+                -254,
+                '-254',
+                1,
+                24,
+            ],
+            [
+                -65535,
+                '-65535',
+                1,
+                25,
+            ],
+            [
+                -18,
+                '-18',
+                1,
+                17,
             ],
         ];
     }
@@ -66,11 +72,11 @@ final class UnsignedIntegerTest extends BaseTestCase
     /**
      * @test
      */
-    public function createOnNegativeValue(): void
+    public function ceateOnNegativeValue(): void
     {
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('The value must be a positive integer.');
-        UnsignedIntegerObject::create(-1);
+        $this->expectExceptionMessage('The value must be a negative integer.');
+        NegativeIntegerObject::create(1);
     }
 
     /**
@@ -79,18 +85,19 @@ final class UnsignedIntegerTest extends BaseTestCase
     public function createOnOutOfRangeValue(): void
     {
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.');
-        UnsignedIntegerObject::create(4294967296);
+        $this->expectExceptionMessage('Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.');
+        NegativeIntegerObject::create(-4294967297);
     }
 
     /**
      * @test
      * @dataProvider getDataSet
      */
-    public function anUnsignedIntegerCanBeParsed(string $data, string $expectedNormalizedData): void
+    public function anUnsignedIntegerCanBeEncodedAndDecoded(string $data, string $expectedNormalizedData): void
     {
         $stream = StringStream::create(hex2bin($data));
         $object = $this->getDecoder()->decode($stream);
+        $object->getNormalizedData();
         static::assertEquals($data, bin2hex((string) $object));
         static::assertEquals($expectedNormalizedData, $object->getNormalizedData());
     }
@@ -99,41 +106,23 @@ final class UnsignedIntegerTest extends BaseTestCase
     {
         return [
             [
-                '00',
-                '0',
+                '20',
+                '-1',
             ], [
-                '01',
-                '1',
+                '29',
+                '-10',
             ], [
-                '0a',
-                '10',
+                '3863',
+                '-100',
             ], [
-                '17',
-                '23',
+                '3903e7',
+                '-1000',
             ], [
-                '1818',
-                '24',
+                'c349010000000000000000',
+                '-18446744073709551617',
             ], [
-                '1819',
-                '25',
-            ], [
-                '1864',
-                '100',
-            ], [
-                '1903e8',
-                '1000',
-            ], [
-                '1a000f4240',
-                '1000000',
-            ], [
-                '1b000000e8d4a51000',
-                '1000000000000',
-            ], [
-                '1bffffffffffffffff',
-                '18446744073709551615',
-            ], [
-                'c249010000000000000000',
-                '18446744073709551616',
+                '3bffffffffffffffff',
+                '-18446744073709551616',
             ],
         ];
     }

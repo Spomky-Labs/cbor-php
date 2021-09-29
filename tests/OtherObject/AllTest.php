@@ -11,7 +11,7 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace CBOR\Test\Type\OtherObject;
+namespace CBOR\Test\OtherObject;
 
 use CBOR\CBORObject;
 use CBOR\Normalizable;
@@ -25,7 +25,7 @@ use CBOR\OtherObject\SinglePrecisionFloatObject;
 use CBOR\OtherObject\TrueObject;
 use CBOR\OtherObject\UndefinedObject;
 use CBOR\StringStream;
-use CBOR\Test\Type\BaseTestCase;
+use CBOR\Test\BaseTestCase;
 use function chr;
 use InvalidArgumentException;
 

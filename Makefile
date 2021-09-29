@@ -38,6 +38,14 @@ static-analyse: vendor ## Run static analyse
 rector: vendor ## Check all files using Rector
 	vendor/bin/rector process --ansi --dry-run
 
+.PHONY: mutation-tests
+mutation-tests: vendor ## Mutation tests
+	vendor/bin/infection -s --threads=$(nproc) --min-msi=60 --min-covered-msi=70
+
+.PHONY: mutation-tests-github
+mutation-tests-github: vendor ## Mutation tests (for Github only)
+	vendor/bin/infection --logger-github --git-diff-filter=AM -s --threads=$(nproc) --min-msi=17 --min-covered-msi=31
+
 
 .DEFAULT_GOAL := help
 help:
