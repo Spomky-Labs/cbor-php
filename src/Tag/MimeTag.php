@@ -50,7 +50,10 @@ final class MimeTag extends Tag implements Normalizable
 
     public function normalize(): string
     {
-        return $this->object->normalize();
+        /** @var TextStringObject|IndefiniteLengthTextStringObject $object */
+        $object = $this->object;
+
+        return $object->normalize();
     }
 
     /**

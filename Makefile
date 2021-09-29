@@ -1,16 +1,13 @@
-.PHONY: it
-it: coding-standards tests static-analyse performance-tests mutation-tests
-
 .PHONY: code-coverage
 code-coverage: vendor ## Show test coverage rates (console)
 	vendor/bin/phpunit --coverage-text
 
-.PHONY: code-coverage-html
-code-coverage-html: vendor ## Show test coverage rates (HTML)
+.PHONY: coverage
+coverage: vendor ## Show test coverage rates (HTML)
 	vendor/bin/phpunit --coverage-html ./build
 
-.PHONY: fix-coding-standards
-fix-coding-standards: vendor ## Fix all files using defined PHP-CS-FIXER rules
+.PHONY: fix-cs
+fix-cs: vendor ## Fix all files using defined PHP-CS-FIXER rules
 	vendor/bin/php-cs-fixer fix
 
 .PHONY: coding-standards

@@ -54,7 +54,10 @@ class UnsignedBigIntegerTag extends Tag implements Normalizable
 
     public function normalize(): string
     {
-        return Utils::hexToString($this->object->normalize());
+        /** @var ByteStringObject|IndefiniteLengthByteStringObject $object */
+        $object = $this->object;
+
+        return Utils::hexToString($object->normalize());
     }
 
     /**

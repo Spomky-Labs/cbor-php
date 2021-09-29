@@ -54,12 +54,19 @@ class DatetimeTag extends Tag implements Normalizable
 
     public function normalize(): DateTimeInterface
     {
-        $result = DateTimeImmutable::createFromFormat(DATE_RFC3339, $this->object->normalize());
+        /** @var TextStringObject|IndefiniteLengthTextStringObject $object */
+        $object = $this->object;
+        $result = DateTimeImmutable::createFromFormat(DATE_RFC3339, $object->normalize());
         if (false !== $result) {
             return $result;
         }
 
-        return DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.uP', $this->object->normalize());
+        $formatted = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.uP', $object->normalize());
+        if (false === $formatted) {
+            throw new InvalidArgumentException('Invalid data. Cannot be converted into a datetime object');
+        }
+
+        return $formatted;
     }
 
     /**

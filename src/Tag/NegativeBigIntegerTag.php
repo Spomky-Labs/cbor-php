@@ -51,7 +51,9 @@ final class NegativeBigIntegerTag extends Tag implements Normalizable
 
     public function normalize(): string
     {
-        $integer = BigInteger::fromBase(bin2hex($this->object->getValue()), 16);
+        /** @var ByteStringObject|IndefiniteLengthByteStringObject $object */
+        $object = $this->object;
+        $integer = BigInteger::fromBase(bin2hex($object->getValue()), 16);
         $minusOne = BigInteger::of(-1);
 
         return $minusOne->minus($integer)->toBase(10);

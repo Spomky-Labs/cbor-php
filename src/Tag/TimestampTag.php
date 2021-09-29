@@ -59,7 +59,9 @@ final class TimestampTag extends Tag implements Normalizable
         switch (true) {
             case $object instanceof UnsignedIntegerObject:
             case $object instanceof NegativeIntegerObject:
-                return DateTimeImmutable::createFromFormat('U', (string) $object->normalize());
+                $formatted = DateTimeImmutable::createFromFormat('U', (string) $object->normalize());
+
+            break;
             case $object instanceof HalfPrecisionFloatObject:
             case $object instanceof SinglePrecisionFloatObject:
             case $object instanceof DoublePrecisionFloatObject:
@@ -72,11 +74,18 @@ final class TimestampTag extends Tag implements Normalizable
                         $parts[1] = str_pad($parts[1], 6, '0', STR_PAD_RIGHT);
                     }
                 }
+                $formatted = DateTimeImmutable::createFromFormat('U.u', implode('.', $parts));
 
-                return DateTimeImmutable::createFromFormat('U.u', implode('.', $parts));
+                break;
             default:
                 throw new InvalidArgumentException('Unable to normalize the object');
         }
+
+        if (false === $formatted) {
+            throw new InvalidArgumentException('Invalid data. Cannot be converted into a datetime object');
+        }
+
+        return $formatted;
     }
 
     /**

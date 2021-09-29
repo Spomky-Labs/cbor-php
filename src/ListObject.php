@@ -93,6 +93,9 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         return $this->data[$index];
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function normalize(): array
     {
         return array_map(static function (CBORObject $object) {

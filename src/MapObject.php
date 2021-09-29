@@ -97,6 +97,9 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         return new ArrayIterator($this->data);
     }
 
+    /**
+     * @return array<mixed, mixed>
+     */
     public function normalize(): array
     {
         $result = [];

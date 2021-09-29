@@ -76,8 +76,12 @@ final class BigFloatTag extends Tag implements Normalizable
 
     public function normalize()
     {
-        $e = $this->object->get(0);
-        $m = $this->object->get(1);
+        /** @var ListObject $object */
+        $object = $this->object;
+        /** @var UnsignedIntegerObject|NegativeIntegerObject $e */
+        $e = $object->get(0);
+        /** @var UnsignedIntegerObject|NegativeIntegerObject|NegativeBigIntegerTag|UnsignedBigIntegerTag $m */
+        $m = $object->get(1);
 
         return rtrim(
             bcmul(
