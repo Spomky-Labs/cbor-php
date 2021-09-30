@@ -23,6 +23,7 @@ use Iterator;
 use IteratorAggregate;
 
 /**
+ * @phpstan-implements ArrayAccess<int, MapItem>
  * @phpstan-implements IteratorAggregate<int, MapItem>
  */
 final class MapObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable, ArrayAccess
@@ -151,7 +152,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     }
 
     /**
-     * @return array<mixed, mixed>
+     * @return array<int|string, mixed>
      */
     public function normalize(): array
     {
@@ -177,17 +178,11 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         return $this->normalize();
     }
 
-    /**
-     * @param int|string $offset
-     */
     public function offsetExists($offset): bool
     {
         return $this->has($offset);
     }
 
-    /**
-     * @param int|string $offset
-     */
     public function offsetGet($offset): MapItem
     {
         return $this->get($offset);
@@ -195,7 +190,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
 
     public function offsetSet($offset, $value): void
     {
-        if (!$offset instanceof CBORObject && !$offset instanceof Normalizable) {
+        if (!$offset instanceof CBORObject) {
             throw new InvalidArgumentException('Invalid key');
         }
         if (!$value instanceof CBORObject) {

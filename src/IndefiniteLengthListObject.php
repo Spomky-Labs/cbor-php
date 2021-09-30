@@ -23,6 +23,7 @@ use Iterator;
 use IteratorAggregate;
 
 /**
+ * @phpstan-implements ArrayAccess<int, CBORObject>
  * @phpstan-implements IteratorAggregate<int, CBORObject>
  * @final
  */
@@ -141,9 +142,6 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
         return $this->has($offset);
     }
 
-    /**
-     * @param int $offset
-     */
     public function offsetGet($offset): CBORObject
     {
         return $this->get($offset);

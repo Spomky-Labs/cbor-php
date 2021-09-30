@@ -142,7 +142,7 @@ final class Decoder implements DecoderInterface
             case CBORObject::MAJOR_TYPE_MAP: //5
                 $object = IndefiniteLengthMapObject::create();
                 while (!($it = $this->process($stream, true)) instanceof OtherObject\BreakObject) {
-                    $object->append($it, $this->process($stream, false));
+                    $object->add($it, $this->process($stream, false));
                 }
 
                 return $object;
