@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use function array_key_exists;
+use ArrayAccess;
 use ArrayIterator;
 use function count;
 use Countable;
@@ -24,7 +26,7 @@ use IteratorAggregate;
  * @phpstan-implements IteratorAggregate<int, MapItem>
  * @final
  */
-class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable
+class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable, ArrayAccess
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_MAP;
     private const ADDITIONAL_INFORMATION = self::LENGTH_INDEFINITE;
@@ -56,9 +58,66 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
         return $result;
     }
 
+    /**
+     * @deprecated The method will be removed on v3.0. Please use "add" instead
+     */
     public function append(CBORObject $key, CBORObject $value): self
     {
-        $this->data[] = MapItem::create($key, $value);
+        return $this->add($key, $value);
+    }
+
+    public function add(CBORObject $key, CBORObject $value): self
+    {
+        if (!$key instanceof Normalizable) {
+            throw new InvalidArgumentException('Invalid key. Shall be normalizable');
+        }
+        $this->data[$key->normalize()] = MapItem::create($key, $value);
+
+        return $this;
+    }
+
+    /**
+     * @param int|string $key
+     */
+    public function has($key): bool
+    {
+        return array_key_exists($key, $this->data);
+    }
+
+    /**
+     * @param int|string $index
+     */
+    public function remove($index): self
+    {
+        if (!$this->has($index)) {
+            return $this;
+        }
+        unset($this->data[$index]);
+        $this->data = array_values($this->data);
+
+        return $this;
+    }
+
+    /**
+     * @param int|string $index
+     */
+    public function get($index): MapItem
+    {
+        if (!$this->has($index)) {
+            throw new InvalidArgumentException('Index not found.');
+        }
+
+        return $this->data[$index];
+    }
+
+    public function set(MapItem $object): self
+    {
+        $key = $object->getKey();
+        if (!$key instanceof Normalizable) {
+            throw new InvalidArgumentException('Invalid key. Shall be normalizable');
+        }
+
+        $this->data[$key->normalize()] = $object;
 
         return $this;
     }
@@ -84,17 +143,16 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
      */
     public function normalize(): array
     {
-        $result = [];
-        foreach ($this->data as $object) {
-            $keyObject = $object->getKey();
-            if (!$keyObject instanceof Normalizable) {
+        return array_reduce($this->data, static function (array $carry, MapItem $item): array {
+            $key = $item->getKey();
+            if (!$key instanceof Normalizable) {
                 throw new InvalidArgumentException('Invalid key. Shall be normalizable');
             }
-            $valueObject = $object->getValue();
-            $result[$keyObject->normalize()] = $valueObject instanceof Normalizable ? $valueObject->normalize() : $object;
-        }
+            $valueObject = $item->getValue();
+            $carry[$key->normalize()] = $valueObject instanceof Normalizable ? $valueObject->normalize() : $valueObject;
 
-        return $result;
+            return $carry;
+        }, []);
     }
 
     /**
@@ -105,5 +163,38 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
     public function getNormalizedData(bool $ignoreTags = false): array
     {
         return $this->normalize();
+    }
+
+    /**
+     * @param int|string $offset
+     */
+    public function offsetExists($offset): bool
+    {
+        return $this->has($offset);
+    }
+
+    /**
+     * @param int|string $offset
+     */
+    public function offsetGet($offset): MapItem
+    {
+        return $this->get($offset);
+    }
+
+    public function offsetSet($offset, $value): void
+    {
+        if (!$offset instanceof CBORObject && !$offset instanceof Normalizable) {
+            throw new InvalidArgumentException('Invalid key');
+        }
+        if (!$value instanceof CBORObject) {
+            throw new InvalidArgumentException('Invalid value');
+        }
+
+        $this->set(MapItem::create($offset, $value));
+    }
+
+    public function offsetUnset($offset): void
+    {
+        $this->remove($offset);
     }
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace CBOR;
 
 use function array_key_exists;
+use ArrayAccess;
 use ArrayIterator;
 use function count;
 use Countable;
@@ -24,7 +25,7 @@ use IteratorAggregate;
 /**
  * @phpstan-implements IteratorAggregate<int, CBORObject>
  */
-class ListObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable
+class ListObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable, ArrayAccess
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_LIST;
 
@@ -51,7 +52,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         }, $data);
 
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
-        $this->data = $data;
+        $this->data = array_values($data);
         $this->length = $length;
     }
 
@@ -84,13 +85,42 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         return $this;
     }
 
+    public function has(int $index): bool
+    {
+        return array_key_exists($index, $this->data);
+    }
+
+    public function remove(int $index): self
+    {
+        if (!$this->has($index)) {
+            return $this;
+        }
+        unset($this->data[$index]);
+        $this->data = array_values($this->data);
+        [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
+
+        return $this;
+    }
+
     public function get(int $index): CBORObject
     {
-        if (!array_key_exists($index, $this->data)) {
+        if (!$this->has($index)) {
             throw new InvalidArgumentException('Index not found.');
         }
 
         return $this->data[$index];
+    }
+
+    public function set(int $index, CBORObject $object): self
+    {
+        if (!$this->has($index)) {
+            throw new InvalidArgumentException('Index not found.');
+        }
+
+        $this->data[$index] = $object;
+        [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
+
+        return $this;
     }
 
     /**
@@ -124,5 +154,34 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
     public function getIterator(): Iterator
     {
         return new ArrayIterator($this->data);
+    }
+
+    public function offsetExists($offset): bool
+    {
+        return $this->has($offset);
+    }
+
+    /**
+     * @param int $offset
+     */
+    public function offsetGet($offset): CBORObject
+    {
+        return $this->get($offset);
+    }
+
+    public function offsetSet($offset, $value): void
+    {
+        if (null === $offset) {
+            $this->add($value);
+
+            return;
+        }
+
+        $this->set($offset, $value);
+    }
+
+    public function offsetUnset($offset): void
+    {
+        $this->remove($offset);
     }
 }
