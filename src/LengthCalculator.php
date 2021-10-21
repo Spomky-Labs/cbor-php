@@ -48,16 +48,16 @@ final class LengthCalculator
     private static function computeLength(int $length): array
     {
         switch (true) {
-            case $length < 24:
+            case $length <= 23:
                 return [$length, null];
-            case $length < 0xFF:
+            case $length <= 0xFF:
                 return [24, chr($length)];
-            case $length < 0xFFFF:
-                return [25, self::hex2bin(dechex($length))];
-            case $length < 0xFFFFFFFF:
-                return [26, self::hex2bin(dechex($length))];
-            case BigInteger::of($length)->isLessThan(BigInteger::fromBase('FFFFFFFFFFFFFFFF', 16)):
-                return [27, self::hex2bin(dechex($length))];
+            case $length <= 0xFFFF:
+                return [25, self::hex2bin(static::fixHexLength(Utils::intToHex($length)))];
+            case $length <= 0xFFFFFFFF:
+                return [26, self::hex2bin(static::fixHexLength(Utils::intToHex($length)))];
+            case BigInteger::of($length)->isLessThanOrEqualTo(BigInteger::fromBase('FFFFFFFFFFFFFFFF', 16)):
+                return [27, self::hex2bin(static::fixHexLength(Utils::intToHex($length)))];
             default:
                 return [31, null];
         }
