@@ -53,9 +53,8 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
         foreach ($this->data as $object) {
             $result .= (string) $object;
         }
-        $result .= "\xFF";
 
-        return $result;
+        return $result."\xFF";
     }
 
     /**

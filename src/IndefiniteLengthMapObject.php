@@ -54,9 +54,8 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
             $result .= (string) $object->getKey();
             $result .= (string) $object->getValue();
         }
-        $result .= "\xFF";
 
-        return $result;
+        return $result."\xFF";
     }
 
     /**

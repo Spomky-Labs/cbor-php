@@ -42,9 +42,8 @@ class IndefiniteLengthByteStringObject extends AbstractCBORObject implements Nor
         foreach ($this->chunks as $chunk) {
             $result .= $chunk->__toString();
         }
-        $result .= "\xFF";
 
-        return $result;
+        return $result."\xFF";
     }
 
     public function add(ByteStringObject $chunk): self

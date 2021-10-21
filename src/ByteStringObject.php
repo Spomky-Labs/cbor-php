@@ -47,9 +47,8 @@ final class ByteStringObject extends AbstractCBORObject implements Normalizable
         if (null !== $this->length) {
             $result .= $this->length;
         }
-        $result .= $this->value;
 
-        return $result;
+        return $result.$this->value;
     }
 
     public function getValue(): string

@@ -42,9 +42,8 @@ abstract class Tag extends AbstractCBORObject
         if (null !== $this->data) {
             $result .= $this->data;
         }
-        $result .= (string) $this->object;
 
-        return $result;
+        return $result.$this->object;
     }
 
     public function getData(): ?string

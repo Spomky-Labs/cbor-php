@@ -42,9 +42,8 @@ class IndefiniteLengthTextStringObject extends AbstractCBORObject implements Nor
         foreach ($this->data as $object) {
             $result .= (string) $object;
         }
-        $result .= "\xFF";
 
-        return $result;
+        return $result."\xFF";
     }
 
     public function add(TextStringObject $chunk): self

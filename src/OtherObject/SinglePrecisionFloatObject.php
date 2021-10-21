@@ -30,9 +30,6 @@ final class SinglePrecisionFloatObject extends Base
         return new self($additionalInformation, $data);
     }
 
-    /**
-     * @return SinglePrecisionFloatObject
-     */
     public static function create(string $value): self
     {
         if (4 !== mb_strlen($value, '8bit')) {

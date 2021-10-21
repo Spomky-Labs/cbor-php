@@ -31,9 +31,6 @@ final class HalfPrecisionFloatObject extends Base implements Normalizable
         return new self($additionalInformation, $data);
     }
 
-    /**
-     * @return HalfPrecisionFloatObject
-     */
     public static function create(string $value): self
     {
         if (2 !== mb_strlen($value, '8bit')) {

@@ -65,9 +65,6 @@ final class SimpleObject extends Base implements Normalizable
         return $this->normalize();
     }
 
-    /**
-     * @return SimpleObject
-     */
     public static function create(int $value): self
     {
         switch (true) {

@@ -47,9 +47,8 @@ final class TextStringObject extends AbstractCBORObject implements Normalizable
         if (null !== $this->length) {
             $result .= $this->length;
         }
-        $result .= $this->data;
 
-        return $result;
+        return $result.$this->data;
     }
 
     public function getValue(): string
