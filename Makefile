@@ -11,8 +11,8 @@ fix-cs: vendor ## Fix all files using defined PHP-CS-FIXER rules
 	vendor/bin/php-cs-fixer fix
 
 .PHONY: coding-standards
-coding-standards: vendor ## Check all files using defined PHP-CS-FIXER rules
-	vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --using-cache=no
+coding-standards: vendor ## Check all files using ECS rules
+	vendor/bin/ecs check
 
 .PHONY: tests
 tests: vendor ## Run all tests
