@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\Tag;
 
 use CBOR\ByteStringObject;
@@ -49,12 +40,12 @@ final class Base64EncodingTag extends Tag
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        if (!$this->object instanceof ByteStringObject && !$this->object instanceof IndefiniteLengthByteStringObject && !$this->object instanceof TextStringObject && !$this->object instanceof IndefiniteLengthTextStringObject) {
+        if (! $this->object instanceof ByteStringObject && ! $this->object instanceof IndefiniteLengthByteStringObject && ! $this->object instanceof TextStringObject && ! $this->object instanceof IndefiniteLengthTextStringObject) {
             return $this->object->getNormalizedData($ignoreTags);
         }
 
         $result = base64_decode($this->object->getNormalizedData($ignoreTags), true);
-        if (false === $result) {
+        if ($result === false) {
             throw new InvalidArgumentException('Unable to decode the data');
         }
 

@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\Test\Tag;
 
 use CBOR\IndefiniteLengthTextStringObject;
@@ -30,10 +21,8 @@ final class MimeTagTest extends TestCase
      */
     public function createValidTagFromTextStringObject(): void
     {
-        $tag = MimeTag::create(
-            TextStringObject::create('text/plain')
-        );
-        static::assertEquals('text/plain', $tag->normalize());
+        $tag = MimeTag::create(TextStringObject::create('text/plain'));
+        static::assertSame('text/plain', $tag->normalize());
     }
 
     /**
@@ -47,7 +36,7 @@ final class MimeTagTest extends TestCase
                 ->append('/')
                 ->append('plain')
         );
-        static::assertEquals('text/plain', $tag->normalize());
+        static::assertSame('text/plain', $tag->normalize());
     }
 
     /**
@@ -58,8 +47,6 @@ final class MimeTagTest extends TestCase
         static::expectException(InvalidArgumentException::class);
         static::expectExceptionMessage('This tag only accepts a Byte String object.');
 
-        MimeTag::create(
-            BreakObject::create()
-        );
+        MimeTag::create(BreakObject::create());
     }
 }

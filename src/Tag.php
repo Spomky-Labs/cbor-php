@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use InvalidArgumentException;
@@ -39,11 +30,11 @@ abstract class Tag extends AbstractCBORObject
     public function __toString(): string
     {
         $result = parent::__toString();
-        if (null !== $this->data) {
+        if ($this->data !== null) {
             $result .= $this->data;
         }
 
-        return $result.$this->object;
+        return $result . $this->object;
     }
 
     public function getData(): ?string
@@ -53,7 +44,11 @@ abstract class Tag extends AbstractCBORObject
 
     abstract public static function getTagId(): int;
 
-    abstract public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): self;
+    abstract public static function createFromLoadedData(
+        int $additionalInformation,
+        ?string $data,
+        CBORObject $object
+    ): self;
 
     public function getValue(): CBORObject
     {
@@ -77,14 +72,16 @@ abstract class Tag extends AbstractCBORObject
             case $tag < 0xFFFFFFFF:
                 return [26, self::hex2bin(dechex($tag))];
             default:
-                throw new InvalidArgumentException('Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.');
+                throw new InvalidArgumentException(
+                    'Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.'
+                );
         }
     }
 
     private static function hex2bin(string $data): string
     {
         $result = hex2bin($data);
-        if (false === $result) {
+        if ($result === false) {
             throw new InvalidArgumentException('Unable to convert the data');
         }
 

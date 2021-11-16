@@ -2,19 +2,11 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use Brick\Math\BigInteger;
 use InvalidArgumentException;
+use const STR_PAD_LEFT;
 
 /**
  * @final
@@ -37,7 +29,7 @@ class NegativeIntegerObject extends AbstractCBORObject implements Normalizable
     public function __toString(): string
     {
         $result = parent::__toString();
-        if (null !== $this->data) {
+        if ($this->data !== null) {
             $result .= $this->data;
         }
 
@@ -63,14 +55,16 @@ class NegativeIntegerObject extends AbstractCBORObject implements Normalizable
 
     public function getValue(): string
     {
-        if (null === $this->data) {
+        if ($this->data === null) {
             return (string) (-1 - $this->additionalInformation);
         }
 
         $result = Utils::binToBigInteger($this->data);
         $minusOne = BigInteger::of(-1);
 
-        return $minusOne->minus($result)->toBase(10);
+        return $minusOne->minus($result)
+            ->toBase(10)
+        ;
     }
 
     public function normalize(): string
@@ -113,7 +107,9 @@ class NegativeIntegerObject extends AbstractCBORObject implements Normalizable
                 $data = self::hex2bin(str_pad($computed_value->toBase(16), 8, '0', STR_PAD_LEFT));
                 break;
             default:
-                throw new InvalidArgumentException('Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.');
+                throw new InvalidArgumentException(
+                    'Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.'
+                );
         }
 
         return new self($ai, $data);
@@ -122,7 +118,7 @@ class NegativeIntegerObject extends AbstractCBORObject implements Normalizable
     private static function hex2bin(string $data): string
     {
         $result = hex2bin($data);
-        if (false === $result) {
+        if ($result === false) {
             throw new InvalidArgumentException('Unable to convert the data');
         }
 

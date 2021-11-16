@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\Test;
 
 use CBOR\IndefiniteLengthListObject;
@@ -21,7 +12,7 @@ use CBOR\UnsignedIntegerObject;
 /**
  * @internal
  */
-final class ListObjectTest extends BaseTestCase
+final class ListObjectTest extends CBORTestCase
 {
     /**
      * @test
@@ -47,11 +38,15 @@ final class ListObjectTest extends BaseTestCase
 
         static::assertCount(3, $object1);
         static::assertCount(3, $object2);
-        static::assertEquals(['Hello', 'World', 3], $object2->normalize());
-        static::assertEquals($object1->normalize(), $object2->normalize());
-        static::assertEquals((string) $object1, (string) $object2);
+        static::assertSame(['Hello', 'World', '3'], $object2->normalize());
+        static::assertSame($object1->normalize(), $object2->normalize());
+        static::assertSame((string) $object1, (string) $object2);
         static::assertTrue(isset($object2[0]));
-        static::assertEquals(TextStringObject::create('World'), $object2[1]);
+        static::assertTrue(isset($object2[1]));
+        static::assertTrue(isset($object2[2]));
+        static::assertSame($object2[0]->normalize(), 'Hello');
+        static::assertSame($object2[1]->normalize(), 'World');
+        static::assertSame($object2[2]->normalize(), '3');
     }
 
     /**
@@ -78,10 +73,14 @@ final class ListObjectTest extends BaseTestCase
 
         static::assertCount(3, $object1);
         static::assertCount(3, $object2);
-        static::assertEquals(['Hello', 'World', 3], $object2->normalize());
-        static::assertEquals($object1->normalize(), $object2->normalize());
-        static::assertEquals((string) $object1, (string) $object2);
+        static::assertSame(['Hello', 'World', '3'], $object2->normalize());
+        static::assertSame($object1->normalize(), $object2->normalize());
+        static::assertSame((string) $object1, (string) $object2);
         static::assertTrue(isset($object2[0]));
-        static::assertEquals(TextStringObject::create('World'), $object2[1]);
+        static::assertTrue(isset($object2[1]));
+        static::assertTrue(isset($object2[2]));
+        static::assertSame($object2[0]->normalize(), 'Hello');
+        static::assertSame($object2[1]->normalize(), 'World');
+        static::assertSame($object2[2]->normalize(), '3');
     }
 }

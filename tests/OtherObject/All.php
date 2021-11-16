@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\Test\OtherObject;
 
 use CBOR\CBORObject;
@@ -25,14 +16,17 @@ use CBOR\OtherObject\SinglePrecisionFloatObject;
 use CBOR\OtherObject\TrueObject;
 use CBOR\OtherObject\UndefinedObject;
 use CBOR\StringStream;
-use CBOR\Test\BaseTestCase;
+use CBOR\Test\CBORTestCase;
 use function chr;
+use const INF;
 use InvalidArgumentException;
+use const M_PI;
+use const STR_PAD_LEFT;
 
 /**
  * @internal
  */
-final class AllTest extends BaseTestCase
+final class All extends CBORTestCase
 {
     /**
      * @test
@@ -41,15 +35,17 @@ final class AllTest extends BaseTestCase
     {
         $object = FalseObject::create();
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_FALSE, $object->getAdditionalInformation());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
+        static::assertSame(CBORObject::OBJECT_FALSE, $object->getAdditionalInformation());
         static::assertNull($object->getContent());
 
         $stream = StringStream::create($object->__toString());
-        $decoded = $this->getDecoder()->decode($stream);
+        $decoded = $this->getDecoder()
+            ->decode($stream)
+        ;
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_FALSE, $decoded->getAdditionalInformation());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
+        static::assertSame(CBORObject::OBJECT_FALSE, $decoded->getAdditionalInformation());
         static::assertNull($decoded->getContent());
         static::assertFalse($decoded->normalize());
     }
@@ -61,14 +57,16 @@ final class AllTest extends BaseTestCase
     {
         $object = TrueObject::create();
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_TRUE, $object->getAdditionalInformation());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
+        static::assertSame(CBORObject::OBJECT_TRUE, $object->getAdditionalInformation());
 
         $stream = StringStream::create($object->__toString());
-        $decoded = $this->getDecoder()->decode($stream);
+        $decoded = $this->getDecoder()
+            ->decode($stream)
+        ;
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_TRUE, $decoded->getAdditionalInformation());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
+        static::assertSame(CBORObject::OBJECT_TRUE, $decoded->getAdditionalInformation());
         static::assertNull($decoded->getContent());
         static::assertTrue($decoded->normalize());
     }
@@ -80,14 +78,16 @@ final class AllTest extends BaseTestCase
     {
         $object = NullObject::create();
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_NULL, $object->getAdditionalInformation());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
+        static::assertSame(CBORObject::OBJECT_NULL, $object->getAdditionalInformation());
 
         $stream = StringStream::create($object->__toString());
-        $decoded = $this->getDecoder()->decode($stream);
+        $decoded = $this->getDecoder()
+            ->decode($stream)
+        ;
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_NULL, $decoded->getAdditionalInformation());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
+        static::assertSame(CBORObject::OBJECT_NULL, $decoded->getAdditionalInformation());
         static::assertNull($decoded->getContent());
         static::assertNull($decoded->normalize());
     }
@@ -99,14 +99,16 @@ final class AllTest extends BaseTestCase
     {
         $object = UndefinedObject::create();
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_UNDEFINED, $object->getAdditionalInformation());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
+        static::assertSame(CBORObject::OBJECT_UNDEFINED, $object->getAdditionalInformation());
 
         $stream = StringStream::create($object->__toString());
-        $decoded = $this->getDecoder()->decode($stream);
+        $decoded = $this->getDecoder()
+            ->decode($stream)
+        ;
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_UNDEFINED, $decoded->getAdditionalInformation());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
+        static::assertSame(CBORObject::OBJECT_UNDEFINED, $decoded->getAdditionalInformation());
         static::assertNull($decoded->getContent());
         static::assertNotInstanceOf(Normalizable::class, $decoded);
     }
@@ -118,8 +120,8 @@ final class AllTest extends BaseTestCase
     {
         $object = BreakObject::create();
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_BREAK, $object->getAdditionalInformation());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
+        static::assertSame(CBORObject::OBJECT_BREAK, $object->getAdditionalInformation());
         static::assertNotInstanceOf(Normalizable::class, $object);
     }
 
@@ -131,15 +133,17 @@ final class AllTest extends BaseTestCase
     {
         $object = SimpleObject::create($value);
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
-        static::assertEquals($value, $object->getAdditionalInformation());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
+        static::assertSame($value, $object->getAdditionalInformation());
         static::assertNull($object->getContent());
 
         $stream = StringStream::create($object->__toString());
-        $decoded = $this->getDecoder()->decode($stream);
+        $decoded = $this->getDecoder()
+            ->decode($stream)
+        ;
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
-        static::assertEquals($value, $decoded->getAdditionalInformation());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
+        static::assertSame($value, $decoded->getAdditionalInformation());
         static::assertNull($decoded->getContent());
         //static::assertEquals($value, $decoded->normalize());
     }
@@ -152,9 +156,9 @@ final class AllTest extends BaseTestCase
     {
         $object = HalfPrecisionFloatObject::create($value);
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_HALF_PRECISION_FLOAT, $object->getAdditionalInformation());
-        if (INF === $expected || $expected === -INF) {
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
+        static::assertSame(CBORObject::OBJECT_HALF_PRECISION_FLOAT, $object->getAdditionalInformation());
+        if ($expected === INF || $expected === -INF) {
             static::assertInfinite($object->normalize());
         } else {
             static::assertEqualsWithDelta($expected, $object->normalize(), $delta);
@@ -169,9 +173,9 @@ final class AllTest extends BaseTestCase
     {
         $object = SinglePrecisionFloatObject::create($value);
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_SINGLE_PRECISION_FLOAT, $object->getAdditionalInformation());
-        if (INF === $expected || $expected === -INF) {
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
+        static::assertSame(CBORObject::OBJECT_SINGLE_PRECISION_FLOAT, $object->getAdditionalInformation());
+        if ($expected === INF || $expected === -INF) {
             static::assertInfinite($object->normalize());
         } else {
             static::assertEqualsWithDelta($expected, $object->normalize(), $delta);
@@ -186,9 +190,9 @@ final class AllTest extends BaseTestCase
     {
         $object = DoublePrecisionFloatObject::create($value);
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_DOUBLE_PRECISION_FLOAT, $object->getAdditionalInformation());
-        if (INF === $expected || $expected === -INF) {
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
+        static::assertSame(CBORObject::OBJECT_DOUBLE_PRECISION_FLOAT, $object->getAdditionalInformation());
+        if ($expected === INF || $expected === -INF) {
             static::assertInfinite($object->normalize());
         } else {
             static::assertEqualsWithDelta($expected, $object->normalize(), $delta);
@@ -203,17 +207,19 @@ final class AllTest extends BaseTestCase
     {
         $object = SimpleObject::create($value);
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_SIMPLE_VALUE, $object->getAdditionalInformation());
-        static::assertEquals(chr($value), $object->getContent());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
+        static::assertSame(CBORObject::OBJECT_SIMPLE_VALUE, $object->getAdditionalInformation());
+        static::assertSame(chr($value), $object->getContent());
         //static::assertEquals($value, $object->normalize());
 
         $stream = StringStream::create($object->__toString());
-        $decoded = $this->getDecoder()->decode($stream);
+        $decoded = $this->getDecoder()
+            ->decode($stream)
+        ;
 
-        static::assertEquals(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
-        static::assertEquals(CBORObject::OBJECT_SIMPLE_VALUE, $decoded->getAdditionalInformation());
-        static::assertEquals(chr($value), $decoded->getContent());
+        static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
+        static::assertSame(CBORObject::OBJECT_SIMPLE_VALUE, $decoded->getAdditionalInformation());
+        static::assertSame(chr($value), $decoded->getContent());
         //static::assertEquals($value, $decoded->normalize());
     }
 
@@ -241,19 +247,12 @@ final class AllTest extends BaseTestCase
 
     public function getSimpleObjectWithoutContent(): array
     {
-        return [
-            [0],
-            [18],
-            [19],
-        ];
+        return [[0], [18], [19]];
     }
 
     public function getSimpleObjectWithContent(): array
     {
-        return [
-            [32],
-            [255],
-        ];
+        return [[32], [255]];
     }
 
     /**
@@ -262,71 +261,19 @@ final class AllTest extends BaseTestCase
     public function getHalfPrecisionFloatObject(): array
     {
         return [
-            [
-                $this->bin('0000000000000001', 2),
-                0.000000059604645,
-                0.000000000000001,
-            ],
-            [
-                $this->bin('0000001111111111', 2),
-                0.000060975552,
-                0.000000000001,
-            ],
-            [
-                $this->bin('0000010000000000', 2),
-                0.00006103515625,
-                0.00000000000001,
-            ],
-            [
-                $this->bin('0111101111111111', 2),
-                65504,
-                1,
-            ],
-            [
-                $this->bin('0011101111111111', 2),
-                0.99951172,
-                0.00000001,
-            ],
-            [
-                $this->bin('0011110000000000', 2),
-                1,
-                1,
-            ],
-            [
-                $this->bin('0011110000000001', 2),
-                1.00097656,
-                0.00000001,
-            ],
-            [
-                $this->bin('0011010101010101', 2),
-                0.333251953125,
-                0.000000000001,
-            ],
-            [
-                $this->bin('1100000000000000', 2),
-                -1,
-                1,
-            ],
-            [
-                $this->bin('0000000000000000', 2),
-                0,
-                1,
-            ],
-            [
-                $this->bin('1000000000000000', 2),
-                -0,
-                1,
-            ],
-            [
-                $this->bin('0111110000000000', 2),
-                INF,
-                1,
-            ],
-            [
-                $this->bin('1111110000000000', 2),
-                -INF,
-                1,
-            ],
+            [$this->bin('0000000000000001', 2), 0.000000059604645, 0.000000000000001],
+            [$this->bin('0000001111111111', 2), 0.000060975552, 0.000000000001],
+            [$this->bin('0000010000000000', 2), 0.00006103515625, 0.00000000000001],
+            [$this->bin('0111101111111111', 2), 65504, 1],
+            [$this->bin('0011101111111111', 2), 0.99951172, 0.00000001],
+            [$this->bin('0011110000000000', 2), 1, 1],
+            [$this->bin('0011110000000001', 2), 1.00097656, 0.00000001],
+            [$this->bin('0011010101010101', 2), 0.333251953125, 0.000000000001],
+            [$this->bin('1100000000000000', 2), -1, 1],
+            [$this->bin('0000000000000000', 2), 0, 1],
+            [$this->bin('1000000000000000', 2), -0, 1],
+            [$this->bin('0111110000000000', 2), INF, 1],
+            [$this->bin('1111110000000000', 2), -INF, 1],
         ];
     }
 
@@ -336,76 +283,20 @@ final class AllTest extends BaseTestCase
     public function getSinglePrecisionFloatObject(): array
     {
         return [
-            [
-                $this->bin('00000000000000000000000000000001', 4),
-                2 ** -149,
-                10 ** -149,
-            ],
-            [
-                $this->bin('00000000011111111111111111111111', 4),
-                1.1754942107 * 10 ** -38,
-                10 ** -38,
-            ],
-            [
-                $this->bin('00000000100000000000000000000000', 4),
-                1.1754943508 * 10 ** -38,
-                10 ** -38,
-            ],
-            [
-                $this->bin('01111111011111111111111111111111', 4),
-                3.4028234664 * 10 ** 38,
-                10 ** 38,
-            ],
-            [
-                $this->bin('00111111011111111111111111111111', 4),
-                0.999999940395355225,
-                0.000000000000000001,
-            ],
-            [
-                $this->bin('00111111100000000000000000000000', 4),
-                1,
-                1,
-            ],
-            [
-                $this->bin('00111111100000000000000000000001', 4),
-                1.00000011920928955,
-                0.00000000000000001,
-            ],
-            [
-                $this->bin('11000000000000000000000000000000', 4),
-                -2,
-                1,
-            ],
-            [
-                $this->bin('00000000000000000000000000000000', 4),
-                0,
-                0,
-            ],
-            [
-                $this->bin('10000000000000000000000000000000', 4),
-                -0,
-                0,
-            ],
-            [
-                $this->bin('01111111100000000000000000000000', 4),
-                INF,
-                0,
-            ],
-            [
-                $this->bin('11111111100000000000000000000000', 4),
-                -INF,
-                0,
-            ],
-            [
-                $this->bin('01000000010010010000111111011011', 4),
-                3.14159274101257324,
-                0.00000000000000001,
-            ],
-            [
-                $this->bin('00111110101010101010101010101011', 4),
-                0.333333343267440796,
-                0.000000000000000001,
-            ],
+            [$this->bin('00000000000000000000000000000001', 4), 2 ** -149, 10 ** -149],
+            [$this->bin('00000000011111111111111111111111', 4), 1.1754942107 * 10 ** -38, 10 ** -38],
+            [$this->bin('00000000100000000000000000000000', 4), 1.1754943508 * 10 ** -38, 10 ** -38],
+            [$this->bin('01111111011111111111111111111111', 4), 3.4028234664 * 10 ** 38, 10 ** 38],
+            [$this->bin('00111111011111111111111111111111', 4), 0.999999940395355225, 0.000000000000000001],
+            [$this->bin('00111111100000000000000000000000', 4), 1, 1],
+            [$this->bin('00111111100000000000000000000001', 4), 1.00000011920928955, 0.00000000000000001],
+            [$this->bin('11000000000000000000000000000000', 4), -2, 1],
+            [$this->bin('00000000000000000000000000000000', 4), 0, 0],
+            [$this->bin('10000000000000000000000000000000', 4), -0, 0],
+            [$this->bin('01111111100000000000000000000000', 4), INF, 0],
+            [$this->bin('11111111100000000000000000000000', 4), -INF, 0],
+            [$this->bin('01000000010010010000111111011011', 4), 3.14159274101257324, 0.00000000000000001],
+            [$this->bin('00111110101010101010101010101011', 4), 0.333333343267440796, 0.000000000000000001],
         ];
     }
 
@@ -415,11 +306,7 @@ final class AllTest extends BaseTestCase
     public function getDoublePrecisionFloatObject(): array
     {
         return [
-            [
-                $this->bin('0011111111110000000000000000000000000000000000000000000000000000', 8),
-                1,
-                1,
-            ],
+            [$this->bin('0011111111110000000000000000000000000000000000000000000000000000', 8), 1, 1],
             [
                 $this->bin('0011111111110000000000000000000000000000000000000000000000000001', 8),
                 1.0000000000000002,
@@ -500,16 +387,8 @@ final class AllTest extends BaseTestCase
                 -0,
                 0.0000000000000001,
             ],
-            [
-                $this->bin('0111111111110000000000000000000000000000000000000000000000000000', 8),
-                INF,
-                1,
-            ],
-            [
-                $this->bin('1111111111110000000000000000000000000000000000000000000000000000', 8),
-                -INF,
-                1,
-            ],
+            [$this->bin('0111111111110000000000000000000000000000000000000000000000000000', 8), INF, 1],
+            [$this->bin('1111111111110000000000000000000000000000000000000000000000000000', 8), -INF, 1],
             [
                 $this->bin('0011111111010101010101010101010101010101010101010101010101010101', 8),
                 1 / 3,
@@ -517,7 +396,7 @@ final class AllTest extends BaseTestCase
             ],
             [
                 $this->bin('0100000000001001001000011111101101010100010001000010110100011000', 8),
-                pi(),
+                M_PI,
                 0.0000000000000001,
             ],
         ];
@@ -526,14 +405,7 @@ final class AllTest extends BaseTestCase
     private function bin(string $binary, int $length): string
     {
         return str_pad(
-            hex2bin(
-                str_pad(
-                    base_convert($binary, 2, 16),
-                    $length * 2,
-                    '0',
-                    STR_PAD_LEFT
-                )
-            ),
+            hex2bin(str_pad(base_convert($binary, 2, 16), $length * 2, '0', STR_PAD_LEFT)),
             $length,
             '0',
             STR_PAD_LEFT

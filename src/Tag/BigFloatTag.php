@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\Tag;
 
 use CBOR\CBORObject;
@@ -28,20 +19,24 @@ final class BigFloatTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
-        if (!extension_loaded('bcmath')) {
+        if (! extension_loaded('bcmath')) {
             throw new RuntimeException('The extension "bcmath" is required to use this tag');
         }
 
-        if (!$object instanceof ListObject || 2 !== count($object)) {
-            throw new InvalidArgumentException('This tag only accepts a ListObject object that contains an exponent and a mantissa.');
+        if (! $object instanceof ListObject || count($object) !== 2) {
+            throw new InvalidArgumentException(
+                'This tag only accepts a ListObject object that contains an exponent and a mantissa.'
+            );
         }
         $e = $object->get(0);
-        if (!$e instanceof UnsignedIntegerObject && !$e instanceof NegativeIntegerObject) {
+        if (! $e instanceof UnsignedIntegerObject && ! $e instanceof NegativeIntegerObject) {
             throw new InvalidArgumentException('The exponent must be a Signed Integer or an Unsigned Integer object.');
         }
         $m = $object->get(1);
-        if (!$m instanceof UnsignedIntegerObject && !$m instanceof NegativeIntegerObject && !$m instanceof NegativeBigIntegerTag && !$m instanceof UnsignedBigIntegerTag) {
-            throw new InvalidArgumentException('The mantissa must be a Positive or Negative Signed Integer or an Unsigned Integer object.');
+        if (! $m instanceof UnsignedIntegerObject && ! $m instanceof NegativeIntegerObject && ! $m instanceof NegativeBigIntegerTag && ! $m instanceof UnsignedBigIntegerTag) {
+            throw new InvalidArgumentException(
+                'The mantissa must be a Positive or Negative Signed Integer or an Unsigned Integer object.'
+            );
         }
 
         parent::__construct($additionalInformation, $data, $object);
@@ -83,16 +78,7 @@ final class BigFloatTag extends Tag implements Normalizable
         /** @var UnsignedIntegerObject|NegativeIntegerObject|NegativeBigIntegerTag|UnsignedBigIntegerTag $m */
         $m = $object->get(1);
 
-        return rtrim(
-            bcmul(
-                $m->normalize(),
-                bcpow(
-                    '2',
-                    $e->normalize(),
-                    100),
-                100),
-            '0'
-        );
+        return rtrim(bcmul($m->normalize(), bcpow('2', $e->normalize(), 100), 100), '0');
     }
 
     /**
@@ -104,7 +90,7 @@ final class BigFloatTag extends Tag implements Normalizable
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        if (!$this->object instanceof ListObject || 2 !== count($this->object)) {
+        if (! $this->object instanceof ListObject || count($this->object) !== 2) {
             return $this->object->getNormalizedData($ignoreTags);
         }
 

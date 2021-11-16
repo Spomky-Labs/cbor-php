@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use function array_key_exists;
@@ -23,7 +14,7 @@ use Iterator;
 use IteratorAggregate;
 
 /**
- * @phpstan-implements ArrayAccess<int, MapItem>
+ * @phpstan-implements ArrayAccess<int, CBORObject>
  * @phpstan-implements IteratorAggregate<int, MapItem>
  */
 final class MapObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable, ArrayAccess
@@ -47,7 +38,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     {
         [$additionalInformation, $length] = LengthCalculator::getLengthOfArray($data);
         array_map(static function ($item): void {
-            if (!$item instanceof MapItem) {
+            if (! $item instanceof MapItem) {
                 throw new InvalidArgumentException('The list must contain only MapItem objects.');
             }
         }, $data);
@@ -55,6 +46,24 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
         $this->data = $data;
         $this->length = $length;
+    }
+
+    public function __toString(): string
+    {
+        $result = parent::__toString();
+        if ($this->length !== null) {
+            $result .= $this->length;
+        }
+        foreach ($this->data as $object) {
+            $result .= $object->getKey()
+                ->__toString()
+            ;
+            $result .= $object->getValue()
+                ->__toString()
+            ;
+        }
+
+        return $result;
     }
 
     /**
@@ -65,23 +74,9 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         return new self($data);
     }
 
-    public function __toString(): string
-    {
-        $result = parent::__toString();
-        if (null !== $this->length) {
-            $result .= $this->length;
-        }
-        foreach ($this->data as $object) {
-            $result .= $object->getKey()->__toString();
-            $result .= $object->getValue()->__toString();
-        }
-
-        return $result;
-    }
-
     public function add(CBORObject $key, CBORObject $value): self
     {
-        if (!$key instanceof Normalizable) {
+        if (! $key instanceof Normalizable) {
             throw new InvalidArgumentException('Invalid key. Shall be normalizable');
         }
         $this->data[$key->normalize()] = MapItem::create($key, $value);
@@ -103,7 +98,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
      */
     public function remove($index): self
     {
-        if (!$this->has($index)) {
+        if (! $this->has($index)) {
             return $this;
         }
         unset($this->data[$index]);
@@ -116,19 +111,19 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     /**
      * @param int|string $index
      */
-    public function get($index): MapItem
+    public function get($index): CBORObject
     {
-        if (!$this->has($index)) {
+        if (! $this->has($index)) {
             throw new InvalidArgumentException('Index not found.');
         }
 
-        return $this->data[$index];
+        return $this->data[$index]->getValue();
     }
 
     public function set(MapItem $object): self
     {
         $key = $object->getKey();
-        if (!$key instanceof Normalizable) {
+        if (! $key instanceof Normalizable) {
             throw new InvalidArgumentException('Invalid key. Shall be normalizable');
         }
 
@@ -158,7 +153,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     {
         return array_reduce($this->data, static function (array $carry, MapItem $item): array {
             $key = $item->getKey();
-            if (!$key instanceof Normalizable) {
+            if (! $key instanceof Normalizable) {
                 throw new InvalidArgumentException('Invalid key. Shall be normalizable');
             }
             $valueObject = $item->getValue();
@@ -183,17 +178,17 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         return $this->has($offset);
     }
 
-    public function offsetGet($offset): MapItem
+    public function offsetGet($offset): CBORObject
     {
         return $this->get($offset);
     }
 
     public function offsetSet($offset, $value): void
     {
-        if (!$offset instanceof CBORObject) {
+        if (! $offset instanceof CBORObject) {
             throw new InvalidArgumentException('Invalid key');
         }
-        if (!$value instanceof CBORObject) {
+        if (! $value instanceof CBORObject) {
             throw new InvalidArgumentException('Invalid value');
         }
 

@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use CBOR\OtherObject\BreakObject;
@@ -44,6 +35,7 @@ use CBOR\Tag\UriTag;
 use InvalidArgumentException;
 use function ord;
 use RuntimeException;
+use const STR_PAD_LEFT;
 
 final class Decoder implements DecoderInterface
 {
@@ -57,14 +49,18 @@ final class Decoder implements DecoderInterface
      */
     private $otherTypeManager;
 
-    public function __construct(?TagManagerInterface $tagObjectManager = null, ?OtherObjectManagerInterface $otherTypeManager = null)
-    {
+    public function __construct(
+        ?TagManagerInterface $tagObjectManager = null,
+        ?OtherObjectManagerInterface $otherTypeManager = null
+    ) {
         $this->tagObjectManager = $tagObjectManager ?? $this->generateTagManager();
         $this->otherTypeManager = $otherTypeManager ?? $this->generateOtherObjectManager();
     }
 
-    public static function create(?TagManagerInterface $tagObjectManager = null, ?OtherObjectManagerInterface $otherTypeManager = null): self
-    {
+    public static function create(
+        ?TagManagerInterface $tagObjectManager = null,
+        ?OtherObjectManagerInterface $otherTypeManager = null
+    ): self {
         return new self($tagObjectManager, $otherTypeManager);
     }
 
@@ -89,7 +85,11 @@ final class Decoder implements DecoderInterface
             case CBORObject::FUTURE_USE_1: //28
             case CBORObject::FUTURE_USE_2: //29
             case CBORObject::FUTURE_USE_3: //30
-                throw new InvalidArgumentException(sprintf('Cannot parse the data. Found invalid Additional Information "%s" (%d).', str_pad(decbin($ai), 8, '0', STR_PAD_LEFT), $ai));
+                throw new InvalidArgumentException(sprintf(
+                    'Cannot parse the data. Found invalid Additional Information "%s" (%d).',
+                    str_pad(decbin($ai), 8, '0', STR_PAD_LEFT),
+                    $ai
+                ));
             case CBORObject::LENGTH_INDEFINITE: //31
                 return $this->processInfinite($stream, $mt, $breakable);
         }
@@ -105,16 +105,16 @@ final class Decoder implements DecoderInterface
             case CBORObject::MAJOR_TYPE_NEGATIVE_INTEGER: //1
                 return NegativeIntegerObject::createObjectForValue($ai, $val);
             case CBORObject::MAJOR_TYPE_BYTE_STRING: //2
-                $length = null === $val ? $ai : Utils::binToInt($val);
+                $length = $val === null ? $ai : Utils::binToInt($val);
 
                 return ByteStringObject::create($stream->read($length));
             case CBORObject::MAJOR_TYPE_TEXT_STRING: //3
-                $length = null === $val ? $ai : Utils::binToInt($val);
+                $length = $val === null ? $ai : Utils::binToInt($val);
 
                 return TextStringObject::create($stream->read($length));
             case CBORObject::MAJOR_TYPE_LIST: //4
                 $object = ListObject::create();
-                $nbItems = null === $val ? $ai : Utils::binToInt($val);
+                $nbItems = $val === null ? $ai : Utils::binToInt($val);
                 for ($i = 0; $i < $nbItems; ++$i) {
                     $object->add($this->process($stream, false));
                 }
@@ -122,7 +122,7 @@ final class Decoder implements DecoderInterface
                 return $object;
             case CBORObject::MAJOR_TYPE_MAP: //5
                 $object = MapObject::create();
-                $nbItems = null === $val ? $ai : Utils::binToInt($val);
+                $nbItems = $val === null ? $ai : Utils::binToInt($val);
                 for ($i = 0; $i < $nbItems; ++$i) {
                     $object->add($this->process($stream, false), $this->process($stream, false));
                 }
@@ -133,7 +133,11 @@ final class Decoder implements DecoderInterface
             case CBORObject::MAJOR_TYPE_OTHER_TYPE: //7
                 return $this->otherTypeManager->createObjectForValue($ai, $val);
             default:
-                throw new RuntimeException(sprintf('Unsupported major type "%s" (%d).', str_pad(decbin($mt), 5, '0', STR_PAD_LEFT), $mt)); // Should never append
+                throw new RuntimeException(sprintf(
+                    'Unsupported major type "%s" (%d).',
+                    str_pad(decbin($mt), 5, '0', STR_PAD_LEFT),
+                    $mt
+                )); // Should never append
         }
     }
 
@@ -142,9 +146,11 @@ final class Decoder implements DecoderInterface
         switch ($mt) {
             case CBORObject::MAJOR_TYPE_BYTE_STRING: //2
                 $object = IndefiniteLengthByteStringObject::create();
-                while (!($it = $this->process($stream, true)) instanceof BreakObject) {
-                    if (!$it instanceof ByteStringObject) {
-                        throw new RuntimeException('Unable to parse the data. Infinite Byte String object can only get Byte String objects.');
+                while (! ($it = $this->process($stream, true)) instanceof BreakObject) {
+                    if (! $it instanceof ByteStringObject) {
+                        throw new RuntimeException(
+                            'Unable to parse the data. Infinite Byte String object can only get Byte String objects.'
+                        );
                     }
                     $object->add($it);
                 }
@@ -152,9 +158,11 @@ final class Decoder implements DecoderInterface
                 return $object;
             case CBORObject::MAJOR_TYPE_TEXT_STRING: //3
                 $object = IndefiniteLengthTextStringObject::create();
-                while (!($it = $this->process($stream, true)) instanceof BreakObject) {
-                    if (!$it instanceof TextStringObject) {
-                        throw new RuntimeException('Unable to parse the data. Infinite Text String object can only get Text String objects.');
+                while (! ($it = $this->process($stream, true)) instanceof BreakObject) {
+                    if (! $it instanceof TextStringObject) {
+                        throw new RuntimeException(
+                            'Unable to parse the data. Infinite Text String object can only get Text String objects.'
+                        );
                     }
                     $object->add($it);
                 }
@@ -162,20 +170,22 @@ final class Decoder implements DecoderInterface
                 return $object;
             case CBORObject::MAJOR_TYPE_LIST: //4
                 $object = IndefiniteLengthListObject::create();
-                while (!($it = $this->process($stream, true)) instanceof BreakObject) {
+                $it = $this->process($stream, true);
+                while (! $it instanceof BreakObject) {
                     $object->add($it);
+                    $it = $this->process($stream, true);
                 }
 
                 return $object;
             case CBORObject::MAJOR_TYPE_MAP: //5
                 $object = IndefiniteLengthMapObject::create();
-                while (!($it = $this->process($stream, true)) instanceof BreakObject) {
+                while (! ($it = $this->process($stream, true)) instanceof BreakObject) {
                     $object->add($it, $this->process($stream, false));
                 }
 
                 return $object;
             case CBORObject::MAJOR_TYPE_OTHER_TYPE: //7
-                if (!$breakable) {
+                if (! $breakable) {
                     throw new InvalidArgumentException('Cannot parse the data. No enclosing indefinite.');
                 }
 
@@ -184,7 +194,11 @@ final class Decoder implements DecoderInterface
             case CBORObject::MAJOR_TYPE_NEGATIVE_INTEGER: //1
             case CBORObject::MAJOR_TYPE_TAG: //6
             default:
-                throw new InvalidArgumentException(sprintf('Cannot parse the data. Found infinite length for Major Type "%s" (%d).', str_pad(decbin($mt), 5, '0', STR_PAD_LEFT), $mt));
+                throw new InvalidArgumentException(sprintf(
+                    'Cannot parse the data. Found infinite length for Major Type "%s" (%d).',
+                    str_pad(decbin($mt), 5, '0', STR_PAD_LEFT),
+                    $mt
+                ));
         }
     }
 

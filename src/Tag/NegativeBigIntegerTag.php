@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\Tag;
 
 use Brick\Math\BigInteger;
@@ -25,7 +16,7 @@ final class NegativeBigIntegerTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
-        if (!$object instanceof ByteStringObject && !$object instanceof IndefiniteLengthByteStringObject) {
+        if (! $object instanceof ByteStringObject && ! $object instanceof IndefiniteLengthByteStringObject) {
             throw new InvalidArgumentException('This tag only accepts a Byte String object.');
         }
 
@@ -56,7 +47,9 @@ final class NegativeBigIntegerTag extends Tag implements Normalizable
         $integer = BigInteger::fromBase(bin2hex($object->getValue()), 16);
         $minusOne = BigInteger::of(-1);
 
-        return $minusOne->minus($integer)->toBase(10);
+        return $minusOne->minus($integer)
+            ->toBase(10)
+        ;
     }
 
     /**
@@ -68,12 +61,14 @@ final class NegativeBigIntegerTag extends Tag implements Normalizable
             return $this->object->getNormalizedData($ignoreTags);
         }
 
-        if (!$this->object instanceof ByteStringObject) {
+        if (! $this->object instanceof ByteStringObject) {
             return $this->object->getNormalizedData($ignoreTags);
         }
         $integer = BigInteger::fromBase(bin2hex($this->object->getValue()), 16);
         $minusOne = BigInteger::of(-1);
 
-        return $minusOne->minus($integer)->toBase(10);
+        return $minusOne->minus($integer)
+            ->toBase(10)
+        ;
     }
 }

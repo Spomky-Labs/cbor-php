@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\Tag;
 
 use CBOR\CBORObject;
@@ -24,12 +15,13 @@ use CBOR\UnsignedIntegerObject;
 use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
+use const STR_PAD_RIGHT;
 
 final class TimestampTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
-        if (!$object instanceof UnsignedIntegerObject && !$object instanceof NegativeIntegerObject && !$object instanceof HalfPrecisionFloatObject && !$object instanceof SinglePrecisionFloatObject && !$object instanceof DoublePrecisionFloatObject) {
+        if (! $object instanceof UnsignedIntegerObject && ! $object instanceof NegativeIntegerObject && ! $object instanceof HalfPrecisionFloatObject && ! $object instanceof SinglePrecisionFloatObject && ! $object instanceof DoublePrecisionFloatObject) {
             throw new InvalidArgumentException('This tag only accepts integer-based or float-based objects.');
         }
         parent::__construct($additionalInformation, $data, $object);
@@ -81,7 +73,7 @@ final class TimestampTag extends Tag implements Normalizable
                 throw new InvalidArgumentException('Unable to normalize the object');
         }
 
-        if (false === $formatted) {
+        if ($formatted === false) {
             throw new InvalidArgumentException('Invalid data. Cannot be converted into a datetime object');
         }
 

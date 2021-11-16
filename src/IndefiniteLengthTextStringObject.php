@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 /**
@@ -19,6 +10,7 @@ namespace CBOR;
 class IndefiniteLengthTextStringObject extends AbstractCBORObject implements Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_TEXT_STRING;
+
     private const ADDITIONAL_INFORMATION = self::LENGTH_INDEFINITE;
 
     /**
@@ -31,11 +23,6 @@ class IndefiniteLengthTextStringObject extends AbstractCBORObject implements Nor
         parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
     }
 
-    public static function create(): self
-    {
-        return new self();
-    }
-
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -43,7 +30,12 @@ class IndefiniteLengthTextStringObject extends AbstractCBORObject implements Nor
             $result .= (string) $object;
         }
 
-        return $result."\xFF";
+        return $result . "\xFF";
+    }
+
+    public static function create(): self
+    {
+        return new self();
     }
 
     public function add(TextStringObject $chunk): self

@@ -2,21 +2,13 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use Brick\Math\BigInteger;
 use function chr;
 use function count;
 use InvalidArgumentException;
+use const STR_PAD_LEFT;
 
 final class LengthCalculator
 {
@@ -67,7 +59,7 @@ final class LengthCalculator
     {
         $data = str_pad($data, (int) (2 ** ceil(log(mb_strlen($data, '8bit'), 2))), '0', STR_PAD_LEFT);
         $result = hex2bin($data);
-        if (false === $result) {
+        if ($result === false) {
             throw new InvalidArgumentException('Unable to convert the data');
         }
 

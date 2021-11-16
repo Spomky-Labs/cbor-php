@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 final class TextStringObject extends AbstractCBORObject implements Normalizable
@@ -36,19 +27,19 @@ final class TextStringObject extends AbstractCBORObject implements Normalizable
         $this->length = $length;
     }
 
-    public static function create(string $data): self
-    {
-        return new self($data);
-    }
-
     public function __toString(): string
     {
         $result = parent::__toString();
-        if (null !== $this->length) {
+        if ($this->length !== null) {
             $result .= $this->length;
         }
 
-        return $result.$this->data;
+        return $result . $this->data;
+    }
+
+    public static function create(string $data): self
+    {
+        return new self($data);
     }
 
     public function getValue(): string

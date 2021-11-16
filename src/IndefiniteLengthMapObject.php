@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use function array_key_exists;
@@ -23,13 +14,14 @@ use Iterator;
 use IteratorAggregate;
 
 /**
- * @phpstan-implements ArrayAccess<int, MapItem>
+ * @phpstan-implements ArrayAccess<int, CBORObject>
  * @phpstan-implements IteratorAggregate<int, MapItem>
  * @final
  */
 class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable, ArrayAccess
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_MAP;
+
     private const ADDITIONAL_INFORMATION = self::LENGTH_INDEFINITE;
 
     /**
@@ -42,11 +34,6 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
         parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
     }
 
-    public static function create(): self
-    {
-        return new self();
-    }
-
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -55,7 +42,12 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
             $result .= (string) $object->getValue();
         }
 
-        return $result."\xFF";
+        return $result . "\xFF";
+    }
+
+    public static function create(): self
+    {
+        return new self();
     }
 
     /**
@@ -68,7 +60,7 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
 
     public function add(CBORObject $key, CBORObject $value): self
     {
-        if (!$key instanceof Normalizable) {
+        if (! $key instanceof Normalizable) {
             throw new InvalidArgumentException('Invalid key. Shall be normalizable');
         }
         $this->data[$key->normalize()] = MapItem::create($key, $value);
@@ -89,7 +81,7 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
      */
     public function remove($index): self
     {
-        if (!$this->has($index)) {
+        if (! $this->has($index)) {
             return $this;
         }
         unset($this->data[$index]);
@@ -101,19 +93,19 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
     /**
      * @param int|string $index
      */
-    public function get($index): MapItem
+    public function get($index): CBORObject
     {
-        if (!$this->has($index)) {
+        if (! $this->has($index)) {
             throw new InvalidArgumentException('Index not found.');
         }
 
-        return $this->data[$index];
+        return $this->data[$index]->getValue();
     }
 
     public function set(MapItem $object): self
     {
         $key = $object->getKey();
-        if (!$key instanceof Normalizable) {
+        if (! $key instanceof Normalizable) {
             throw new InvalidArgumentException('Invalid key. Shall be normalizable');
         }
 
@@ -145,7 +137,7 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
     {
         return array_reduce($this->data, static function (array $carry, MapItem $item): array {
             $key = $item->getKey();
-            if (!$key instanceof Normalizable) {
+            if (! $key instanceof Normalizable) {
                 throw new InvalidArgumentException('Invalid key. Shall be normalizable');
             }
             $valueObject = $item->getValue();
@@ -170,17 +162,17 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
         return $this->has($offset);
     }
 
-    public function offsetGet($offset): MapItem
+    public function offsetGet($offset): CBORObject
     {
         return $this->get($offset);
     }
 
     public function offsetSet($offset, $value): void
     {
-        if (!$offset instanceof CBORObject) {
+        if (! $offset instanceof CBORObject) {
             throw new InvalidArgumentException('Invalid key');
         }
-        if (!$value instanceof CBORObject) {
+        if (! $value instanceof CBORObject) {
             throw new InvalidArgumentException('Invalid value');
         }
 

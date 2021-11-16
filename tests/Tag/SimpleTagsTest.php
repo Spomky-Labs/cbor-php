@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\Test\Tag;
 
 use CBOR\ByteStringObject;
@@ -33,14 +24,12 @@ final class SimpleTagsTest extends TestCase
      */
     public function createValidUriTag(): void
     {
-        $tag = UriTag::create(
-            TextStringObject::create('Text')
-        );
+        $tag = UriTag::create(TextStringObject::create('Text'));
 
         static::assertInstanceOf(TextStringObject::class, $tag->getValue());
-        static::assertEquals(CBORObject::MAJOR_TYPE_TAG, $tag->getMajorType());
-        static::assertEquals(CBORObject::LENGTH_1_BYTE, $tag->getAdditionalInformation());
-        static::assertEquals(hex2bin(dechex(CBORObject::TAG_URI)), $tag->getData());
+        static::assertSame(CBORObject::MAJOR_TYPE_TAG, $tag->getMajorType());
+        static::assertSame(CBORObject::LENGTH_1_BYTE, $tag->getAdditionalInformation());
+        static::assertSame(hex2bin(dechex(CBORObject::TAG_URI)), $tag->getData());
     }
 
     /**
@@ -50,9 +39,7 @@ final class SimpleTagsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('This tag only accepts a Text String object.');
-        UriTag::create(
-            ByteStringObject::create('Text')
-        );
+        UriTag::create(ByteStringObject::create('Text'));
     }
 
     /**
@@ -60,14 +47,12 @@ final class SimpleTagsTest extends TestCase
      */
     public function createValidBase64Tag(): void
     {
-        $tag = Base64Tag::create(
-            TextStringObject::create('Text')
-        );
+        $tag = Base64Tag::create(TextStringObject::create('Text'));
 
         static::assertInstanceOf(TextStringObject::class, $tag->getValue());
-        static::assertEquals(CBORObject::MAJOR_TYPE_TAG, $tag->getMajorType());
-        static::assertEquals(CBORObject::LENGTH_1_BYTE, $tag->getAdditionalInformation());
-        static::assertEquals(hex2bin(dechex(CBORObject::TAG_BASE64)), $tag->getData());
+        static::assertSame(CBORObject::MAJOR_TYPE_TAG, $tag->getMajorType());
+        static::assertSame(CBORObject::LENGTH_1_BYTE, $tag->getAdditionalInformation());
+        static::assertSame(hex2bin(dechex(CBORObject::TAG_BASE64)), $tag->getData());
     }
 
     /**
@@ -77,9 +62,7 @@ final class SimpleTagsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('This tag only accepts a Text String object.');
-        Base64Tag::create(
-            ByteStringObject::create('Text')
-        );
+        Base64Tag::create(ByteStringObject::create('Text'));
     }
 
     /**
@@ -87,14 +70,12 @@ final class SimpleTagsTest extends TestCase
      */
     public function createValidBase64UrlTag(): void
     {
-        $tag = Base64UrlTag::create(
-            TextStringObject::create('Text')
-        );
+        $tag = Base64UrlTag::create(TextStringObject::create('Text'));
 
         static::assertInstanceOf(TextStringObject::class, $tag->getValue());
-        static::assertEquals(CBORObject::MAJOR_TYPE_TAG, $tag->getMajorType());
-        static::assertEquals(CBORObject::LENGTH_1_BYTE, $tag->getAdditionalInformation());
-        static::assertEquals(hex2bin(dechex(CBORObject::TAG_BASE64_URL)), $tag->getData());
+        static::assertSame(CBORObject::MAJOR_TYPE_TAG, $tag->getMajorType());
+        static::assertSame(CBORObject::LENGTH_1_BYTE, $tag->getAdditionalInformation());
+        static::assertSame(hex2bin(dechex(CBORObject::TAG_BASE64_URL)), $tag->getData());
     }
 
     /**
@@ -104,9 +85,7 @@ final class SimpleTagsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('This tag only accepts a Text String object.');
-        Base64UrlTag::create(
-            ByteStringObject::create('Text')
-        );
+        Base64UrlTag::create(ByteStringObject::create('Text'));
     }
 
     /**
@@ -114,13 +93,11 @@ final class SimpleTagsTest extends TestCase
      */
     public function createValidCBORTag(): void
     {
-        $tag = CBORTag::create(
-            ByteStringObject::create('Text')
-        );
+        $tag = CBORTag::create(ByteStringObject::create('Text'));
 
         static::assertInstanceOf(ByteStringObject::class, $tag->getValue());
-        static::assertEquals(CBORObject::MAJOR_TYPE_TAG, $tag->getMajorType());
-        static::assertEquals(CBORObject::LENGTH_2_BYTES, $tag->getAdditionalInformation());
-        static::assertEquals(hex2bin(dechex(CBORObject::TAG_CBOR)), $tag->getData());
+        static::assertSame(CBORObject::MAJOR_TYPE_TAG, $tag->getMajorType());
+        static::assertSame(CBORObject::LENGTH_2_BYTES, $tag->getAdditionalInformation());
+        static::assertSame(hex2bin(dechex(CBORObject::TAG_CBOR)), $tag->getData());
     }
 }

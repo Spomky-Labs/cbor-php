@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\Test\Tag;
 
 use CBOR\ByteStringObject;
@@ -38,7 +29,7 @@ final class DatetimeTagTest extends TestCase
     public function createValidDatetimeTag(CBORObject $object, string $expectedTimestamp): void
     {
         $tag = DatetimeTag::create($object);
-        static::assertEquals($expectedTimestamp, $tag->getNormalizedData()->format('U.u'));
+        static::assertSame($expectedTimestamp, $tag->getNormalizedData()->format('U.u'));
     }
 
     /**
@@ -49,9 +40,7 @@ final class DatetimeTagTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('This tag only accepts a Byte String object.');
 
-        DatetimeTag::create(
-            ByteStringObject::create('data')
-        );
+        DatetimeTag::create(ByteStringObject::create('data'));
     }
 
     /**
@@ -59,10 +48,8 @@ final class DatetimeTagTest extends TestCase
      */
     public function createValidTimestampTagWithUnsignedInteger(): void
     {
-        $tag = TimestampTag::create(
-            UnsignedIntegerObject::create(0)
-        );
-        static::assertEquals('0.000000', $tag->getNormalizedData()->format('U.u'));
+        $tag = TimestampTag::create(UnsignedIntegerObject::create(0));
+        static::assertSame('0.000000', $tag->getNormalizedData()->format('U.u'));
     }
 
     /**
@@ -70,10 +57,8 @@ final class DatetimeTagTest extends TestCase
      */
     public function createValidTimestampTagWithNegativeInteger(): void
     {
-        $tag = TimestampTag::create(
-            NegativeIntegerObject::create(-10)
-        );
-        static::assertEquals('-10.000000', $tag->getNormalizedData()->format('U.u'));
+        $tag = TimestampTag::create(NegativeIntegerObject::create(-10));
+        static::assertSame('-10.000000', $tag->getNormalizedData()->format('U.u'));
     }
 
     /**
@@ -84,7 +69,7 @@ final class DatetimeTagTest extends TestCase
         $tag = TimestampTag::create(
             HalfPrecisionFloatObject::create(hex2bin(base_convert('0011010101010101', 2, 16)))
         );
-        static::assertEquals('0.333251', $tag->normalize()->format('U.u'));
+        static::assertSame('0.333251', $tag->normalize()->format('U.u'));
     }
 
     /**
@@ -95,7 +80,7 @@ final class DatetimeTagTest extends TestCase
         $tag = TimestampTag::create(
             SinglePrecisionFloatObject::create(hex2bin(base_convert('00111111011111111111111111111111', 2, 16)))
         );
-        static::assertEquals('0.999999', $tag->normalize()->format('U.u'));
+        static::assertSame('0.999999', $tag->normalize()->format('U.u'));
     }
 
     /**
@@ -104,18 +89,17 @@ final class DatetimeTagTest extends TestCase
     public function createValidTimestampTagWithDoublePrecisionFloat(): void
     {
         $tag = TimestampTag::create(
-            DoublePrecisionFloatObject::create(hex2bin(base_convert('0100000000001001001000011111101101010100010001000010110100011000', 2, 16)))
+            DoublePrecisionFloatObject::create(
+                hex2bin(base_convert('0100000000001001001000011111101101010100010001000010110100011000', 2, 16))
+            )
         );
-        static::assertEquals('3.141592', $tag->normalize()->format('U.u'));
+        static::assertSame('3.141592', $tag->normalize()->format('U.u'));
     }
 
     public function getDatetimes(): array
     {
         $buildTestEntry = static function (string $datetime, string $timestamp): array {
-            return [
-                TextStringObject::create($datetime),
-                $timestamp,
-            ];
+            return [TextStringObject::create($datetime), $timestamp];
         };
 
         return [

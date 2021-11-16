@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\Test;
 
 use CBOR\ByteStringObject;
@@ -24,7 +15,7 @@ use CBOR\UnsignedIntegerObject;
 /**
  * @internal
  */
-final class MapObjectTest extends BaseTestCase
+final class MapObjectTest extends CBORTestCase
 {
     /**
      * @test
@@ -50,22 +41,22 @@ final class MapObjectTest extends BaseTestCase
 
         static::assertCount(4, $object1);
         static::assertCount(4, $object2);
-        static::assertEquals([
+        static::assertSame([
             10 => 'Hello',
             -150 => 'World',
-            'AZERTY' => 1,
-            'Test' => 3,
+            'AZERTY' => '1',
+            'Test' => '3',
         ], $object2->normalize());
-        static::assertEquals($object1->normalize(), $object2->normalize());
-        static::assertEquals((string) $object1, (string) $object2);
+        static::assertSame($object1->normalize(), $object2->normalize());
+        static::assertSame((string) $object1, (string) $object2);
         static::assertTrue(isset($object2[10]));
         static::assertTrue(isset($object2[-150]));
         static::assertTrue(isset($object2['AZERTY']));
         static::assertTrue(isset($object2['Test']));
-        static::assertEquals(
-            MapItem::create(NegativeIntegerObject::create(-150), TextStringObject::create('World')),
-            $object2[-150]
-        );
+        static::assertSame($object2[10]->normalize(), 'Hello');
+        static::assertSame($object2[-150]->normalize(), 'World');
+        static::assertSame($object2['AZERTY']->normalize(), '1');
+        static::assertSame($object2['Test']->normalize(), '3');
     }
 
     /**
@@ -92,21 +83,21 @@ final class MapObjectTest extends BaseTestCase
 
         static::assertCount(4, $object1);
         static::assertCount(4, $object2);
-        static::assertEquals([
+        static::assertSame([
             10 => 'Hello',
             -150 => 'World',
-            'AZERTY' => 1,
-            'Test' => 3,
+            'AZERTY' => '1',
+            'Test' => '3',
         ], $object2->normalize());
-        static::assertEquals($object1->normalize(), $object2->normalize());
-        static::assertEquals((string) $object1, (string) $object2);
+        static::assertSame($object1->normalize(), $object2->normalize());
+        static::assertSame((string) $object1, (string) $object2);
         static::assertTrue(isset($object2[10]));
         static::assertTrue(isset($object2[-150]));
         static::assertTrue(isset($object2['AZERTY']));
         static::assertTrue(isset($object2['Test']));
-        static::assertEquals(
-            MapItem::create(NegativeIntegerObject::create(-150), TextStringObject::create('World')),
-            $object2[-150]
-        );
+        static::assertSame($object2[10]->normalize(), 'Hello');
+        static::assertSame($object2[-150]->normalize(), 'World');
+        static::assertSame($object2['AZERTY']->normalize(), '1');
+        static::assertSame($object2['Test']->normalize(), '3');
     }
 }

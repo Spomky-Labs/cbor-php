@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use function array_key_exists;
@@ -30,6 +21,7 @@ use IteratorAggregate;
 class IndefiniteLengthListObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable, ArrayAccess
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_LIST;
+
     private const ADDITIONAL_INFORMATION = self::LENGTH_INDEFINITE;
 
     /**
@@ -42,11 +34,6 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
         parent::__construct(self::MAJOR_TYPE, self::ADDITIONAL_INFORMATION);
     }
 
-    public static function create(): self
-    {
-        return new self();
-    }
-
     public function __toString(): string
     {
         $result = parent::__toString();
@@ -54,7 +41,12 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
             $result .= (string) $object;
         }
 
-        return $result."\xFF";
+        return $result . "\xFF";
+    }
+
+    public static function create(): self
+    {
+        return new self();
     }
 
     /**
@@ -91,7 +83,7 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
 
     public function remove(int $index): self
     {
-        if (!$this->has($index)) {
+        if (! $this->has($index)) {
             return $this;
         }
         unset($this->data[$index]);
@@ -102,7 +94,7 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
 
     public function get(int $index): CBORObject
     {
-        if (!$this->has($index)) {
+        if (! $this->has($index)) {
             throw new InvalidArgumentException('Index not found.');
         }
 
@@ -111,7 +103,7 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
 
     public function set(int $index, CBORObject $object): self
     {
-        if (!$this->has($index)) {
+        if (! $this->has($index)) {
             throw new InvalidArgumentException('Index not found.');
         }
 
@@ -148,7 +140,7 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
 
     public function offsetSet($offset, $value): void
     {
-        if (null === $offset) {
+        if ($offset === null) {
             $this->add($value);
 
             return;

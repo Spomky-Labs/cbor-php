@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR;
 
 use function array_key_exists;
@@ -47,7 +38,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
     {
         [$additionalInformation, $length] = LengthCalculator::getLengthOfArray($data);
         array_map(static function ($item): void {
-            if (!$item instanceof CBORObject) {
+            if (! $item instanceof CBORObject) {
                 throw new InvalidArgumentException('The list must contain only CBORObject objects.');
             }
         }, $data);
@@ -57,18 +48,10 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         $this->length = $length;
     }
 
-    /**
-     * @param CBORObject[] $data
-     */
-    public static function create(array $data = []): self
-    {
-        return new self($data);
-    }
-
     public function __toString(): string
     {
         $result = parent::__toString();
-        if (null !== $this->length) {
+        if ($this->length !== null) {
             $result .= $this->length;
         }
         foreach ($this->data as $object) {
@@ -76,6 +59,14 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         }
 
         return $result;
+    }
+
+    /**
+     * @param CBORObject[] $data
+     */
+    public static function create(array $data = []): self
+    {
+        return new self($data);
     }
 
     public function add(CBORObject $object): self
@@ -93,7 +84,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
 
     public function remove(int $index): self
     {
-        if (!$this->has($index)) {
+        if (! $this->has($index)) {
             return $this;
         }
         unset($this->data[$index]);
@@ -105,7 +96,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
 
     public function get(int $index): CBORObject
     {
-        if (!$this->has($index)) {
+        if (! $this->has($index)) {
             throw new InvalidArgumentException('Index not found.');
         }
 
@@ -114,7 +105,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
 
     public function set(int $index, CBORObject $object): self
     {
-        if (!$this->has($index)) {
+        if (! $this->has($index)) {
             throw new InvalidArgumentException('Index not found.');
         }
 
@@ -169,7 +160,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
 
     public function offsetSet($offset, $value): void
     {
-        if (null === $offset) {
+        if ($offset === null) {
             $this->add($value);
 
             return;

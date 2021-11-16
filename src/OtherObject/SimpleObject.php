@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2018-2020 Spomky-Labs
- *
- * This software may be modified and distributed under the terms
- * of the MIT license.  See the LICENSE file for details.
- */
-
 namespace CBOR\OtherObject;
 
 use CBOR\Normalizable;
@@ -29,18 +20,18 @@ final class SimpleObject extends Base implements Normalizable
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
     {
-        if (24 === $additionalInformation) {
-            if (null === $data) {
+        if ($additionalInformation === 24) {
+            if ($data === null) {
                 throw new InvalidArgumentException('Invalid simple value. Content data is missing.');
             }
-            if (1 !== mb_strlen($data, '8bit')) {
+            if (mb_strlen($data, '8bit') !== 1) {
                 throw new InvalidArgumentException('Invalid simple value. Content data is too long.');
             }
             if (ord($data) < 32) {
                 throw new InvalidArgumentException('Invalid simple value. Content data must be between 32 and 255.');
             }
         } elseif ($additionalInformation < 20) {
-            if (null !== $data) {
+            if ($data !== null) {
                 throw new InvalidArgumentException('Invalid simple value. Content data should not be present.');
             }
         }
@@ -50,7 +41,7 @@ final class SimpleObject extends Base implements Normalizable
 
     public function normalize(): int
     {
-        if (null === $this->data) {
+        if ($this->data === null) {
             return $this->getAdditionalInformation();
         }
 
