@@ -44,7 +44,7 @@ mutation-tests: vendor ## Mutation tests
 
 .PHONY: mutation-tests-github
 mutation-tests-github: vendor ## Mutation tests (for Github only)
-	vendor/bin/infection --logger-github --git-diff-filter=AM -s --threads=$(nproc) --min-msi=17 --min-covered-msi=31
+	vendor/bin/infection --git-diff-filter=AM -s --threads=$(nproc) --min-msi=17 --min-covered-msi=31
 
 
 .DEFAULT_GOAL := help
