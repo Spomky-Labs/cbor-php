@@ -1,19 +1,20 @@
 CBOR for PHP
 ============
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Spomky-Labs/cbor-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Spomky-Labs/cbor-php/?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/Spomky-Labs/cbor-php/badge.svg?branch=master)](https://coveralls.io/github/Spomky-Labs/cbor-php?branch=master)
+![Build Status](https://github.com/Spomky-Labs/cbor-php/workflows/Unit%20and%20Functional%20Tests/badge.svg)
+![Build Status](https://github.com/Spomky-Labs/cbor-php/workflows/Mutation%20Testing/badge.svg)
 
-[![Build Status](https://travis-ci.org/Spomky-Labs/cbor-php.svg?branch=master)](https://travis-ci.org/Spomky-Labs/cbor-php)
+![Coding Standards](https://github.com/Spomky-Labs/cbor-php/workflows/Coding%20Standards/badge.svg)
+![Static Analyze](https://github.com/Spomky-Labs/cbor-php/workflows/Static%20Analyze/badge.svg)
 
-[![Latest Stable Version](https://poser.pugx.org/spomky-labs/cbor-php/v/stable.png)](https://packagist.org/packages/spomky-labs/cbor-php)
-[![Total Downloads](https://poser.pugx.org/spomky-labs/cbor-php/downloads.png)](https://packagist.org/packages/spomky-labs/cbor-php)
-[![Latest Unstable Version](https://poser.pugx.org/spomky-labs/cbor-php/v/unstable.png)](https://packagist.org/packages/spomky-labs/cbor-php)
-[![License](https://poser.pugx.org/spomky-labs/cbor-php/license.png)](https://packagist.org/packages/spomky-labs/cbor-php)
+[![Latest Stable Version](https://poser.pugx.org/Spomky-Labs/cbor-php/v)](//packagist.org/packages/Spomky-Labs/cbor-php)
+[![Total Downloads](https://poser.pugx.org/Spomky-Labs/cbor-php/downloads)](//packagist.org/packages/Spomky-Labs/cbor-php)
+[![Latest Unstable Version](https://poser.pugx.org/Spomky-Labs/cbor-php/v/unstable)](//packagist.org/packages/Spomky-Labs/cbor-php)
+[![License](https://poser.pugx.org/Spomky-Labs/cbor-php/license)](//packagist.org/packages/Spomky-Labs/cbor-php)
 
 # Scope
 
-This library will help you to decode and create objects using the Concise Binary Object Representation (CBOR - [RFC7049](https://tools.ietf.org/html/rfc7049)).
+This library will help you to decode and create objects using the Concise Binary Object Representation (CBOR - [RFC8949](https://tools.ietf.org/html/rfc8949)).
 
 # Installation
 
@@ -25,7 +26,11 @@ This project follows the [semantic versioning](http://semver.org/) strictly.
 
 I bring solutions to your problems and answer your questions.
 
-If you really love that project and the work I have done or if you want I prioritize your issues, then you can help me out for a couple of :beers: or more!
+If you really love that project, and the work I have done or if you want I prioritize your issues, then you can help me out for a couple of :beers: or more!
+
+[Become a sponsor](https://github.com/sponsors/Spomky)
+
+Or
 
 [![Become a Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/FlorentMorselli)
 
@@ -33,13 +38,13 @@ If you really love that project and the work I have done or if you want I priori
 
 ## Object Creation
 
-This library supports all Major Types defined in the RFC7049 and has capabilities to support any kind of Tags (Major Type 6) and Other Objects (Major Type 7).
+This library supports all Major Types defined in the RFC8949 and has capabilities to support any kind of Tags (Major Type 6) and Other Objects (Major Type 7).
 
 Each object have at least:
 
 * a static method `create`. This method will correctly instantiate the object.
 * can be converted into a binary string: `$object->__toString();` or `(string) $object`.
-* a method `getNormalizedData($ignoreTags = false)` that converts the object into its normalized representation. Tags can be ignored with the first argument set to `true`.
+* ~~a method `getNormalizedData($ignoreTags = false)` that converts the object into its normalized representation. Tags can be ignored with the first argument set to `true`.~~ (deprecated in v2.1)
 
 ### Positive Integer (Major Type 0)
 
@@ -56,21 +61,17 @@ $object = UnsignedIntegerObject::createFromHex('0AFFEBFF');
 echo bin2hex((string)$object); // 1a0affebff
 ```
 
-**Note: the method `getNormalizedData()` will always return the integer as a string. This is needed to avoid lack of 64 bits integer support on PHP**
-
-### Negative Integer (Major TypFe 1)
+### Negative Integer (Major Type 1)
 
 ```php
 <?php
 
-use CBOR\SignedIntegerObject;
+use CBOR\NegativeIntegerObject;
 
-$object = SignedIntegerObject::create(-10);
-$object = SignedIntegerObject::create(-1000);
-$object = SignedIntegerObject::create(-10000);
+$object = NegativeIntegerObject::create(-10);
+$object = NegativeIntegerObject::create(-1000);
+$object = NegativeIntegerObject::create(-10000);
 ```
-
-**Note: the method `getNormalizedData()` will always return the integer as a string. This is needed to avoid lack of 64 bits integer support on PHP**
 
 ### Byte String / Indefinite Length Byte String (Major Type 2)
 
@@ -80,17 +81,18 @@ Byte String and Indefinite Length Byte String objects have the same major type b
 <?php
 
 use CBOR\ByteStringObject; // Byte String
-use CBOR\ByteStringWithChunkObject; // Indefinite Length Byte String
+use CBOR\IndefiniteLengthByteStringObject; // Indefinite Length Byte String
 
 // Create a Byte String with value "Hello"
-$object = new ByteStringObject('Hello');
+$object = ByteStringObject::create('Hello');
 
 // Create an Indefinite Length Byte String with value "Hello" ("He" + "" + "ll" + "o")
-$object = new ByteStringWithChunkObject();
-$object->append('He');
-$object->append('');
-$object->append('ll');
-$object->append('o');
+$object = IndefiniteLengthByteStringObject::create()
+    ->append('He')
+    ->append('')
+    ->append('ll')
+    ->append('o')
+;
 ```
 
 ### Text String / Indefinite Length Text String (Major Type 3)
@@ -101,17 +103,18 @@ Text String and Indefinite Length Text String objects have the same major type b
 <?php
 
 use CBOR\TextStringObject; // Text String
-use CBOR\TextStringWithChunkObject; // Indefinite Length Text String
+use CBOR\IndefiniteLengthTextStringObject; // Indefinite Length Text String
 
 // Create a Text String with value "(｡◕‿◕｡)⚡"
-$object = new TextStringObject('(｡◕‿◕｡)⚡');
+$object = TextStringObject::create('(｡◕‿◕｡)⚡');
 
 // Create an Indefinite Length Text String with value "(｡◕‿◕｡)⚡" ("(｡◕" + "" + "‿◕" + "｡)⚡")
-$object = new TextStringWithChunkObject();
-$object->append('(｡◕');
-$object->append('');
-$object->append('‿◕');
-$object->append('｡)⚡');
+$object = IndefiniteLengthTextStringObject::create()
+    ->append('(｡◕')
+    ->append('')
+    ->append('‿◕')
+    ->append('｡)⚡')
+;
 ```
 
 ### List / Indefinite Length List (Major Type 4)
@@ -123,18 +126,20 @@ Items in the List object can be any of CBOR Object type.
 <?php
 
 use CBOR\ListObject; // List
-use CBOR\InfiniteListObject; // Indefinite Length List
+use CBOR\IndefiniteLengthListObject; // Infinite List
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
 
 // Create a List with a single item
-$object = new ListObject();
-$object->add(new TextStringObject('(｡◕‿◕｡)⚡'));
+$object = ListObject::create()
+    ->add(TextStringObject::create('(｡◕‿◕｡)⚡'))
+;
 
-// Create an Indefinite Length List with several items
-$object = new InfiniteListObject();
-$object->add(new TextStringObject('(｡◕‿◕｡)⚡'));
-$object->add(UnsignedIntegerObject::create(25));
+// Create an Infinite List with several items
+$object = IndefiniteLengthListObject::create()
+    ->add(TextStringObject::create('(｡◕‿◕｡)⚡'))
+    ->add(UnsignedIntegerObject::create(25))
+;
 ```
 
 ### Map / Indefinite Length Map (Major Type 5)
@@ -145,33 +150,34 @@ Keys and values in the Map object can be any of CBOR Object type.
 **However, be really careful with keys. Please follow the recommendation hereunder:**
 
 * Keys should not be duplicated
-* Keys should be of type Positive or Negative Integer Integer, (Indefinite Length)Byte String or (Indefinite Length)Text String. Other types may cause errors.
+* Keys should be of type Positive or Negative Integer, (Indefinite Length)Byte String or (Indefinite Length)Text String. Other types may cause errors.
 
 ```php
 <?php
 
 use CBOR\MapObject; // Map
-use CBOR\MapItem; // Map
-use CBOR\InfiniteMapObject; // Indefinite Length Map
+use CBOR\IndefiniteLengthMapObject; // Infinite Map
 use CBOR\ByteStringObject;
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
-use CBOR\SignedIntegerObject;
+use CBOR\NegativeIntegerObject;
 
 // Create a Map with a single item
-$object = new MapObject();
-$object->add(UnsignedIntegerObject::create(25),new TextStringObject('(｡◕‿◕｡)⚡'));
+$object = MapObject::create()
+    ->add(UnsignedIntegerObject::create(25), TextStringObject::create('(｡◕‿◕｡)⚡'))
+;
 
-// Create an Indefinite Length Map with several items
-$object = new InfiniteMapObject();
-$object->append(new ByteStringObject('A'), SignedIntegerObject::create(-652));
-$object->append(UnsignedIntegerObject::create(25), new TextStringObject('(｡◕‿◕｡)⚡'));
+// Create an Infinite Map with several items
+$object = IndefiniteLengthMapObject::create()
+    ->append(ByteStringObject::create('A'), NegativeIntegerObject::create(-652))
+    ->append(UnsignedIntegerObject::create(25), TextStringObject::create('(｡◕‿◕｡)⚡'))
+;
 ```
 
 ### Tags (Major Type 6)
 
 This library can support any kind of tags.
-It comes with some of thew described in the specification:
+It comes with some of the thew described in the specification:
 
 * Base 16 encoding
 * Base 64 encoding
@@ -202,7 +208,7 @@ $taggedObject = TimestampTag::create($object); // Returns a \DateTimeImmutable o
 ### Other Objects (Major Type 7)
 
 This library can support any kind of "other objects".
-It comes with some of thew described in the specification:
+It comes with some of the thew described in the specification:
 
 * False
 * True
@@ -225,14 +231,9 @@ use CBOR\OtherObject\FalseObject;
 use CBOR\OtherObject\NullObject;
 use CBOR\OtherObject\UndefinedObject;
 
-$object = new FalseObject();
-$object->getNormalizedData(); // false
-
-$object = new NullObject();
-$object->getNormalizedData(); // null
-
-$object = new UndefinedObject();
-$object->getNormalizedData(); // 'undefined'
+$object = FalseObject::create();
+$object = NullObject::create();
+$object = UndefinedObject::create();
 ```
 
 ## Example
@@ -241,9 +242,10 @@ $object->getNormalizedData(); // 'undefined'
 <?php
 
 use CBOR\MapObject;
+use CBOR\OtherObject\UndefinedObject;
 use CBOR\TextStringObject;
 use CBOR\ListObject;
-use CBOR\SignedIntegerObject;
+use CBOR\NegativeIntegerObject;
 use CBOR\UnsignedIntegerObject;
 use CBOR\OtherObject\TrueObject;
 use CBOR\OtherObject\FalseObject;
@@ -251,59 +253,46 @@ use CBOR\OtherObject\NullObject;
 use CBOR\Tag\DecimalFractionTag;
 use CBOR\Tag\TimestampTag;
 
-$object = new MapObject();
-$object->add(
-    new TextStringObject('(｡◕‿◕｡)⚡'),
-    new ListObject([
-        new TrueObject(),
-        new FalseObject(),
-        new DecimalFractionTag(
-            new ListObject([
-                SignedIntegerObject::create(-2),
-                UnsignedIntegerObject::create(1234),
-            ])
-        ),
-    ])
-);
-
-$object->add(
-    UnsignedIntegerObject::create(2000),
-    new NullObject()
-);
-$object->add(
-    new TextStringObject('date'),
-    TimestampTag::create(
-        UnsignedIntegerObject::create(1577836800)
+$object = MapObject::create()
+    ->add(
+        TextStringObject::create('(｡◕‿◕｡)⚡'),
+        ListObject::create([
+            TrueObject::create(),
+            FalseObject::create(),
+            UndefinedObject::create(),
+            DecimalFractionTag::createFromExponentAndMantissa(
+                NegativeIntegerObject::create(-2),
+                UnsignedIntegerObject::create(1234)
+            ),
+        ])
     )
-);
+    ->add(
+        UnsignedIntegerObject::create(2000),
+        NullObject::create()
+    )
+    ->add(
+        TextStringObject::create('date'),
+        TimestampTag::create(UnsignedIntegerObject::create(1577836800))
+    )
+;
 ```
 
 The encoded result will be `0xa37428efbda1e29795e280bfe29795efbda129e29aa183f5f4c482211904d21907d0f66464617465c11a5e0be100`.
-The normalized result is:
-
-```php
-array:3 [
-  "(｡◕‿◕｡)⚡" => array:3 [
-    0 => true
-    1 => false
-    2 => "12.34"
-  ]
-  2000 => null
-  "date" => DateTimeImmutable @1577836800 {
-    date: 2020-01-01 00:00:00.0 +00:00
-  }
-]
-
-```
-
 
 ## Object Loading
 
 If you want to load a CBOR encoded string, you just have to instantiate a `CBOR\Decoder` class.
-This class needs the following arguments:
+This class does not need any argument.
 
-* A `Tag` manager: this manager will be able to identify the tags associated to the data and create it accordingly if the tag ID is supported.
-* An `Other Object` manager: this manager will be able to identify all other objects and create it accordingly if supported.
+```php
+<?php
+
+use CBOR\Decoder;
+
+$decoder = Decoder::create();
+```
+
+If needed, you can define custom sets of Tag and Other Object support managers.
 
 ```php
 <?php
@@ -312,29 +301,30 @@ use CBOR\Decoder;
 use CBOR\OtherObject;
 use CBOR\Tag;
 
-$otherObjectManager = new OtherObject\OtherObjectManager();
-$otherObjectManager->add(OtherObject\SimpleObject::class);
-$otherObjectManager->add(OtherObject\FalseObject::class);
-$otherObjectManager->add(OtherObject\TrueObject::class);
-$otherObjectManager->add(OtherObject\NullObject::class);
-$otherObjectManager->add(OtherObject\UndefinedObject::class);
-$otherObjectManager->add(OtherObject\SimpleObject::class);
-$otherObjectManager->add(OtherObject\HalfPrecisionFloatObject::class);
-$otherObjectManager->add(OtherObject\SinglePrecisionFloatObject::class);
-$otherObjectManager->add(OtherObject\DoublePrecisionFloatObject::class);
+$otherObjectManager = OtherObject\OtherObjectManager::create()
+    ->add(OtherObject\SimpleObject::class)
+    ->add(OtherObject\FalseObject::class)
+    ->add(OtherObject\TrueObject::class)
+    ->add(OtherObject\NullObject::class)
+    ->add(OtherObject\UndefinedObject::class)
+    ->add(OtherObject\HalfPrecisionFloatObject::class)
+    ->add(OtherObject\SinglePrecisionFloatObject::class)
+    ->add(OtherObject\DoublePrecisionFloatObject::class)
+;
 
-$tagManager = new Tag\TagObjectManager();
-$tagManager->add(Tag\DatetimeTag::class);
-$tagManager->add(Tag\TimestampTag::class);
-$tagManager->add(Tag\PositiveBigIntegerTag::class);
-$tagManager->add(Tag\NegativeBigIntegerTag::class);
-$tagManager->add(Tag\DecimalFractionTag::class);
-$tagManager->add(Tag\BigFloatTag::class);
-$tagManager->add(Tag\Base64UrlEncodingTag::class);
-$tagManager->add(Tag\Base64EncodingTag::class);
-$tagManager->add(Tag\Base16EncodingTag::class);
+$tagManager = Tag\TagManager::create()
+    ->add(Tag\DatetimeTag::class)
+    ->add(Tag\TimestampTag::class)
+    ->add(Tag\UnsignedBigIntegerTag::class)
+    ->add(Tag\NegativeBigIntegerTag::class)
+    ->add(Tag\DecimalFractionTag::class)
+    ->add(Tag\BigFloatTag::class)
+    ->add(Tag\Base64UrlEncodingTag::class)
+    ->add(Tag\Base64EncodingTag::class)
+    ->add(Tag\Base16EncodingTag::class)
+;
 
-$decoder = new Decoder($tagManager, $otherObjectManager);
+$decoder = Decoder::create($tagManager, $otherObjectManager);
 ```
 
 Then, the decoder will read the data you want to load.
@@ -350,7 +340,7 @@ use CBOR\StringStream;
 $data = hex2bin('fb3fd5555555555555');
 
 // String Stream
-$stream = new StringStream($data);
+$stream = StringStream::create($data);
 
 // Load the data
 $object = $decoder->decode($stream); // Return a CBOR\OtherObject\DoublePrecisionFloatObject class with normalized value ~0.3333 (1/3)

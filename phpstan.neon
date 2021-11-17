@@ -1,11 +1,62 @@
 parameters:
-    level: 7
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
+    level: 8
     paths:
         - src
-includes:
-    - vendor/phpstan/phpstan-strict-rules/rules.neon
-    - vendor/phpstan/phpstan-phpunit/extension.neon
-    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
-    - vendor/phpstan/phpstan-beberlei-assert/extension.neon
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        -
+            message: '#Parameter .* of static method CBOR\\Utils\:\:binToBigInteger\(\) expects string, string\|null given\.#'
+            count: 3
+            path: src/OtherObject/SinglePrecisionFloatObject.php
+        -
+            message: '#Parameter .* of static method CBOR\\Utils\:\:binToBigInteger\(\) expects string, string\|null given\.#'
+            count: 3
+            path: src/OtherObject/DoublePrecisionFloatObject.php
+        -
+            message: '#Parameter .* of static method CBOR\\Utils\:\:binToBigInteger\(\) expects string, string\|null given\.#'
+            count: 3
+            path: src/OtherObject/HalfPrecisionFloatObject.php
+        -
+            message: '#Parameter .* of static method CBOR\\Utils\:\:binToInt\(\) expects string, string\|null given\.#'
+            count: 1
+            path: src/Tag/TagManager.php
+        -
+            message: '#Instanceof between CBOR\\CBORObject and CBOR\\CBORObject will always evaluate to true\.#'
+            count: 1
+            path: src/ListObject.php
+        -
+            message: '#Instanceof between CBOR\\MapItem and CBOR\\MapItem will always evaluate to true\.#'
+            count: 1
+            path: src/MapObject.php
+        -
+            message: '#Class CBOR\\TextStringWithChunkObject extends \@final class CBOR\\IndefiniteLengthTextStringObject\.#'
+            count: 1
+            path: src/TextStringWithChunkObject.php
+        -
+            message: '#Class CBOR\\Tag\\TagObjectManager extends \@final class CBOR\\Tag\\TagManager\.#'
+            count: 1
+            path: src/Tag/TagObjectManager.php
+        -
+            message: '#Class CBOR\\Tag\\PositiveBigIntegerTag extends \@final class CBOR\\Tag\\UnsignedBigIntegerTag\.#'
+            count: 1
+            path: src/Tag/PositiveBigIntegerTag.php
+        -
+            message: '#Class CBOR\\Tag\\EpochTag extends \@final class CBOR\\Tag\\DatetimeTag\.#'
+            count: 1
+            path: src/Tag/EpochTag.php
+        -
+            message: '#Class CBOR\\SignedIntegerObject extends \@final class CBOR\\NegativeIntegerObject\.#'
+            count: 1
+            path: src/SignedIntegerObject.php
+        -
+            message: '#Class CBOR\\InfiniteMapObject extends \@final class CBOR\\IndefiniteLengthMapObject\.#'
+            count: 1
+            path: src/InfiniteMapObject.php
+        -
+            message: '#Class CBOR\\InfiniteListObject extends \@final class CBOR\\IndefiniteLengthListObject\.#'
+            count: 1
+            path: src/InfiniteListObject.php
+        -
+            message: '#Class CBOR\\ByteStringWithChunkObject extends \@final class CBOR\\IndefiniteLengthByteStringObject\.#'
+            count: 1
+            path: src/ByteStringWithChunkObject.php
