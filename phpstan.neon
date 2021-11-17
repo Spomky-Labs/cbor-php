@@ -29,10 +29,6 @@ parameters:
             count: 1
             path: src/MapObject.php
         -
-            message: '#Method CBOR\\OtherObject\\NullObject\:\:normalize\(\) should return mixed but return statement is missing\.#'
-            count: 1
-            path: src/OtherObject/NullObject.php
-        -
             message: '#Class CBOR\\TextStringWithChunkObject extends \@final class CBOR\\IndefiniteLengthTextStringObject\.#'
             count: 1
             path: src/TextStringWithChunkObject.php
