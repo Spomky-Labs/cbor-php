@@ -36,7 +36,7 @@ static-analyse: vendor ## Run static analyse
 
 .PHONY: rector
 rector: vendor ## Check all files using Rector
-	vendor/bin/rector process --ansi --dry-run
+	vendor/bin/rector process --ansi --dry-run  -v
 
 .PHONY: mutation-tests
 mutation-tests: vendor ## Mutation tests
