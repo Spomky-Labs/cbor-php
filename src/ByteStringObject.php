@@ -8,15 +8,9 @@ final class ByteStringObject extends AbstractCBORObject implements Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_BYTE_STRING;
 
-    /**
-     * @var string
-     */
-    private $value;
+    private string $value;
 
-    /**
-     * @var string|null
-     */
-    private $length;
+    private ?string $length = null;
 
     public function __construct(string $data)
     {
@@ -55,13 +49,5 @@ final class ByteStringObject extends AbstractCBORObject implements Normalizable
     public function normalize(): string
     {
         return $this->value;
-    }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false): string
-    {
-        return $this->normalize();
     }
 }

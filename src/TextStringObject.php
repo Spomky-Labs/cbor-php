@@ -8,15 +8,9 @@ final class TextStringObject extends AbstractCBORObject implements Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_TEXT_STRING;
 
-    /**
-     * @var string|null
-     */
-    private $length;
+    private ?string $length = null;
 
-    /**
-     * @var string
-     */
-    private $data;
+    private string $data;
 
     public function __construct(string $data)
     {
@@ -50,14 +44,6 @@ final class TextStringObject extends AbstractCBORObject implements Normalizable
     public function getLength(): int
     {
         return mb_strlen($this->data, 'utf8');
-    }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false): string
-    {
-        return $this->normalize();
     }
 
     public function normalize()

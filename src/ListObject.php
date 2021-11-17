@@ -24,12 +24,9 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
     /**
      * @var CBORObject[]
      */
-    private $data;
+    private array $data;
 
-    /**
-     * @var string|null
-     */
-    private $length;
+    private ?string $length = null;
 
     /**
      * @param CBORObject[] $data
@@ -123,16 +120,6 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         return array_map(static function (CBORObject $object) {
             return $object instanceof Normalizable ? $object->normalize() : $object;
         }, $this->data);
-    }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     *
-     * @return array<int|string, mixed>
-     */
-    public function getNormalizedData(bool $ignoreTags = false): array
-    {
-        return $this->normalize();
     }
 
     public function count(): int

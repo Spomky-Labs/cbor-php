@@ -71,9 +71,9 @@ final class SignedIntegerTest extends CBORTestCase
         $object = $this->getDecoder()
             ->decode($stream)
         ;
-        $object->getNormalizedData();
+        $object->normalize();
         static::assertSame($data, bin2hex((string) $object));
-        static::assertSame($expectedNormalizedData, $object->getNormalizedData());
+        static::assertSame($expectedNormalizedData, $object->normalize());
     }
 
     public function getDataSet(): array

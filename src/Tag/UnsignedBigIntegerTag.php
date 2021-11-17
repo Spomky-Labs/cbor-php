@@ -12,10 +12,7 @@ use CBOR\Tag;
 use CBOR\Utils;
 use InvalidArgumentException;
 
-/**
- * @final
- */
-class UnsignedBigIntegerTag extends Tag implements Normalizable
+final class UnsignedBigIntegerTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -49,21 +46,5 @@ class UnsignedBigIntegerTag extends Tag implements Normalizable
         $object = $this->object;
 
         return Utils::hexToString($object->normalize());
-    }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        if ($ignoreTags) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-
-        if (! $this->object instanceof ByteStringObject) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-
-        return Utils::hexToString($this->object->getValue());
     }
 }

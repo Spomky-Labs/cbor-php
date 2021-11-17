@@ -14,10 +14,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
 
-/**
- * @final
- */
-class DatetimeTag extends Tag implements Normalizable
+final class DatetimeTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {
@@ -59,17 +56,5 @@ class DatetimeTag extends Tag implements Normalizable
         }
 
         return $formatted;
-    }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        if ($ignoreTags) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-
-        return $this->normalize();
     }
 }

@@ -12,10 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class CBORTestCase extends TestCase
 {
-    /**
-     * @var Decoder|null
-     */
-    private $decoder;
+    private ?Decoder $decoder = null;
 
     protected function getDecoder(): Decoder
     {

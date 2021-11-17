@@ -39,20 +39,17 @@ final class LengthCalculator
      */
     private static function computeLength(int $length): array
     {
-        switch (true) {
-            case $length <= 23:
-                return [$length, null];
-            case $length <= 0xFF:
-                return [24, chr($length)];
-            case $length <= 0xFFFF:
-                return [25, self::hex2bin(dechex($length))];
-            case $length <= 0xFFFFFFFF:
-                return [26, self::hex2bin(dechex($length))];
-            case BigInteger::of($length)->isLessThan(BigInteger::fromBase('FFFFFFFFFFFFFFFF', 16)):
-                return [27, self::hex2bin(dechex($length))];
-            default:
-                return [31, null];
-        }
+        return match (true) {
+            $length <= 23 => [$length, null],
+            $length <= 0xFF => [24, chr($length)],
+            $length <= 0xFFFF => [25, self::hex2bin(dechex($length))],
+            $length <= 0xFFFFFFFF => [26, self::hex2bin(dechex($length))],
+            BigInteger::of($length)->isLessThan(BigInteger::fromBase('FFFFFFFFFFFFFFFF', 16)) => [
+                27,
+                self::hex2bin(dechex($length)),
+            ],
+            default => [31, null],
+        };
     }
 
     private static function hex2bin(string $data): string

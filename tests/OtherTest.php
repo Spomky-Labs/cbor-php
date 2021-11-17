@@ -21,7 +21,6 @@ final class OtherTest extends CBORTestCase
         $object = $this->getDecoder()
             ->decode($stream)
         ;
-        $object->getNormalizedData();
         static::assertSame($data, bin2hex((string) $object));
     }
 

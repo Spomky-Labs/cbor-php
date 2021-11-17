@@ -79,29 +79,4 @@ final class DecimalFractionTag extends Tag implements Normalizable
 
         return rtrim(bcmul($m->normalize(), bcpow('10', $e->normalize(), 100), 100), '0');
     }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        if ($ignoreTags) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-
-        if (! $this->object instanceof ListObject || count($this->object) !== 2) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-        $e = $this->object->get(0);
-        $m = $this->object->get(1);
-
-        if (! $e instanceof UnsignedIntegerObject && ! $e instanceof NegativeIntegerObject) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-        if (! $m instanceof UnsignedIntegerObject && ! $m instanceof NegativeIntegerObject && ! $m instanceof NegativeBigIntegerTag && ! $m instanceof UnsignedBigIntegerTag) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-
-        return $this->normalize();
-    }
 }

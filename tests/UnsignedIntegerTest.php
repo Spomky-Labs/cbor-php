@@ -66,7 +66,7 @@ final class UnsignedIntegerTest extends CBORTestCase
             ->decode($stream)
         ;
         static::assertSame($data, bin2hex((string) $object));
-        static::assertSame($expectedNormalizedData, $object->getNormalizedData());
+        static::assertSame($expectedNormalizedData, $object->normalize());
     }
 
     public function getDataSet(): array

@@ -46,12 +46,4 @@ final class MimeTag extends Tag implements Normalizable
 
         return $object->normalize();
     }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        return $this->object->getNormalizedData($ignoreTags);
-    }
 }

@@ -6,20 +6,10 @@ namespace CBOR;
 
 class MapItem
 {
-    /**
-     * @var CBORObject
-     */
-    private $key;
-
-    /**
-     * @var CBORObject
-     */
-    private $value;
-
-    public function __construct(CBORObject $key, CBORObject $value)
-    {
-        $this->key = $key;
-        $this->value = $value;
+    public function __construct(
+        private CBORObject $key,
+        private CBORObject $value
+    ) {
     }
 
     public static function create(CBORObject $key, CBORObject $value): self

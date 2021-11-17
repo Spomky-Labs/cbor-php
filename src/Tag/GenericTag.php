@@ -18,12 +18,4 @@ final class GenericTag extends Tag
     {
         return new self($additionalInformation, $data, $object);
     }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        return $this->object;
-    }
 }

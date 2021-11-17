@@ -23,12 +23,4 @@ final class GenericObject extends Base
 
         return new self($additionalInformation, $data);
     }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        return $this->data;
-    }
 }

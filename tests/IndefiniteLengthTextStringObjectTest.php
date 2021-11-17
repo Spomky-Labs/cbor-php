@@ -33,7 +33,7 @@ final class IndefiniteLengthTextStringObjectTest extends CBORTestCase
         static::assertSame(CBORObject::LENGTH_INDEFINITE, $object->getAdditionalInformation());
         static::assertSame($expectedValue, $object->getValue());
         static::assertSame($expectedLength, $object->getLength());
-        static::assertSame($expectedValue, $object->getNormalizedData());
+        static::assertSame($expectedValue, $object->normalize());
 
         $binary = (string) $object;
         static::assertSame(hex2bin($expectedEncodedObject), $binary);
@@ -48,7 +48,7 @@ final class IndefiniteLengthTextStringObjectTest extends CBORTestCase
         static::assertSame(CBORObject::LENGTH_INDEFINITE, $decoded->getAdditionalInformation());
         static::assertSame($expectedValue, $decoded->getValue());
         static::assertSame($expectedLength, $decoded->getLength());
-        static::assertSame($expectedValue, $decoded->getNormalizedData());
+        static::assertSame($expectedValue, $decoded->normalize());
     }
 
     public function getData(): array

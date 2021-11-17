@@ -79,24 +79,4 @@ final class TimestampTag extends Tag implements Normalizable
 
         return $formatted;
     }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        if ($ignoreTags) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-        switch (true) {
-            case $this->object instanceof UnsignedIntegerObject:
-            case $this->object instanceof NegativeIntegerObject:
-            case $this->object instanceof HalfPrecisionFloatObject:
-            case $this->object instanceof SinglePrecisionFloatObject:
-            case $this->object instanceof DoublePrecisionFloatObject:
-                return $this->normalize();
-            default:
-                return $this->object->getNormalizedData($ignoreTags);
-        }
-    }
 }

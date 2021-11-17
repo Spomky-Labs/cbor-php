@@ -10,21 +10,12 @@ abstract class Tag extends AbstractCBORObject
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_TAG;
 
-    /**
-     * @var string|null
-     */
-    protected $data;
-
-    /**
-     * @var CBORObject
-     */
-    protected $object;
-
-    public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
-    {
+    public function __construct(
+        int $additionalInformation,
+        protected ?string $data,
+        protected CBORObject $object
+    ) {
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
-        $this->data = $data;
-        $this->object = $object;
     }
 
     public function __toString(): string

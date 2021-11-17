@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-/**
- * @final
- */
-class IndefiniteLengthByteStringObject extends AbstractCBORObject implements Normalizable
+final class IndefiniteLengthByteStringObject extends AbstractCBORObject implements Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_BYTE_STRING;
 
@@ -16,7 +13,7 @@ class IndefiniteLengthByteStringObject extends AbstractCBORObject implements Nor
     /**
      * @var ByteStringObject[]
      */
-    private $chunks = [];
+    private array $chunks = [];
 
     public function __construct()
     {
@@ -80,13 +77,5 @@ class IndefiniteLengthByteStringObject extends AbstractCBORObject implements Nor
         }
 
         return $result;
-    }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false): string
-    {
-        return $this->normalize();
     }
 }

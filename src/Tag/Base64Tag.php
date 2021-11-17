@@ -37,12 +37,4 @@ final class Base64Tag extends Tag
 
         return new self($ai, $data, $object);
     }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        return $this->object->getNormalizedData($ignoreTags);
-    }
 }

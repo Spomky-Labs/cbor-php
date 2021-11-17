@@ -7,8 +7,6 @@ namespace CBOR;
 use function array_key_exists;
 use ArrayAccess;
 use ArrayIterator;
-use function count;
-use Countable;
 use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
@@ -18,7 +16,7 @@ use IteratorAggregate;
  * @phpstan-implements IteratorAggregate<int, CBORObject>
  * @final
  */
-class IndefiniteLengthListObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable, ArrayAccess
+class IndefiniteLengthListObject extends AbstractCBORObject implements IteratorAggregate, Normalizable, ArrayAccess
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_LIST;
 
@@ -27,7 +25,7 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
     /**
      * @var CBORObject[]
      */
-    private $data = [];
+    private array $data = [];
 
     public function __construct()
     {
@@ -57,16 +55,6 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
         return array_map(static function (CBORObject $object) {
             return $object instanceof Normalizable ? $object->normalize() : $object;
         }, $this->data);
-    }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     *
-     * @return mixed[]
-     */
-    public function getNormalizedData(bool $ignoreTags = false): array
-    {
-        return $this->normalize();
     }
 
     public function add(CBORObject $item): self
@@ -110,14 +98,6 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
         $this->data[$index] = $object;
 
         return $this;
-    }
-
-    /**
-     * @deprecated The method will be removed on v3.0. No replacement
-     */
-    public function count(): int
-    {
-        return count($this->data);
     }
 
     /**

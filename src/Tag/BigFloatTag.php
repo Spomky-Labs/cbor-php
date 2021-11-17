@@ -80,20 +80,4 @@ final class BigFloatTag extends Tag implements Normalizable
 
         return rtrim(bcmul($m->normalize(), bcpow('2', $e->normalize(), 100), 100), '0');
     }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        if ($ignoreTags) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-
-        if (! $this->object instanceof ListObject || count($this->object) !== 2) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-
-        return $this->normalize();
-    }
 }

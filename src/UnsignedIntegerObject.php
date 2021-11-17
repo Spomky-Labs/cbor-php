@@ -12,15 +12,11 @@ final class UnsignedIntegerObject extends AbstractCBORObject implements Normaliz
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_UNSIGNED_INTEGER;
 
-    /**
-     * @var string|null
-     */
-    private $data;
-
-    public function __construct(int $additionalInformation, ?string $data)
-    {
+    public function __construct(
+        int $additionalInformation,
+        private ?string $data
+    ) {
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
-        $this->data = $data;
     }
 
     public function __toString(): string
@@ -76,14 +72,6 @@ final class UnsignedIntegerObject extends AbstractCBORObject implements Normaliz
     public function normalize(): string
     {
         return $this->getValue();
-    }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false): string
-    {
-        return $this->normalize();
     }
 
     private static function createBigInteger(BigInteger $integer): self

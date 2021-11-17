@@ -51,24 +51,4 @@ final class NegativeBigIntegerTag extends Tag implements Normalizable
             ->toBase(10)
         ;
     }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        if ($ignoreTags) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-
-        if (! $this->object instanceof ByteStringObject) {
-            return $this->object->getNormalizedData($ignoreTags);
-        }
-        $integer = BigInteger::fromBase(bin2hex($this->object->getValue()), 16);
-        $minusOne = BigInteger::of(-1);
-
-        return $minusOne->minus($integer)
-            ->toBase(10)
-        ;
-    }
 }

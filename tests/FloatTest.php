@@ -21,7 +21,7 @@ final class FloatTest extends CBORTestCase
         $object = $this->getDecoder()
             ->decode($stream)
         ;
-        $object->getNormalizedData();
+        $object->normalize();
         static::assertSame($data, bin2hex((string) $object));
     }
 

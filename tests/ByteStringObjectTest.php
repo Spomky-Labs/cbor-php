@@ -29,7 +29,7 @@ final class ByteStringObjectTest extends CBORTestCase
         static::assertSame($expectedAdditionalInformation, $object->getAdditionalInformation());
         static::assertSame($string, $object->getValue());
         static::assertSame($expectedLength, $object->getLength());
-        static::assertSame($string, $object->getNormalizedData());
+        static::assertSame($string, $object->normalize());
 
         $binary = (string) $object;
         static::assertSame(hex2bin($expectedEncodedObject), $binary);
@@ -44,7 +44,7 @@ final class ByteStringObjectTest extends CBORTestCase
         static::assertSame($expectedAdditionalInformation, $decoded->getAdditionalInformation());
         static::assertSame($string, $decoded->getValue());
         static::assertSame($expectedLength, $decoded->getLength());
-        static::assertSame($string, $decoded->getNormalizedData());
+        static::assertSame($string, $decoded->normalize());
     }
 
     public function getData(): array

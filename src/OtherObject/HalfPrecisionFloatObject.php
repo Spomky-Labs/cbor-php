@@ -33,18 +33,7 @@ final class HalfPrecisionFloatObject extends Base implements Normalizable
         return new self(self::OBJECT_HALF_PRECISION_FLOAT, $value);
     }
 
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        return $this->normalize();
-    }
-
-    /**
-     * @return float|int
-     */
-    public function normalize()
+    public function normalize(): float|int
     {
         $exponent = $this->getExponent();
         $mantissa = $this->getMantissa();

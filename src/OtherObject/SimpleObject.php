@@ -7,7 +7,6 @@ namespace CBOR\OtherObject;
 use CBOR\Normalizable;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
-use function chr;
 use InvalidArgumentException;
 use function ord;
 
@@ -46,25 +45,5 @@ final class SimpleObject extends Base implements Normalizable
         }
 
         return Utils::binToInt($this->data);
-    }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     */
-    public function getNormalizedData(bool $ignoreTags = false): int
-    {
-        return $this->normalize();
-    }
-
-    public static function create(int $value): self
-    {
-        switch (true) {
-            case $value < 32:
-                return new self($value, null);
-            case $value < 256:
-                return new self(24, chr($value));
-            default:
-                throw new InvalidArgumentException('The value is not a valid simple value.');
-        }
     }
 }

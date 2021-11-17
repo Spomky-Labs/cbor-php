@@ -21,7 +21,6 @@ final class GlobalTest extends CBORTestCase
         $object = $this->getDecoder()
             ->decode($stream)
         ;
-        $object->getNormalizedData();
         static::assertSame($data, bin2hex((string) $object));
     }
 

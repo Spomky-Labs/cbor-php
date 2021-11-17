@@ -29,7 +29,7 @@ final class DatetimeTagTest extends TestCase
     public function createValidDatetimeTag(CBORObject $object, string $expectedTimestamp): void
     {
         $tag = DatetimeTag::create($object);
-        static::assertSame($expectedTimestamp, $tag->getNormalizedData()->format('U.u'));
+        static::assertSame($expectedTimestamp, $tag->normalize()->format('U.u'));
     }
 
     /**
@@ -49,7 +49,7 @@ final class DatetimeTagTest extends TestCase
     public function createValidTimestampTagWithUnsignedInteger(): void
     {
         $tag = TimestampTag::create(UnsignedIntegerObject::create(0));
-        static::assertSame('0.000000', $tag->getNormalizedData()->format('U.u'));
+        static::assertSame('0.000000', $tag->normalize()->format('U.u'));
     }
 
     /**
@@ -58,7 +58,7 @@ final class DatetimeTagTest extends TestCase
     public function createValidTimestampTagWithNegativeInteger(): void
     {
         $tag = TimestampTag::create(NegativeIntegerObject::create(-10));
-        static::assertSame('-10.000000', $tag->getNormalizedData()->format('U.u'));
+        static::assertSame('-10.000000', $tag->normalize()->format('U.u'));
     }
 
     /**

@@ -10,15 +10,12 @@ use CBOR\Tag;
 use CBOR\Utils;
 use InvalidArgumentException;
 
-/**
- * @final
- */
-class TagManager implements TagManagerInterface
+final class TagManager implements TagManagerInterface
 {
     /**
      * @var string[]
      */
-    private $classes = [];
+    private array $classes = [];
 
     public static function create(): self
     {

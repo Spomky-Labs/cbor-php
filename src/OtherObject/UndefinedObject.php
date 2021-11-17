@@ -27,14 +27,4 @@ final class UndefinedObject extends Base
     {
         return new self();
     }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     *
-     * @return string
-     */
-    public function getNormalizedData(bool $ignoreTags = false)
-    {
-        return 'undefined';
-    }
 }

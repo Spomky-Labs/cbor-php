@@ -24,12 +24,9 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     /**
      * @var MapItem[]
      */
-    private $data;
+    private array $data;
 
-    /**
-     * @var string|null
-     */
-    private $length;
+    private ?string $length = null;
 
     /**
      * @param MapItem[] $data
@@ -85,18 +82,12 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         return $this;
     }
 
-    /**
-     * @param int|string $key
-     */
-    public function has($key): bool
+    public function has(int|string $key): bool
     {
         return array_key_exists($key, $this->data);
     }
 
-    /**
-     * @param int|string $index
-     */
-    public function remove($index): self
+    public function remove(int|string $index): self
     {
         if (! $this->has($index)) {
             return $this;
@@ -108,10 +99,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         return $this;
     }
 
-    /**
-     * @param int|string $index
-     */
-    public function get($index): CBORObject
+    public function get(int|string $index): CBORObject
     {
         if (! $this->has($index)) {
             throw new InvalidArgumentException('Index not found.');
@@ -161,16 +149,6 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
 
             return $carry;
         }, []);
-    }
-
-    /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
-     *
-     * @return array<int|string, mixed>
-     */
-    public function getNormalizedData(bool $ignoreTags = false): array
-    {
-        return $this->normalize();
     }
 
     public function offsetExists($offset): bool
