@@ -29,8 +29,9 @@ final class NullObject extends Base implements Normalizable
         return new self();
     }
 
-    public function normalize()
+    public function normalize(): ?string
     {
+        return null;
     }
 
     /**
