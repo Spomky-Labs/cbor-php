@@ -44,7 +44,6 @@ Each object have at least:
 
 * a static method `create`. This method will correctly instantiate the object.
 * can be converted into a binary string: `$object->__toString();` or `(string) $object`.
-* ~~a method `getNormalizedData($ignoreTags = false)` that converts the object into its normalized representation. Tags can be ignored with the first argument set to `true`.~~ (deprecated in v2.1)
 
 ### Positive Integer (Major Type 0)
 
