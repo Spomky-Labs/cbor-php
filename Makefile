@@ -40,11 +40,11 @@ rector: vendor ## Check all files using Rector
 
 .PHONY: mutation-tests
 mutation-tests: vendor ## Mutation tests
-	vendor/bin/infection -s --threads=$(nproc) --min-msi=60 --min-covered-msi=70
+	vendor/bin/infection -s --threads=$(nproc) --min-msi=64 --min-covered-msi=74
 
 .PHONY: mutation-tests-github
 mutation-tests-github: vendor ## Mutation tests (for Github only)
-	vendor/bin/infection --logger-github --git-diff-filter=AM -s --threads=$(nproc) --min-msi=17 --min-covered-msi=31
+	vendor/bin/infection --logger-github --git-diff-filter=AM -s --threads=$(nproc) --min-msi=64 --min-covered-msi=74
 
 
 .DEFAULT_GOAL := help

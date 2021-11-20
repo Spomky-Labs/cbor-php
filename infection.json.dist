@@ -10,11 +10,6 @@
     },
     "mutators": {
         "@default": true,
-        "global-ignoreSourceCodeByRegex": [
-           "\\$this->logger.*",
-           "\\$this->cache->save.*",
-           "parent::build(\\$container);"
-        ],
         "MBString": {
             "settings": {
                 "mb_substr": false,
