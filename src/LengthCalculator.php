@@ -43,15 +43,15 @@ final class LengthCalculator
             case $length <= 23:
                 return [$length, null];
             case $length <= 0xFF:
-                return [24, chr($length)];
+                return [CBORObject::LENGTH_1_BYTE, chr($length)];
             case $length <= 0xFFFF:
-                return [25, self::hex2bin(dechex($length))];
+                return [CBORObject::LENGTH_2_BYTES, self::hex2bin(dechex($length))];
             case $length <= 0xFFFFFFFF:
-                return [26, self::hex2bin(dechex($length))];
+                return [CBORObject::LENGTH_4_BYTES, self::hex2bin(dechex($length))];
             case BigInteger::of($length)->isLessThanOrEqualTo(BigInteger::fromBase('FFFFFFFFFFFFFFFF', 16)):
-                return [27, self::hex2bin(dechex($length))];
+                return [CBORObject::LENGTH_8_BYTES, self::hex2bin(dechex($length))];
             default:
-                return [31, null];
+                return [CBORObject::LENGTH_INDEFINITE, null];
         }
     }
 
