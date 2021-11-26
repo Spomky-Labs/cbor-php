@@ -20,8 +20,7 @@ final class LengthCalculatorTest extends TestCase
         string $data,
         int $expectedAdditionalInformation,
         ?string $expectedLength
-    ): void
-    {
+    ): void {
         [$additionalInformation, $length] = LengthCalculator::getLengthOfString($data);
 
         static::assertSame($expectedAdditionalInformation, $additionalInformation);
