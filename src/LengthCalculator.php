@@ -48,7 +48,7 @@ final class LengthCalculator
                 return [25, self::hex2bin(dechex($length))];
             case $length <= 0xFFFFFFFF:
                 return [26, self::hex2bin(dechex($length))];
-            case BigInteger::of($length)->isLessThan(BigInteger::fromBase('FFFFFFFFFFFFFFFF', 16)):
+            case BigInteger::of($length)->isLessThanOrEqualTo(BigInteger::fromBase('FFFFFFFFFFFFFFFF', 16)):
                 return [27, self::hex2bin(dechex($length))];
             default:
                 return [31, null];
