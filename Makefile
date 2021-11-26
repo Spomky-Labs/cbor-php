@@ -8,11 +8,11 @@ coverage: vendor ## Show test coverage rates (HTML)
 
 .PHONY: fix-cs
 fix-cs: vendor ## Fix all files using defined PHP-CS-FIXER rules
-	vendor/bin/php-cs-fixer fix
+	 vendor/bin/ecs --fix
 
 .PHONY: coding-standards
 coding-standards: vendor ## Check all files using ECS rules
-	vendor/bin/ecs check
+	vendor/bin/ecs
 
 .PHONY: tests
 tests: vendor ## Run all tests

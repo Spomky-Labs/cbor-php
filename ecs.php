@@ -114,6 +114,7 @@ return static function (ContainerConfigurator $containerConfigurator) use ($head
 
     $parameters = $containerConfigurator->parameters();
     $parameters
+        ->set(Option::PARALLEL, true)
         ->set(Option::PATHS, [__DIR__])
         ->set(Option::SKIP, [__DIR__ . '/.github', __DIR__ . '/build', __DIR__ . '/vendor'])
     ;

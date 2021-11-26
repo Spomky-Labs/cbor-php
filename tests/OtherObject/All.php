@@ -145,7 +145,7 @@ final class All extends CBORTestCase
         static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
         static::assertSame($value, $decoded->getAdditionalInformation());
         static::assertNull($decoded->getContent());
-        //static::assertEquals($value, $decoded->normalize());
+        static::assertSame($value, $decoded->normalize());
     }
 
     /**
@@ -210,7 +210,7 @@ final class All extends CBORTestCase
         static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $object->getMajorType());
         static::assertSame(CBORObject::OBJECT_SIMPLE_VALUE, $object->getAdditionalInformation());
         static::assertSame(chr($value), $object->getContent());
-        //static::assertEquals($value, $object->normalize());
+        static::assertSame($value, $object->normalize());
 
         $stream = StringStream::create($object->__toString());
         $decoded = $this->getDecoder()
@@ -220,7 +220,7 @@ final class All extends CBORTestCase
         static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
         static::assertSame(CBORObject::OBJECT_SIMPLE_VALUE, $decoded->getAdditionalInformation());
         static::assertSame(chr($value), $decoded->getContent());
-        //static::assertEquals($value, $decoded->normalize());
+        static::assertSame($value, $decoded->normalize());
     }
 
     /**
