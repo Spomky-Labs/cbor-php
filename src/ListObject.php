@@ -126,13 +126,15 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
     }
 
     /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
+     * @deprecated The method will be removed on v3.0. Please rely on the CBOR\Normalizable interface
      *
      * @return array<int|string, mixed>
      */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
-        return $this->normalize();
+        return array_map(static function (CBORObject $object) use ($ignoreTags) {
+            return $object->getNormalizedData($ignoreTags);
+        }, $this->data);
     }
 
     public function count(): int

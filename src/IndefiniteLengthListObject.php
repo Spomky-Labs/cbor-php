@@ -60,13 +60,15 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
     }
 
     /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
+     * @deprecated The method will be removed on v3.0. Please rely on the CBOR\Normalizable interface
      *
      * @return mixed[]
      */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
-        return $this->normalize();
+        return array_map(static function (CBORObject $object) use ($ignoreTags) {
+            return $object->getNormalizedData($ignoreTags);
+        }, $this->data);
     }
 
     public function add(CBORObject $item): self

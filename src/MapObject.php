@@ -164,13 +164,19 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     }
 
     /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
+     * @deprecated The method will be removed on v3.0. Please rely on the CBOR\Normalizable interface
      *
      * @return array<int|string, mixed>
      */
     public function getNormalizedData(bool $ignoreTags = false): array
     {
-        return $this->normalize();
+        return array_reduce($this->data, static function (array $carry, MapItem $item) use ($ignoreTags): array {
+            $key = $item->getKey();
+            $valueObject = $item->getValue();
+            $carry[$key->getNormalizedData($ignoreTags)] = $valueObject->getNormalizedData($ignoreTags);
+
+            return $carry;
+        }, []);
     }
 
     public function offsetExists($offset): bool

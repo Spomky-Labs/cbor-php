@@ -83,10 +83,15 @@ class IndefiniteLengthTextStringObject extends AbstractCBORObject implements Nor
     }
 
     /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
+     * @deprecated The method will be removed on v3.0. Please rely on the CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false): string
     {
-        return $this->normalize();
+        $result = '';
+        foreach ($this->data as $object) {
+            $result .= $object->getNormalizedData($ignoreTags);
+        }
+
+        return $result;
     }
 }

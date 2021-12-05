@@ -82,7 +82,7 @@ final class BigFloatTag extends Tag implements Normalizable
     }
 
     /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
+     * @deprecated The method will be removed on v3.0. Please rely on the CBOR\Normalizable interface
      */
     public function getNormalizedData(bool $ignoreTags = false)
     {

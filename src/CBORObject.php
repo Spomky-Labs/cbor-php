@@ -93,7 +93,7 @@ interface CBORObject
     public function getAdditionalInformation(): int;
 
     /**
-     * @deprecated The method will be removed on v3.0. Please use CBOR\Normalizable interface
+     * @deprecated The method will be removed on v3.0. Please rely on the CBOR\Normalizable interface
      *
      * @return mixed|null
      */
