@@ -354,11 +354,6 @@ Please report all issues in [the main repository](https://github.com/Spomky-Labs
 
 Please make sure to [follow these best practices](.github/CONTRIBUTING.md).
 
-# Security Issues
-
-If you discover a security vulnerability within the project, please **don't use the bug tracker and don't publish it publicly**.
-Instead, all security issues must be sent to security [at] spomky-labs.com. 
-
 # Licence
 
 This project is release under [MIT licence](LICENSE).
