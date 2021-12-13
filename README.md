@@ -292,7 +292,7 @@ use CBOR\Decoder;
 $decoder = Decoder::create();
 ```
 
-If needed, you can define custom sets of Tag and Other Object support managers.
+If needed, you can define custom sets of Tag or Other Object support managers.
 
 ```php
 <?php
@@ -324,7 +324,10 @@ $tagManager = Tag\TagManager::create()
     ->add(Tag\Base16EncodingTag::class)
 ;
 
-$decoder = Decoder::create($tagManager, $otherObjectManager);
+$decoder = Decoder::create()
+ ->withTagManager($tagManager)
+ ->withOtherObjectManager($otherObjectManager)
+;
 ```
 
 Then, the decoder will read the data you want to load.
@@ -342,7 +345,7 @@ $data = hex2bin('fb3fd5555555555555');
 // String Stream
 $stream = StringStream::create($data);
 
-// Load the data
+// Decode the data
 $object = $decoder->decode($stream); // Return a CBOR\OtherObject\DoublePrecisionFloatObject class with normalized value ~0.3333 (1/3)
 ```
 

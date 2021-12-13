@@ -1,7 +1,7 @@
 ---
 name: 🐛 Bug Report
 about: ⚠️ See below for security reports
-labels: Bug
+labels: bug
 
 ---
 

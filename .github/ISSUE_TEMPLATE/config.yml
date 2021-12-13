@@ -1,0 +1,13 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Support Question
+    url: https://stackoverflow.com/
+    about: |
+      We use GitHub issues only to discuss bugs and new features.
+      For this kind of questions about using the library or the bundle when the documentation is not enough for your use case,
+      please use https://stackoverflow.com/ using the tags `[cbor]` and `[php]`.
+  
+      We also propose Paid Support for Commercial Services. In this case, send an e-mail to
+      `contact+support@spomky-labs.com`
+  
+      Thanks!

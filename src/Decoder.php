@@ -42,26 +42,40 @@ final class Decoder implements DecoderInterface
     /**
      * @var Tag\TagManagerInterface
      */
-    private $tagObjectManager;
+    private $tagManager;
 
     /**
      * @var OtherObject\OtherObjectManagerInterface
      */
-    private $otherTypeManager;
+    private $otherObjectManager;
 
     public function __construct(
-        ?TagManagerInterface $tagObjectManager = null,
+        ?TagManagerInterface         $tagManager = null,
         ?OtherObjectManagerInterface $otherTypeManager = null
     ) {
-        $this->tagObjectManager = $tagObjectManager ?? $this->generateTagManager();
-        $this->otherTypeManager = $otherTypeManager ?? $this->generateOtherObjectManager();
+        $this->tagManager = $tagManager ?? $this->generateTagManager();
+        $this->otherObjectManager = $otherTypeManager ?? $this->generateOtherObjectManager();
     }
 
     public static function create(
-        ?TagManagerInterface $tagObjectManager = null,
-        ?OtherObjectManagerInterface $otherTypeManager = null
+        ?TagManagerInterface         $tagManager = null,
+        ?OtherObjectManagerInterface $otherObjectManager = null
     ): self {
-        return new self($tagObjectManager, $otherTypeManager);
+        return new self($tagManager, $otherObjectManager);
+    }
+
+    public function withTagManager(TagManagerInterface         $tagManager): self
+    {
+        $this->tagManager = $tagManager;
+
+        return $this;
+    }
+
+    public function withOtherObjectManager(OtherObjectManagerInterface $otherObjectManager): self
+    {
+        $this->otherObjectManager = $otherObjectManager;
+
+        return $this;
     }
 
     public function decode(Stream $stream): CBORObject
@@ -129,9 +143,9 @@ final class Decoder implements DecoderInterface
 
                 return $object;
             case CBORObject::MAJOR_TYPE_TAG: //6
-                return $this->tagObjectManager->createObjectForValue($ai, $val, $this->process($stream, false));
+                return $this->tagManager->createObjectForValue($ai, $val, $this->process($stream, false));
             case CBORObject::MAJOR_TYPE_OTHER_TYPE: //7
-                return $this->otherTypeManager->createObjectForValue($ai, $val);
+                return $this->otherObjectManager->createObjectForValue($ai, $val);
             default:
                 throw new RuntimeException(sprintf(
                     'Unsupported major type "%s" (%d).',

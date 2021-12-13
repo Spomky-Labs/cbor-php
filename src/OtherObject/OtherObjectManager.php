@@ -8,6 +8,9 @@ use function array_key_exists;
 use CBOR\OtherObject;
 use InvalidArgumentException;
 
+/**
+ * @final
+ */
 class OtherObjectManager implements OtherObjectManagerInterface
 {
     /**
