@@ -2,6 +2,16 @@
 
 declare(strict_types=1);
 
+/*
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2018-2020 Spomky-Labs
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace CBOR;
 
 use CBOR\OtherObject\BreakObject;
@@ -50,7 +60,7 @@ final class Decoder implements DecoderInterface
     private $otherObjectManager;
 
     public function __construct(
-        ?TagManagerInterface         $tagManager = null,
+        ?TagManagerInterface $tagManager = null,
         ?OtherObjectManagerInterface $otherTypeManager = null
     ) {
         $this->tagManager = $tagManager ?? $this->generateTagManager();
@@ -58,13 +68,13 @@ final class Decoder implements DecoderInterface
     }
 
     public static function create(
-        ?TagManagerInterface         $tagManager = null,
+        ?TagManagerInterface $tagManager = null,
         ?OtherObjectManagerInterface $otherObjectManager = null
     ): self {
         return new self($tagManager, $otherObjectManager);
     }
 
-    public function withTagManager(TagManagerInterface         $tagManager): self
+    public function withTagManager(TagManagerInterface $tagManager): self
     {
         $this->tagManager = $tagManager;
 
