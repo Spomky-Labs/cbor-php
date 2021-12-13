@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 /*
- *
  * The MIT License (MIT)
  *
  * Copyright (c) 2018-2020 Spomky-Labs
@@ -42,8 +41,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
-$header = '
-The MIT License (MIT)
+$header = 'The MIT License (MIT)
 
 Copyright (c) 2018-2020 Spomky-Labs
 

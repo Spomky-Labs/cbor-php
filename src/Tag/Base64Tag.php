@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 /*
- *
  * The MIT License (MIT)
  *
  * Copyright (c) 2018-2020 Spomky-Labs
