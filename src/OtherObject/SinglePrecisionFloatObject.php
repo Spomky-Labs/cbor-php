@@ -32,7 +32,10 @@ final class SinglePrecisionFloatObject extends Base
         return new self(self::OBJECT_SINGLE_PRECISION_FLOAT, $value);
     }
 
-    public function normalize(): float|int
+    /**
+     *  @return float|int
+     */
+    public function normalize()
     {
         $exponent = $this->getExponent();
         $mantissa = $this->getMantissa();

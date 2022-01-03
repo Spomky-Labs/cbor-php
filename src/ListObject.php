@@ -24,9 +24,10 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
     /**
      * @var CBORObject[]
      */
-    private array $data;
+    private $data;
 
-    private ?string $length = null;
+    /** @var null|string $length */
+    private $length = null;
 
     /**
      * @param CBORObject[] $data

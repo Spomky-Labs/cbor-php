@@ -15,7 +15,7 @@ final class TagManager implements TagManagerInterface
     /**
      * @var string[]
      */
-    private array $classes = [];
+    private $classes = [];
 
     public static function create(): self
     {

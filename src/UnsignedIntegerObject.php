@@ -12,11 +12,15 @@ final class UnsignedIntegerObject extends AbstractCBORObject implements Normaliz
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_UNSIGNED_INTEGER;
 
+    /** @var string|null $data */
+    private $data;
+    
     public function __construct(
         int $additionalInformation,
-        private ?string $data
+        ?string $data
     ) {
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
+        $this->data = $data;
     }
 
     public function __toString(): string

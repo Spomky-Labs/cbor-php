@@ -13,7 +13,7 @@ final class IndefiniteLengthByteStringObject extends AbstractCBORObject implemen
     /**
      * @var ByteStringObject[]
      */
-    private array $chunks = [];
+    private $chunks = [];
 
     public function __construct()
     {

@@ -24,9 +24,10 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     /**
      * @var MapItem[]
      */
-    private array $data;
+    private $data;
 
-    private ?string $length = null;
+    /** @var null|string $length */
+    private $length = null;
 
     /**
      * @param MapItem[] $data
@@ -82,12 +83,18 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         return $this;
     }
 
-    public function has(int|string $key): bool
+    /**
+     * @param int|string $key
+     */
+    public function has($key): bool
     {
         return array_key_exists($key, $this->data);
     }
 
-    public function remove(int|string $index): self
+    /**
+     * @param int|string $index
+     */
+    public function remove($index): self
     {
         if (! $this->has($index)) {
             return $this;
@@ -99,7 +106,10 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         return $this;
     }
 
-    public function get(int|string $index): CBORObject
+    /**
+     * @param int|string $index
+     */
+    public function get($index): CBORObject
     {
         if (! $this->has($index)) {
             throw new InvalidArgumentException('Index not found.');

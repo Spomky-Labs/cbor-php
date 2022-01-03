@@ -33,7 +33,11 @@ final class DoublePrecisionFloatObject extends Base implements Normalizable
         return new self(self::OBJECT_DOUBLE_PRECISION_FLOAT, $value);
     }
 
-    public function normalize(): float|int
+
+    /**
+     * @return float|int
+     */
+    public function normalize()
     {
         $exponent = $this->getExponent();
         $mantissa = $this->getMantissa();

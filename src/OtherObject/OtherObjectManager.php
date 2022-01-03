@@ -13,7 +13,7 @@ class OtherObjectManager implements OtherObjectManagerInterface
     /**
      * @var string[]
      */
-    private array $classes = [];
+    private $classes = [];
 
     public static function create(): self
     {

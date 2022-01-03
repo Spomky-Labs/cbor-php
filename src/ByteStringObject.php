@@ -8,9 +8,11 @@ final class ByteStringObject extends AbstractCBORObject implements Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_BYTE_STRING;
 
-    private string $value;
+    /** @var string $value */
+    private $value;
 
-    private ?string $length = null;
+    /** @var string|null $value */
+    private $length = null;
 
     public function __construct(string $data)
     {

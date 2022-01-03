@@ -13,7 +13,7 @@ final class IndefiniteLengthTextStringObject extends AbstractCBORObject implemen
     /**
      * @var TextStringObject[]
      */
-    private array $data = [];
+    private $data = [];
 
     public function __construct()
     {

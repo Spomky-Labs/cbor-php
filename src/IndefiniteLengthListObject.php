@@ -25,7 +25,7 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements IteratorA
     /**
      * @var CBORObject[]
      */
-    private array $data = [];
+    private $data = [];
 
     public function __construct()
     {

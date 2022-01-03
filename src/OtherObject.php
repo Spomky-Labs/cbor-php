@@ -8,11 +8,15 @@ abstract class OtherObject extends AbstractCBORObject
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_OTHER_TYPE;
 
+    /** @var string|null $data */
+    protected $data;
+
     public function __construct(
         int $additionalInformation,
-        protected ?string $data
+        ?string $data
     ) {
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
+        $this->data = $data;
     }
 
     public function __toString(): string

@@ -39,9 +39,11 @@ use const STR_PAD_LEFT;
 
 final class Decoder implements DecoderInterface
 {
-    private TagManagerInterface $tagObjectManager;
+    /** @var TagManagerInterface $tagObjectManager */
+    private $tagObjectManager;
 
-    private OtherObjectManagerInterface $otherTypeManager;
+    /** @var OtherObjectManagerInterface $otherTypeManager */
+    private $otherTypeManager;
 
     public function __construct(
         ?TagManagerInterface $tagObjectManager = null,

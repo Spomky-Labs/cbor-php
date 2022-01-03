@@ -8,9 +8,11 @@ final class TextStringObject extends AbstractCBORObject implements Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_TEXT_STRING;
 
-    private ?string $length = null;
+    /** @var string|null $length */
+    private $length = null;
 
-    private string $data;
+    /** @var string $data */
+    private $data;
 
     public function __construct(string $data)
     {

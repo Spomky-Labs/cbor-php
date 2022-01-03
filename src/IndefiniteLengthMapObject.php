@@ -25,7 +25,7 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements IteratorAg
     /**
      * @var MapItem[]
      */
-    private array $data = [];
+    private $data = [];
 
     public function __construct()
     {
@@ -58,12 +58,18 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements IteratorAg
         return $this;
     }
 
-    public function has(int|string $key): bool
+    /**
+     * @param int|string $key
+     */
+    public function has($key): bool
     {
         return array_key_exists($key, $this->data);
     }
 
-    public function remove(int|string $index): self
+    /**
+     * @param int|string $index
+     */
+    public function remove($index): self
     {
         if (! $this->has($index)) {
             return $this;
@@ -74,7 +80,10 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements IteratorAg
         return $this;
     }
 
-    public function get(int|string $index): CBORObject
+    /**
+     * @param int|string $index
+     */
+    public function get($index): CBORObject
     {
         if (! $this->has($index)) {
             throw new InvalidArgumentException('Index not found.');
