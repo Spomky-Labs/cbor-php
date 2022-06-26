@@ -1,5 +1,5 @@
 ---
 name: 📖 Documentation Issue
-about: Documentation issues (typo, missing information...)
+about: To report typo or obsolete section in the documentation
 
 ---
