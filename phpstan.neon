@@ -1,5 +1,5 @@
 parameters:
-    level: 8
+    level: max
     paths:
         - src
     treatPhpDocTypesAsCertain: false
@@ -20,11 +20,3 @@ parameters:
             message: '#Parameter .* of static method CBOR\\Utils\:\:binToInt\(\) expects string, string\|null given\.#'
             count: 1
             path: src/Tag/TagManager.php
-        -
-            message: '#Instanceof between CBOR\\CBORObject and CBOR\\CBORObject will always evaluate to true\.#'
-            count: 1
-            path: src/ListObject.php
-        -
-            message: '#Instanceof between CBOR\\MapItem and CBOR\\MapItem will always evaluate to true\.#'
-            count: 1
-            path: src/MapObject.php

@@ -46,7 +46,7 @@ final class TextStringObject extends AbstractCBORObject implements Normalizable
         return mb_strlen($this->data, 'utf8');
     }
 
-    public function normalize()
+    public function normalize(): string
     {
         return $this->data;
     }

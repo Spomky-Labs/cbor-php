@@ -2,27 +2,23 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Configuration\Option;
+use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
+use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(SetList::DEAD_CODE);
-    $containerConfigurator->import(SetList::PHP_80);
-    $containerConfigurator->import(SymfonySetList::SYMFONY_52_VALIDATOR_ATTRIBUTES);
-    $containerConfigurator->import(SymfonySetList::SYMFONY_CODE_QUALITY);
-    $containerConfigurator->import(SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION);
-    $containerConfigurator->import(SymfonySetList::SYMFONY_CODE_QUALITY);
-    $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_80);
-    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
-    $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
-    $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
+return static function (RectorConfig $config): void {
+    $config->import(SetList::DEAD_CODE);
+    $config->import(LevelSetList::UP_TO_PHP_80);
+    $config->import(SymfonySetList::SYMFONY_CODE_QUALITY);
+    $config->parallel();
+    $config->paths([__DIR__ . '/src', __DIR__ . '/tests']);
+    $config->phpVersion(PhpVersion::PHP_80);
+    $config->importNames();
+    $config->importShortClasses();
 
-    $services = $containerConfigurator->services();
+    $services = $config->services();
     $services->set(TypedPropertyRector::class);
 };

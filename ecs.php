@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff;
 use PhpCsFixer\Fixer\Alias\MbStrFunctionsFixer;
 use PhpCsFixer\Fixer\ArrayNotation\ArraySyntaxFixer;
 use PhpCsFixer\Fixer\ClassNotation\ProtectedToPrivateFixer;
@@ -28,93 +27,71 @@ use PhpCsFixer\Fixer\Strict\StrictComparisonFixer;
 use PhpCsFixer\Fixer\Strict\StrictParamFixer;
 use PhpCsFixer\Fixer\Whitespace\ArrayIndentationFixer;
 use PhpCsFixer\Fixer\Whitespace\CompactNullableTypehintFixer;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\EasyCodingStandard\ValueObject\Option;
+use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 $header = '';
 
-return static function (ContainerConfigurator $containerConfigurator) use ($header): void {
-    $containerConfigurator->import(SetList::PSR_12);
-    $containerConfigurator->import(SetList::PHP_CS_FIXER);
-    $containerConfigurator->import(SetList::PHP_CS_FIXER_RISKY);
-    $containerConfigurator->import(SetList::CLEAN_CODE);
-    $containerConfigurator->import(SetList::SYMFONY);
-    $containerConfigurator->import(SetList::DOCTRINE_ANNOTATIONS);
-    $containerConfigurator->import(SetList::SPACES);
-    $containerConfigurator->import(SetList::PHPUNIT);
-    $containerConfigurator->import(SetList::SYMPLIFY);
-    $containerConfigurator->import(SetList::ARRAY);
-    $containerConfigurator->import(SetList::COMMON);
-    $containerConfigurator->import(SetList::COMMENTS);
-    $containerConfigurator->import(SetList::CONTROL_STRUCTURES);
-    $containerConfigurator->import(SetList::DOCBLOCK);
-    $containerConfigurator->import(SetList::NAMESPACES);
-    $containerConfigurator->import(SetList::STRICT);
+return static function (ECSConfig $config) use ($header): void {
+    $config->import(SetList::PSR_12);
+    $config->import(SetList::CLEAN_CODE);
+    $config->import(SetList::DOCTRINE_ANNOTATIONS);
+    $config->import(SetList::SPACES);
+    $config->import(SetList::PHPUNIT);
+    $config->import(SetList::SYMPLIFY);
+    $config->import(SetList::ARRAY);
+    $config->import(SetList::COMMON);
+    $config->import(SetList::COMMENTS);
+    $config->import(SetList::CONTROL_STRUCTURES);
+    $config->import(SetList::DOCBLOCK);
+    $config->import(SetList::NAMESPACES);
+    $config->import(SetList::STRICT);
 
-    $services = $containerConfigurator->services();
-    $services->set(StrictParamFixer::class);
-    $services->set(StrictComparisonFixer::class);
-    $services->set(ArraySyntaxFixer::class)
-        ->call('configure', [[
-            'syntax' => 'short',
-        ]])
-    ;
-    $services->set(ArrayIndentationFixer::class);
-    $services->set(OrderedImportsFixer::class);
-    $services->set(ProtectedToPrivateFixer::class);
-    $services->set(DeclareStrictTypesFixer::class);
-    $services->set(NativeConstantInvocationFixer::class);
-    $services->set(NativeFunctionInvocationFixer::class)
-        ->call('configure', [[
-            'include' => ['@compiler_optimized'],
-            'scope' => 'namespaced',
-            'strict' => true,
-        ]])
-    ;
-    $services->set(MbStrFunctionsFixer::class);
-    $services->set(LinebreakAfterOpeningTagFixer::class);
-    $services->set(CombineConsecutiveIssetsFixer::class);
-    $services->set(CombineConsecutiveUnsetsFixer::class);
-    $services->set(CompactNullableTypehintFixer::class);
-    $services->set(NoSuperfluousElseifFixer::class);
-    $services->set(NoSuperfluousPhpdocTagsFixer::class);
-    $services->set(PhpdocTrimConsecutiveBlankLineSeparationFixer::class);
-    $services->set(PhpdocOrderFixer::class);
-    $services->set(SimplifiedNullReturnFixer::class);
-    $services->set(HeaderCommentFixer::class)
-        ->call('configure', [[
-            'header' => $header,
-        ]])
-    ;
-    $services->set(AlignMultilineCommentFixer::class)
-        ->call('configure', [[
-            'comment_type' => 'all_multiline',
-        ]])
-    ;
-    $services->set(PhpUnitTestAnnotationFixer::class)
-        ->call('configure', [[
-            'style' => 'annotation',
-        ]])
-    ;
-    $services->set(PhpUnitTestCaseStaticMethodCallsFixer::class);
-    $services->set(GlobalNamespaceImportFixer::class)
-        ->call('configure', [[
-            'import_classes' => true,
-            'import_constants' => true,
-            'import_functions' => true,
-        ]])
-    ;
+    $services = $config->services();
+    $config->rule(StrictParamFixer::class);
+    $config->rule(StrictComparisonFixer::class);
+    $config->rule(ArrayIndentationFixer::class);
+    $config->rule(OrderedImportsFixer::class);
+    $config->rule(ProtectedToPrivateFixer::class);
+    $config->rule(DeclareStrictTypesFixer::class);
+    $config->rule(NativeConstantInvocationFixer::class);
+    $config->rule(MbStrFunctionsFixer::class);
+    $config->rule(LinebreakAfterOpeningTagFixer::class);
+    $config->rule(CombineConsecutiveIssetsFixer::class);
+    $config->rule(CombineConsecutiveUnsetsFixer::class);
+    $config->rule(CompactNullableTypehintFixer::class);
+    $config->rule(NoSuperfluousElseifFixer::class);
+    $config->rule(NoSuperfluousPhpdocTagsFixer::class);
+    $config->rule(PhpdocTrimConsecutiveBlankLineSeparationFixer::class);
+    $config->rule(PhpdocOrderFixer::class);
+    $config->rule(SimplifiedNullReturnFixer::class);
+    $config->rule(PhpUnitTestCaseStaticMethodCallsFixer::class);
+    $config->ruleWithConfiguration(ArraySyntaxFixer::class, [
+        'syntax' => 'short',
+    ]);
+    $config->ruleWithConfiguration(NativeFunctionInvocationFixer::class, [
+        'include' => ['@compiler_optimized'],
+        'scope' => 'namespaced',
+        'strict' => true,
+    ]);
+    $config->ruleWithConfiguration(HeaderCommentFixer::class, [
+        'header' => $header,
+    ]);
+    $config->ruleWithConfiguration(AlignMultilineCommentFixer::class, [
+        'comment_type' => 'all_multiline',
+    ]);
+    $config->ruleWithConfiguration(PhpUnitTestAnnotationFixer::class, [
+        'style' => 'annotation',
+    ]);
+    $config->ruleWithConfiguration(GlobalNamespaceImportFixer::class, [
+        'import_classes' => true,
+        'import_constants' => true,
+        'import_functions' => true,
+    ]);
 
-    // The absence of @cover in tests is OK
-    $services->remove(PhpUnitTestClassRequiresCoversFixer::class);
-
-    // The assignment in if of while statements are OK
-    $services->remove(AssignmentInConditionSniff::class);
-
-    $parameters = $containerConfigurator->parameters();
-    $parameters
-        ->set(Option::PATHS, [__DIR__])
-        ->set(Option::SKIP, [__DIR__ . '/.github', __DIR__ . '/build', __DIR__ . '/vendor'])
-    ;
+    $config->services()
+        ->remove(PhpUnitTestClassRequiresCoversFixer::class);
+    $config->parallel();
+    $config->paths([__DIR__]);
+    $config->skip([__DIR__ . '/.github', __DIR__ . '/build', __DIR__ . '/vendor']);
 };

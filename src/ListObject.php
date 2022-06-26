@@ -117,9 +117,10 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
      */
     public function normalize(): array
     {
-        return array_map(static function (CBORObject $object) {
-            return $object instanceof Normalizable ? $object->normalize() : $object;
-        }, $this->data);
+        return array_map(
+            static fn (CBORObject $object) => $object instanceof Normalizable ? $object->normalize() : $object,
+            $this->data
+        );
     }
 
     public function count(): int

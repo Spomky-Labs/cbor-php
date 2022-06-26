@@ -98,9 +98,10 @@ final class DatetimeTagTest extends TestCase
 
     public function getDatetimes(): array
     {
-        $buildTestEntry = static function (string $datetime, string $timestamp): array {
-            return [TextStringObject::create($datetime), $timestamp];
-        };
+        $buildTestEntry = static fn (string $datetime, string $timestamp): array => [
+            TextStringObject::create($datetime),
+            $timestamp,
+        ];
 
         return [
             $buildTestEntry('2003-12-13T18:30:02Z', '1071340202.000000'),

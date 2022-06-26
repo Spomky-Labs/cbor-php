@@ -52,9 +52,10 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements IteratorA
      */
     public function normalize(): array
     {
-        return array_map(static function (CBORObject $object) {
-            return $object instanceof Normalizable ? $object->normalize() : $object;
-        }, $this->data);
+        return array_map(
+            static fn (CBORObject $object) => $object instanceof Normalizable ? $object->normalize() : $object,
+            $this->data
+        );
     }
 
     public function add(CBORObject $item): self

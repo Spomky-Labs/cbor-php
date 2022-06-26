@@ -6,6 +6,7 @@ namespace CBOR\Test;
 
 use CBOR\NegativeIntegerObject;
 use CBOR\StringStream;
+use InvalidArgumentException;
 
 /**
  * @internal
@@ -31,7 +32,7 @@ final class SignedIntegerTest extends CBORTestCase
     public function getValidValue(): array
     {
         return [
-            [-12345678, '-12345678', 1, 26],
+            [-12_345_678, '-12345678', 1, 26],
             [-255, '-255', 1, 24],
             [-254, '-254', 1, 24],
             [-65535, '-65535', 1, 25],
@@ -44,7 +45,7 @@ final class SignedIntegerTest extends CBORTestCase
      */
     public function ceateOnNegativeValue(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The value must be a negative integer.');
         NegativeIntegerObject::create(1);
     }
@@ -54,11 +55,11 @@ final class SignedIntegerTest extends CBORTestCase
      */
     public function createOnOutOfRangeValue(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Out of range. Please use NegativeBigIntegerTag tag with ByteStringObject object instead.'
         );
-        NegativeIntegerObject::create(-4294967297);
+        NegativeIntegerObject::create(-4_294_967_297);
     }
 
     /**

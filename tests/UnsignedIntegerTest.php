@@ -6,6 +6,7 @@ namespace CBOR\Test;
 
 use CBOR\StringStream;
 use CBOR\UnsignedIntegerObject;
+use InvalidArgumentException;
 
 /**
  * @internal
@@ -30,7 +31,7 @@ final class UnsignedIntegerTest extends CBORTestCase
 
     public function getValidValue(): array
     {
-        return [[12345678, '12345678', 0, 26], [255, '255', 0, 25], [254, '254', 0, 24], [18, '18', 0, 18]];
+        return [[12_345_678, '12345678', 0, 26], [255, '255', 0, 25], [254, '254', 0, 24], [18, '18', 0, 18]];
     }
 
     /**
@@ -38,7 +39,7 @@ final class UnsignedIntegerTest extends CBORTestCase
      */
     public function createOnNegativeValue(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The value must be a positive integer.');
         UnsignedIntegerObject::create(-1);
     }
@@ -48,11 +49,11 @@ final class UnsignedIntegerTest extends CBORTestCase
      */
     public function createOnOutOfRangeValue(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.'
         );
-        UnsignedIntegerObject::create(4294967296);
+        UnsignedIntegerObject::create(4_294_967_296);
     }
 
     /**
