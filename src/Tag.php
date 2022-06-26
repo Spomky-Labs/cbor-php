@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use CBOR\Tag\TagInterface;
 use InvalidArgumentException;
 
-abstract class Tag extends AbstractCBORObject
+abstract class Tag extends AbstractCBORObject implements TagInterface
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_TAG;
 
@@ -32,14 +33,6 @@ abstract class Tag extends AbstractCBORObject
     {
         return $this->data;
     }
-
-    abstract public static function getTagId(): int;
-
-    abstract public static function createFromLoadedData(
-        int $additionalInformation,
-        ?string $data,
-        CBORObject $object
-    ): self;
 
     public function getValue(): CBORObject
     {

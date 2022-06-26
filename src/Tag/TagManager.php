@@ -37,7 +37,7 @@ final class TagManager implements TagManagerInterface
         return array_key_exists($value, $this->classes) ? $this->classes[$value] : GenericTag::class;
     }
 
-    public function createObjectForValue(int $additionalInformation, ?string $data, CBORObject $object): Tag
+    public function createObjectForValue(int $additionalInformation, ?string $data, CBORObject $object): TagInterface
     {
         $value = $additionalInformation;
         if ($additionalInformation >= 24) {

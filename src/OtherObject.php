@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-abstract class OtherObject extends AbstractCBORObject
+use CBOR\OtherObject\OtherObjectInterface;
+
+abstract class OtherObject extends AbstractCBORObject implements OtherObjectInterface
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_OTHER_TYPE;
 
@@ -29,11 +31,4 @@ abstract class OtherObject extends AbstractCBORObject
     {
         return $this->data;
     }
-
-    /**
-     * @return int[]
-     */
-    abstract public static function supportedAdditionalInformation(): array;
-
-    abstract public static function createFromLoadedData(int $additionalInformation, ?string $data): self;
 }
