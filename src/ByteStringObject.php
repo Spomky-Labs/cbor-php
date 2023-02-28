@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+/**
+ * @see \CBOR\Test\ByteStringObjectTest
+ */
 final class ByteStringObject extends AbstractCBORObject implements Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_BYTE_STRING;

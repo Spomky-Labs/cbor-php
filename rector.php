@@ -21,6 +21,7 @@ return static function (RectorConfig $config): void {
     $config->import(PHPUnitSetList::PHPUNIT_YIELD_DATA_PROVIDER);
     $config->parallel();
     $config->paths([__DIR__ . '/src', __DIR__ . '/tests']);
+    $config->skip([__DIR__ . '/src/IndefiniteLengthMapObject.php', __DIR__ . '/src/MapObject.php']);
     $config->phpVersion(PhpVersion::PHP_80);
     $config->importNames();
     $config->importShortClasses();
