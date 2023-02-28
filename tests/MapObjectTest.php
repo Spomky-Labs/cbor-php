@@ -11,15 +11,14 @@ use CBOR\MapObject;
 use CBOR\NegativeIntegerObject;
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class MapObjectTest extends CBORTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function aMapActsAsAnArray(): void
     {
         $object1 = MapObject::create()
@@ -59,9 +58,7 @@ final class MapObjectTest extends CBORTestCase
         static::assertSame($object2['Test']->normalize(), '3');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function anIndefiniteLengthMapActsAsAnArray(): void
     {
         $object1 = IndefiniteLengthMapObject::create()

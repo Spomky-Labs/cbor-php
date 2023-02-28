@@ -1,5 +1,10 @@
-/vendor/
+.phpunit.result.cache
+report.md
+*.cache
+*.log
+node_modules
+yarn.lock
+yarn-error.log
 /composer.lock
-/*cache
-/build
-/infection.log
+/vendor
+infection.txt

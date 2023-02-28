@@ -7,16 +7,16 @@ namespace CBOR\Test;
 use CBOR\StringStream;
 use CBOR\UnsignedIntegerObject;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class UnsignedIntegerTest extends CBORTestCase
 {
-    /**
-     * @test
-     * @dataProvider getValidValue
-     */
+    #[DataProvider('getValidValue')]
+    #[Test]
     public function createOnValidValue(
         int $intValue,
         string $expectedIntValue,
@@ -29,14 +29,12 @@ final class UnsignedIntegerTest extends CBORTestCase
         static::assertSame($expectedAdditionalInformation, $unsignedInteger->getAdditionalInformation());
     }
 
-    public function getValidValue(): array
+    public static function getValidValue(): array
     {
         return [[12_345_678, '12345678', 0, 26], [255, '255', 0, 25], [254, '254', 0, 24], [18, '18', 0, 18]];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createOnNegativeValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -44,9 +42,7 @@ final class UnsignedIntegerTest extends CBORTestCase
         UnsignedIntegerObject::create(-1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createOnOutOfRangeValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -56,10 +52,8 @@ final class UnsignedIntegerTest extends CBORTestCase
         UnsignedIntegerObject::create(4_294_967_296);
     }
 
-    /**
-     * @test
-     * @dataProvider getDataSet
-     */
+    #[DataProvider('getDataSet')]
+    #[Test]
     public function anUnsignedIntegerCanBeParsed(string $data, string $expectedNormalizedData): void
     {
         $stream = StringStream::create(hex2bin($data));
@@ -70,7 +64,7 @@ final class UnsignedIntegerTest extends CBORTestCase
         static::assertSame($expectedNormalizedData, $object->normalize());
     }
 
-    public function getDataSet(): array
+    public static function getDataSet(): array
     {
         return [
             ['00', '0'], ['01', '1'], ['0a', '10'], ['17', '23'], [

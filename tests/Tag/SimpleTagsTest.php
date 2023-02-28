@@ -12,6 +12,7 @@ use CBOR\Tag\CBORTag;
 use CBOR\Tag\UriTag;
 use CBOR\TextStringObject;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,9 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class SimpleTagsTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidUriTag(): void
     {
         $tag = UriTag::create(TextStringObject::create('Text'));
@@ -32,9 +31,7 @@ final class SimpleTagsTest extends TestCase
         static::assertSame(hex2bin(dechex(CBORObject::TAG_URI)), $tag->getData());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createInvalidUriTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -42,9 +39,7 @@ final class SimpleTagsTest extends TestCase
         UriTag::create(ByteStringObject::create('Text'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidBase64Tag(): void
     {
         $tag = Base64Tag::create(TextStringObject::create('Text'));
@@ -55,9 +50,7 @@ final class SimpleTagsTest extends TestCase
         static::assertSame(hex2bin(dechex(CBORObject::TAG_BASE64)), $tag->getData());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createInvalidBase64Tag(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -65,9 +58,7 @@ final class SimpleTagsTest extends TestCase
         Base64Tag::create(ByteStringObject::create('Text'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidBase64UrlTag(): void
     {
         $tag = Base64UrlTag::create(TextStringObject::create('Text'));
@@ -78,9 +69,7 @@ final class SimpleTagsTest extends TestCase
         static::assertSame(hex2bin(dechex(CBORObject::TAG_BASE64_URL)), $tag->getData());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createInvalidBase64UrlTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -88,9 +77,7 @@ final class SimpleTagsTest extends TestCase
         Base64UrlTag::create(ByteStringObject::create('Text'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidCBORTag(): void
     {
         $tag = CBORTag::create(ByteStringObject::create('Text'));

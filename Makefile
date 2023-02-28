@@ -1,51 +1,48 @@
-.PHONY: code-coverage
-code-coverage: vendor ## Show test coverage rates (console)
-	vendor/bin/phpunit --coverage-text
+mu: vendor ## Mutation tests
+	vendor/bin/infection -s --threads=$$(nproc) --min-msi=3 --min-covered-msi=58
 
-.PHONY: coverage
-coverage: vendor ## Show test coverage rates (HTML)
-	vendor/bin/phpunit --coverage-html ./build
-
-.PHONY: fix-cs
-fix-cs: vendor ## Fix all files using defined PHP-CS-FIXER rules
-	vendor/bin/php-cs-fixer fix
-
-.PHONY: coding-standards
-coding-standards: vendor ## Check all files using ECS rules
-	vendor/bin/ecs check
-
-.PHONY: tests
 tests: vendor ## Run all tests
 	vendor/bin/phpunit  --color
+
+cc: vendor ## Show test coverage rates (HTML)
+	vendor/bin/phpunit --coverage-html ./build
+
+cs: vendor ## Fix all files using defined ECS rules
+	vendor/bin/ecs check --fix
+
+tu: vendor ## Run only unit tests
+	vendor/bin/phpunit --color --group Unit
+
+ti: vendor ## Run only integration tests
+	vendor/bin/phpunit --color --group Integration
+
+tf: vendor ## Run only functional tests
+	vendor/bin/phpunit --color --group Functional
+
+st: vendor ## Run static analyse
+	vendor/bin/phpstan analyse
+
+
+################################################
+
+ci-mu: vendor ## Mutation tests (for Github only)
+	vendor/bin/infection --logger-github -s --threads=$$(nproc) --min-msi=3 --min-covered-msi=58
+
+ci-cc: vendor ## Show test coverage rates (console)
+	vendor/bin/phpunit --coverage-text
+
+ci-cs: vendor ## Check all files using defined ECS rules
+	vendor/bin/ecs check
+
+################################################
+
 
 vendor: composer.json composer.lock
 	composer validate
 	composer install
 
-.PHONY: tu
-tu: vendor ## Run only unit tests
-	vendor/bin/phpunit --color --group Unit
-
-.PHONY: tf
-tf: vendor ## Run only functional tests
-	vendor/bin/phpunit --color --group Functional
-
-.PHONY: static-analyse
-static-analyse: vendor ## Run static analyse
-	vendor/bin/phpstan analyse
-
-.PHONY: rector
 rector: vendor ## Check all files using Rector
-	vendor/bin/rector process --ansi --dry-run  -v
-
-.PHONY: mutation-tests
-mutation-tests: vendor ## Mutation tests
-	vendor/bin/infection -s --threads=$(nproc) --min-msi=64 --min-covered-msi=74
-
-.PHONY: mutation-tests-github
-mutation-tests-github: vendor ## Mutation tests (for Github only)
-	vendor/bin/infection --logger-github --git-diff-filter=AM -s --threads=$(nproc) --min-msi=64 --min-covered-msi=74
-
+	vendor/bin/rector process --ansi --dry-run --xdebug
 
 .DEFAULT_GOAL := help
 help:

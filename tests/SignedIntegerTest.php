@@ -7,16 +7,16 @@ namespace CBOR\Test;
 use CBOR\NegativeIntegerObject;
 use CBOR\StringStream;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class SignedIntegerTest extends CBORTestCase
 {
-    /**
-     * @test
-     * @dataProvider getValidValue
-     */
+    #[DataProvider('getValidValue')]
+    #[Test]
     public function createOnValidValue(
         int $intValue,
         string $expectedIntValue,
@@ -29,7 +29,7 @@ final class SignedIntegerTest extends CBORTestCase
         static::assertSame($expectedAdditionalInformation, $unsignedInteger->getAdditionalInformation());
     }
 
-    public function getValidValue(): array
+    public static function getValidValue(): array
     {
         return [
             [-12_345_678, '-12345678', 1, 26],
@@ -40,9 +40,7 @@ final class SignedIntegerTest extends CBORTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function ceateOnNegativeValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -50,9 +48,7 @@ final class SignedIntegerTest extends CBORTestCase
         NegativeIntegerObject::create(1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createOnOutOfRangeValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -62,10 +58,8 @@ final class SignedIntegerTest extends CBORTestCase
         NegativeIntegerObject::create(-4_294_967_297);
     }
 
-    /**
-     * @test
-     * @dataProvider getDataSet
-     */
+    #[DataProvider('getDataSet')]
+    #[Test]
     public function anUnsignedIntegerCanBeEncodedAndDecoded(string $data, string $expectedNormalizedData): void
     {
         $stream = StringStream::create(hex2bin($data));
@@ -77,7 +71,7 @@ final class SignedIntegerTest extends CBORTestCase
         static::assertSame($expectedNormalizedData, $object->normalize());
     }
 
-    public function getDataSet(): array
+    public static function getDataSet(): array
     {
         return [
             ['20', '-1'], ['29', '-10'], ['3863', '-100'], ['3903e7', '-1000'], [

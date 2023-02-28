@@ -7,16 +7,16 @@ namespace CBOR\Test;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\StringStream;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class ByteStringObjectTest extends CBORTestCase
 {
-    /**
-     * @test
-     * @dataProvider getData
-     */
+    #[DataProvider('getData')]
+    #[Test]
     public function aByteStringObjectCanBeCreated(
         string $string,
         int $expectedAdditionalInformation,
@@ -47,7 +47,7 @@ final class ByteStringObjectTest extends CBORTestCase
         static::assertSame($string, $decoded->normalize());
     }
 
-    public function getData(): array
+    public static function getData(): array
     {
         return [
             ['Hello', 5, 5, '4548656c6c6f'],

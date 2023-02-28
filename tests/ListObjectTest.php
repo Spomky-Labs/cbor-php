@@ -8,15 +8,14 @@ use CBOR\IndefiniteLengthListObject;
 use CBOR\ListObject;
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class ListObjectTest extends CBORTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function aListActsAsAnArray(): void
     {
         $object1 = ListObject::create()
@@ -49,9 +48,7 @@ final class ListObjectTest extends CBORTestCase
         static::assertSame($object2[2]->normalize(), '3');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function anIndefiniteLengthListActsAsAnArray(): void
     {
         $object1 = IndefiniteLengthListObject::create()

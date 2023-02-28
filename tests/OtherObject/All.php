@@ -21,16 +21,15 @@ use function chr;
 use const INF;
 use InvalidArgumentException;
 use const M_PI;
-use const STR_PAD_LEFT;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class All extends CBORTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidFalseObject(): void
     {
         $object = FalseObject::create();
@@ -50,9 +49,7 @@ final class All extends CBORTestCase
         static::assertFalse($decoded->normalize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidTrueObject(): void
     {
         $object = TrueObject::create();
@@ -71,9 +68,7 @@ final class All extends CBORTestCase
         static::assertTrue($decoded->normalize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidNullObject(): void
     {
         $object = NullObject::create();
@@ -92,9 +87,7 @@ final class All extends CBORTestCase
         static::assertNull($decoded->normalize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidUndefinedObject(): void
     {
         $object = UndefinedObject::create();
@@ -113,9 +106,7 @@ final class All extends CBORTestCase
         static::assertNotInstanceOf(Normalizable::class, $decoded);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidBreakObject(): void
     {
         $object = BreakObject::create();
@@ -125,10 +116,8 @@ final class All extends CBORTestCase
         static::assertNotInstanceOf(Normalizable::class, $object);
     }
 
-    /**
-     * @test
-     * @dataProvider getSimpleObjectWithoutContent
-     */
+    #[DataProvider('getSimpleObjectWithoutContent')]
+    #[Test]
     public function createValidSimpleObjectWithoutContent(int $value): void
     {
         $object = SimpleObject::create($value);
@@ -148,10 +137,8 @@ final class All extends CBORTestCase
         //static::assertEquals($value, $decoded->normalize());
     }
 
-    /**
-     * @test
-     * @dataProvider getHalfPrecisionFloatObject
-     */
+    #[DataProvider('getHalfPrecisionFloatObject')]
+    #[Test]
     public function createValidHalfPrecisionFloatObject(string $value, float $expected, float $delta): void
     {
         $object = HalfPrecisionFloatObject::create($value);
@@ -165,10 +152,8 @@ final class All extends CBORTestCase
         }
     }
 
-    /**
-     * @test
-     * @dataProvider getSinglePrecisionFloatObject
-     */
+    #[DataProvider('getSinglePrecisionFloatObject')]
+    #[Test]
     public function createValidSinglePrecisionFloatObject(string $value, float $expected, float $delta): void
     {
         $object = SinglePrecisionFloatObject::create($value);
@@ -182,10 +167,8 @@ final class All extends CBORTestCase
         }
     }
 
-    /**
-     * @test
-     * @dataProvider getDoublePrecisionFloatObject
-     */
+    #[DataProvider('getDoublePrecisionFloatObject')]
+    #[Test]
     public function createValidDoublePrecisionFloatObject(string $value, float $expected, float $delta): void
     {
         $object = DoublePrecisionFloatObject::create($value);
@@ -199,10 +182,8 @@ final class All extends CBORTestCase
         }
     }
 
-    /**
-     * @test
-     * @dataProvider getSimpleObjectWithContent
-     */
+    #[DataProvider('getSimpleObjectWithContent')]
+    #[Test]
     public function createValidSimpleObjectWithContent(int $value): void
     {
         $object = SimpleObject::create($value);
@@ -223,9 +204,7 @@ final class All extends CBORTestCase
         //static::assertEquals($value, $decoded->normalize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createInvalidSimpleObjectWithContent(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -234,9 +213,7 @@ final class All extends CBORTestCase
         SimpleObject::createFromLoadedData(0, ' ');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createInvalidSimpleObjectOutOfRange(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -245,12 +222,12 @@ final class All extends CBORTestCase
         SimpleObject::create(256);
     }
 
-    public function getSimpleObjectWithoutContent(): array
+    public static function getSimpleObjectWithoutContent(): array
     {
         return [[0], [18], [19]];
     }
 
-    public function getSimpleObjectWithContent(): array
+    public static function getSimpleObjectWithContent(): array
     {
         return [[32], [255]];
     }
@@ -258,7 +235,7 @@ final class All extends CBORTestCase
     /**
      * @see https://en.wikipedia.org/wiki/Half-precision_floating-point_format
      */
-    public function getHalfPrecisionFloatObject(): array
+    public static function getHalfPrecisionFloatObject(): array
     {
         return [
             [$this->bin('0000000000000001', 2), 0.000000059604645, 0.000000000000001],
@@ -280,7 +257,7 @@ final class All extends CBORTestCase
     /**
      * @see https://en.wikipedia.org/wiki/Single-precision_floating-point_format
      */
-    public function getSinglePrecisionFloatObject(): array
+    public static function getSinglePrecisionFloatObject(): array
     {
         return [
             [$this->bin('00000000000000000000000000000001', 4), 2 ** -149, 10 ** -149],
@@ -303,7 +280,7 @@ final class All extends CBORTestCase
     /**
      * @see https://en.wikipedia.org/wiki/Double-precision_floating-point_format
      */
-    public function getDoublePrecisionFloatObject(): array
+    public static function getDoublePrecisionFloatObject(): array
     {
         return [
             [$this->bin('0011111111110000000000000000000000000000000000000000000000000000', 8), 1, 1],
@@ -400,15 +377,5 @@ final class All extends CBORTestCase
                 0.0000000000000001,
             ],
         ];
-    }
-
-    private function bin(string $binary, int $length): string
-    {
-        return str_pad(
-            hex2bin(str_pad(base_convert($binary, 2, 16), $length * 2, '0', STR_PAD_LEFT)),
-            $length,
-            '0',
-            STR_PAD_LEFT
-        );
     }
 }

@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace CBOR\Test;
 
 use CBOR\StringStream;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class FloatTest extends CBORTestCase
 {
-    /**
-     * @test
-     * @dataProvider getDataSet
-     */
+    #[DataProvider('getDataSet')]
+    #[Test]
     public function aFloatCanBeParsed(string $data): void
     {
         $stream = StringStream::create(hex2bin($data));
@@ -25,7 +25,7 @@ final class FloatTest extends CBORTestCase
         static::assertSame($data, bin2hex((string) $object));
     }
 
-    public function getDataSet(): array
+    public static function getDataSet(): array
     {
         return [
             ['f90000'], ['f98000'], ['f93c00'], ['fb3ff199999999999a'], ['f93e00'], [

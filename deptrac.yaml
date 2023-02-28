@@ -1,0 +1,14 @@
+parameters:
+  paths:
+    - './src'
+  layers:
+    - name: 'CBOR'
+      collectors:
+        - type: 'className'
+          regex: '^CBO\\'
+    - name: 'Vendors'
+      collectors:
+        - { type: className, regex: '^Brick\\' }
+  ruleset:
+    CBOR:
+      - Vendors
