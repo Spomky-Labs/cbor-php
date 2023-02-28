@@ -15,6 +15,8 @@ use CBOR\Tag\TimestampTag;
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,19 +24,15 @@ use PHPUnit\Framework\TestCase;
  */
 final class DatetimeTagTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider getDatetimes
-     */
+    #[DataProvider('getDatetimes')]
+    #[Test]
     public function createValidDatetimeTag(CBORObject $object, string $expectedTimestamp): void
     {
         $tag = DatetimeTag::create($object);
         static::assertSame($expectedTimestamp, $tag->normalize()->format('U.u'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createInvalidDatetimeTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -43,27 +41,21 @@ final class DatetimeTagTest extends TestCase
         DatetimeTag::create(ByteStringObject::create('data'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidTimestampTagWithUnsignedInteger(): void
     {
         $tag = TimestampTag::create(UnsignedIntegerObject::create(0));
         static::assertSame('0.000000', $tag->normalize()->format('U.u'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidTimestampTagWithNegativeInteger(): void
     {
         $tag = TimestampTag::create(NegativeIntegerObject::create(-10));
         static::assertSame('-10.000000', $tag->normalize()->format('U.u'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidTimestampTagWithHalfPrecisionFloat(): void
     {
         $tag = TimestampTag::create(
@@ -72,9 +64,7 @@ final class DatetimeTagTest extends TestCase
         static::assertSame('0.333251', $tag->normalize()->format('U.u'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidTimestampTagWithSinglePrecisionFloat(): void
     {
         $tag = TimestampTag::create(
@@ -83,9 +73,7 @@ final class DatetimeTagTest extends TestCase
         static::assertSame('0.999999', $tag->normalize()->format('U.u'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidTimestampTagWithDoublePrecisionFloat(): void
     {
         $tag = TimestampTag::create(
@@ -96,7 +84,7 @@ final class DatetimeTagTest extends TestCase
         static::assertSame('3.141592', $tag->normalize()->format('U.u'));
     }
 
-    public function getDatetimes(): array
+    public static function getDatetimes(): array
     {
         $buildTestEntry = static fn (string $datetime, string $timestamp): array => [
             TextStringObject::create($datetime),

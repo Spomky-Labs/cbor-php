@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace CBOR\Test;
 
 use CBOR\OtherObject\DoublePrecisionFloatObject;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class DoublePrecisionFloat extends CBORTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function aDoublePrecisionObjectCanBeCreated(): void
     {
         $obj = DoublePrecisionFloatObject::create(hex2bin('3fd5555555555555'));

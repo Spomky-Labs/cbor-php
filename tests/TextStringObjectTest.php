@@ -7,16 +7,16 @@ namespace CBOR\Test;
 use CBOR\CBORObject;
 use CBOR\StringStream;
 use CBOR\TextStringObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class TextStringObjectTest extends CBORTestCase
 {
-    /**
-     * @test
-     * @dataProvider getData
-     */
+    #[DataProvider('getData')]
+    #[Test]
     public function aTextStringObjectCanBeCreated(
         string $string,
         int $expectedAdditionalInformation,
@@ -47,7 +47,7 @@ final class TextStringObjectTest extends CBORTestCase
         static::assertSame($string, $decoded->normalize());
     }
 
-    public function getData(): array
+    public static function getData(): array
     {
         return [
             ['Hello', 5, 5, '6548656c6c6f'],

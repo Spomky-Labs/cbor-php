@@ -234,6 +234,6 @@ final class Decoder implements DecoderInterface
             ->add(HalfPrecisionFloatObject::class)
             ->add(SinglePrecisionFloatObject::class)
             ->add(DoublePrecisionFloatObject::class)
-            ;
+        ;
     }
 }

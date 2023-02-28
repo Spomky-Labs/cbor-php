@@ -53,7 +53,7 @@ final class TimestampTag extends Tag implements Normalizable
             case $object instanceof NegativeIntegerObject:
                 $formatted = DateTimeImmutable::createFromFormat('U', $object->normalize());
 
-            break;
+                break;
             case $object instanceof HalfPrecisionFloatObject:
             case $object instanceof SinglePrecisionFloatObject:
             case $object instanceof DoublePrecisionFloatObject:

@@ -11,6 +11,9 @@ use CBOR\Tag;
 use CBOR\TextStringObject;
 use InvalidArgumentException;
 
+/**
+ * @see \CBOR\Test\Tag\MimeTagTest
+ */
 final class MimeTag extends Tag implements Normalizable
 {
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)

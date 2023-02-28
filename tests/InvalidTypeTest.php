@@ -7,6 +7,8 @@ namespace CBOR\Test;
 use Brick\Math\Exception\IntegerOverflowException;
 use CBOR\StringStream;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
 
 /**
@@ -14,10 +16,8 @@ use RuntimeException;
  */
 final class InvalidTypeTest extends CBORTestCase
 {
-    /**
-     * @test
-     * @dataProvider getInvalidDataItems
-     */
+    #[DataProvider('getInvalidDataItems')]
+    #[Test]
     public function invalidData(string $item, string $class, string $expectedError): void
     {
         $this->expectException($class);
@@ -32,7 +32,7 @@ final class InvalidTypeTest extends CBORTestCase
     /**
      * @see https://datatracker.ietf.org/doc/html/rfc8949#appendix-F.1
      */
-    public function getInvalidDataItems(): array
+    public static function getInvalidDataItems(): array
     {
         return [
             [
