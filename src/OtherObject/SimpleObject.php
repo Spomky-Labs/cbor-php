@@ -14,7 +14,7 @@ final class SimpleObject extends Base implements Normalizable
 {
     public static function supportedAdditionalInformation(): array
     {
-        return array_merge(range(0, 19), [24]);
+        return [...range(0, 19), 24];
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
