@@ -16,6 +16,7 @@ use IteratorAggregate;
 /**
  * @phpstan-implements ArrayAccess<int, CBORObject>
  * @phpstan-implements IteratorAggregate<int, CBORObject>
+ * @see \CBOR\Test\ListObjectTest
  */
 class ListObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable, ArrayAccess
 {

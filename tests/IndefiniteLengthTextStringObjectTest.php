@@ -8,16 +8,16 @@ use CBOR\CBORObject;
 use CBOR\IndefiniteLengthTextStringObject;
 use CBOR\StringStream;
 use CBOR\TextStringObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class IndefiniteLengthTextStringObjectTest extends CBORTestCase
 {
-    /**
-     * @test
-     * @dataProvider getData
-     */
+    #[DataProvider('getData')]
+    #[Test]
     public function aIndefiniteLengthTextStringObjectCanBeCreated(
         array $chunks,
         int $expectedLength,
@@ -51,7 +51,7 @@ final class IndefiniteLengthTextStringObjectTest extends CBORTestCase
         static::assertSame($expectedValue, $decoded->normalize());
     }
 
-    public function getData(): array
+    public static function getData(): array
     {
         return [
             [['He', 'll', 'o'], 5, 'Hello', '7f624865626c6c616fff'],

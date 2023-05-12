@@ -9,6 +9,7 @@ use CBOR\OtherObject\BreakObject;
 use CBOR\Tag\MimeTag;
 use CBOR\TextStringObject;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,18 +17,14 @@ use PHPUnit\Framework\TestCase;
  */
 final class MimeTagTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidTagFromTextStringObject(): void
     {
         $tag = MimeTag::create(TextStringObject::create('text/plain'));
         static::assertSame('text/plain', $tag->normalize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidTagFromTIndefiniteLengthTextStringObject(): void
     {
         $tag = MimeTag::create(
@@ -39,9 +36,7 @@ final class MimeTagTest extends TestCase
         static::assertSame('text/plain', $tag->normalize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createInvalidTag(): void
     {
         static::expectException(InvalidArgumentException::class);

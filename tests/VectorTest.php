@@ -6,16 +6,16 @@ namespace CBOR\Test;
 
 use CBOR\StringStream;
 use const JSON_THROW_ON_ERROR;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class VectorTest extends CBORTestCase
 {
-    /**
-     * @test
-     * @dataProvider getVectors
-     */
+    #[DataProvider('getVectors')]
+    #[Test]
     public function createOnValidValue(string $cbor, string $hex): void
     {
         $stream = StringStream::create(base64_decode($cbor, true));
@@ -26,7 +26,7 @@ final class VectorTest extends CBORTestCase
         static::assertSame(hex2bin($hex), (string) $result);
     }
 
-    public function getVectors(): array
+    public static function getVectors(): array
     {
         return json_decode(file_get_contents(__DIR__ . '/vectors.json'), true, 512, JSON_THROW_ON_ERROR);
     }

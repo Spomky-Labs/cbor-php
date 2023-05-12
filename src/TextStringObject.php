@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+/**
+ * @see \CBOR\Test\TextStringObjectTest
+ */
 final class TextStringObject extends AbstractCBORObject implements Normalizable
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_TEXT_STRING;

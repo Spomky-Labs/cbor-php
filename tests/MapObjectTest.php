@@ -11,15 +11,14 @@ use CBOR\MapObject;
 use CBOR\NegativeIntegerObject;
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class MapObjectTest extends CBORTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function aMapActsAsAnArray(): void
     {
         $object1 = MapObject::create()
@@ -49,19 +48,17 @@ final class MapObjectTest extends CBORTestCase
         ], $object2->normalize());
         static::assertSame($object1->normalize(), $object2->normalize());
         static::assertSame((string) $object1, (string) $object2);
-        static::assertTrue(isset($object2[10]));
-        static::assertTrue(isset($object2[-150]));
-        static::assertTrue(isset($object2['AZERTY']));
-        static::assertTrue(isset($object2['Test']));
+        static::assertArrayHasKey(10, $object2);
+        static::assertArrayHasKey(-150, $object2);
+        static::assertArrayHasKey('AZERTY', $object2);
+        static::assertArrayHasKey('Test', $object2);
         static::assertSame($object2[10]->normalize(), 'Hello');
         static::assertSame($object2[-150]->normalize(), 'World');
         static::assertSame($object2['AZERTY']->normalize(), '1');
         static::assertSame($object2['Test']->normalize(), '3');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function anIndefiniteLengthMapActsAsAnArray(): void
     {
         $object1 = IndefiniteLengthMapObject::create()
@@ -91,10 +88,10 @@ final class MapObjectTest extends CBORTestCase
         ], $object2->normalize());
         static::assertSame($object1->normalize(), $object2->normalize());
         static::assertSame((string) $object1, (string) $object2);
-        static::assertTrue(isset($object2[10]));
-        static::assertTrue(isset($object2[-150]));
-        static::assertTrue(isset($object2['AZERTY']));
-        static::assertTrue(isset($object2['Test']));
+        static::assertArrayHasKey(10, $object2);
+        static::assertArrayHasKey(-150, $object2);
+        static::assertArrayHasKey('AZERTY', $object2);
+        static::assertArrayHasKey('Test', $object2);
         static::assertSame($object2[10]->normalize(), 'Hello');
         static::assertSame($object2[-150]->normalize(), 'World');
         static::assertSame($object2['AZERTY']->normalize(), '1');

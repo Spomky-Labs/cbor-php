@@ -12,6 +12,7 @@ use CBOR\Tag\Base64UrlEncodingTag;
 use CBOR\Tag\CBOREncodingTag;
 use CBOR\TextStringObject;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,9 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class EncodingTagsTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidBase16EncodingTag(): void
     {
         $tag = Base16EncodingTag::create(TextStringObject::create('Text'));
@@ -31,9 +30,7 @@ final class EncodingTagsTest extends TestCase
         static::assertSame(CBORObject::TAG_ENCODED_BASE16, $tag->getAdditionalInformation());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidBase64EncodingTag(): void
     {
         $tag = Base64EncodingTag::create(TextStringObject::create('Text'));
@@ -43,9 +40,7 @@ final class EncodingTagsTest extends TestCase
         static::assertSame(CBORObject::TAG_ENCODED_BASE64, $tag->getAdditionalInformation());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidBase64UrlEncodingTag(): void
     {
         $tag = Base64UrlEncodingTag::create(TextStringObject::create('Text'));
@@ -55,9 +50,7 @@ final class EncodingTagsTest extends TestCase
         static::assertSame(CBORObject::TAG_ENCODED_BASE64_URL, $tag->getAdditionalInformation());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createValidCBOREncodingTag(): void
     {
         $tag = CBOREncodingTag::create(ByteStringObject::create('Text'));
@@ -67,9 +60,7 @@ final class EncodingTagsTest extends TestCase
         static::assertSame(CBORObject::TAG_ENCODED_CBOR, $tag->getAdditionalInformation());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createInvalidCBOREncodingTag(): void
     {
         $this->expectException(InvalidArgumentException::class);

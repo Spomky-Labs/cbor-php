@@ -7,16 +7,16 @@ namespace CBOR\Test;
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthByteStringObject;
 use CBOR\StringStream;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class IndefiniteLengthByteStringObjectTest extends CBORTestCase
 {
-    /**
-     * @test
-     * @dataProvider getData
-     */
+    #[DataProvider('getData')]
+    #[Test]
     public function aIndefiniteLengthByteStringObjectCanBeCreated(
         array $chunks,
         int $expectedLength,
@@ -50,7 +50,7 @@ final class IndefiniteLengthByteStringObjectTest extends CBORTestCase
         static::assertSame($expectedValue, $decoded->normalize());
     }
 
-    public function getData(): array
+    public static function getData(): array
     {
         return [
             [['He', 'll', 'o'], 5, 'Hello', '5f424865426c6c416fff'],
