@@ -25,7 +25,7 @@
     },
     "require": {
         "php": ">=8.0",
-        "brick/math": "^0.9|^0.10|^0.11",
+        "brick/math": "^0.9|^0.10|^0.11|^0.12",
         "ext-mbstring": "*"
     },
     "require-dev": {
