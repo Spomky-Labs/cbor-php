@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     bootstrap="vendor/autoload.php"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
 >
-    <coverage>
-        <include>
-            <directory suffix=".php">./src</directory>
-        </include>
-    </coverage>
-    <testsuites>
-        <testsuite name="CBOR Test Suite">
-            <directory suffix="Test.php">./tests/</directory>
-        </testsuite>
-    </testsuites>
-    <php>
-        <ini name="error_reporting" value="-1"/>
-        <ini name="intl.default_locale" value="en"/>
-        <ini name="intl.error_level" value="0"/>
-        <ini name="memory_limit" value="-1"/>
-    </php>
+  <testsuites>
+    <testsuite name="CBOR Test Suite">
+      <directory>./tests/</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <ini name="error_reporting" value="-1"/>
+    <ini name="intl.default_locale" value="en"/>
+    <ini name="intl.error_level" value="0"/>
+    <ini name="memory_limit" value="-1"/>
+  </php>
+  <source>
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+  </source>
 </phpunit>
