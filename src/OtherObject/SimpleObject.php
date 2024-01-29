@@ -7,8 +7,8 @@ namespace CBOR\OtherObject;
 use CBOR\Normalizable;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
-use function chr;
 use InvalidArgumentException;
+use function chr;
 use function ord;
 
 final class SimpleObject extends Base implements Normalizable

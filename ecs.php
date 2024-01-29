@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use PhpCsFixer\Fixer\Alias\MbStrFunctionsFixer;
 use PhpCsFixer\Fixer\ArrayNotation\ArraySyntaxFixer;
 use PhpCsFixer\Fixer\ClassNotation\ProtectedToPrivateFixer;
 use PhpCsFixer\Fixer\Comment\HeaderCommentFixer;
@@ -26,7 +25,6 @@ use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
 use PhpCsFixer\Fixer\Strict\StrictComparisonFixer;
 use PhpCsFixer\Fixer\Strict\StrictParamFixer;
 use PhpCsFixer\Fixer\Whitespace\ArrayIndentationFixer;
-use PhpCsFixer\Fixer\Whitespace\CompactNullableTypehintFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
@@ -47,7 +45,6 @@ return static function (ECSConfig $config) use ($header): void {
     $config->import(SetList::NAMESPACES);
     $config->import(SetList::STRICT);
 
-    $services = $config->services();
     $config->rule(StrictParamFixer::class);
     $config->rule(StrictComparisonFixer::class);
     $config->rule(ArrayIndentationFixer::class);
@@ -55,11 +52,9 @@ return static function (ECSConfig $config) use ($header): void {
     $config->rule(ProtectedToPrivateFixer::class);
     $config->rule(DeclareStrictTypesFixer::class);
     $config->rule(NativeConstantInvocationFixer::class);
-    $config->rule(MbStrFunctionsFixer::class);
     $config->rule(LinebreakAfterOpeningTagFixer::class);
     $config->rule(CombineConsecutiveIssetsFixer::class);
     $config->rule(CombineConsecutiveUnsetsFixer::class);
-    $config->rule(CompactNullableTypehintFixer::class);
     $config->rule(NoSuperfluousElseifFixer::class);
     $config->rule(NoSuperfluousPhpdocTagsFixer::class);
     $config->rule(PhpdocTrimConsecutiveBlankLineSeparationFixer::class);
@@ -89,9 +84,9 @@ return static function (ECSConfig $config) use ($header): void {
         'import_functions' => true,
     ]);
 
-    $config->services()
-        ->remove(PhpUnitTestClassRequiresCoversFixer::class);
     $config->parallel();
     $config->paths([__DIR__]);
-    $config->skip([__DIR__ . '/.github', __DIR__ . '/build', __DIR__ . '/vendor']);
+    $config->skip(
+        [__DIR__ . '/.github', __DIR__ . '/build', __DIR__ . '/vendor', PhpUnitTestClassRequiresCoversFixer::class]
+    );
 };

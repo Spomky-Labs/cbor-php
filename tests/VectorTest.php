@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CBOR\Test;
 
 use CBOR\StringStream;
-use const JSON_THROW_ON_ERROR;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use const JSON_THROW_ON_ERROR;
 
 /**
  * @internal

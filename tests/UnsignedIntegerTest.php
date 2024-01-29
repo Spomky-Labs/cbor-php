@@ -7,6 +7,7 @@ namespace CBOR\Test;
 use CBOR\StringStream;
 use CBOR\UnsignedIntegerObject;
 use InvalidArgumentException;
+use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -29,9 +30,12 @@ final class UnsignedIntegerTest extends CBORTestCase
         static::assertSame($expectedAdditionalInformation, $unsignedInteger->getAdditionalInformation());
     }
 
-    public static function getValidValue(): array
+    public static function getValidValue(): Iterator
     {
-        return [[12_345_678, '12345678', 0, 26], [255, '255', 0, 25], [254, '254', 0, 24], [18, '18', 0, 18]];
+        yield [12_345_678, '12345678', 0, 26];
+        yield [255, '255', 0, 25];
+        yield [254, '254', 0, 24];
+        yield [18, '18', 0, 18];
     }
 
     #[Test]
@@ -64,16 +68,19 @@ final class UnsignedIntegerTest extends CBORTestCase
         static::assertSame($expectedNormalizedData, $object->normalize());
     }
 
-    public static function getDataSet(): array
+    public static function getDataSet(): Iterator
     {
-        return [
-            ['00', '0'], ['01', '1'], ['0a', '10'], ['17', '23'], [
-                '1818',
-                '24',
-            ], ['1819', '25'], ['1864', '100'], ['1903e8', '1000'], ['1a000f4240', '1000000'], [
-                '1b000000e8d4a51000',
-                '1000000000000',
-            ], ['1bffffffffffffffff', '18446744073709551615'], ['c249010000000000000000', '18446744073709551616'],
-        ];
+        yield ['00', '0'];
+        yield ['01', '1'];
+        yield ['0a', '10'];
+        yield ['17', '23'];
+        yield ['1818', '24'];
+        yield ['1819', '25'];
+        yield ['1864', '100'];
+        yield ['1903e8', '1000'];
+        yield ['1a000f4240', '1000000'];
+        yield ['1b000000e8d4a51000', '1000000000000'];
+        yield ['1bffffffffffffffff', '18446744073709551615'];
+        yield ['c249010000000000000000', '18446744073709551616'];
     }
 }

@@ -1,4 +1,4 @@
-Target branch: 
+Target branch:
 Resolves issue # <!-- #-prefixed issue number(s), if any -->
 
 <!-- replace space with "x" in square brackets: [x] -->

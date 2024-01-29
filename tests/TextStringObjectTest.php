@@ -7,6 +7,7 @@ namespace CBOR\Test;
 use CBOR\CBORObject;
 use CBOR\StringStream;
 use CBOR\TextStringObject;
+use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -47,12 +48,10 @@ final class TextStringObjectTest extends CBORTestCase
         static::assertSame($string, $decoded->normalize());
     }
 
-    public static function getData(): array
+    public static function getData(): Iterator
     {
-        return [
-            ['Hello', 5, 5, '6548656c6c6f'],
-            ['(｡◕‿◕｡)', 17, 7, '7128efbda1e29795e280bfe29795efbda129'],
-            ['HelloHelloHelloHelloHello', 24, 25, '781948656c6c6f48656c6c6f48656c6c6f48656c6c6f48656c6c6f'],
-        ];
+        yield ['Hello', 5, 5, '6548656c6c6f'];
+        yield ['(｡◕‿◕｡)', 17, 7, '7128efbda1e29795e280bfe29795efbda129'];
+        yield ['HelloHelloHelloHelloHello', 24, 25, '781948656c6c6f48656c6c6f48656c6c6f48656c6c6f48656c6c6f'];
     }
 }

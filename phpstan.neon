@@ -3,28 +3,6 @@ parameters:
     paths:
         - src
     treatPhpDocTypesAsCertain: false
-    ignoreErrors:
-        -
-            message: '#Parameter .* of static method CBOR\\Utils\:\:binToBigInteger\(\) expects string, string\|null given\.#'
-            count: 3
-            path: src/OtherObject/SinglePrecisionFloatObject.php
-        -
-            message: '#Parameter .* of static method CBOR\\Utils\:\:binToBigInteger\(\) expects string, string\|null given\.#'
-            count: 3
-            path: src/OtherObject/DoublePrecisionFloatObject.php
-        -
-            message: '#Parameter .* of static method CBOR\\Utils\:\:binToBigInteger\(\) expects string, string\|null given\.#'
-            count: 3
-            path: src/OtherObject/HalfPrecisionFloatObject.php
-        -
-            message: '#Parameter .* of static method CBOR\\Utils\:\:binToInt\(\) expects string, string\|null given\.#'
-            count: 1
-            path: src/Tag/TagManager.php
-        -
-            message: '#Instanceof between CBOR\\CBORObject and CBOR\\CBORObject will always evaluate to true\.#'
-            count: 1
-            path: src/ListObject.php
-        -
-            message: '#Instanceof between CBOR\\MapItem and CBOR\\MapItem will always evaluate to true\.#'
-            count: 1
-            path: src/MapObject.php
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - phpstan-baseline.neon

@@ -1,0 +1,36 @@
+parameters:
+    ignoreErrors:
+        -
+            message: "#^Instanceof between CBOR\\\\MapItem and CBOR\\\\MapItem will always evaluate to true\\.$#"
+            count: 1
+            path: src/MapObject.php
+
+        -
+            message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToBigInteger\\(\\) expects string, string\\|null given\\.$#"
+            count: 3
+            path: src/OtherObject/DoublePrecisionFloatObject.php
+
+        -
+            message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToBigInteger\\(\\) expects string, string\\|null given\\.$#"
+            count: 3
+            path: src/OtherObject/HalfPrecisionFloatObject.php
+
+        -
+            message: "#^PHPDoc tag @var with type CBOR\\\\OtherObject is not subtype of native type string\\.$#"
+            count: 1
+            path: src/OtherObject/OtherObjectManager.php
+
+        -
+            message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToBigInteger\\(\\) expects string, string\\|null given\\.$#"
+            count: 3
+            path: src/OtherObject/SinglePrecisionFloatObject.php
+
+        -
+            message: "#^PHPDoc tag @var with type CBOR\\\\Tag is not subtype of native type string\\.$#"
+            count: 1
+            path: src/Tag/TagManager.php
+
+        -
+            message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToInt\\(\\) expects string, string\\|null given\\.$#"
+            count: 1
+            path: src/Tag/TagManager.php

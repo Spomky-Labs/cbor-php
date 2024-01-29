@@ -8,8 +8,8 @@ use Brick\Math\BigInteger;
 use CBOR\Normalizable;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
-use const INF;
 use InvalidArgumentException;
+use const INF;
 use const NAN;
 
 final class DoublePrecisionFloatObject extends Base implements Normalizable

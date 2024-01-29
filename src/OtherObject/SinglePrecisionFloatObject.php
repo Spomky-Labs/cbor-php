@@ -7,8 +7,8 @@ namespace CBOR\OtherObject;
 use Brick\Math\BigInteger;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
-use const INF;
 use InvalidArgumentException;
+use const INF;
 use const NAN;
 
 final class SinglePrecisionFloatObject extends Base

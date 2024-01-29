@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace CBOR;
 
-use function chr;
 use Stringable;
+use function chr;
 
 abstract class AbstractCBORObject implements CBORObject, Stringable
 {
