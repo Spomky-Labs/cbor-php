@@ -18,12 +18,13 @@ use CBOR\OtherObject\TrueObject;
 use CBOR\OtherObject\UndefinedObject;
 use CBOR\StringStream;
 use CBOR\Test\CBORTestCase;
-use function chr;
-use const INF;
 use InvalidArgumentException;
-use const M_PI;
+use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use function chr;
+use const INF;
+use const M_PI;
 use const STR_PAD_LEFT;
 
 /**
@@ -256,160 +257,165 @@ final class AllTest extends CBORTestCase
         SimpleObject::create(256);
     }
 
-    public static function getSimpleObjectWithoutContent(): array
+    public static function getSimpleObjectWithoutContent(): Iterator
     {
-        return [[0], [18], [19]];
+        yield [0];
+        yield [18];
+        yield [19];
     }
 
-    public static function getSimpleObjectWithContent(): array
+    public static function getSimpleObjectWithContent(): Iterator
     {
-        return [[32], [255]];
+        yield [32];
+        yield [255];
     }
 
     /**
      * @see https://en.wikipedia.org/wiki/Half-precision_floating-point_format
      */
-    public static function getHalfPrecisionFloatObject(): array
+    public static function getHalfPrecisionFloatObject(): Iterator
     {
-        return [
-            [self::bitsToByteString('0000000000000001', 2), 0.000000059604645, 0.000000000000001],
-            [self::bitsToByteString('0000001111111111', 2), 0.000060975552, 0.000000000001],
-            [self::bitsToByteString('0000010000000000', 2), 0.00006103515625, 0.00000000000001],
-            [self::bitsToByteString('0111101111111111', 2), 65504, 1],
-            [self::bitsToByteString('0011101111111111', 2), 0.99951172, 0.00000001],
-            [self::bitsToByteString('0011110000000000', 2), 1, 1],
-            [self::bitsToByteString('0011110000000001', 2), 1.00097656, 0.00000001],
-            [self::bitsToByteString('0011010101010101', 2), 0.333251953125, 0.000000000001],
-            [self::bitsToByteString('1100000000000000', 2), -1, 1],
-            [self::bitsToByteString('0000000000000000', 2), 0, 1],
-            [self::bitsToByteString('1000000000000000', 2), -0, 1],
-            [self::bitsToByteString('0111110000000000', 2), INF, 1],
-            [self::bitsToByteString('1111110000000000', 2), -INF, 1],
-        ];
+        yield [self::bitsToByteString('0000000000000001', 2), 0.000000059604645, 0.000000000000001];
+        yield [self::bitsToByteString('0000001111111111', 2), 0.000060975552, 0.000000000001];
+        yield [self::bitsToByteString('0000010000000000', 2), 0.00006103515625, 0.00000000000001];
+        yield [self::bitsToByteString('0111101111111111', 2), 65504, 1];
+        yield [self::bitsToByteString('0011101111111111', 2), 0.99951172, 0.00000001];
+        yield [self::bitsToByteString('0011110000000000', 2), 1, 1];
+        yield [self::bitsToByteString('0011110000000001', 2), 1.00097656, 0.00000001];
+        yield [self::bitsToByteString('0011010101010101', 2), 0.333251953125, 0.000000000001];
+        yield [self::bitsToByteString('1100000000000000', 2), -1, 1];
+        yield [self::bitsToByteString('0000000000000000', 2), 0, 1];
+        yield [self::bitsToByteString('1000000000000000', 2), -0, 1];
+        yield [self::bitsToByteString('0111110000000000', 2), INF, 1];
+        yield [self::bitsToByteString('1111110000000000', 2), -INF, 1];
     }
 
     /**
      * @see https://en.wikipedia.org/wiki/Single-precision_floating-point_format
      */
-    public static function getSinglePrecisionFloatObject(): array
+    public static function getSinglePrecisionFloatObject(): Iterator
     {
-        return [
-            [self::bitsToByteString('00000000000000000000000000000001', 4), 2 ** -149, 10 ** -149],
-            [self::bitsToByteString('00000000011111111111111111111111', 4), 1.1754942107 * 10 ** -38, 10 ** -38],
-            [self::bitsToByteString('00000000100000000000000000000000', 4), 1.1754943508 * 10 ** -38, 10 ** -38],
-            [self::bitsToByteString('01111111011111111111111111111111', 4), 3.4028234664 * 10 ** 38, 10 ** 38],
-            [self::bitsToByteString('00111111011111111111111111111111', 4), 0.999999940395355225, 0.000000000000000001],
-            [self::bitsToByteString('00111111100000000000000000000000', 4), 1, 1],
-            [self::bitsToByteString('00111111100000000000000000000001', 4), 1.00000011920928955, 0.00000000000000001],
-            [self::bitsToByteString('11000000000000000000000000000000', 4), -2, 1],
-            [self::bitsToByteString('00000000000000000000000000000000', 4), 0, 0],
-            [self::bitsToByteString('10000000000000000000000000000000', 4), -0, 0],
-            [self::bitsToByteString('01111111100000000000000000000000', 4), INF, 0],
-            [self::bitsToByteString('11111111100000000000000000000000', 4), -INF, 0],
-            [self::bitsToByteString('01000000010010010000111111011011', 4), 3.14159274101257324, 0.00000000000000001],
-            [self::bitsToByteString('00111110101010101010101010101011', 4), 0.333333343267440796, 0.000000000000000001],
+        yield [self::bitsToByteString('00000000000000000000000000000001', 4), 2 ** -149, 10 ** -149];
+        yield [self::bitsToByteString('00000000011111111111111111111111', 4), 1.1754942107 * 10 ** -38, 10 ** -38];
+        yield [self::bitsToByteString('00000000100000000000000000000000', 4), 1.1754943508 * 10 ** -38, 10 ** -38];
+        yield [self::bitsToByteString('01111111011111111111111111111111', 4), 3.4028234664 * 10 ** 38, 10 ** 38];
+        yield [
+            self::bitsToByteString('00111111011111111111111111111111', 4),
+            0.999999940395355225,
+            0.000000000000000001,
+        ];
+        yield [self::bitsToByteString('00111111100000000000000000000000', 4), 1, 1];
+        yield [self::bitsToByteString('00111111100000000000000000000001', 4), 1.00000011920928955, 0.00000000000000001];
+        yield [self::bitsToByteString('11000000000000000000000000000000', 4), -2, 1];
+        yield [self::bitsToByteString('00000000000000000000000000000000', 4), 0, 0];
+        yield [self::bitsToByteString('10000000000000000000000000000000', 4), -0, 0];
+        yield [self::bitsToByteString('01111111100000000000000000000000', 4), INF, 0];
+        yield [self::bitsToByteString('11111111100000000000000000000000', 4), -INF, 0];
+        yield [self::bitsToByteString('01000000010010010000111111011011', 4), 3.14159274101257324, 0.00000000000000001];
+        yield [
+            self::bitsToByteString('00111110101010101010101010101011', 4),
+            0.333333343267440796,
+            0.000000000000000001,
         ];
     }
 
     /**
      * @see https://en.wikipedia.org/wiki/Double-precision_floating-point_format
      */
-    public static function getDoublePrecisionFloatObject(): array
+    public static function getDoublePrecisionFloatObject(): Iterator
     {
-        return [
-            [self::bitsToByteString('0011111111110000000000000000000000000000000000000000000000000000', 8), 1, 1],
-            [
-                self::bitsToByteString('0011111111110000000000000000000000000000000000000000000000000001', 8),
-                1.0000000000000002,
-                0.0000000000000001,
-            ],
-            [
-                self::bitsToByteString('0011111111110000000000000000000000000000000000000000000000000010', 8),
-                1.0000000000000004,
-                0.0000000000000001,
-            ],
-            [
-                self::bitsToByteString('0100000000000000000000000000000000000000000000000000000000000000', 8),
-                2,
-                0.0000000000000001,
-            ],
-            [
-                self::bitsToByteString('1100000000000000000000000000000000000000000000000000000000000000', 8),
-                -2,
-                0.0000000000000001,
-            ],
-            [
-                self::bitsToByteString('0100000000001000000000000000000000000000000000000000000000000000', 8),
-                3,
-                0.0000000000000001,
-            ],
-            [
-                self::bitsToByteString('0100000000010000000000000000000000000000000000000000000000000000', 8),
-                4,
-                0.0000000000000001,
-            ],
-            [
-                self::bitsToByteString('0100000000010100000000000000000000000000000000000000000000000000', 8),
-                5,
-                0.0000000000000001,
-            ],
-            [
-                self::bitsToByteString('0100000000011000000000000000000000000000000000000000000000000000', 8),
-                6,
-                0.0000000000000001,
-            ],
-            [
-                self::bitsToByteString('0100000000110111000000000000000000000000000000000000000000000000', 8),
-                23,
-                0.0000000000000001,
-            ],
-            [
-                self::bitsToByteString('0011111110001000000000000000000000000000000000000000000000000000', 8),
-                0.01171875,
-                0.00000001,
-            ],
-            [
-                self::bitsToByteString('0000000000000000000000000000000000000000000000000000000000000001', 8),
-                4.9406564584124654 * 10 ** -324,
-                10 ** -323,
-            ],
-            [
-                self::bitsToByteString('0000000000001111111111111111111111111111111111111111111111111111', 8),
-                2.2250738585072009 * 10 ** -308,
-                10 ** -308,
-            ],
-            [
-                self::bitsToByteString('0000000000010000000000000000000000000000000000000000000000000000', 8),
-                2.2250738585072014 * 10 ** -308,
-                10 ** -308,
-            ],
-            [
-                self::bitsToByteString('0111111111101111111111111111111111111111111111111111111111111111', 8),
-                1.7976931348623157 * 10 ** 308,
-                1,
-            ],
-            [
-                self::bitsToByteString('0000000000000000000000000000000000000000000000000000000000000000', 8),
-                0,
-                0.0000000000000001,
-            ],
-            [
-                self::bitsToByteString('1000000000000000000000000000000000000000000000000000000000000000', 8),
-                -0,
-                0.0000000000000001,
-            ],
-            [self::bitsToByteString('0111111111110000000000000000000000000000000000000000000000000000', 8), INF, 1],
-            [self::bitsToByteString('1111111111110000000000000000000000000000000000000000000000000000', 8), -INF, 1],
-            [
-                self::bitsToByteString('0011111111010101010101010101010101010101010101010101010101010101', 8),
-                1 / 3,
-                0.0000000000000001,
-            ],
-            [
-                self::bitsToByteString('0100000000001001001000011111101101010100010001000010110100011000', 8),
-                M_PI,
-                0.0000000000000001,
-            ],
+        yield [self::bitsToByteString('0011111111110000000000000000000000000000000000000000000000000000', 8), 1, 1];
+        yield [
+            self::bitsToByteString('0011111111110000000000000000000000000000000000000000000000000001', 8),
+            1.0000000000000002,
+            0.0000000000000001,
+        ];
+        yield [
+            self::bitsToByteString('0011111111110000000000000000000000000000000000000000000000000010', 8),
+            1.0000000000000004,
+            0.0000000000000001,
+        ];
+        yield [
+            self::bitsToByteString('0100000000000000000000000000000000000000000000000000000000000000', 8),
+            2,
+            0.0000000000000001,
+        ];
+        yield [
+            self::bitsToByteString('1100000000000000000000000000000000000000000000000000000000000000', 8),
+            -2,
+            0.0000000000000001,
+        ];
+        yield [
+            self::bitsToByteString('0100000000001000000000000000000000000000000000000000000000000000', 8),
+            3,
+            0.0000000000000001,
+        ];
+        yield [
+            self::bitsToByteString('0100000000010000000000000000000000000000000000000000000000000000', 8),
+            4,
+            0.0000000000000001,
+        ];
+        yield [
+            self::bitsToByteString('0100000000010100000000000000000000000000000000000000000000000000', 8),
+            5,
+            0.0000000000000001,
+        ];
+        yield [
+            self::bitsToByteString('0100000000011000000000000000000000000000000000000000000000000000', 8),
+            6,
+            0.0000000000000001,
+        ];
+        yield [
+            self::bitsToByteString('0100000000110111000000000000000000000000000000000000000000000000', 8),
+            23,
+            0.0000000000000001,
+        ];
+        yield [
+            self::bitsToByteString('0011111110001000000000000000000000000000000000000000000000000000', 8),
+            0.01171875,
+            0.00000001,
+        ];
+        yield [
+            self::bitsToByteString('0000000000000000000000000000000000000000000000000000000000000001', 8),
+            4.9406564584124654 * 10 ** -324,
+            10 ** -323,
+        ];
+        yield [
+            self::bitsToByteString('0000000000001111111111111111111111111111111111111111111111111111', 8),
+            2.2250738585072009 * 10 ** -308,
+            10 ** -308,
+        ];
+        yield [
+            self::bitsToByteString('0000000000010000000000000000000000000000000000000000000000000000', 8),
+            2.2250738585072014 * 10 ** -308,
+            10 ** -308,
+        ];
+        yield [
+            self::bitsToByteString('0111111111101111111111111111111111111111111111111111111111111111', 8),
+            1.7976931348623157 * 10 ** 308,
+            1,
+        ];
+        yield [
+            self::bitsToByteString('0000000000000000000000000000000000000000000000000000000000000000', 8),
+            0,
+            0.0000000000000001,
+        ];
+        yield [
+            self::bitsToByteString('1000000000000000000000000000000000000000000000000000000000000000', 8),
+            -0,
+            0.0000000000000001,
+        ];
+        yield [self::bitsToByteString('0111111111110000000000000000000000000000000000000000000000000000', 8), INF, 1];
+        yield [self::bitsToByteString('1111111111110000000000000000000000000000000000000000000000000000', 8), -INF, 1];
+        yield [
+            self::bitsToByteString('0011111111010101010101010101010101010101010101010101010101010101', 8),
+            1 / 3,
+            0.0000000000000001,
+        ];
+        yield [
+            self::bitsToByteString('0100000000001001001000011111101101010100010001000010110100011000', 8),
+            M_PI,
+            0.0000000000000001,
         ];
     }
 

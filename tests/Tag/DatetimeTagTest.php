@@ -15,6 +15,7 @@ use CBOR\Tag\TimestampTag;
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
 use InvalidArgumentException;
+use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -84,19 +85,16 @@ final class DatetimeTagTest extends TestCase
         static::assertSame('3.141592', $tag->normalize()->format('U.u'));
     }
 
-    public static function getDatetimes(): array
+    public static function getDatetimes(): Iterator
     {
         $buildTestEntry = static fn (string $datetime, string $timestamp): array => [
             TextStringObject::create($datetime),
             $timestamp,
         ];
-
-        return [
-            $buildTestEntry('2003-12-13T18:30:02Z', '1071340202.000000'),
-            $buildTestEntry('2003-12-13T18:30:02.25Z', '1071340202.250000'),
-            $buildTestEntry('2003-12-13T18:30:02+01:00', '1071336602.000000'),
-            $buildTestEntry('2003-12-13T18:30:02.25+01:00', '1071336602.250000'),
-            $buildTestEntry('2003-12-13T18:30:02.251254+01:00', '1071336602.251254'),
-        ];
+        yield $buildTestEntry('2003-12-13T18:30:02Z', '1071340202.000000');
+        yield $buildTestEntry('2003-12-13T18:30:02.25Z', '1071340202.250000');
+        yield $buildTestEntry('2003-12-13T18:30:02+01:00', '1071336602.000000');
+        yield $buildTestEntry('2003-12-13T18:30:02.25+01:00', '1071336602.250000');
+        yield $buildTestEntry('2003-12-13T18:30:02.251254+01:00', '1071336602.251254');
     }
 }

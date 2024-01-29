@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace CBOR\OtherObject;
 
-use function array_key_exists;
 use CBOR\OtherObject;
 use InvalidArgumentException;
+use function array_key_exists;
 
 class OtherObjectManager implements OtherObjectManagerInterface
 {

@@ -7,6 +7,7 @@ namespace CBOR\Test;
 use CBOR\NegativeIntegerObject;
 use CBOR\StringStream;
 use InvalidArgumentException;
+use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -29,15 +30,13 @@ final class SignedIntegerTest extends CBORTestCase
         static::assertSame($expectedAdditionalInformation, $unsignedInteger->getAdditionalInformation());
     }
 
-    public static function getValidValue(): array
+    public static function getValidValue(): Iterator
     {
-        return [
-            [-12_345_678, '-12345678', 1, 26],
-            [-255, '-255', 1, 24],
-            [-254, '-254', 1, 24],
-            [-65535, '-65535', 1, 25],
-            [-18, '-18', 1, 17],
-        ];
+        yield [-12_345_678, '-12345678', 1, 26];
+        yield [-255, '-255', 1, 24];
+        yield [-254, '-254', 1, 24];
+        yield [-65535, '-65535', 1, 25];
+        yield [-18, '-18', 1, 17];
     }
 
     #[Test]
@@ -71,13 +70,13 @@ final class SignedIntegerTest extends CBORTestCase
         static::assertSame($expectedNormalizedData, $object->normalize());
     }
 
-    public static function getDataSet(): array
+    public static function getDataSet(): Iterator
     {
-        return [
-            ['20', '-1'], ['29', '-10'], ['3863', '-100'], ['3903e7', '-1000'], [
-                'c349010000000000000000',
-                '-18446744073709551617',
-            ], ['3bffffffffffffffff', '-18446744073709551616'],
-        ];
+        yield ['20', '-1'];
+        yield ['29', '-10'];
+        yield ['3863', '-100'];
+        yield ['3903e7', '-1000'];
+        yield ['c349010000000000000000', '-18446744073709551617'];
+        yield ['3bffffffffffffffff', '-18446744073709551616'];
     }
 }

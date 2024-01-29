@@ -10,10 +10,10 @@ use CBOR\NegativeIntegerObject;
 use CBOR\Normalizable;
 use CBOR\Tag;
 use CBOR\UnsignedIntegerObject;
-use function count;
-use function extension_loaded;
 use InvalidArgumentException;
 use RuntimeException;
+use function count;
+use function extension_loaded;
 
 final class BigFloatTag extends Tag implements Normalizable
 {

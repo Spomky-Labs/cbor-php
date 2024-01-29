@@ -7,6 +7,7 @@ namespace CBOR\Test;
 use CBOR\CBORObject;
 use CBOR\IndefiniteLengthByteStringObject;
 use CBOR\StringStream;
+use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -50,15 +51,13 @@ final class IndefiniteLengthByteStringObjectTest extends CBORTestCase
         static::assertSame($expectedValue, $decoded->normalize());
     }
 
-    public static function getData(): array
+    public static function getData(): Iterator
     {
-        return [
-            [['He', 'll', 'o'], 5, 'Hello', '5f424865426c6c416fff'],
-            [['(', '｡', '◕', '‿', '◕', '｡', ')'],
-                17,
-                '(｡◕‿◕｡)',
-                '5f412843efbda143e2979543e280bf43e2979543efbda14129ff',
-            ],
+        yield [['He', 'll', 'o'], 5, 'Hello', '5f424865426c6c416fff'];
+        yield [['(', '｡', '◕', '‿', '◕', '｡', ')'],
+            17,
+            '(｡◕‿◕｡)',
+            '5f412843efbda143e2979543e280bf43e2979543efbda14129ff',
         ];
     }
 }
