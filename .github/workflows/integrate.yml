@@ -38,7 +38,7 @@ jobs:
         uses: "actions/checkout@v4"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
 
@@ -74,7 +74,7 @@ jobs:
         uses: "actions/checkout@v4"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "--optimize-autoloader"
@@ -111,7 +111,7 @@ jobs:
         run: "composer validate --strict"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
           composer-options: "--optimize-autoloader"
@@ -140,7 +140,7 @@ jobs:
         uses: "actions/checkout@v4"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
           composer-options: "--optimize-autoloader"
@@ -173,7 +173,7 @@ jobs:
         run: "git fetch --depth=1 origin ${GITHUB_BASE_REF}"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
           composer-options: "--optimize-autoloader"
@@ -202,7 +202,7 @@ jobs:
         run: "git fetch --depth=1 origin ${GITHUB_BASE_REF}"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
           composer-options: "--optimize-autoloader"
