@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - "*.x"
-  pull_request: null
 
 jobs:
   mutation_testing:
