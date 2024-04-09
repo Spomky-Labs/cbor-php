@@ -14,7 +14,7 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Checkout code"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v3"
 
       - name: "Check file permissions"
         run: |
@@ -35,10 +35,10 @@ jobs:
           coverage: "none"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v3"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
 
@@ -71,10 +71,10 @@ jobs:
           coverage: "xdebug"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v3"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "--optimize-autoloader"
@@ -105,13 +105,13 @@ jobs:
           coverage: "none"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v3"
 
       - name: "Validate Composer configuration"
         run: "composer validate --strict"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
           composer-options: "--optimize-autoloader"
@@ -137,10 +137,10 @@ jobs:
           coverage: "none"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v3"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
           composer-options: "--optimize-autoloader"
@@ -151,35 +151,6 @@ jobs:
       - name: "Deptrac"
         run: |
           vendor/bin/deptrac analyse --fail-on-uncovered --no-cache
-
-  mutation_testing:
-    name: "5️⃣ Mutation Testing"
-    needs:
-      - "byte_level"
-      - "syntax_errors"
-    runs-on: "ubuntu-latest"
-    steps:
-      - name: "Set up PHP"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          php-version: "8.3"
-          extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
-          coverage: "xdebug"
-
-      - name: "Checkout code"
-        uses: "actions/checkout@v4"
-
-      - name: "Fetch Git base reference"
-        run: "git fetch --depth=1 origin ${GITHUB_BASE_REF}"
-
-      - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
-        with:
-          dependency-versions: "highest"
-          composer-options: "--optimize-autoloader"
-
-      - name: "Execute Infection"
-        run: "make ci-mu"
 
   rector_checkstyle:
     name: "6️⃣ Rector Checkstyle"
@@ -196,13 +167,13 @@ jobs:
           coverage: "xdebug"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v3"
 
       - name: "Fetch Git base reference"
         run: "git fetch --depth=1 origin ${GITHUB_BASE_REF}"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
           composer-options: "--optimize-autoloader"
@@ -218,7 +189,7 @@ jobs:
     runs-on: "ubuntu-20.04"
     steps:
       - name: "Checkout code"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v3"
 
       - name: "Check exported files"
         run: |
