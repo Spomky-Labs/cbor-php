@@ -85,15 +85,12 @@ function validate(): void
 {
     io()->title('Validating Composer configuration');
     $command = ['composer', 'validate', '--strict'];
-    $environment = ['XDEBUG_MODE' => 'off'];
+    $environment = [
+        'XDEBUG_MODE' => 'off',
+    ];
     run($command, environment: $environment);
 
-    $command = [
-        'composer',
-        'dump-autoload',
-        '--optimize',
-        '--strict-psr'
-    ];
+    $command = ['composer', 'dump-autoload', '--optimize', '--strict-psr'];
     run($command, environment: $environment);
 }
 
