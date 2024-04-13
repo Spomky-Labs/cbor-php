@@ -94,6 +94,64 @@ function validate(): void
     run($command, environment: $environment);
 }
 
+/**
+ * @param array<string> $allowedLicenses
+ */
+#[AsTask(description: 'Check licenses')]
+function checkLicenses(
+    array $allowedLicenses = ['Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'MIT', 'MPL-2.0', 'OSL-3.0']
+): void {
+    io()->title('Checking licenses');
+    $allowedExceptions = [];
+    $command = ['composer', 'licenses', '-f', 'json'];
+    $environment = [
+        'XDEBUG_MODE' => 'off',
+    ];
+    $result = run($command, environment: $environment, quiet: true);
+    if (! $result->isSuccessful()) {
+        io()->error('Cannot determine licenses');
+        exit(1);
+    }
+    $licenses = json_decode($result->getOutput(), true);
+    $disallowed = array_filter(
+        $licenses['dependencies'],
+        static fn (array $info, $name) => ! in_array($name, $allowedExceptions, true)
+            && count(array_diff($info['license'], $allowedLicenses)) === 1,
+        \ARRAY_FILTER_USE_BOTH
+    );
+    $allowed = array_filter(
+        $licenses['dependencies'],
+        static fn (array $info, $name) => in_array($name, $allowedExceptions, true)
+            || count(array_diff($info['license'], $allowedLicenses)) === 0,
+        \ARRAY_FILTER_USE_BOTH
+    );
+    if (count($disallowed) > 0) {
+        io()
+            ->table(
+                ['Package', 'License'],
+                array_map(
+                    static fn ($name, $info) => [$name, implode(', ', $info['license'])],
+                    array_keys($disallowed),
+                    $disallowed
+                )
+            );
+        io()
+            ->error('Disallowed licenses found');
+        exit(1);
+    }
+    io()
+        ->table(
+            ['Package', 'License'],
+            array_map(
+                static fn ($name, $info) => [$name, implode(', ', $info['license'])],
+                array_keys($allowed),
+                $allowed
+            )
+        );
+    io()
+        ->success('All licenses are allowed');
+}
+
 #[AsTask(description: 'Run Rector')]
 function rector(bool $fix = false): void
 {

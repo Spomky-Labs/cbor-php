@@ -151,6 +151,32 @@ jobs:
       - name: "Deptrac"
         run: 'castor deptrac'
 
+  check_licenses:
+    name: "5️⃣ Check Licenses"
+    needs:
+      - "byte_level"
+      - "syntax_errors"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Set up PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "8.3"
+          extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
+          tools: castor
+
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@v3"
+        with:
+          dependency-versions: "highest"
+          composer-options: "--optimize-autoloader"
+
+      - name: "Execute license check"
+        run: "castor check-licenses"
+
   rector_checkstyle:
     name: "6️⃣ Rector Checkstyle"
     needs:
