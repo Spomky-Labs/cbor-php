@@ -68,6 +68,7 @@ jobs:
         with:
           php-version: "${{ matrix.php-version }}"
           extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
+          tools: castor
           coverage: "xdebug"
 
       - name: "Checkout code"
@@ -80,7 +81,7 @@ jobs:
           composer-options: "--optimize-autoloader"
 
       - name: "Execute tests (PHP)"
-        run: "make ci-cc"
+        run: "castor test --coverage-text"
 
   #      - name: Send coverage to Coveralls
   #        if: "matrix.php-version == '8.1' && matrix.dependencies == 'highest'"
@@ -102,13 +103,14 @@ jobs:
         with:
           php-version: "8.3"
           extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
+          tools: castor
           coverage: "none"
 
       - name: "Checkout code"
         uses: "actions/checkout@v3"
 
       - name: "Validate Composer configuration"
-        run: "composer validate --strict"
+        run: "castor validate"
 
       - name: "Install dependencies"
         uses: "ramsey/composer-install@v3"
@@ -116,11 +118,8 @@ jobs:
           dependency-versions: "highest"
           composer-options: "--optimize-autoloader"
 
-      - name: "Check PSR-4 mapping"
-        run: "composer dump-autoload --optimize --strict-psr"
-
       - name: "Execute static analysis"
-        run: "make st"
+        run: "castor stan"
 
   coding_standards:
     name: "4️⃣ Coding Standards"
@@ -134,6 +133,7 @@ jobs:
         with:
           php-version: "8.3"
           extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
+          tools: castor
           coverage: "none"
 
       - name: "Checkout code"
@@ -146,11 +146,36 @@ jobs:
           composer-options: "--optimize-autoloader"
 
       - name: "Check coding style"
-        run: "make ci-cs"
+        run: "castor cs"
 
       - name: "Deptrac"
-        run: |
-          vendor/bin/deptrac analyse --fail-on-uncovered --no-cache
+        run: 'castor deptrac'
+
+  check_licenses:
+    name: "5️⃣ Check Licenses"
+    needs:
+      - "byte_level"
+      - "syntax_errors"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Set up PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "8.3"
+          extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
+          tools: castor
+
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@v3"
+        with:
+          dependency-versions: "highest"
+          composer-options: "--optimize-autoloader"
+
+      - name: "Execute license check"
+        run: "castor check-licenses"
 
   rector_checkstyle:
     name: "6️⃣ Rector Checkstyle"
@@ -164,6 +189,7 @@ jobs:
         with:
           php-version: "8.3"
           extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
+          tools: castor
           coverage: "xdebug"
 
       - name: "Checkout code"
@@ -179,7 +205,7 @@ jobs:
           composer-options: "--optimize-autoloader"
 
       - name: "Execute Rector"
-        run: "make rector"
+        run: "castor rector"
 
   exported_files:
     name: "7️⃣ Exported files"

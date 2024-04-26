@@ -87,6 +87,12 @@ return static function (ECSConfig $config) use ($header): void {
     $config->parallel();
     $config->paths([__DIR__]);
     $config->skip(
-        [__DIR__ . '/.github', __DIR__ . '/build', __DIR__ . '/vendor', PhpUnitTestClassRequiresCoversFixer::class]
+        [
+            __DIR__ . '/.github',
+            __DIR__ . '/build',
+            __DIR__ . '/vendor',
+            __DIR__ . '/.castor.stub.php',
+            PhpUnitTestClassRequiresCoversFixer::class,
+        ]
     );
 };
