@@ -83,14 +83,6 @@ jobs:
       - name: "Execute tests (PHP)"
         run: "castor test --coverage-text"
 
-  #      - name: Send coverage to Coveralls
-  #        if: "matrix.php-version == '8.1' && matrix.dependencies == 'highest'"
-  #        env:
-  #          COVERALLS_REPO_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-  #        run: |
-  #          wget "https://github.com/php-coveralls/php-coveralls/releases/download/v2.5.2/php-coveralls.phar"
-  #          php ./php-coveralls.phar -v
-
   static_analysis:
     name: "3️⃣ Static Analysis"
     needs:

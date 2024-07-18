@@ -4,11 +4,11 @@ parameters:
   layers:
     - name: 'CBOR'
       collectors:
-        - type: 'className'
-          regex: '^CBO\\'
+        - type: 'classLike'
+          value: '^CBO\\'
     - name: 'Vendors'
       collectors:
-        - { type: className, regex: '^Brick\\' }
+        - { type: 'classLike', value: '^Brick\\' }
   ruleset:
     CBOR:
       - Vendors
