@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Castor\Attribute\AsOption;
 use Castor\Attribute\AsTask;
 use function Castor\io;
 use function Castor\run;
@@ -99,10 +100,10 @@ function validate(): void
  */
 #[AsTask(description: 'Check licenses')]
 function checkLicenses(
+    #[AsOption(description: 'Allowed licenses.')]
     array $allowedLicenses = ['Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'MIT', 'MPL-2.0', 'OSL-3.0']
 ): void {
     io()->title('Checking licenses');
-    $allowedExceptions = [];
     $command = ['composer', 'licenses', '-f', 'json'];
     $environment = [
         'XDEBUG_MODE' => 'off',
@@ -115,14 +116,12 @@ function checkLicenses(
     $licenses = json_decode($result->getOutput(), true);
     $disallowed = array_filter(
         $licenses['dependencies'],
-        static fn (array $info, $name) => ! in_array($name, $allowedExceptions, true)
-            && count(array_diff($info['license'], $allowedLicenses)) === 1,
+        static fn (array $info, $name) => count(array_diff($info['license'], $allowedLicenses)) === 1,
         \ARRAY_FILTER_USE_BOTH
     );
     $allowed = array_filter(
         $licenses['dependencies'],
-        static fn (array $info, $name) => in_array($name, $allowedExceptions, true)
-            || count(array_diff($info['license'], $allowedLicenses)) === 0,
+        static fn (array $info, $name) => count(array_diff($info['license'], $allowedLicenses)) === 0,
         \ARRAY_FILTER_USE_BOTH
     );
     if (count($disallowed) > 0) {
