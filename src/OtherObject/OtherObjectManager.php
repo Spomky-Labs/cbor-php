@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace CBOR\OtherObject;
 
+use CBOR\CBORObject;
 use CBOR\OtherObject;
 use InvalidArgumentException;
 use function array_key_exists;
 
-class OtherObjectManager implements OtherObjectManagerInterface
+final class OtherObjectManager implements OtherObjectManagerInterface
 {
     /**
      * @var string[]
@@ -20,6 +21,9 @@ class OtherObjectManager implements OtherObjectManagerInterface
         return new self();
     }
 
+    /**
+     * @param class-string<CBORObject> $class
+     */
     public function add(string $class): self
     {
         foreach ($class::supportedAdditionalInformation() as $ai) {

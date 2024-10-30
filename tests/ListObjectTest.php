@@ -37,7 +37,7 @@ final class ListObjectTest extends CBORTestCase
 
         static::assertCount(3, $object1);
         static::assertCount(3, $object2);
-        static::assertSame(['Hello', 'World', '3'], $object2->normalize());
+        static::assertSame(['Hello', 'World', 3], $object2->normalize());
         static::assertSame($object1->normalize(), $object2->normalize());
         static::assertSame((string) $object1, (string) $object2);
         static::assertArrayHasKey(0, $object2);
@@ -45,7 +45,7 @@ final class ListObjectTest extends CBORTestCase
         static::assertArrayHasKey(2, $object2);
         static::assertSame($object2[0]->normalize(), 'Hello');
         static::assertSame($object2[1]->normalize(), 'World');
-        static::assertSame($object2[2]->normalize(), '3');
+        static::assertSame($object2[2]->normalize(), 3);
     }
 
     #[Test]
@@ -70,7 +70,7 @@ final class ListObjectTest extends CBORTestCase
 
         static::assertCount(3, $object1);
         static::assertCount(3, $object2);
-        static::assertSame(['Hello', 'World', '3'], $object2->normalize());
+        static::assertSame(['Hello', 'World', 3], $object2->normalize());
         static::assertSame($object1->normalize(), $object2->normalize());
         static::assertSame((string) $object1, (string) $object2);
         static::assertArrayHasKey(0, $object2);
@@ -78,6 +78,6 @@ final class ListObjectTest extends CBORTestCase
         static::assertArrayHasKey(2, $object2);
         static::assertSame($object2[0]->normalize(), 'Hello');
         static::assertSame($object2[1]->normalize(), 'World');
-        static::assertSame($object2[2]->normalize(), '3');
+        static::assertSame($object2[2]->normalize(), 3);
     }
 }

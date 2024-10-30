@@ -10,7 +10,7 @@ use function chr;
 abstract class AbstractCBORObject implements CBORObject, Stringable
 {
     public function __construct(
-        private int $majorType,
+        private readonly int $majorType,
         protected int $additionalInformation
     ) {
     }

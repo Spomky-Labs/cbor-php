@@ -13,7 +13,7 @@ final class TextStringObject extends AbstractCBORObject implements Normalizable
 
     private ?string $length = null;
 
-    private string $data;
+    private readonly string $data;
 
     public function __construct(string $data)
     {

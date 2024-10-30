@@ -8,3 +8,4 @@ yarn-error.log
 /composer.lock
 /vendor
 infection.txt
+/.castor.stub.php

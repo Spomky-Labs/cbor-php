@@ -14,8 +14,8 @@ use const JSON_THROW_ON_ERROR;
  */
 final class VectorTest extends CBORTestCase
 {
-    #[DataProvider('getVectors')]
     #[Test]
+    #[DataProvider('getVectors')]
     public function createOnValidValue(string $cbor, string $hex): void
     {
         $stream = StringStream::create(base64_decode($cbor, true));
