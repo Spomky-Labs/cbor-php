@@ -85,8 +85,5 @@ return static function (ECSConfig $config) use ($header): void {
     ]);
 
     $config->parallel();
-    $config->paths([__DIR__]);
-    $config->skip(
-        [__DIR__ . '/.github', __DIR__ . '/build', __DIR__ . '/vendor', PhpUnitTestClassRequiresCoversFixer::class]
-    );
+    $config->paths([__DIR__ . '/src', __DIR__ . '/tests']);
 };

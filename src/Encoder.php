@@ -29,8 +29,7 @@ final class Encoder implements EncoderInterface
 
     public function encode(mixed $data, int $options = 0): string
     {
-        return $this->processData($data, $options)
-            ->__toString();
+        return (string) $this->processData($data, $options);
     }
 
     private function processData(mixed $data, int $option): CBORObject
@@ -95,21 +94,24 @@ final class Encoder implements EncoderInterface
     private function processTextString(string $data, int $option): TextStringObject|IndefiniteLengthTextStringObject
     {
         $isIndefinite = 0 !== ($option & self::INDEFINITE_TEXT_STRING_LENGTH);
+        $cbor = TextStringObject::create($data);
 
-        return $isIndefinite ? IndefiniteLengthTextStringObject::create()->add(
-            TextStringObject::create($data)
-        ) : TextStringObject::create(
-            $data
-        );
+        if (! $isIndefinite) {
+            return $cbor;
+        }
+
+        return IndefiniteLengthTextStringObject::create()->add($cbor);
     }
 
     private function processByteString(string $data, int $option): ByteStringObject|IndefiniteLengthByteStringObject
     {
         $isIndefinite = 0 !== ($option & self::INDEFINITE_BYTE_STRING_LENGTH);
-        return $isIndefinite ? IndefiniteLengthByteStringObject::create()->add(
-            ByteStringObject::create($data)
-        ) : ByteStringObject::create(
-            $data
-        );
+        $cbor = ByteStringObject::create($data);
+
+        if (! $isIndefinite) {
+            return $cbor;
+        }
+
+        return IndefiniteLengthByteStringObject::create()->add($cbor);
     }
 }
