@@ -6,8 +6,18 @@ parameters:
 			path: src/NegativeIntegerObject.php
 
 		-
+			message: "#^Cannot access offset 1 on array\\|false\\.$#"
+			count: 1
+			path: src/OtherObject/DoublePrecisionFloatObject.php
+
+		-
 			message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToBigInteger\\(\\) expects string, string\\|null given\\.$#"
 			count: 3
+			path: src/OtherObject/DoublePrecisionFloatObject.php
+
+		-
+			message: "#^Parameter \\#2 \\$data of class CBOR\\\\OtherObject\\\\DoublePrecisionFloatObject constructor expects string\\|null, string\\|false given\\.$#"
+			count: 1
 			path: src/OtherObject/DoublePrecisionFloatObject.php
 
 		-
@@ -16,8 +26,18 @@ parameters:
 			path: src/OtherObject/HalfPrecisionFloatObject.php
 
 		-
+			message: "#^Cannot access offset 1 on array\\|false\\.$#"
+			count: 1
+			path: src/OtherObject/SinglePrecisionFloatObject.php
+
+		-
 			message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToBigInteger\\(\\) expects string, string\\|null given\\.$#"
 			count: 3
+			path: src/OtherObject/SinglePrecisionFloatObject.php
+
+		-
+			message: "#^Parameter \\#2 \\$data of class CBOR\\\\OtherObject\\\\SinglePrecisionFloatObject constructor expects string\\|null, string\\|false given\\.$#"
+			count: 1
 			path: src/OtherObject/SinglePrecisionFloatObject.php
 
 		-

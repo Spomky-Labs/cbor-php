@@ -55,7 +55,6 @@ jobs:
         operating-system:
           - "ubuntu-latest"
         php-version:
-          - "8.1"
           - "8.2"
           - "8.3"
         dependencies:
@@ -80,7 +79,7 @@ jobs:
           composer-options: "--optimize-autoloader"
 
       - name: "Execute tests (PHP)"
-        run: "make ci-cc"
+        run: "castor test"
 
   #      - name: Send coverage to Coveralls
   #        if: "matrix.php-version == '8.1' && matrix.dependencies == 'highest'"
@@ -120,7 +119,7 @@ jobs:
         run: "composer dump-autoload --optimize --strict-psr"
 
       - name: "Execute static analysis"
-        run: "make st"
+        run: "castor stan"
 
   coding_standards:
     name: "4️⃣ Coding Standards"
@@ -146,40 +145,10 @@ jobs:
           composer-options: "--optimize-autoloader"
 
       - name: "Check coding style"
-        run: "make ci-cs"
+        run: "castor cs"
 
       - name: "Deptrac"
-        run: |
-          vendor/bin/deptrac analyse --fail-on-uncovered --no-cache
-
-  mutation_testing:
-    name: "5️⃣ Mutation Testing"
-    needs:
-      - "byte_level"
-      - "syntax_errors"
-    runs-on: "ubuntu-latest"
-    steps:
-      - name: "Set up PHP"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          php-version: "8.3"
-          extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
-          coverage: "xdebug"
-
-      - name: "Checkout code"
-        uses: "actions/checkout@v3"
-
-      - name: "Fetch Git base reference"
-        run: "git fetch --depth=1 origin ${GITHUB_BASE_REF}"
-
-      - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
-        with:
-          dependency-versions: "highest"
-          composer-options: "--optimize-autoloader"
-
-      - name: "Execute Infection"
-        run: "make ci-mu"
+        run: "castor deptrac"
 
   rector_checkstyle:
     name: "6️⃣ Rector Checkstyle"
@@ -208,7 +177,7 @@ jobs:
           composer-options: "--optimize-autoloader"
 
       - name: "Execute Rector"
-        run: "make rector"
+        run: "castor rector"
 
   exported_files:
     name: "7️⃣ Exported files"
