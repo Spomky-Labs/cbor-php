@@ -14,8 +14,8 @@ use const JSON_THROW_ON_ERROR;
  */
 final class VectorTest extends CBORTestCase
 {
-    #[DataProvider('getVectors')]
     #[Test]
+    #[DataProvider('getVectors')]
     public function createOnValidValue(string $cbor, string $hex): void
     {
         $stream = StringStream::create(base64_decode($cbor, true));
@@ -26,8 +26,11 @@ final class VectorTest extends CBORTestCase
         static::assertSame(hex2bin($hex), (string) $result);
     }
 
-    public static function getVectors(): array
+    public static function getVectors(): iterable
     {
-        return json_decode(file_get_contents(__DIR__ . '/vectors.json'), true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode(file_get_contents(__DIR__ . '/vectors.json'), true, 512, JSON_THROW_ON_ERROR);
+        foreach ($data as $datum) {
+            yield [$datum['cbor'], $datum['hex']];
+        }
     }
 }

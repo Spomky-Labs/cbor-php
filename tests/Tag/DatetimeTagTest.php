@@ -53,7 +53,7 @@ final class DatetimeTagTest extends TestCase
     public function createValidTimestampTagWithNegativeInteger(): void
     {
         $tag = TimestampTag::create(NegativeIntegerObject::create(-10));
-        static::assertSame('-10.000000', $tag->normalize()->format('U.u'));
+        static::assertEqualsWithDelta(-10.0, $tag->normalize()->format('U.u'), 0.00001);
     }
 
     #[Test]

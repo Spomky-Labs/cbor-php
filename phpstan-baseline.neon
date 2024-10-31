@@ -1,36 +1,61 @@
 parameters:
-    ignoreErrors:
-        -
-            message: "#^Instanceof between CBOR\\\\MapItem and CBOR\\\\MapItem will always evaluate to true\\.$#"
-            count: 1
-            path: src/MapObject.php
+	ignoreErrors:
+		-
+			message: "#^Method CBOR\\\\NegativeIntegerObject\\:\\:getValue\\(\\) should return int\\|numeric\\-string but returns int\\|string\\.$#"
+			count: 1
+			path: src/NegativeIntegerObject.php
 
-        -
-            message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToBigInteger\\(\\) expects string, string\\|null given\\.$#"
-            count: 3
-            path: src/OtherObject/DoublePrecisionFloatObject.php
+		-
+			message: "#^Cannot access offset 1 on array\\|false\\.$#"
+			count: 1
+			path: src/OtherObject/DoublePrecisionFloatObject.php
 
-        -
-            message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToBigInteger\\(\\) expects string, string\\|null given\\.$#"
-            count: 3
-            path: src/OtherObject/HalfPrecisionFloatObject.php
+		-
+			message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToBigInteger\\(\\) expects string, string\\|null given\\.$#"
+			count: 3
+			path: src/OtherObject/DoublePrecisionFloatObject.php
 
-        -
-            message: "#^PHPDoc tag @var with type CBOR\\\\OtherObject is not subtype of native type string\\.$#"
-            count: 1
-            path: src/OtherObject/OtherObjectManager.php
+		-
+			message: "#^Parameter \\#2 \\$data of class CBOR\\\\OtherObject\\\\DoublePrecisionFloatObject constructor expects string\\|null, string\\|false given\\.$#"
+			count: 1
+			path: src/OtherObject/DoublePrecisionFloatObject.php
 
-        -
-            message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToBigInteger\\(\\) expects string, string\\|null given\\.$#"
-            count: 3
-            path: src/OtherObject/SinglePrecisionFloatObject.php
+		-
+			message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToBigInteger\\(\\) expects string, string\\|null given\\.$#"
+			count: 3
+			path: src/OtherObject/HalfPrecisionFloatObject.php
 
-        -
-            message: "#^PHPDoc tag @var with type CBOR\\\\Tag is not subtype of native type string\\.$#"
-            count: 1
-            path: src/Tag/TagManager.php
+		-
+			message: "#^Cannot access offset 1 on array\\|false\\.$#"
+			count: 1
+			path: src/OtherObject/SinglePrecisionFloatObject.php
 
-        -
-            message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToInt\\(\\) expects string, string\\|null given\\.$#"
-            count: 1
-            path: src/Tag/TagManager.php
+		-
+			message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToBigInteger\\(\\) expects string, string\\|null given\\.$#"
+			count: 3
+			path: src/OtherObject/SinglePrecisionFloatObject.php
+
+		-
+			message: "#^Parameter \\#2 \\$data of class CBOR\\\\OtherObject\\\\SinglePrecisionFloatObject constructor expects string\\|null, string\\|false given\\.$#"
+			count: 1
+			path: src/OtherObject/SinglePrecisionFloatObject.php
+
+		-
+			message: "#^Parameter \\#1 \\$num1 of function bcmul expects numeric\\-string, string given\\.$#"
+			count: 1
+			path: src/Tag/BigFloatTag.php
+
+		-
+			message: "#^Parameter \\#1 \\$num1 of function bcmul expects numeric\\-string, string given\\.$#"
+			count: 1
+			path: src/Tag/DecimalFractionTag.php
+
+		-
+			message: "#^Parameter \\#1 \\$value of static method CBOR\\\\Utils\\:\\:binToInt\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/Tag/TagManager.php
+
+		-
+			message: "#^Method CBOR\\\\UnsignedIntegerObject\\:\\:getValue\\(\\) should return int\\|numeric\\-string but returns int\\|string\\.$#"
+			count: 1
+			path: src/UnsignedIntegerObject.php

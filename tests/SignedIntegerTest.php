@@ -20,7 +20,7 @@ final class SignedIntegerTest extends CBORTestCase
     #[Test]
     public function createOnValidValue(
         int $intValue,
-        string $expectedIntValue,
+        int $expectedIntValue,
         int $expectedMajorType,
         int $expectedAdditionalInformation
     ): void {
@@ -32,15 +32,15 @@ final class SignedIntegerTest extends CBORTestCase
 
     public static function getValidValue(): Iterator
     {
-        yield [-12_345_678, '-12345678', 1, 26];
-        yield [-255, '-255', 1, 24];
-        yield [-254, '-254', 1, 24];
-        yield [-65535, '-65535', 1, 25];
-        yield [-18, '-18', 1, 17];
+        yield [-12_345_678, -12345678, 1, 26];
+        yield [-255, -255, 1, 24];
+        yield [-254, -254, 1, 24];
+        yield [-65535, -65535, 1, 25];
+        yield [-18, -18, 1, 17];
     }
 
     #[Test]
-    public function ceateOnNegativeValue(): void
+    public function createOnNegativeValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The value must be a negative integer.');
@@ -59,7 +59,7 @@ final class SignedIntegerTest extends CBORTestCase
 
     #[DataProvider('getDataSet')]
     #[Test]
-    public function anUnsignedIntegerCanBeEncodedAndDecoded(string $data, string $expectedNormalizedData): void
+    public function anUnsignedIntegerCanBeEncodedAndDecoded(string $data, int|string $expectedNormalizedData): void
     {
         $stream = StringStream::create(hex2bin($data));
         $object = $this->getDecoder()
@@ -72,10 +72,10 @@ final class SignedIntegerTest extends CBORTestCase
 
     public static function getDataSet(): Iterator
     {
-        yield ['20', '-1'];
-        yield ['29', '-10'];
-        yield ['3863', '-100'];
-        yield ['3903e7', '-1000'];
+        yield ['20', -1];
+        yield ['29', -10];
+        yield ['3863', -100];
+        yield ['3903e7', -1000];
         yield ['c349010000000000000000', '-18446744073709551617'];
         yield ['3bffffffffffffffff', '-18446744073709551616'];
     }
