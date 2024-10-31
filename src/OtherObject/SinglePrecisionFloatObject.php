@@ -30,7 +30,7 @@ final class SinglePrecisionFloatObject extends Base
             ))(),
         };
 
-        return new self(self::OBJECT_DOUBLE_PRECISION_FLOAT, $value);
+        return new self(self::OBJECT_SINGLE_PRECISION_FLOAT, $value);
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
