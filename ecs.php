@@ -28,9 +28,8 @@ use PhpCsFixer\Fixer\Whitespace\ArrayIndentationFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
-$header = '';
-
-return static function (ECSConfig $config) use ($header): void {
+return static function (ECSConfig $config): void {
+    $header = '';
     $config->import(SetList::PSR_12);
     $config->import(SetList::CLEAN_CODE);
     $config->import(SetList::DOCTRINE_ANNOTATIONS);

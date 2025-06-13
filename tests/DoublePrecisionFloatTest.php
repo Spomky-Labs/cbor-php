@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\Test;
 /**
  * @internal
  */
-final class DoublePrecisionFloat extends CBORTestCase
+final class DoublePrecisionFloatTest extends CBORTestCase
 {
     #[Test]
     public function aDoublePrecisionObjectCanBeCreated(): void
