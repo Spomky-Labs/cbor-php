@@ -18,7 +18,7 @@ final class FloatTest extends CBORTestCase
     #[Test]
     public function aFloatCanBeParsed(int|string $data): void
     {
-        $stream = StringStream::create(hex2bin($data));
+        $stream = StringStream::create(hex2bin((string) $data));
         $object = $this->getDecoder()
             ->decode($stream)
         ;

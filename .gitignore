@@ -9,3 +9,7 @@ yarn-error.log
 /vendor
 infection.txt
 /.castor.stub.php
+
+/.phpunit.cache/
+/tmp*
+/.ci-tools/coverage
