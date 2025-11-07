@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use function strlen;
+
 /**
  * @see \CBOR\Test\ByteStringObjectTest
  */
@@ -44,7 +46,7 @@ final class ByteStringObject extends AbstractCBORObject implements Normalizable
 
     public function getLength(): int
     {
-        return mb_strlen($this->value, '8bit');
+        return strlen($this->value);
     }
 
     public function normalize(): string

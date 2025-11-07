@@ -1,0 +1,895 @@
+parameters:
+	ignoreErrors:
+		-
+			rawMessage: 'Method CBOR\AbstractCBORObject::__toString() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/AbstractCBORObject.php
+
+		-
+			rawMessage: 'Method CBOR\AbstractCBORObject::getAdditionalInformation() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/AbstractCBORObject.php
+
+		-
+			rawMessage: 'Method CBOR\AbstractCBORObject::getMajorType() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/AbstractCBORObject.php
+
+		-
+			rawMessage: Class "CBOR\ByteStringObject" is not allowed to extend "CBOR\AbstractCBORObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/ByteStringObject.php
+
+		-
+			rawMessage: Constructor in CBOR\Decoder has parameter $otherTypeManager with default value.
+			identifier: ergebnis.noConstructorParameterWithDefaultValue
+			count: 1
+			path: ../src/Decoder.php
+
+		-
+			rawMessage: Constructor in CBOR\Decoder has parameter $tagObjectManager with default value.
+			identifier: ergebnis.noConstructorParameterWithDefaultValue
+			count: 1
+			path: ../src/Decoder.php
+
+		-
+			rawMessage: Control structures using switch should not be used.
+			identifier: ergebnis.noSwitch
+			count: 3
+			path: ../src/Decoder.php
+
+		-
+			rawMessage: 'Method CBOR\Decoder::__construct() has parameter $otherTypeManager with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Decoder.php
+
+		-
+			rawMessage: 'Method CBOR\Decoder::__construct() has parameter $otherTypeManager with null as default value.'
+			identifier: ergebnis.noParameterWithNullDefaultValue
+			count: 1
+			path: ../src/Decoder.php
+
+		-
+			rawMessage: 'Method CBOR\Decoder::__construct() has parameter $tagObjectManager with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Decoder.php
+
+		-
+			rawMessage: 'Method CBOR\Decoder::__construct() has parameter $tagObjectManager with null as default value.'
+			identifier: ergebnis.noParameterWithNullDefaultValue
+			count: 1
+			path: ../src/Decoder.php
+
+		-
+			rawMessage: 'Method CBOR\Decoder::create() has parameter $otherTypeManager with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Decoder.php
+
+		-
+			rawMessage: 'Method CBOR\Decoder::create() has parameter $otherTypeManager with null as default value.'
+			identifier: ergebnis.noParameterWithNullDefaultValue
+			count: 1
+			path: ../src/Decoder.php
+
+		-
+			rawMessage: 'Method CBOR\Decoder::create() has parameter $tagObjectManager with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Decoder.php
+
+		-
+			rawMessage: 'Method CBOR\Decoder::create() has parameter $tagObjectManager with null as default value.'
+			identifier: ergebnis.noParameterWithNullDefaultValue
+			count: 1
+			path: ../src/Decoder.php
+
+		-
+			rawMessage: 'Method CBOR\Decoder::processFinite() has parameter $val with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Decoder.php
+
+		-
+			rawMessage: Class "CBOR\IndefiniteLengthByteStringObject" is not allowed to extend "CBOR\AbstractCBORObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/IndefiniteLengthByteStringObject.php
+
+		-
+			rawMessage: Class "CBOR\IndefiniteLengthListObject" is not allowed to extend "CBOR\AbstractCBORObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/IndefiniteLengthListObject.php
+
+		-
+			rawMessage: Class CBOR\IndefiniteLengthListObject is neither abstract nor final.
+			identifier: ergebnis.final
+			count: 1
+			path: ../src/IndefiniteLengthListObject.php
+
+		-
+			rawMessage: Class "CBOR\IndefiniteLengthMapObject" is not allowed to extend "CBOR\AbstractCBORObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/IndefiniteLengthMapObject.php
+
+		-
+			rawMessage: Class CBOR\IndefiniteLengthMapObject is neither abstract nor final.
+			identifier: ergebnis.final
+			count: 1
+			path: ../src/IndefiniteLengthMapObject.php
+
+		-
+			rawMessage: Possibly invalid array key type mixed.
+			identifier: offsetAccess.invalidOffset
+			count: 3
+			path: ../src/IndefiniteLengthMapObject.php
+
+		-
+			rawMessage: Class "CBOR\IndefiniteLengthTextStringObject" is not allowed to extend "CBOR\AbstractCBORObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/IndefiniteLengthTextStringObject.php
+
+		-
+			rawMessage: Class "CBOR\ListObject" is not allowed to extend "CBOR\AbstractCBORObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/ListObject.php
+
+		-
+			rawMessage: Class CBOR\ListObject is neither abstract nor final.
+			identifier: ergebnis.final
+			count: 1
+			path: ../src/ListObject.php
+
+		-
+			rawMessage: Constructor in CBOR\ListObject has parameter $data with default value.
+			identifier: ergebnis.noConstructorParameterWithDefaultValue
+			count: 1
+			path: ../src/ListObject.php
+
+		-
+			rawMessage: 'Method CBOR\ListObject::normalize() should return array<int, mixed> but returns array<mixed>.'
+			identifier: return.type
+			count: 1
+			path: ../src/ListObject.php
+
+		-
+			rawMessage: Class CBOR\MapItem is neither abstract nor final.
+			identifier: ergebnis.final
+			count: 1
+			path: ../src/MapItem.php
+
+		-
+			rawMessage: Class "CBOR\MapObject" is not allowed to extend "CBOR\AbstractCBORObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/MapObject.php
+
+		-
+			rawMessage: Constructor in CBOR\MapObject has parameter $data with default value.
+			identifier: ergebnis.noConstructorParameterWithDefaultValue
+			count: 1
+			path: ../src/MapObject.php
+
+		-
+			rawMessage: Possibly invalid array key type mixed.
+			identifier: offsetAccess.invalidOffset
+			count: 3
+			path: ../src/MapObject.php
+
+		-
+			rawMessage: Class "CBOR\NegativeIntegerObject" is not allowed to extend "CBOR\AbstractCBORObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/NegativeIntegerObject.php
+
+		-
+			rawMessage: Control structures using switch should not be used.
+			identifier: ergebnis.noSwitch
+			count: 1
+			path: ../src/NegativeIntegerObject.php
+
+		-
+			rawMessage: 'Method CBOR\NegativeIntegerObject::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/NegativeIntegerObject.php
+
+		-
+			rawMessage: 'Method CBOR\NegativeIntegerObject::createObjectForValue() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/NegativeIntegerObject.php
+
+		-
+			rawMessage: 'Method CBOR\NegativeIntegerObject::getValue() should return int|numeric-string but returns int|string.'
+			identifier: return.type
+			count: 1
+			path: ../src/NegativeIntegerObject.php
+
+		-
+			rawMessage: Class "CBOR\OtherObject" is not allowed to extend "CBOR\AbstractCBORObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/OtherObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject::__toString() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/OtherObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject::getContent() has a nullable return type declaration.'
+			identifier: ergebnis.noNullableReturnTypeDeclaration
+			count: 1
+			path: ../src/OtherObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject::getContent() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/OtherObject.php
+
+		-
+			rawMessage: Class "CBOR\OtherObject\BreakObject" is not allowed to extend "CBOR\OtherObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/OtherObject/BreakObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\BreakObject::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/BreakObject.php
+
+		-
+			rawMessage: Cannot access offset 1 on array|false.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../src/OtherObject/DoublePrecisionFloatObject.php
+
+		-
+			rawMessage: Class "CBOR\OtherObject\DoublePrecisionFloatObject" is not allowed to extend "CBOR\OtherObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/OtherObject/DoublePrecisionFloatObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\DoublePrecisionFloatObject::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/DoublePrecisionFloatObject.php
+
+		-
+			rawMessage: 'Parameter #1 $value of static method CBOR\Utils::binToBigInteger() expects string, string|null given.'
+			identifier: argument.type
+			count: 3
+			path: ../src/OtherObject/DoublePrecisionFloatObject.php
+
+		-
+			rawMessage: 'Parameter #2 $data of class CBOR\OtherObject\DoublePrecisionFloatObject constructor expects string|null, string|false given.'
+			identifier: argument.type
+			count: 1
+			path: ../src/OtherObject/DoublePrecisionFloatObject.php
+
+		-
+			rawMessage: Class "CBOR\OtherObject\FalseObject" is not allowed to extend "CBOR\OtherObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/OtherObject/FalseObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\FalseObject::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/FalseObject.php
+
+		-
+			rawMessage: Class "CBOR\OtherObject\GenericObject" is not allowed to extend "CBOR\OtherObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/OtherObject/GenericObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\GenericObject::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/GenericObject.php
+
+		-
+			rawMessage: Class "CBOR\OtherObject\HalfPrecisionFloatObject" is not allowed to extend "CBOR\OtherObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/OtherObject/HalfPrecisionFloatObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\HalfPrecisionFloatObject::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/HalfPrecisionFloatObject.php
+
+		-
+			rawMessage: 'Parameter #1 $value of static method CBOR\Utils::binToBigInteger() expects string, string|null given.'
+			identifier: argument.type
+			count: 3
+			path: ../src/OtherObject/HalfPrecisionFloatObject.php
+
+		-
+			rawMessage: Class "CBOR\OtherObject\NullObject" is not allowed to extend "CBOR\OtherObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/OtherObject/NullObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\NullObject::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/NullObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\NullObject::normalize() has a nullable return type declaration.'
+			identifier: ergebnis.noNullableReturnTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/NullObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\OtherObjectInterface::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/OtherObjectInterface.php
+
+		-
+			rawMessage: Constructor in CBOR\OtherObject\OtherObjectManager has parameter $classes with default value.
+			identifier: ergebnis.noConstructorParameterWithDefaultValue
+			count: 1
+			path: ../src/OtherObject/OtherObjectManager.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\OtherObjectManager::createObjectForValue() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/OtherObjectManager.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\OtherObjectManagerInterface::createObjectForValue() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/OtherObjectManagerInterface.php
+
+		-
+			rawMessage: Class "CBOR\OtherObject\SimpleObject" is not allowed to extend "CBOR\OtherObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/OtherObject/SimpleObject.php
+
+		-
+			rawMessage: Control structures using switch should not be used.
+			identifier: ergebnis.noSwitch
+			count: 1
+			path: ../src/OtherObject/SimpleObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\SimpleObject::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/SimpleObject.php
+
+		-
+			rawMessage: Cannot access offset 1 on array|false.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../src/OtherObject/SinglePrecisionFloatObject.php
+
+		-
+			rawMessage: Class "CBOR\OtherObject\SinglePrecisionFloatObject" is not allowed to extend "CBOR\OtherObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/OtherObject/SinglePrecisionFloatObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\SinglePrecisionFloatObject::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/SinglePrecisionFloatObject.php
+
+		-
+			rawMessage: 'Parameter #1 $value of static method CBOR\Utils::binToBigInteger() expects string, string|null given.'
+			identifier: argument.type
+			count: 3
+			path: ../src/OtherObject/SinglePrecisionFloatObject.php
+
+		-
+			rawMessage: 'Parameter #2 $data of class CBOR\OtherObject\SinglePrecisionFloatObject constructor expects string|null, string|false given.'
+			identifier: argument.type
+			count: 1
+			path: ../src/OtherObject/SinglePrecisionFloatObject.php
+
+		-
+			rawMessage: Class "CBOR\OtherObject\TrueObject" is not allowed to extend "CBOR\OtherObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/OtherObject/TrueObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\TrueObject::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/TrueObject.php
+
+		-
+			rawMessage: Class "CBOR\OtherObject\UndefinedObject" is not allowed to extend "CBOR\OtherObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/OtherObject/UndefinedObject.php
+
+		-
+			rawMessage: 'Method CBOR\OtherObject\UndefinedObject::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/OtherObject/UndefinedObject.php
+
+		-
+			rawMessage: Class "CBOR\Tag" is not allowed to extend "CBOR\AbstractCBORObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag.php
+
+		-
+			rawMessage: Control structures using switch should not be used.
+			identifier: ergebnis.noSwitch
+			count: 1
+			path: ../src/Tag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag::__toString() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/Tag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag::determineComponents() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/Tag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag::getData() has a nullable return type declaration.'
+			identifier: ergebnis.noNullableReturnTypeDeclaration
+			count: 1
+			path: ../src/Tag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag::getData() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/Tag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag::getValue() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/Tag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\Base16EncodingTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/Base16EncodingTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\Base16EncodingTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/Base16EncodingTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\Base64EncodingTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/Base64EncodingTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\Base64EncodingTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/Base64EncodingTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\Base64Tag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/Base64Tag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\Base64Tag::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/Base64Tag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\Base64Tag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/Base64Tag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\Base64UrlEncodingTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/Base64UrlEncodingTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\Base64UrlEncodingTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/Base64UrlEncodingTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\Base64UrlTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/Base64UrlTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\Base64UrlTag::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/Base64UrlTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\Base64UrlTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/Base64UrlTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\BigFloatTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/BigFloatTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\BigFloatTag::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/BigFloatTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\BigFloatTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/BigFloatTag.php
+
+		-
+			rawMessage: 'Parameter #1 $num1 of function bcmul expects numeric-string, string given.'
+			identifier: argument.type
+			count: 1
+			path: ../src/Tag/BigFloatTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\CBOREncodingTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/CBOREncodingTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\CBOREncodingTag::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/CBOREncodingTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\CBOREncodingTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/CBOREncodingTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\CBORTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/CBORTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\CBORTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/CBORTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\DatetimeTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/DatetimeTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\DatetimeTag::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/DatetimeTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\DatetimeTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/DatetimeTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\DecimalFractionTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/DecimalFractionTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\DecimalFractionTag::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/DecimalFractionTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\DecimalFractionTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/DecimalFractionTag.php
+
+		-
+			rawMessage: 'Parameter #1 $num1 of function bcmul expects numeric-string, string given.'
+			identifier: argument.type
+			count: 1
+			path: ../src/Tag/DecimalFractionTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\GenericTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/GenericTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\GenericTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/GenericTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\MimeTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/MimeTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\MimeTag::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/MimeTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\MimeTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/MimeTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\NegativeBigIntegerTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/NegativeBigIntegerTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\NegativeBigIntegerTag::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/NegativeBigIntegerTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\NegativeBigIntegerTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/NegativeBigIntegerTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\TagInterface::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/TagInterface.php
+
+		-
+			rawMessage: Constructor in CBOR\Tag\TagManager has parameter $classes with default value.
+			identifier: ergebnis.noConstructorParameterWithDefaultValue
+			count: 1
+			path: ../src/Tag/TagManager.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\TagManager::createObjectForValue() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/TagManager.php
+
+		-
+			rawMessage: 'Parameter #1 $value of static method CBOR\Utils::binToInt() expects string, string|null given.'
+			identifier: argument.type
+			count: 1
+			path: ../src/Tag/TagManager.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\TagManagerInterface::createObjectForValue() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/TagManagerInterface.php
+
+		-
+			rawMessage: Class "CBOR\Tag\TimestampTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/TimestampTag.php
+
+		-
+			rawMessage: Control structures using switch should not be used.
+			identifier: ergebnis.noSwitch
+			count: 1
+			path: ../src/Tag/TimestampTag.php
+
+		-
+			rawMessage: 'Language construct isset() should not be used.'
+			identifier: ergebnis.noIsset
+			count: 1
+			path: ../src/Tag/TimestampTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\TimestampTag::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/TimestampTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\TimestampTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/TimestampTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\UnsignedBigIntegerTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/UnsignedBigIntegerTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\UnsignedBigIntegerTag::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/UnsignedBigIntegerTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\UnsignedBigIntegerTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/UnsignedBigIntegerTag.php
+
+		-
+			rawMessage: Class "CBOR\Tag\UriTag" is not allowed to extend "CBOR\Tag".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/Tag/UriTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\UriTag::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/UriTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\UriTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Tag/UriTag.php
+
+		-
+			rawMessage: Class "CBOR\TextStringObject" is not allowed to extend "CBOR\AbstractCBORObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/TextStringObject.php
+
+		-
+			rawMessage: Class "CBOR\UnsignedIntegerObject" is not allowed to extend "CBOR\AbstractCBORObject".
+			identifier: ergebnis.noExtends
+			count: 1
+			path: ../src/UnsignedIntegerObject.php
+
+		-
+			rawMessage: Control structures using switch should not be used.
+			identifier: ergebnis.noSwitch
+			count: 1
+			path: ../src/UnsignedIntegerObject.php
+
+		-
+			rawMessage: 'Method CBOR\UnsignedIntegerObject::__construct() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/UnsignedIntegerObject.php
+
+		-
+			rawMessage: 'Method CBOR\UnsignedIntegerObject::createObjectForValue() has parameter $data with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/UnsignedIntegerObject.php
+
+		-
+			rawMessage: 'Method CBOR\UnsignedIntegerObject::getValue() should return int|numeric-string but returns int|string.'
+			identifier: return.type
+			count: 1
+			path: ../src/UnsignedIntegerObject.php
+
+		-
+			rawMessage: 'Method CBOR\Utils::assertString() has parameter $message with a nullable type declaration.'
+			identifier: ergebnis.noParameterWithNullableTypeDeclaration
+			count: 1
+			path: ../src/Utils.php
+
+		-
+			rawMessage: 'Method CBOR\Utils::assertString() has parameter $message with null as default value.'
+			identifier: ergebnis.noParameterWithNullDefaultValue
+			count: 1
+			path: ../src/Utils.php
+
+		-
+			rawMessage: 'Method CBOR\Utils::assertString() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/Utils.php
+
+		-
+			rawMessage: 'Method CBOR\Utils::binToBigInteger() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/Utils.php
+
+		-
+			rawMessage: 'Method CBOR\Utils::binToInt() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/Utils.php
+
+		-
+			rawMessage: 'Method CBOR\Utils::decode() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/Utils.php
+
+		-
+			rawMessage: 'Method CBOR\Utils::hexToBigInteger() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/Utils.php
+
+		-
+			rawMessage: 'Method CBOR\Utils::hexToInt() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/Utils.php
+
+		-
+			rawMessage: 'Method CBOR\Utils::hexToString() is not final, but since the containing class is abstract, it should be.'
+			identifier: ergebnis.finalInAbstractClass
+			count: 1
+			path: ../src/Utils.php

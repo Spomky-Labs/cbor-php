@@ -52,10 +52,10 @@ final class MapObjectTest extends CBORTestCase
         static::assertArrayHasKey(-150, $object2);
         static::assertArrayHasKey('AZERTY', $object2);
         static::assertArrayHasKey('Test', $object2);
-        static::assertSame($object2[10]->normalize(), 'Hello');
-        static::assertSame($object2[-150]->normalize(), 'World');
-        static::assertSame($object2['AZERTY']->normalize(), 1);
-        static::assertSame($object2['Test']->normalize(), 3);
+        static::assertSame('Hello', $object2[10]->normalize());
+        static::assertSame('World', $object2[-150]->normalize());
+        static::assertSame(1, $object2['AZERTY']->normalize());
+        static::assertSame(3, $object2['Test']->normalize());
     }
 
     #[Test]
@@ -92,9 +92,9 @@ final class MapObjectTest extends CBORTestCase
         static::assertArrayHasKey(-150, $object2);
         static::assertArrayHasKey('AZERTY', $object2);
         static::assertArrayHasKey('Test', $object2);
-        static::assertSame($object2[10]->normalize(), 'Hello');
-        static::assertSame($object2[-150]->normalize(), 'World');
-        static::assertSame($object2['AZERTY']->normalize(), 1);
-        static::assertSame($object2['Test']->normalize(), 3);
+        static::assertSame('Hello', $object2[10]->normalize());
+        static::assertSame('World', $object2[-150]->normalize());
+        static::assertSame(1, $object2['AZERTY']->normalize());
+        static::assertSame(3, $object2['Test']->normalize());
     }
 }
