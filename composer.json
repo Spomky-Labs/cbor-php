@@ -31,7 +31,7 @@
     "require-dev": {
         "ext-json": "*",
         "ekino/phpstan-banned-code": "^3.0",
-        "infection/infection": "^0.31",
+        "infection/infection": "^0.29|^0.30|^0.31",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-beberlei-assert": "^2.0",
