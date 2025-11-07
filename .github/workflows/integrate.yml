@@ -14,7 +14,7 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Checkout code"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
 
       - name: "Check file permissions"
         run: |
@@ -32,19 +32,18 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           php-version: "8.3"
-          tools: "castor"
           coverage: "none"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
 
       - name: "Check source code for syntax errors"
-        run: "castor lint"
+        run: "composer exec -- parallel-lint src/ tests/"
 
   unit_tests:
     name: "2️⃣ Unit and functional tests"
@@ -56,6 +55,7 @@ jobs:
         operating-system:
           - "ubuntu-latest"
         php-version:
+          - "8.1"
           - "8.2"
           - "8.3"
         dependencies:
@@ -67,29 +67,21 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           php-version: "${{ matrix.php-version }}"
-          tools: "castor"
           extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
+          tools: castor
           coverage: "xdebug"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "--optimize-autoloader"
 
       - name: "Execute tests (PHP)"
-        run: "castor test"
-
-  #      - name: Send coverage to Coveralls
-  #        if: "matrix.php-version == '8.1' && matrix.dependencies == 'highest'"
-  #        env:
-  #          COVERALLS_REPO_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-  #        run: |
-  #          wget "https://github.com/php-coveralls/php-coveralls/releases/download/v2.5.2/php-coveralls.phar"
-  #          php ./php-coveralls.phar -v
+        run: "castor test --coverage-text"
 
   static_analysis:
     name: "3️⃣ Static Analysis"
@@ -102,24 +94,21 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           php-version: "8.3"
-          tools: "castor"
           extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
+          tools: castor
           coverage: "none"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
 
       - name: "Validate Composer configuration"
-        run: "composer validate --strict"
+        run: "castor validate"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
           composer-options: "--optimize-autoloader"
-
-      - name: "Check PSR-4 mapping"
-        run: "composer dump-autoload --optimize --strict-psr"
 
       - name: "Execute static analysis"
         run: "castor stan"
@@ -135,15 +124,15 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           php-version: "8.3"
-          tools: "castor"
           extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
+          tools: castor
           coverage: "none"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
           composer-options: "--optimize-autoloader"
@@ -152,7 +141,33 @@ jobs:
         run: "castor cs"
 
       - name: "Deptrac"
-        run: "castor deptrac"
+        run: 'castor deptrac'
+
+  check_licenses:
+    name: "5️⃣ Check Licenses"
+    needs:
+      - "byte_level"
+      - "syntax_errors"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Set up PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "8.3"
+          extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
+          tools: castor
+
+      - name: "Checkout code"
+        uses: "actions/checkout@v4"
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@v3"
+        with:
+          dependency-versions: "highest"
+          composer-options: "--optimize-autoloader"
+
+      - name: "Execute license check"
+        run: "castor check-licenses"
 
   rector_checkstyle:
     name: "6️⃣ Rector Checkstyle"
@@ -165,18 +180,18 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           php-version: "8.3"
-          tools: "castor"
           extensions: "ctype, dom, json, libxml, mbstring, openssl, phar, simplexml, tokenizer, xml, xmlwriter"
+          tools: castor
           coverage: "xdebug"
 
       - name: "Checkout code"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
 
       - name: "Fetch Git base reference"
         run: "git fetch --depth=1 origin ${GITHUB_BASE_REF}"
 
       - name: "Install dependencies"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "highest"
           composer-options: "--optimize-autoloader"
@@ -192,7 +207,7 @@ jobs:
     runs-on: "ubuntu-20.04"
     steps:
       - name: "Checkout code"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
 
       - name: "Check exported files"
         run: |

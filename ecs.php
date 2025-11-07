@@ -19,6 +19,7 @@ use PhpCsFixer\Fixer\Phpdoc\PhpdocTrimConsecutiveBlankLineSeparationFixer;
 use PhpCsFixer\Fixer\PhpTag\LinebreakAfterOpeningTagFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestAnnotationFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestCaseStaticMethodCallsFixer;
+use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestClassRequiresCoversFixer;
 use PhpCsFixer\Fixer\ReturnNotation\SimplifiedNullReturnFixer;
 use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
 use PhpCsFixer\Fixer\Strict\StrictComparisonFixer;
@@ -30,7 +31,6 @@ use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 $header = '';
 
 return static function (ECSConfig $config) use ($header): void {
-    $header = '';
     $config->import(SetList::PSR_12);
     $config->import(SetList::CLEAN_CODE);
     $config->import(SetList::DOCTRINE_ANNOTATIONS);
@@ -85,5 +85,14 @@ return static function (ECSConfig $config) use ($header): void {
     ]);
 
     $config->parallel();
-    $config->paths([__DIR__ . '/src', __DIR__ . '/tests']);
+    $config->paths([__DIR__]);
+    $config->skip(
+        [
+            __DIR__ . '/.github',
+            __DIR__ . '/build',
+            __DIR__ . '/vendor',
+            __DIR__ . '/.castor.stub.php',
+            PhpUnitTestClassRequiresCoversFixer::class,
+        ]
+    );
 };
