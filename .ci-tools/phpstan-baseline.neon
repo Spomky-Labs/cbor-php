@@ -211,7 +211,7 @@ parameters:
 			path: ../src/NegativeIntegerObject.php
 
 		-
-			rawMessage: 'Method CBOR\NegativeIntegerObject::getValue() should return int|numeric-string but returns int|string.'
+			rawMessage: 'Method CBOR\NegativeIntegerObject::getValue() should return numeric-string but returns string.'
 			identifier: return.type
 			count: 1
 			path: ../src/NegativeIntegerObject.php
@@ -835,7 +835,7 @@ parameters:
 			path: ../src/UnsignedIntegerObject.php
 
 		-
-			rawMessage: 'Method CBOR\UnsignedIntegerObject::getValue() should return int|numeric-string but returns int|string.'
+			rawMessage: 'Method CBOR\UnsignedIntegerObject::getValue() should return numeric-string but returns string.'
 			identifier: return.type
 			count: 1
 			path: ../src/UnsignedIntegerObject.php
