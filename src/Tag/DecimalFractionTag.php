@@ -55,12 +55,12 @@ final class DecimalFractionTag extends Tag implements Normalizable
         return self::TAG_DECIMAL_FRACTION;
     }
 
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): self
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Tag
+    public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): self
     {
         $object = ListObject::create()
             ->add($e)
@@ -124,7 +124,10 @@ final class DecimalFractionTag extends Tag implements Normalizable
         $mantissaStr = $integerPart . $fractionalPart;
 
         // Remove leading zeros (except if mantissa is just "0")
-        $mantissaStr = ltrim($mantissaStr, '0') ?: '0';
+        $mantissaStr = ltrim($mantissaStr, '0');
+        if ($mantissaStr === '') {
+            $mantissaStr = '0';
+        }
 
         // Parse mantissa as integer
         bcscale(0);

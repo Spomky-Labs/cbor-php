@@ -28,12 +28,12 @@ final class HalfPrecisionFloatObject extends Base implements Normalizable
         // Handle special cases: NaN
         if (is_nan($number)) {
             // RFC 8949: canonical NaN is 0xf97e00 (quiet NaN with zero payload)
-            return new self(self::OBJECT_HALF_PRECISION_FLOAT, hex2bin('7E00'));
+            return new self(self::OBJECT_HALF_PRECISION_FLOAT, self::hex2binSafe('7E00'));
         }
 
         // Handle special cases: Infinity
         if (is_infinite($number)) {
-            $value = $number > 0 ? hex2bin('7C00') : hex2bin('FC00');
+            $value = $number > 0 ? self::hex2binSafe('7C00') : self::hex2binSafe('FC00');
             return new self(self::OBJECT_HALF_PRECISION_FLOAT, $value);
         }
 
@@ -148,5 +148,14 @@ final class HalfPrecisionFloatObject extends Base implements Normalizable
         $sign = Utils::binToBigInteger($data)->shiftedRight(15);
 
         return $sign->isEqualTo(BigInteger::one()) ? -1 : 1;
+    }
+
+    private static function hex2binSafe(string $hex): string
+    {
+        $result = hex2bin($hex);
+        if ($result === false) {
+            throw new InvalidArgumentException('Invalid hex string');
+        }
+        return $result;
     }
 }

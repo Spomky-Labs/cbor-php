@@ -47,19 +47,19 @@ final class BigFloatTag extends Tag implements Normalizable
         return self::TAG_BIG_FLOAT;
     }
 
-    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): Tag
+    public static function createFromLoadedData(int $additionalInformation, ?string $data, CBORObject $object): self
     {
         return new self($additionalInformation, $data, $object);
     }
 
-    public static function create(CBORObject $object): Tag
+    public static function create(CBORObject $object): self
     {
         [$ai, $data] = self::determineComponents(self::TAG_BIG_FLOAT);
 
         return new self($ai, $data, $object);
     }
 
-    public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): Tag
+    public static function createFromExponentAndMantissa(CBORObject $e, CBORObject $m): self
     {
         $object = ListObject::create()
             ->add($e)
