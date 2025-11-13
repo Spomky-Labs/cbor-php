@@ -26,7 +26,7 @@ final class DoublePrecisionFloatObject extends Base implements Normalizable
             is_nan($number) => hex2bin('7FF8000000000000'),
             is_infinite($number) && $number > 0 => hex2bin('7FF0000000000000'),
             is_infinite($number) && $number < 0 => hex2bin('FFF0000000000000'),
-            default => (fn (): string => unpack('S', "\x01\x00")[1] === 1 ? strrev(pack('d', $number)) : pack(
+            default => (static fn (): string => unpack('S', "\x01\x00")[1] === 1 ? strrev(pack('d', $number)) : pack(
                 'd',
                 $number
             ))(),
