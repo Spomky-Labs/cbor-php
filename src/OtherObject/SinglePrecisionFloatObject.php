@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CBOR\OtherObject;
 
 use Brick\Math\BigInteger;
+use CBOR\Normalizable;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
 use InvalidArgumentException;
@@ -12,7 +13,7 @@ use function strlen;
 use const INF;
 use const NAN;
 
-final class SinglePrecisionFloatObject extends Base
+final class SinglePrecisionFloatObject extends Base implements Normalizable
 {
     public static function supportedAdditionalInformation(): array
     {
@@ -25,7 +26,7 @@ final class SinglePrecisionFloatObject extends Base
             is_nan($number) => hex2bin('7FC00000'),
             is_infinite($number) && $number > 0 => hex2bin('7F800000'),
             is_infinite($number) && $number < 0 => hex2bin('FF800000'),
-            default => (fn (): string => unpack('S', "\x01\x00")[1] === 1 ? strrev(pack('f', $number)) : pack(
+            default => (static fn (): string => unpack('S', "\x01\x00")[1] === 1 ? strrev(pack('f', $number)) : pack(
                 'f',
                 $number
             ))(),
