@@ -2,7 +2,8 @@ name: 📁 PHP CI & Docker Build
 
 on:
   push:
-    branches: [main]
+    branches:
+      - '*.*.x'
     tags: ['*']
   pull_request: ~
   workflow_dispatch: ~
@@ -16,7 +17,7 @@ jobs:
     name: "0️⃣ Pre-checks"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: "Check file permissions"
         run: |
@@ -43,7 +44,7 @@ jobs:
     outputs:
       cache-key: ${{ steps.cache-key-generator.outputs.key }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - id: cache-key-generator
         run: echo "key=composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}" >> $GITHUB_OUTPUT
@@ -69,7 +70,7 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/cache@v4
         with:
           path: |
@@ -85,7 +86,7 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/cache@v4
         with:
           path: |
@@ -101,7 +102,7 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/cache@v4
         with:
           path: |
@@ -117,7 +118,7 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/cache@v4
         with:
           path: |
@@ -136,7 +137,7 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: composer exec -- parallel-lint src tests
 
   check_licenses:
@@ -146,7 +147,7 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: castor check-licenses
 
   deptrac:
@@ -156,7 +157,7 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/cache@v4
         with:
           path: |
@@ -166,7 +167,7 @@ jobs:
       - run: castor deptrac
 
   tests:
-    name: "🧪 Unit & Functional Tests (PHP ${{ matrix.php-version }})"
+    name: "🧪 Unit & Functional Tests (PHP ${{ matrix.php-version }}${{ matrix.lowest-deps && ' - Lowest Deps' || '' }})"
     needs:
       - prepare_dependencies
       - phpstan
@@ -177,19 +178,25 @@ jobs:
       - check_licenses
       - deptrac
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental || false }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - php-version: '8.2'
+            lowest-deps: true
+          - php-version: '8.2'
           - php-version: '8.3'
           - php-version: '8.4'
+          - php-version: '8.5'
+            experimental: true
     container:
       image: ghcr.io/spomky-labs/phpqa:${{ matrix.php-version }}
     env:
       XDEBUG_MODE: coverage
       PHP_VERSION: ${{ matrix.php-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install dependencies
         run: |
           if [ "${{ matrix.lowest-deps || 'false' }}" = "true" ]; then
@@ -211,7 +218,7 @@ jobs:
     env:
       XDEBUG_MODE: coverage
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Execute Infection
         run: castor infect
 
@@ -220,10 +227,10 @@ jobs:
     needs: [prepare_dependencies]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Check exported files
         run: |
-          EXPECTED="CODE_OF_CONDUCT.md,LICENSE,README.md,RELEASES.md,SECURITY.md,composer.json"
+          EXPECTED="CODE_OF_CONDUCT.md,LICENSE,README.md,RELEASES.md,SECURITY.md,UPGRADE-4.0.md,composer.json"
           CURRENT=$(git archive HEAD | tar --list | grep -v '/$' | grep -Ev '^(assets|bin|config|fixtures|frankenphp|migrations|public|src|templates|translations)/' | sort | paste -sd "," -)
           echo "CURRENT = ${CURRENT}"
           echo "EXPECTED = ${EXPECTED}"
