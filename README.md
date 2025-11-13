@@ -1,6 +1,6 @@
 # CBOR for PHP
 
-[![Build Status](https://github.com/Spomky-Labs/cbor-php/workflows/Integrate/badge.svg)](https://github.com/Spomky-Labs/cbor-php/actions)
+[![CI](https://github.com/Spomky-Labs/cbor-php/actions/workflows/ci.yml/badge.svg)](https://github.com/Spomky-Labs/cbor-php/actions/workflows/ci.yml)
 [![Latest Stable Version](https://poser.pugx.org/spomky-labs/cbor-php/v)](https://packagist.org/packages/spomky-labs/cbor-php)
 [![Total Downloads](https://poser.pugx.org/spomky-labs/cbor-php/downloads)](https://packagist.org/packages/spomky-labs/cbor-php)
 [![License](https://poser.pugx.org/spomky-labs/cbor-php/license)](https://packagist.org/packages/spomky-labs/cbor-php)
