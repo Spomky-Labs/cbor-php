@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace CBOR\Test;
 
 use CBOR\Tag\DecimalFractionTag;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Test;
+use function extension_loaded;
+use const INF;
+use const NAN;
 
 /**
  * Test cases for DecimalFractionTag (Tag 4)
@@ -127,7 +131,7 @@ final class DecimalFractionTagTest extends CBORTestCase
             static::markTestSkipped('bcmath extension is required');
         }
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('DecimalFraction cannot represent NaN or Infinity');
         DecimalFractionTag::createFromFloat(NAN);
     }
@@ -139,7 +143,7 @@ final class DecimalFractionTagTest extends CBORTestCase
             static::markTestSkipped('bcmath extension is required');
         }
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('DecimalFraction cannot represent NaN or Infinity');
         DecimalFractionTag::createFromFloat(INF);
     }
@@ -151,7 +155,7 @@ final class DecimalFractionTagTest extends CBORTestCase
             static::markTestSkipped('bcmath extension is required');
         }
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('DecimalFraction cannot represent NaN or Infinity');
         DecimalFractionTag::createFromFloat(-INF);
     }
@@ -163,22 +167,7 @@ final class DecimalFractionTagTest extends CBORTestCase
             static::markTestSkipped('bcmath extension is required');
         }
 
-        $testValues = [
-            0.0,
-            1.0,
-            -1.0,
-            2.5,
-            -2.5,
-            0.5,
-            -0.5,
-            0.25,
-            0.125,
-            10.0,
-            100.0,
-            1.23,
-            12.34,
-            123.45,
-        ];
+        $testValues = [0.0, 1.0, -1.0, 2.5, -2.5, 0.5, -0.5, 0.25, 0.125, 10.0, 100.0, 1.23, 12.34, 123.45];
 
         foreach ($testValues as $value) {
             $obj = DecimalFractionTag::createFromFloat($value);
@@ -260,7 +249,7 @@ final class DecimalFractionTagTest extends CBORTestCase
             static::markTestSkipped('bcmath extension is required');
         }
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Precision must be non-negative');
         DecimalFractionTag::createFromFloat(1.23, -1);
     }

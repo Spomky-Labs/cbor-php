@@ -6,6 +6,8 @@ namespace CBOR\Test;
 
 use CBOR\OtherObject\SinglePrecisionFloatObject;
 use PHPUnit\Framework\Attributes\Test;
+use const INF;
+use const NAN;
 
 /**
  * @internal
@@ -32,7 +34,7 @@ final class SinglePrecisionFloatTest extends CBORTestCase
     public function aSinglePrecisionObjectCanHandleInfinity(): void
     {
         $obj = SinglePrecisionFloatObject::createFromFloat(INF);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertGreaterThan(0, $obj->normalize());
         static::assertSame(hex2bin('fa7f800000'), $obj->__toString());
     }
@@ -41,7 +43,7 @@ final class SinglePrecisionFloatTest extends CBORTestCase
     public function aSinglePrecisionObjectCanHandleNegativeInfinity(): void
     {
         $obj = SinglePrecisionFloatObject::createFromFloat(-INF);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertLessThan(0, $obj->normalize());
         static::assertSame(hex2bin('faff800000'), $obj->__toString());
     }
@@ -50,7 +52,7 @@ final class SinglePrecisionFloatTest extends CBORTestCase
     public function aSinglePrecisionObjectCanHandleNaN(): void
     {
         $obj = SinglePrecisionFloatObject::createFromFloat(NAN);
-        static::assertTrue(is_nan($obj->normalize()));
+        static::assertNan($obj->normalize());
         static::assertSame(hex2bin('fa7fc00000'), $obj->__toString());
     }
 

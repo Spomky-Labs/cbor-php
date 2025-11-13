@@ -14,6 +14,8 @@ use InvalidArgumentException;
 use RuntimeException;
 use function count;
 use function extension_loaded;
+use function sprintf;
+use function strlen;
 
 final class DecimalFractionTag extends Tag implements Normalizable
 {
@@ -123,9 +125,6 @@ final class DecimalFractionTag extends Tag implements Normalizable
 
         // Remove leading zeros (except if mantissa is just "0")
         $mantissaStr = ltrim($mantissaStr, '0') ?: '0';
-
-        // Handle negative values
-        $negative = str_starts_with($mantissaStr, '-');
 
         // Parse mantissa as integer
         bcscale(0);

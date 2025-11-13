@@ -6,6 +6,14 @@ namespace CBOR\Test;
 
 use CBOR\OtherObject\DoublePrecisionFloatObject;
 use PHPUnit\Framework\Attributes\Test;
+use function is_float;
+use function is_int;
+use const INF;
+use const M_E;
+use const M_PI;
+use const NAN;
+use const PHP_FLOAT_MAX;
+use const PHP_FLOAT_MIN;
 
 /**
  * @internal
@@ -56,7 +64,7 @@ final class DoublePrecisionFloatTest extends CBORTestCase
     public function aDoublePrecisionObjectCanHandleInfinity(): void
     {
         $obj = DoublePrecisionFloatObject::createFromFloat(INF);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertGreaterThan(0, $obj->normalize());
         static::assertSame(hex2bin('fb7ff0000000000000'), $obj->__toString());
     }
@@ -65,7 +73,7 @@ final class DoublePrecisionFloatTest extends CBORTestCase
     public function aDoublePrecisionObjectCanHandleNegativeInfinity(): void
     {
         $obj = DoublePrecisionFloatObject::createFromFloat(-INF);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertLessThan(0, $obj->normalize());
         static::assertSame(hex2bin('fbfff0000000000000'), $obj->__toString());
     }
@@ -74,7 +82,7 @@ final class DoublePrecisionFloatTest extends CBORTestCase
     public function aDoublePrecisionObjectCanHandleNaN(): void
     {
         $obj = DoublePrecisionFloatObject::createFromFloat(NAN);
-        static::assertTrue(is_nan($obj->normalize()));
+        static::assertNan($obj->normalize());
         static::assertSame(hex2bin('fb7ff8000000000000'), $obj->__toString());
     }
 

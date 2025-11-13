@@ -6,6 +6,8 @@ namespace CBOR\Test;
 
 use CBOR\OtherObject\HalfPrecisionFloatObject;
 use PHPUnit\Framework\Attributes\Test;
+use const INF;
+use const NAN;
 
 /**
  * @internal
@@ -32,7 +34,7 @@ final class HalfPrecisionFloatTest extends CBORTestCase
     public function aHalfPrecisionObjectCanHandleInfinity(): void
     {
         $obj = HalfPrecisionFloatObject::createFromFloat(INF);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertGreaterThan(0, $obj->normalize());
         static::assertSame(hex2bin('f97c00'), $obj->__toString());
     }
@@ -41,7 +43,7 @@ final class HalfPrecisionFloatTest extends CBORTestCase
     public function aHalfPrecisionObjectCanHandleNegativeInfinity(): void
     {
         $obj = HalfPrecisionFloatObject::createFromFloat(-INF);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertLessThan(0, $obj->normalize());
         static::assertSame(hex2bin('f9fc00'), $obj->__toString());
     }
@@ -50,7 +52,7 @@ final class HalfPrecisionFloatTest extends CBORTestCase
     public function aHalfPrecisionObjectCanHandleNaN(): void
     {
         $obj = HalfPrecisionFloatObject::createFromFloat(NAN);
-        static::assertTrue(is_nan($obj->normalize()));
+        static::assertNan($obj->normalize());
         static::assertSame(hex2bin('f97e00'), $obj->__toString());
     }
 
@@ -99,7 +101,7 @@ final class HalfPrecisionFloatTest extends CBORTestCase
     {
         // Numbers larger than half precision max should become infinity
         $obj = HalfPrecisionFloatObject::createFromFloat(100000.0);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertGreaterThan(0, $obj->normalize());
     }
 

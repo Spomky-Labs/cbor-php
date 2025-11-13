@@ -313,6 +313,24 @@ parameters:
 			path: ../src/OtherObject/GenericObject.php
 
 		-
+			rawMessage: Binary operation "&" between mixed and 8388607 results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: ../src/OtherObject/HalfPrecisionFloatObject.php
+
+		-
+			rawMessage: Binary operation ">>" between mixed and 23 results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: ../src/OtherObject/HalfPrecisionFloatObject.php
+
+		-
+			rawMessage: Cannot access offset 1 on array|false.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: ../src/OtherObject/HalfPrecisionFloatObject.php
+
+		-
 			rawMessage: Class "CBOR\OtherObject\HalfPrecisionFloatObject" is not allowed to extend "CBOR\OtherObject".
 			identifier: ergebnis.noExtends
 			count: 1
@@ -328,6 +346,12 @@ parameters:
 			rawMessage: 'Parameter #1 $value of static method CBOR\Utils::binToBigInteger() expects string, string|null given.'
 			identifier: argument.type
 			count: 3
+			path: ../src/OtherObject/HalfPrecisionFloatObject.php
+
+		-
+			rawMessage: 'Parameter #2 $data of class CBOR\OtherObject\HalfPrecisionFloatObject constructor expects string|null, string|false given.'
+			identifier: argument.type
+			count: 2
 			path: ../src/OtherObject/HalfPrecisionFloatObject.php
 
 		-
@@ -565,6 +589,24 @@ parameters:
 			path: ../src/Tag/Base64UrlTag.php
 
 		-
+			rawMessage: Binary operation "&" between mixed and 4503599627370495 results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: ../src/Tag/BigFloatTag.php
+
+		-
+			rawMessage: Binary operation ">>" between mixed and 52 results in an error.
+			identifier: binaryOp.invalid
+			count: 1
+			path: ../src/Tag/BigFloatTag.php
+
+		-
+			rawMessage: Cannot access offset 1 on array|false.
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: ../src/Tag/BigFloatTag.php
+
+		-
 			rawMessage: Class "CBOR\Tag\BigFloatTag" is not allowed to extend "CBOR\Tag".
 			identifier: ergebnis.noExtends
 			count: 1
@@ -574,6 +616,12 @@ parameters:
 			rawMessage: 'Method CBOR\Tag\BigFloatTag::__construct() has parameter $data with a nullable type declaration.'
 			identifier: ergebnis.noParameterWithNullableTypeDeclaration
 			count: 1
+			path: ../src/Tag/BigFloatTag.php
+
+		-
+			rawMessage: 'Method CBOR\Tag\BigFloatTag::createFromFloat() should return CBOR\Tag\BigFloatTag but returns CBOR\Tag.'
+			identifier: return.type
+			count: 2
 			path: ../src/Tag/BigFloatTag.php
 
 		-
@@ -649,6 +697,12 @@ parameters:
 			path: ../src/Tag/DecimalFractionTag.php
 
 		-
+			rawMessage: 'Method CBOR\Tag\DecimalFractionTag::createFromFloat() should return CBOR\Tag\DecimalFractionTag but returns CBOR\Tag.'
+			identifier: return.type
+			count: 2
+			path: ../src/Tag/DecimalFractionTag.php
+
+		-
 			rawMessage: 'Method CBOR\Tag\DecimalFractionTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
 			identifier: ergebnis.noParameterWithNullableTypeDeclaration
 			count: 1
@@ -657,6 +711,12 @@ parameters:
 		-
 			rawMessage: 'Parameter #1 $num1 of function bcmul expects numeric-string, string given.'
 			identifier: argument.type
+			count: 1
+			path: ../src/Tag/DecimalFractionTag.php
+
+		-
+			rawMessage: Short ternary operator is not allowed. Use null coalesce operator if applicable or consider using long ternary.
+			identifier: ternary.shortNotAllowed
 			count: 1
 			path: ../src/Tag/DecimalFractionTag.php
 

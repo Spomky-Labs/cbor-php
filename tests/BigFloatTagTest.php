@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace CBOR\Test;
 
 use CBOR\Tag\BigFloatTag;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Test;
+use function extension_loaded;
+use const INF;
+use const NAN;
 
 /**
  * Test cases for BigFloatTag (Tag 5)
@@ -138,7 +142,7 @@ final class BigFloatTagTest extends CBORTestCase
             static::markTestSkipped('bcmath extension is required');
         }
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('BigFloat cannot represent NaN or Infinity');
         BigFloatTag::createFromFloat(NAN);
     }
@@ -150,7 +154,7 @@ final class BigFloatTagTest extends CBORTestCase
             static::markTestSkipped('bcmath extension is required');
         }
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('BigFloat cannot represent NaN or Infinity');
         BigFloatTag::createFromFloat(INF);
     }
@@ -162,7 +166,7 @@ final class BigFloatTagTest extends CBORTestCase
             static::markTestSkipped('bcmath extension is required');
         }
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('BigFloat cannot represent NaN or Infinity');
         BigFloatTag::createFromFloat(-INF);
     }
@@ -174,23 +178,7 @@ final class BigFloatTagTest extends CBORTestCase
             static::markTestSkipped('bcmath extension is required');
         }
 
-        $testValues = [
-            0.0,
-            1.0,
-            -1.0,
-            2.0,
-            -2.0,
-            0.5,
-            -0.5,
-            0.25,
-            0.125,
-            4.0,
-            8.0,
-            16.0,
-            1.5,
-            2.5,
-            3.75,
-        ];
+        $testValues = [0.0, 1.0, -1.0, 2.0, -2.0, 0.5, -0.5, 0.25, 0.125, 4.0, 8.0, 16.0, 1.5, 2.5, 3.75];
 
         foreach ($testValues as $value) {
             $obj = BigFloatTag::createFromFloat($value);

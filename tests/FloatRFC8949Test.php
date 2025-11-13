@@ -8,6 +8,8 @@ use CBOR\OtherObject\DoublePrecisionFloatObject;
 use CBOR\OtherObject\HalfPrecisionFloatObject;
 use CBOR\OtherObject\SinglePrecisionFloatObject;
 use PHPUnit\Framework\Attributes\Test;
+use const INF;
+use const NAN;
 
 /**
  * Test cases based on RFC 8949 (CBOR) specification examples
@@ -100,7 +102,7 @@ final class FloatRFC8949Test extends CBORTestCase
     {
         // Infinity as half precision
         $obj = HalfPrecisionFloatObject::createFromFloat(INF);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertGreaterThan(0, $obj->normalize());
         static::assertSame('f97c00', bin2hex($obj->__toString()));
     }
@@ -110,7 +112,7 @@ final class FloatRFC8949Test extends CBORTestCase
     {
         // NaN as half precision - RFC 8949 canonical: 0xf97e00
         $obj = HalfPrecisionFloatObject::createFromFloat(NAN);
-        static::assertTrue(is_nan($obj->normalize()));
+        static::assertNan($obj->normalize());
         static::assertSame('f97e00', bin2hex($obj->__toString()));
     }
 
@@ -119,7 +121,7 @@ final class FloatRFC8949Test extends CBORTestCase
     {
         // -Infinity as half precision
         $obj = HalfPrecisionFloatObject::createFromFloat(-INF);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertLessThan(0, $obj->normalize());
         static::assertSame('f9fc00', bin2hex($obj->__toString()));
     }
@@ -129,7 +131,7 @@ final class FloatRFC8949Test extends CBORTestCase
     {
         // Infinity as single precision
         $obj = SinglePrecisionFloatObject::createFromFloat(INF);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertGreaterThan(0, $obj->normalize());
         static::assertSame('fa7f800000', bin2hex($obj->__toString()));
     }
@@ -139,7 +141,7 @@ final class FloatRFC8949Test extends CBORTestCase
     {
         // NaN as single precision
         $obj = SinglePrecisionFloatObject::createFromFloat(NAN);
-        static::assertTrue(is_nan($obj->normalize()));
+        static::assertNan($obj->normalize());
         static::assertSame('fa7fc00000', bin2hex($obj->__toString()));
     }
 
@@ -148,7 +150,7 @@ final class FloatRFC8949Test extends CBORTestCase
     {
         // -Infinity as single precision
         $obj = SinglePrecisionFloatObject::createFromFloat(-INF);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertLessThan(0, $obj->normalize());
         static::assertSame('faff800000', bin2hex($obj->__toString()));
     }
@@ -158,7 +160,7 @@ final class FloatRFC8949Test extends CBORTestCase
     {
         // Infinity as double precision
         $obj = DoublePrecisionFloatObject::createFromFloat(INF);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertGreaterThan(0, $obj->normalize());
         static::assertSame('fb7ff0000000000000', bin2hex($obj->__toString()));
     }
@@ -168,7 +170,7 @@ final class FloatRFC8949Test extends CBORTestCase
     {
         // NaN as double precision
         $obj = DoublePrecisionFloatObject::createFromFloat(NAN);
-        static::assertTrue(is_nan($obj->normalize()));
+        static::assertNan($obj->normalize());
         static::assertSame('fb7ff8000000000000', bin2hex($obj->__toString()));
     }
 
@@ -177,7 +179,7 @@ final class FloatRFC8949Test extends CBORTestCase
     {
         // -Infinity as double precision
         $obj = DoublePrecisionFloatObject::createFromFloat(-INF);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertLessThan(0, $obj->normalize());
         static::assertSame('fbfff0000000000000', bin2hex($obj->__toString()));
     }
@@ -223,7 +225,7 @@ final class FloatRFC8949Test extends CBORTestCase
     {
         // Numbers larger than max half precision (65504) should overflow to infinity
         $obj = HalfPrecisionFloatObject::createFromFloat(100000.0);
-        static::assertTrue(is_infinite($obj->normalize()));
+        static::assertInfinite($obj->normalize());
         static::assertGreaterThan(0, $obj->normalize());
     }
 
