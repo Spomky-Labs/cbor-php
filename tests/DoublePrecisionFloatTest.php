@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace CBOR\Test;
 
 use CBOR\OtherObject\DoublePrecisionFloatObject;
-use PHPUnit\Framework\Attributes\Test;
+use const INF;
 use function is_float;
 use function is_int;
-use const INF;
 use const M_E;
 use const M_PI;
 use const NAN;
 use const PHP_FLOAT_MAX;
 use const PHP_FLOAT_MIN;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal

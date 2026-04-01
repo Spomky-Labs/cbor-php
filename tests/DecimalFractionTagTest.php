@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace CBOR\Test;
 
 use CBOR\Tag\DecimalFractionTag;
-use InvalidArgumentException;
-use PHPUnit\Framework\Attributes\Test;
 use function extension_loaded;
 use const INF;
+use InvalidArgumentException;
 use const NAN;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test cases for DecimalFractionTag (Tag 4)

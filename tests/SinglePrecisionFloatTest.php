@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CBOR\Test;
 
 use CBOR\OtherObject\SinglePrecisionFloatObject;
-use PHPUnit\Framework\Attributes\Test;
 use const INF;
 use const NAN;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
