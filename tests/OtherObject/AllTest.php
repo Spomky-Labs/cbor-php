@@ -18,13 +18,13 @@ use CBOR\OtherObject\TrueObject;
 use CBOR\OtherObject\UndefinedObject;
 use CBOR\StringStream;
 use CBOR\Test\CBORTestCase;
-use InvalidArgumentException;
-use Iterator;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 use function chr;
 use const INF;
+use InvalidArgumentException;
+use Iterator;
 use const M_PI;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use const STR_PAD_LEFT;
 
 /**
