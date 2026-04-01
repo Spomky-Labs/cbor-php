@@ -7,9 +7,9 @@ namespace CBOR\Test;
 use CBOR\OtherObject\DoublePrecisionFloatObject;
 use CBOR\OtherObject\HalfPrecisionFloatObject;
 use CBOR\OtherObject\SinglePrecisionFloatObject;
-use PHPUnit\Framework\Attributes\Test;
 use const INF;
 use const NAN;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test cases based on RFC 8949 (CBOR) specification examples
