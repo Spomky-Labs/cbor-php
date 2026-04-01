@@ -74,7 +74,7 @@ final class InvalidTypeTest extends CBORTestCase
         yield [
             '5bffffffffffffffff010203',
             IntegerOverflowException::class,
-            '18446744073709551615 is out of range -9223372036854775808 to 9223372036854775807 and cannot be represented as an integer.',
+            '18446744073709551615 is out of range',
         ];
         yield ['7affffffff00', InvalidArgumentException::class, 'Out of range. Expected: 4294967295, read: 0.'];
         yield [
