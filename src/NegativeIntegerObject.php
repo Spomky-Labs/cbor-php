@@ -14,7 +14,7 @@ final class NegativeIntegerObject extends AbstractCBORObject implements Normaliz
 
     public function __construct(
         int $additionalInformation,
-        private readonly ?string $data
+        private ?string $data
     ) {
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
     }
