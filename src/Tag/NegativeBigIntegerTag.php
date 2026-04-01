@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CBOR\Tag;
 
+use function assert;
 use Brick\Math\BigInteger;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;

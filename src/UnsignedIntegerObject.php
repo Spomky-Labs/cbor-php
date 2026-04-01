@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CBOR;
 
+use function assert;
 use Brick\Math\BigInteger;
 use InvalidArgumentException;
 use const STR_PAD_LEFT;
