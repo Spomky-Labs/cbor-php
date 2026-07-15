@@ -16,7 +16,7 @@ if (file_exists('/tools/.composer/vendor-bin/phpunit/vendor/autoload.php')) {
 }
 $builder->withSets([
     SetList::DEAD_CODE,
-    LevelSetList::UP_TO_PHP_81,
+    LevelSetList::UP_TO_PHP_80,
     DoctrineSetList::DOCTRINE_CODE_QUALITY,
     DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
     PHPUnitSetList::PHPUNIT_CODE_QUALITY,
@@ -24,7 +24,7 @@ $builder->withSets([
     PHPUnitSetList::PHPUNIT_120,
 ]);
 $builder->withComposerBased(twig: true, doctrine: true, phpunit: true, symfony: true);
-$builder->withPhpVersion(PhpVersion::PHP_81);
+$builder->withPhpVersion(PhpVersion::PHP_80);
 $builder->withPaths(
     [
         __DIR__ . '/../src',
