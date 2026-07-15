@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CBOR\OtherObject;
 
 use Brick\Math\BigInteger;
-use CBOR\Normalizable;
 use CBOR\OtherObject as Base;
 use CBOR\Utils;
 use const INF;
@@ -13,7 +12,7 @@ use InvalidArgumentException;
 use const NAN;
 use function strlen;
 
-final class SinglePrecisionFloatObject extends Base implements Normalizable
+final class SinglePrecisionFloatObject extends Base
 {
     public static function supportedAdditionalInformation(): array
     {
@@ -23,10 +22,10 @@ final class SinglePrecisionFloatObject extends Base implements Normalizable
     public static function createFromFloat(float $number): self
     {
         $value = match (true) {
-            is_nan($number) => self::hex2binSafe('7FC00000'),
-            is_infinite($number) && $number > 0 => self::hex2binSafe('7F800000'),
-            is_infinite($number) && $number < 0 => self::hex2binSafe('FF800000'),
-            default => (static fn (): string => unpack('S', "\x01\x00")[1] === 1 ? strrev(pack('f', $number)) : pack(
+            is_nan($number) => hex2bin('7FC00000'),
+            is_infinite($number) && $number > 0 => hex2bin('7F800000'),
+            is_infinite($number) && $number < 0 => hex2bin('FF800000'),
+            default => (fn (): string => unpack('S', "\x01\x00")[1] === 1 ? strrev(pack('f', $number)) : pack(
                 'f',
                 $number
             ))(),
@@ -89,14 +88,5 @@ final class SinglePrecisionFloatObject extends Base implements Normalizable
         $sign = Utils::binToBigInteger($data)->shiftedRight(31);
 
         return $sign->isEqualTo(BigInteger::one()) ? -1 : 1;
-    }
-
-    private static function hex2binSafe(string $hex): string
-    {
-        $result = hex2bin($hex);
-        if ($result === false) {
-            throw new InvalidArgumentException('Invalid hex string');
-        }
-        return $result;
     }
 }

@@ -283,6 +283,12 @@ parameters:
 			path: ../src/OtherObject/DoublePrecisionFloatObject.php
 
 		-
+			rawMessage: 'Parameter #2 $data of class CBOR\OtherObject\DoublePrecisionFloatObject constructor expects string|null, string|false given.'
+			identifier: argument.type
+			count: 1
+			path: ../src/OtherObject/DoublePrecisionFloatObject.php
+
+		-
 			rawMessage: Class "CBOR\OtherObject\FalseObject" is not allowed to extend "CBOR\OtherObject".
 			identifier: ergebnis.noExtends
 			count: 1
@@ -305,24 +311,6 @@ parameters:
 			identifier: ergebnis.noParameterWithNullableTypeDeclaration
 			count: 1
 			path: ../src/OtherObject/GenericObject.php
-
-		-
-			rawMessage: Binary operation "&" between mixed and 8388607 results in an error.
-			identifier: binaryOp.invalid
-			count: 1
-			path: ../src/OtherObject/HalfPrecisionFloatObject.php
-
-		-
-			rawMessage: Binary operation ">>" between mixed and 23 results in an error.
-			identifier: binaryOp.invalid
-			count: 1
-			path: ../src/OtherObject/HalfPrecisionFloatObject.php
-
-		-
-			rawMessage: Cannot access offset 1 on array|false.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: ../src/OtherObject/HalfPrecisionFloatObject.php
 
 		-
 			rawMessage: Class "CBOR\OtherObject\HalfPrecisionFloatObject" is not allowed to extend "CBOR\OtherObject".
@@ -424,6 +412,12 @@ parameters:
 			rawMessage: 'Parameter #1 $value of static method CBOR\Utils::binToBigInteger() expects string, string|null given.'
 			identifier: argument.type
 			count: 3
+			path: ../src/OtherObject/SinglePrecisionFloatObject.php
+
+		-
+			rawMessage: 'Parameter #2 $data of class CBOR\OtherObject\SinglePrecisionFloatObject constructor expects string|null, string|false given.'
+			identifier: argument.type
+			count: 1
 			path: ../src/OtherObject/SinglePrecisionFloatObject.php
 
 		-
@@ -571,24 +565,6 @@ parameters:
 			path: ../src/Tag/Base64UrlTag.php
 
 		-
-			rawMessage: Binary operation "&" between mixed and 4503599627370495 results in an error.
-			identifier: binaryOp.invalid
-			count: 1
-			path: ../src/Tag/BigFloatTag.php
-
-		-
-			rawMessage: Binary operation ">>" between mixed and 52 results in an error.
-			identifier: binaryOp.invalid
-			count: 1
-			path: ../src/Tag/BigFloatTag.php
-
-		-
-			rawMessage: Cannot access offset 1 on array|false.
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 2
-			path: ../src/Tag/BigFloatTag.php
-
-		-
 			rawMessage: Class "CBOR\Tag\BigFloatTag" is not allowed to extend "CBOR\Tag".
 			identifier: ergebnis.noExtends
 			count: 1
@@ -731,18 +707,6 @@ parameters:
 			identifier: ergebnis.noParameterWithNullableTypeDeclaration
 			count: 1
 			path: ../src/Tag/NegativeBigIntegerTag.php
-
-		-
-			rawMessage: Class "CBOR\Tag\SelfDescribeCBORTag" is not allowed to extend "CBOR\Tag".
-			identifier: ergebnis.noExtends
-			count: 1
-			path: ../src/Tag/SelfDescribeCBORTag.php
-
-		-
-			rawMessage: 'Method CBOR\Tag\SelfDescribeCBORTag::createFromLoadedData() has parameter $data with a nullable type declaration.'
-			identifier: ergebnis.noParameterWithNullableTypeDeclaration
-			count: 1
-			path: ../src/Tag/SelfDescribeCBORTag.php
 
 		-
 			rawMessage: 'Method CBOR\Tag\TagInterface::createFromLoadedData() has parameter $data with a nullable type declaration.'
