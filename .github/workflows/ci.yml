@@ -193,7 +193,7 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:${{ matrix.php-version }}
     env:
-      XDEBUG_MODE: coverage
+      XDEBUG_MODE: 'off'
       PHP_VERSION: ${{ matrix.php-version }}
     steps:
       - uses: actions/checkout@v7.0.0
@@ -205,8 +205,10 @@ jobs:
             composer install --no-interaction --no-progress
           fi
 
+      # PHPUnit is invoked directly rather than through `castor phpunit`: castor itself requires PHP >= 8.4 and
+      # this job also runs on the older versions of the matrix. Coverage is produced by the mutation testing job.
       - name: Run PHPUnit
-        run: castor phpunit
+        run: composer exec -- phpunit-11 --configuration .ci-tools/phpunit.xml.dist
 
   infection:
     name: "🧬 Mutation Testing"
