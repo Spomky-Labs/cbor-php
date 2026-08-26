@@ -139,6 +139,12 @@ parameters:
 			path: ../src/IndefiniteLengthTextStringObject.php
 
 		-
+			rawMessage: 'Call to function array_map() on a separate line has no effect.'
+			identifier: function.resultUnused
+			count: 1
+			path: ../src/ListObject.php
+
+		-
 			rawMessage: Class "CBOR\ListObject" is not allowed to extend "CBOR\AbstractCBORObject".
 			identifier: ergebnis.noExtends
 			count: 1
@@ -211,7 +217,7 @@ parameters:
 			path: ../src/NegativeIntegerObject.php
 
 		-
-			rawMessage: 'Method CBOR\NegativeIntegerObject::getValue() should return numeric-string but returns string.'
+			rawMessage: 'Method CBOR\NegativeIntegerObject::getValue() should return numeric-string but returns non-empty-string.'
 			identifier: return.type
 			count: 1
 			path: ../src/NegativeIntegerObject.php
@@ -871,7 +877,7 @@ parameters:
 			path: ../src/UnsignedIntegerObject.php
 
 		-
-			rawMessage: 'Method CBOR\UnsignedIntegerObject::getValue() should return numeric-string but returns string.'
+			rawMessage: 'Method CBOR\UnsignedIntegerObject::getValue() should return numeric-string but returns non-empty-string.'
 			identifier: return.type
 			count: 1
 			path: ../src/UnsignedIntegerObject.php
