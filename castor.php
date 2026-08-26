@@ -102,10 +102,12 @@ function phpqa(array $command, array $dockerOptions = []): void
         return;
     }
 
+    $isTty = stream_isatty(\STDIN) && stream_isatty(\STDOUT);
+
     $defaultDockerOptions = [
         '--rm',
         '--init',
-        '-it',
+        ...($isTty ? ['-it'] : []),
         '--user', sprintf('%s:%s', getmyuid(), getmygid()),
         '--pull', 'always',
         '-v', getcwd() . ':/project',

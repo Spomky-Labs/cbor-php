@@ -5,6 +5,8 @@
     colors="true"
     xsi:noNamespaceSchemaLocation="phpunit.xsd"
     cacheDirectory=".phpunit.cache"
+    executionOrder="random"
+    resolveDependencies="true"
 >
 <coverage/>
 <testsuites>
