@@ -5,6 +5,10 @@ name: "Automatic Releases"
 # locally, and the following commands require it. Splitting them into separate
 # jobs gives each one a fresh checkout of the default branch, so every release
 # made from an older branch fails with "not a valid object name".
+#
+# The checkout must be unshallow for the same reason: "switch-default-branch-
+# to-next-minor" resolves the newest release branch locally, and the default
+# shallow clone only contains the ref that triggered the workflow.
 
 on:
   milestone:
@@ -19,6 +23,8 @@ jobs:
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v7.0.1"
+        with:
+          fetch-depth: 0
 
       - name: "Release"
         uses: "laminas/automatic-releases@1.26.2"
