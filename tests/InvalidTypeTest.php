@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CBOR\Test;
 
-use Brick\Math\Exception\IntegerOverflowException;
 use CBOR\StringStream;
 use InvalidArgumentException;
 use Iterator;
@@ -73,8 +72,8 @@ final class InvalidTypeTest extends CBORTestCase
         yield ['5affffffff00', InvalidArgumentException::class, 'Out of range. Expected: 4294967295, read: 0.'];
         yield [
             '5bffffffffffffffff010203',
-            IntegerOverflowException::class,
-            '18446744073709551615 is out of range',
+            InvalidArgumentException::class,
+            'Out of range. "18446744073709551615" cannot be represented as a PHP integer.',
         ];
         yield ['7affffffff00', InvalidArgumentException::class, 'Out of range. Expected: 4294967295, read: 0.'];
         yield [
