@@ -180,6 +180,19 @@ $otherObjectManager = OtherObjectManager::create()
 $decoder = Decoder::create($tagManager, $otherObjectManager);
 ```
 
+#### Limiting the Nesting Depth
+
+Decoding is a recursive operation: a deeply nested data item (e.g. thousands of nested arrays, maps or tags) can
+exhaust the call stack. The decoder therefore rejects data nested deeper than `Decoder::DEFAULT_MAX_DEPTH` (1000
+levels) with an `InvalidArgumentException`.
+
+When the data comes from an untrusted source, a much lower limit is recommended:
+
+```php
+// Accept at most 32 levels of nested arrays, maps and tags
+$decoder = Decoder::create(null, null, 32);
+```
+
 #### Decoding Binary Data
 
 ```php
