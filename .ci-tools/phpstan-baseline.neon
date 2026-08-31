@@ -25,6 +25,12 @@ parameters:
 			path: ../src/ByteStringObject.php
 
 		-
+			rawMessage: Constructor in CBOR\Decoder has parameter $maxDepth with default value.
+			identifier: ergebnis.noConstructorParameterWithDefaultValue
+			count: 1
+			path: ../src/Decoder.php
+
+		-
 			rawMessage: Constructor in CBOR\Decoder has parameter $otherTypeManager with default value.
 			identifier: ergebnis.noConstructorParameterWithDefaultValue
 			count: 1
