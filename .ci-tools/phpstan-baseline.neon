@@ -133,12 +133,6 @@ parameters:
 			path: ../src/IndefiniteLengthMapObject.php
 
 		-
-			rawMessage: Possibly invalid array key type mixed.
-			identifier: offsetAccess.invalidOffset
-			count: 3
-			path: ../src/IndefiniteLengthMapObject.php
-
-		-
 			rawMessage: Class "CBOR\IndefiniteLengthTextStringObject" is not allowed to extend "CBOR\AbstractCBORObject".
 			identifier: ergebnis.noExtends
 			count: 1
@@ -190,12 +184,6 @@ parameters:
 			rawMessage: Constructor in CBOR\MapObject has parameter $data with default value.
 			identifier: ergebnis.noConstructorParameterWithDefaultValue
 			count: 1
-			path: ../src/MapObject.php
-
-		-
-			rawMessage: Possibly invalid array key type mixed.
-			identifier: offsetAccess.invalidOffset
-			count: 3
 			path: ../src/MapObject.php
 
 		-

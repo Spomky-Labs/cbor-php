@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace CBOR\Test;
 
-use Brick\Math\Exception\IntegerOverflowException;
 use CBOR\StringStream;
 use InvalidArgumentException;
 use Iterator;
@@ -73,8 +72,8 @@ final class InvalidTypeTest extends CBORTestCase
         yield ['5affffffff00', InvalidArgumentException::class, 'Out of range. Expected: 4294967295, read: 0.'];
         yield [
             '5bffffffffffffffff010203',
-            IntegerOverflowException::class,
-            '18446744073709551615 is out of range',
+            InvalidArgumentException::class,
+            'Out of range. "18446744073709551615" cannot be represented as a PHP integer.',
         ];
         yield ['7affffffff00', InvalidArgumentException::class, 'Out of range. Expected: 4294967295, read: 0.'];
         yield [
@@ -95,7 +94,13 @@ final class InvalidTypeTest extends CBORTestCase
         yield ['9f', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
         yield ['9f0102', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
         yield ['bf', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
-        yield ['bf01020102', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
+        // This RFC 8949 F.1 item is both truncated and carrying the key 1 twice. The duplicate key is now
+        // caught before the stream runs out, so the item is still rejected, on the first defect encountered.
+        yield [
+            'bf01020102',
+            InvalidArgumentException::class,
+            'Invalid key. The key "1" is defined more than once in the map.',
+        ];
         yield ['819f', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
         yield ['9f8000', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
         yield ['9f9f9f9f9fffffffff', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
