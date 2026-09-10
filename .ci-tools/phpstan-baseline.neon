@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Parameter #1 $codepoint of function chr expects int<0, 255>, int given.'
-			identifier: argument.type
-			count: 1
-			path: ../src/AbstractCBORObject.php
-
-		-
 			rawMessage: 'Call to function array_map() on a separate line has no effect.'
 			identifier: function.resultUnused
 			count: 1
