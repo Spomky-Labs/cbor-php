@@ -12,6 +12,21 @@ use function Castor\run;
 guard_min_version('v0.23.0');
 
 /**
+ * Tells whether a package satisfies the license policy.
+ *
+ * A package passes when every license it declares is on the allow list. One
+ * that declares no license at all never passes: an undeclared license is not
+ * an allowed one.
+ *
+ * @param array<string> $packageLicenses
+ * @param array<string> $allowedLicenses
+ */
+function isLicenseAllowed(array $packageLicenses, array $allowedLicenses): bool
+{
+    return $packageLicenses !== [] && array_diff($packageLicenses, $allowedLicenses) === [];
+}
+
+/**
  * @param array<string> $allowedLicenses
  */
 #[AsTask(description: 'Check licenses.')]
@@ -32,18 +47,20 @@ function checkLicenses(
         exit(1);
     }
     $licenses = json_decode((string) $result->getOutput(), true);
+    $dependencies = $licenses['dependencies'] ?? [];
+    if ($dependencies === []) {
+        io()->error(
+            'No dependency reported by "composer licenses". Run "composer install" first, otherwise this check passes without checking anything.'
+        );
+        exit(1);
+    }
     $disallowed = array_filter(
-        $licenses['dependencies'],
+        $dependencies,
         static fn (array $info, $name) => ! in_array($name, $allowedExceptions, true)
-            && count(array_diff($info['license'], $allowedLicenses)) === 1,
+            && ! isLicenseAllowed($info['license'], $allowedLicenses),
         \ARRAY_FILTER_USE_BOTH
     );
-    $allowed = array_filter(
-        $licenses['dependencies'],
-        static fn (array $info, $name) => in_array($name, $allowedExceptions, true)
-            || count(array_diff($info['license'], $allowedLicenses)) === 0,
-        \ARRAY_FILTER_USE_BOTH
-    );
+    $allowed = array_diff_key($dependencies, $disallowed);
     if (count($disallowed) > 0) {
         io()
             ->table(
