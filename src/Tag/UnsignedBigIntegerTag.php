@@ -44,7 +44,12 @@ final class UnsignedBigIntegerTag extends Tag implements Normalizable
     {
         /** @var ByteStringObject|IndefiniteLengthByteStringObject $object */
         $object = $this->object;
+        $value = $object->normalize();
+        if ($value === '') {
+            // RFC 8949 section 3.4.3: the empty byte string is the preferred serialization of zero.
+            return '0';
+        }
 
-        return Utils::hexToString($object->normalize());
+        return Utils::hexToString($value);
     }
 }
