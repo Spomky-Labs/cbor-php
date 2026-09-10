@@ -22,7 +22,9 @@ use Throwable;
  * them was an assert(), which is compiled out under the production default zend.assertions=-1.
  *
  * Every exception assertion in this test suite expects InvalidArgumentException, and that is what callers guard
- * against, so both paths must raise it too.
+ * against, so the header path must raise it too. The empty bignum is no longer an error at all: RFC 8949 section
+ * 3.4.3 makes the empty byte string the preferred serialization of zero, so the tags decode it (see
+ * \CBOR\Test\BigNumTagTest), while the hexadecimal helpers keep rejecting an empty argument.
  *
  * @internal
  */
@@ -53,30 +55,28 @@ final class ExceptionContractTest extends CBORTestCase
     }
 
     /**
-     * @return iterable<string, array{string}>
+     * @return iterable<string, array{string, string}>
      */
     public static function emptyBigNumPayloads(): iterable
     {
-        yield 'unsigned big num, tag 2' => ['c240'];
-        yield 'negative big num, tag 3' => ['c340'];
+        yield 'unsigned big num, tag 2' => ['c240', '0'];
+        yield 'negative big num, tag 3' => ['c340', '-1'];
     }
 
     /**
-     * This is the case the removed assert() was supposed to cover. Under zend.assertions=-1, which is the production
-     * default, the statement was gone at compile time and the empty string reached Brick\Math untouched.
+     * This is the case the removed assert() was supposed to cover: under zend.assertions=-1, which is the production
+     * default, the statement was gone at compile time and the empty string reached Brick\Math untouched. Nothing
+     * reaches Brick\Math any more, because the empty byte string is the preferred serialization of zero.
      */
     #[Test]
     #[DataProvider('emptyBigNumPayloads')]
-    public function anEmptyBigNumPayloadIsRejected(string $payload): void
+    public function anEmptyBigNumPayloadDecodesToItsValue(string $payload, string $expected): void
     {
         $object = $this->getDecoder()
             ->decode(StringStream::create((string) hex2bin($payload)))
         ;
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The value shall not be empty.');
-
-        $object->normalize();
+        static::assertSame($expected, $object->normalize());
     }
 
     /**

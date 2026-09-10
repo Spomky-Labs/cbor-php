@@ -7,6 +7,7 @@ namespace CBOR\Tag;
 use Brick\Math\BigInteger;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;
+use CBOR\IndefiniteLengthListObject;
 use CBOR\ListObject;
 use CBOR\NegativeIntegerObject;
 use CBOR\Normalizable;
@@ -17,6 +18,7 @@ use function extension_loaded;
 use InvalidArgumentException;
 use RuntimeException;
 use function sprintf;
+use function str_contains;
 use function str_starts_with;
 use function strlen;
 
@@ -37,7 +39,8 @@ final class DecimalFractionTag extends Tag implements Normalizable
         if (! extension_loaded('bcmath')) {
             throw new RuntimeException('The extension "bcmath" is required to use this tag');
         }
-        if (! $object instanceof ListObject || count($object) !== 2) {
+        $isList = $object instanceof ListObject || $object instanceof IndefiniteLengthListObject;
+        if (! $isList || count($object) !== 2) {
             throw new InvalidArgumentException(
                 'This tag only accepts a ListObject object that contains an exponent and a mantissa.'
             );
@@ -213,7 +216,7 @@ final class DecimalFractionTag extends Tag implements Normalizable
 
     public function normalize()
     {
-        /** @var ListObject $object */
+        /** @var ListObject|IndefiniteLengthListObject $object */
         $object = $this->object;
         /** @var UnsignedIntegerObject|NegativeIntegerObject $e */
         $e = $object->get(0);
@@ -222,8 +225,34 @@ final class DecimalFractionTag extends Tag implements Normalizable
 
         $exponent = (string) $e->normalize();
         self::assertExponentIsWithinBounds($exponent);
+        $mantissa = (string) $m->normalize();
 
-        return rtrim(bcmul((string) $m->normalize(), bcpow('10', $exponent, 100), 100), '0');
+        // The exponent is bounded, so it fits a PHP integer and the scale below is finite.
+        $exponentValue = (int) $exponent;
+        if ($exponentValue >= 0) {
+            // m x 10^e with e >= 0 is an integer: no scale is needed and none shall be printed.
+            return bcmul($mantissa, bcpow('10', $exponent, 0), 0);
+        }
+
+        // m x 10^-s has exactly s decimal digits, so that scale makes the division exact. A fixed scale would
+        // either truncate the result to zero or, worse, report a rounded value as if it were the decoded one.
+        $scale = -$exponentValue;
+
+        return self::stripTrailingZeros(bcdiv($mantissa, bcpow('10', (string) $scale, 0), $scale));
+    }
+
+    /**
+     * bcdiv() pads the result up to the requested scale, so the exact value comes back with trailing zeros and,
+     * once they are gone, a dangling decimal point. Both are stripped, but only from a value that has a decimal
+     * point at all: trimming "500" would turn it into "5".
+     */
+    private static function stripTrailingZeros(string $value): string
+    {
+        if (! str_contains($value, '.')) {
+            return $value;
+        }
+
+        return rtrim(rtrim($value, '0'), '.');
     }
 
     private static function assertExponentIsWithinBounds(string $exponent): void

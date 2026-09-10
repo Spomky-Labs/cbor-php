@@ -10,9 +10,11 @@ use CBOR\Normalizable;
 use CBOR\Tag;
 use CBOR\TextStringObject;
 use const DATE_RFC3339;
+use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
+use function preg_match;
 
 /**
  * @see \CBOR\Test\Tag\DatetimeTagTest
@@ -48,16 +50,38 @@ final class DatetimeTag extends Tag implements Normalizable
     {
         /** @var TextStringObject|IndefiniteLengthTextStringObject $object */
         $object = $this->object;
-        $result = DateTimeImmutable::createFromFormat(DATE_RFC3339, $object->normalize());
-        if ($result !== false) {
-            return $result;
+        $value = $object->normalize();
+
+        // RFC 3339 allows a leap second, which no PHP date can hold. It is parsed as the second before it and
+        // shifted forward again, which lands on the next minute: the closest instant this library can return.
+        $isLeapSecond = preg_match('/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:)60(.*)$/', $value, $matches) === 1;
+        if ($isLeapSecond) {
+            $value = $matches[1] . '59' . $matches[2];
         }
 
-        $formatted = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.uP', $object->normalize());
-        if ($formatted === false) {
-            throw new InvalidArgumentException('Invalid data. Cannot be converted into a datetime object');
+        $result = DateTimeImmutable::createFromFormat(DATE_RFC3339, $value);
+        if ($result === false || ! self::wasParsedExactly()) {
+            $result = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.uP', $value);
+            if ($result === false || ! self::wasParsedExactly()) {
+                throw new InvalidArgumentException('Invalid data. Cannot be converted into a datetime object');
+            }
         }
 
-        return $formatted;
+        return $isLeapSecond ? $result->add(new DateInterval('PT1S')) : $result;
+    }
+
+    /**
+     * Tells whether the last parse consumed the whole string and described an instant that exists.
+     *
+     * createFromFormat() does not reject a date-time that cannot be: it rolls it over and merely reports a warning,
+     * so "2013-02-30" comes back as the 2nd of March and hour 25 as the next day. A document then decodes to an
+     * instant it does not carry, which is worse than a rejection.
+     */
+    private static function wasParsedExactly(): bool
+    {
+        $errors = DateTimeImmutable::getLastErrors();
+
+        // As of PHP 8.2 a parse with nothing to report returns false instead of an array of empty counters.
+        return $errors === false || ($errors['warning_count'] === 0 && $errors['error_count'] === 0);
     }
 }
