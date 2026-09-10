@@ -83,7 +83,7 @@ final class HalfPrecisionRoundingTest extends CBORTestCase
     public function anEncodedValueNormalizesBackToItself(float $value, string $expectedHex): void
     {
         $object = HalfPrecisionFloatObject::createFromFloat($value);
-        $normalized = (float) $object->normalize();
+        $normalized = $object->normalize();
 
         static::assertSame($expectedHex, bin2hex((string) HalfPrecisionFloatObject::createFromFloat($normalized)));
     }

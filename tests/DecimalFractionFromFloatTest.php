@@ -21,7 +21,7 @@ final class DecimalFractionFromFloatTest extends CBORTestCase
     {
         $tag = DecimalFractionTag::createFromFloat($value);
 
-        static::assertSame($expected, rtrim(rtrim($tag->normalize(), '0'), '.'));
+        static::assertSame($expected, $tag->normalize());
     }
 
     /**

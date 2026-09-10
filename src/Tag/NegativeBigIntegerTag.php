@@ -45,7 +45,10 @@ final class NegativeBigIntegerTag extends Tag implements Normalizable
     {
         /** @var ByteStringObject|IndefiniteLengthByteStringObject $object */
         $object = $this->object;
-        $integer = Utils::hexToBigInteger(bin2hex($object->getValue()));
+        $value = $object->getValue();
+        // RFC 8949 section 3.4.3: the empty byte string is the preferred serialization of zero, so tag 3 wrapping
+        // it is -1 - 0.
+        $integer = $value === '' ? BigInteger::zero() : Utils::hexToBigInteger(bin2hex($value));
         $minusOne = BigInteger::of(-1);
 
         return $minusOne->minus($integer)

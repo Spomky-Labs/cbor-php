@@ -51,6 +51,10 @@ echo $dateTime->format('Y-m-d H:i:s'); // 2024-01-15 10:30:00
 **Accepts:** `TextStringObject` or `IndefiniteLengthTextStringObject`
 **Returns:** `DateTimeImmutable` when normalized
 
+A date-time that does not exist (`2013-02-30T12:00:00Z`, a twenty-fifth hour) is rejected with an
+`InvalidArgumentException` rather than silently rolled over to the following day. A leap second is accepted and
+reported as the instant that follows it, since PHP dates cannot hold one.
+
 ---
 
 #### Tag 1: Epoch-Based Date/Time
@@ -76,6 +80,9 @@ echo $dateTime->format('c'); // ISO 8601 format
 
 **Accepts:** `UnsignedIntegerObject`, `NegativeIntegerObject`, or float objects
 **Returns:** `DateTimeImmutable` when normalized
+
+A float timestamp is converted to the nearest microsecond. `NAN`, `INF` and magnitudes no date object can hold are
+rejected with an `InvalidArgumentException`.
 
 ---
 
@@ -104,6 +111,9 @@ $value = $tag->normalize(); // "81985529216486895"
 **Accepts:** `ByteStringObject` or `IndefiniteLengthByteStringObject`
 **Returns:** Numeric string when normalized
 
+An empty byte string is the preferred serialization of zero (RFC 8949 § 3.4.3): tag 2 normalizes it to `"0"`
+and tag 3 to `"-1"`.
+
 ---
 
 #### Tag 3: Negative Bignum
@@ -127,6 +137,9 @@ $value = $tag->normalize(); // "-256"
 
 **Accepts:** `ByteStringObject` or `IndefiniteLengthByteStringObject`
 **Returns:** Numeric string when normalized
+
+An empty byte string is the preferred serialization of zero (RFC 8949 § 3.4.3): tag 2 normalizes it to `"0"`
+and tag 3 to `"-1"`.
 
 ---
 
@@ -169,8 +182,8 @@ $tag = DecimalFractionTag::create(
 );
 ```
 
-**Accepts:** `ListObject` with exactly 2 elements [exponent, mantissa]
-**Returns:** String representation of the decimal value when normalized
+**Accepts:** `ListObject` or `IndefiniteLengthListObject` with exactly 2 elements [exponent, mantissa]
+**Returns:** Exact string representation of the decimal value when normalized
 
 ---
 
