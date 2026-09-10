@@ -11,6 +11,7 @@ use CBOR\Utils;
 use const INF;
 use InvalidArgumentException;
 use const NAN;
+use function ord;
 use function strlen;
 
 final class HalfPrecisionFloatObject extends Base implements Normalizable
@@ -20,78 +21,76 @@ final class HalfPrecisionFloatObject extends Base implements Normalizable
         return [self::OBJECT_HALF_PRECISION_FLOAT];
     }
 
+    /**
+     * Encode a PHP float as an IEEE 754 binary16 value: 1 sign bit, 5 exponent bits (bias 15) and 10 mantissa bits.
+     *
+     * The conversion reads the binary64 representation of the argument directly and rounds to nearest, ties to even,
+     * as IEEE 754 mandates. Going through binary32 first would round twice and would therefore be off by one unit in
+     * the last place for the values that sit exactly halfway between two binary16 neighbours.
+     */
     public static function createFromFloat(float $number): self
     {
-        // IEEE 754 binary16 (half-precision) conversion
-        // Format: 1 sign bit, 5 exponent bits (bias 15), 10 mantissa bits
-
-        // Handle special cases: NaN
         if (is_nan($number)) {
             // RFC 8949: canonical NaN is 0xf97e00 (quiet NaN with zero payload)
-            return new self(self::OBJECT_HALF_PRECISION_FLOAT, self::hex2binSafe('7E00'));
+            return self::createFromBits(0x7E00);
         }
 
-        // Handle special cases: Infinity
+        // abs() and comparisons cannot tell -0.0 from 0.0, so every bit is read from the packed representation.
+        $packed = pack('E', $number);
+        $signBit = (ord($packed[0]) & 0x80) === 0 ? 0 : 1 << 15;
+
         if (is_infinite($number)) {
-            $value = $number > 0 ? self::hex2binSafe('7C00') : self::hex2binSafe('FC00');
-            return new self(self::OBJECT_HALF_PRECISION_FLOAT, $value);
+            return self::createFromBits($signBit | 0x7C00);
         }
 
-        // Extract sign
-        $sign = $number < 0 ? 1 : 0;
-        $absNumber = abs($number);
+        // Magnitude of the binary64 value: 11 exponent bits (bias 1023) followed by 52 mantissa bits.
+        $bits = ord($packed[0]) & 0x7F;
+        for ($index = 1; $index < 8; $index++) {
+            $bits = ($bits << 8) | ord($packed[$index]);
+        }
+        $doubleExponent = $bits >> 52;
+        $doubleMantissa = $bits & 0x000FFFFFFFFFFFFF;
 
-        // Handle zero (positive and negative zero)
-        if ($absNumber === 0.0) {
-            $value = pack('n', $sign << 15);
-            return new self(self::OBJECT_HALF_PRECISION_FLOAT, $value);
+        // Zero, or a subnormal binary64 below 2^-1022, which is far under half of the smallest binary16 subnormal.
+        if ($doubleExponent === 0) {
+            return self::createFromBits($signBit);
         }
 
-        // Convert via single precision to simplify extraction
-        // Pack as float, then convert to big-endian bytes
-        $packed = pack('f', $absNumber);
-        if (unpack('S', "\x01\x00")[1] === 1) {
-            $packed = strrev($packed); // Little-endian system
-        }
-        $singleBits = unpack('N', $packed)[1];
+        // Significand with its implicit leading bit: abs($number) === $significand * 2 ** ($doubleExponent - 1075).
+        $significand = $doubleMantissa | (1 << 52);
 
-        // Extract single precision components
-        $singleExponent = ($singleBits >> 23) & 0xFF;
-        $singleMantissa = $singleBits & 0x7FFFFF;
+        // Exponent field the value would carry as a normal binary16 number.
+        $halfExponent = $doubleExponent - 1023 + 15;
 
-        // Convert exponent: single (bias 127) to half (bias 15)
-        $halfExponent = $singleExponent - 127 + 15;
-
-        // Handle overflow: value too large for half precision
+        // Too large for binary16, before rounding is even considered.
         if ($halfExponent >= 0x1F) {
-            // Overflow to infinity
-            $value = pack('n', ($sign << 15) | 0x7C00);
-            return new self(self::OBJECT_HALF_PRECISION_FLOAT, $value);
+            return self::createFromBits($signBit | 0x7C00);
         }
 
-        // Handle underflow and subnormal numbers
-        if ($halfExponent <= 0) {
-            // Check if we can represent as subnormal
-            if ($halfExponent < -10) {
-                // Too small, flush to zero
-                $value = pack('n', $sign << 15);
-                return new self(self::OBJECT_HALF_PRECISION_FLOAT, $value);
+        if ($halfExponent > 0) {
+            // Normal: keep 11 significant bits (the implicit one plus 10) out of the 53 the significand holds.
+            $halfSignificand = self::roundToNearestEven($significand, 42);
+            if ($halfSignificand === 0x800) {
+                // Rounding carried out of the mantissa and into the exponent.
+                $halfSignificand >>= 1;
+                $halfExponent++;
+                if ($halfExponent >= 0x1F) {
+                    return self::createFromBits($signBit | 0x7C00);
+                }
             }
 
-            // Subnormal: shift mantissa right and set exponent to 0
-            $halfMantissa = ($singleMantissa | 0x800000) >> (1 - $halfExponent + 13);
-            $halfExponent = 0;
-        } else {
-            // Normal number: convert mantissa from 23 bits to 10 bits
-            // Truncate (simple rounding) - could be improved with round-to-nearest
-            $halfMantissa = $singleMantissa >> 13;
+            return self::createFromBits($signBit | ($halfExponent << 10) | ($halfSignificand & 0x3FF));
         }
 
-        // Assemble the 16-bit half-precision value
-        $halfBits = ($sign << 15) | ($halfExponent << 10) | ($halfMantissa & 0x3FF);
-        $value = pack('n', $halfBits);
+        // Subnormal: express the value as a multiple of 2^-24, the smallest binary16 step.
+        $shift = 43 - $halfExponent;
+        if ($shift > 53) {
+            // Strictly below half of the smallest subnormal, so it rounds to zero.
+            return self::createFromBits($signBit);
+        }
 
-        return new self(self::OBJECT_HALF_PRECISION_FLOAT, $value);
+        // A carry out of the 10 mantissa bits spills into the exponent field, which yields the smallest normal.
+        return self::createFromBits($signBit | self::roundToNearestEven($significand, $shift));
     }
 
     public static function createFromLoadedData(int $additionalInformation, ?string $data): Base
@@ -150,12 +149,24 @@ final class HalfPrecisionFloatObject extends Base implements Normalizable
         return $sign->isEqualTo(BigInteger::one()) ? -1 : 1;
     }
 
-    private static function hex2binSafe(string $hex): string
+    private static function createFromBits(int $bits): self
     {
-        $result = hex2bin($hex);
-        if ($result === false) {
-            throw new InvalidArgumentException('Invalid hex string');
+        return new self(self::OBJECT_HALF_PRECISION_FLOAT, pack('n', $bits));
+    }
+
+    /**
+     * Drop the $shift lowest bits of $significand, rounding to nearest and breaking ties towards the even value.
+     */
+    private static function roundToNearestEven(int $significand, int $shift): int
+    {
+        $kept = $significand >> $shift;
+        $dropped = $significand & ((1 << $shift) - 1);
+        $halfway = 1 << ($shift - 1);
+
+        if ($dropped > $halfway || ($dropped === $halfway && ($kept & 1) === 1)) {
+            $kept++;
         }
-        return $result;
+
+        return $kept;
     }
 }

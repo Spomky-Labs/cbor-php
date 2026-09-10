@@ -122,6 +122,9 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     }
 
     /**
+     * Items that do not implement Normalizable -- the encoding tags or the "break" simple value, for instance -- have
+     * no native counterpart and are returned as the CBORObject they are.
+     *
      * @return array<int|string, mixed>
      */
     public function normalize(): array

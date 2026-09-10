@@ -131,23 +131,26 @@ final class DecimalFractionTag extends Tag implements Normalizable
         // Calculate exponent (negative = decimal places)
         $exponent = -strlen($fractionalPart);
 
-        // Combine to form mantissa (remove decimal point)
-        $mantissaStr = $integerPart . $fractionalPart;
+        // Keep the sign aside: it is not a digit and must not survive the normalisation below, which would
+        // otherwise turn a value rounding to zero, such as -1e-12, into the unparsable mantissa "-".
+        $isNegative = str_starts_with($integerPart, '-');
 
-        // Remove leading zeros (except if mantissa is just "0")
-        $mantissaStr = ltrim($mantissaStr, '0');
-        if ($mantissaStr === '') {
-            $mantissaStr = '0';
+        // Combine to form mantissa (drop the sign and the decimal point, then the leading zeros)
+        $mantissa = ltrim(ltrim($integerPart, '-') . $fractionalPart, '0');
+        if ($mantissa === '') {
+            $mantissa = '0';
         }
-
-        // Parse mantissa as integer
-        bcscale(0);
-        $mantissa = $mantissaStr;
 
         // Normalize: remove trailing zeros from mantissa by adjusting exponent
         while ($mantissa !== '0' && str_ends_with($mantissa, '0')) {
             $mantissa = substr($mantissa, 0, -1);
             $exponent++;
+        }
+
+        // A value that rounds to zero at the requested precision is zero, whatever its sign was.
+        if ($mantissa === '0') {
+            $isNegative = false;
+            $exponent = 0;
         }
 
         // Create exponent object
@@ -158,12 +161,9 @@ final class DecimalFractionTag extends Tag implements Normalizable
         }
 
         // Create mantissa object
-        $mantissaInt = (int) $mantissa;
-        if ($mantissaInt >= 0) {
-            $mantissaObj = UnsignedIntegerObject::createFromString($mantissa);
-        } else {
-            $mantissaObj = NegativeIntegerObject::createFromString($mantissa);
-        }
+        $mantissaObj = $isNegative
+            ? NegativeIntegerObject::createFromString('-' . $mantissa)
+            : UnsignedIntegerObject::createFromString($mantissa);
 
         return self::createFromExponentAndMantissa($exponentObj, $mantissaObj);
     }

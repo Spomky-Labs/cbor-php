@@ -53,33 +53,33 @@ final class InvalidTypeTest extends CBORTestCase
         yield ['19', InvalidArgumentException::class, 'Out of range. Expected: 2, read: 0.'];
         yield ['1a', InvalidArgumentException::class, 'Out of range. Expected: 4, read: 0.'];
         yield ['1b', InvalidArgumentException::class, 'Out of range. Expected: 8, read: 0.'];
-        yield ['1901', InvalidArgumentException::class, 'Out of range. Expected: 2, read: 0.'];
-        yield ['1a0102', InvalidArgumentException::class, 'Out of range. Expected: 4, read: 0.'];
-        yield ['1b01020304050607', InvalidArgumentException::class, 'Out of range. Expected: 8, read: 0.'];
+        yield ['1901', InvalidArgumentException::class, 'Out of range. Expected: 2, read: 1.'];
+        yield ['1a0102', InvalidArgumentException::class, 'Out of range. Expected: 4, read: 2.'];
+        yield ['1b01020304050607', InvalidArgumentException::class, 'Out of range. Expected: 8, read: 7.'];
         yield ['38', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
         yield ['58', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
         yield ['78', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
         yield ['98', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
-        yield ['9a01ff00', InvalidArgumentException::class, 'Out of range. Expected: 4, read: 0.'];
+        yield ['9a01ff00', InvalidArgumentException::class, 'Out of range. Expected: 4, read: 3.'];
         yield ['b8', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
         yield ['d8', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
         yield ['f8', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
-        yield ['f900', InvalidArgumentException::class, 'Out of range. Expected: 2, read: 0.'];
-        yield ['fa0000', InvalidArgumentException::class, 'Out of range. Expected: 4, read: 0.'];
-        yield ['fb000000', InvalidArgumentException::class, 'Out of range. Expected: 8, read: 0.'];
+        yield ['f900', InvalidArgumentException::class, 'Out of range. Expected: 2, read: 1.'];
+        yield ['fa0000', InvalidArgumentException::class, 'Out of range. Expected: 4, read: 2.'];
+        yield ['fb000000', InvalidArgumentException::class, 'Out of range. Expected: 8, read: 3.'];
         yield ['41', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
         yield ['61', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
-        yield ['5affffffff00', InvalidArgumentException::class, 'Out of range. Expected: 4294967295, read: 0.'];
+        yield ['5affffffff00', InvalidArgumentException::class, 'Out of range. Expected: 4294967295, read: 1.'];
         yield [
             '5bffffffffffffffff010203',
             InvalidArgumentException::class,
             'Out of range. "18446744073709551615" cannot be represented as a PHP integer.',
         ];
-        yield ['7affffffff00', InvalidArgumentException::class, 'Out of range. Expected: 4294967295, read: 0.'];
+        yield ['7affffffff00', InvalidArgumentException::class, 'Out of range. Expected: 4294967295, read: 1.'];
         yield [
             '7b7fffffffffffffff010203',
             InvalidArgumentException::class,
-            'Out of range. Expected: 9223372036854775807, read: 0.',
+            'Out of range. Expected: 9223372036854775807, read: 3.',
         ];
         yield ['81', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
         yield ['818181818181818181', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];

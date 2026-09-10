@@ -9,9 +9,11 @@ use ArrayAccess;
 use ArrayIterator;
 use function count;
 use Countable;
+use function get_debug_type;
 use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
+use function sprintf;
 
 /**
  * @phpstan-implements ArrayAccess<int, CBORObject>
@@ -35,8 +37,15 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
     public function __construct(array $data = [])
     {
         [$additionalInformation, $length] = LengthCalculator::getLengthOfArray($data);
-        array_map(static function ($item): void {
-        }, $data);
+        foreach ($data as $index => $item) {
+            if (! $item instanceof CBORObject) {
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid item at index "%s". Expected a CBORObject, got "%s".',
+                    $index,
+                    get_debug_type($item)
+                ));
+            }
+        }
 
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
         $this->data = array_values($data);
@@ -109,6 +118,9 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
     }
 
     /**
+     * Items that do not implement Normalizable -- the encoding tags or the "break" simple value, for instance -- have
+     * no native counterpart and are returned as the CBORObject they are.
+     *
      * @return array<int, mixed>
      */
     public function normalize(): array
