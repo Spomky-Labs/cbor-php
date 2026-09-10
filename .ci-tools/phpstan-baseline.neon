@@ -25,12 +25,6 @@ parameters:
 			path: ../src/OtherObject/DoublePrecisionFloatObject.php
 
 		-
-			rawMessage: 'Parameter #1 $value of static method CBOR\Utils::binToBigInteger() expects string, string|null given.'
-			identifier: argument.type
-			count: 3
-			path: ../src/OtherObject/DoublePrecisionFloatObject.php
-
-		-
 			rawMessage: Binary operation "&" between mixed and 8388607 results in an error.
 			identifier: binaryOp.invalid
 			count: 1
@@ -49,21 +43,9 @@ parameters:
 			path: ../src/OtherObject/HalfPrecisionFloatObject.php
 
 		-
-			rawMessage: 'Parameter #1 $value of static method CBOR\Utils::binToBigInteger() expects string, string|null given.'
-			identifier: argument.type
-			count: 3
-			path: ../src/OtherObject/HalfPrecisionFloatObject.php
-
-		-
 			rawMessage: Cannot access offset 1 on array|false.
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
-			path: ../src/OtherObject/SinglePrecisionFloatObject.php
-
-		-
-			rawMessage: 'Parameter #1 $value of static method CBOR\Utils::binToBigInteger() expects string, string|null given.'
-			identifier: argument.type
-			count: 3
 			path: ../src/OtherObject/SinglePrecisionFloatObject.php
 
 		-
