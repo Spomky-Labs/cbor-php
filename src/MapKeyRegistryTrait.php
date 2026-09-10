@@ -99,6 +99,16 @@ trait MapKeyRegistryTrait
             throw new InvalidArgumentException('Invalid key. Shall be normalizable');
         }
 
+        // A list or a map never normalizes to a scalar, so the answer is already known from the head of the item.
+        // Reading it first matters for more than the message: normalizing a container walks the whole sub-structure,
+        // and a hostile document can make that arbitrarily expensive for a key that is turned down anyway.
+        $majorType = $key->getMajorType();
+        if ($majorType === CBORObject::MAJOR_TYPE_LIST || $majorType === CBORObject::MAJOR_TYPE_MAP) {
+            throw new InvalidArgumentException(
+                'Invalid key. A map key shall normalize to an integer or a string, got "array".'
+            );
+        }
+
         $normalized = $key->normalize();
         if (! is_int($normalized) && ! is_string($normalized)) {
             throw new InvalidArgumentException(sprintf(
