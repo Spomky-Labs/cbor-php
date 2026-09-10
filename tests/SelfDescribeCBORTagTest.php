@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CBOR\Test;
 
+use CBOR\StringStream;
+use CBOR\Tag\CBORTag;
 use CBOR\Tag\SelfDescribeCBORTag;
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
@@ -78,5 +80,32 @@ final class SelfDescribeCBORTagTest extends CBORTestCase
 
         $retrieved = $tag->getCBORObject();
         static::assertSame($originalValue, $retrieved->normalize());
+    }
+
+    /**
+     * SelfDescribeCBORTag is deprecated in favour of CBORTag, which is the class the default decoder
+     * registers for tag 55799. The two must stay byte-for-byte interchangeable so that migrating is safe.
+     */
+    #[Test]
+    public function selfDescribeCBORTagEncodesExactlyLikeTheCBORTagItIsDeprecatedInFavourOf(): void
+    {
+        $innerObject = TextStringObject::create('CBOR');
+
+        static::assertSame(
+            (string) CBORTag::create($innerObject),
+            (string) SelfDescribeCBORTag::create($innerObject)
+        );
+    }
+
+    #[Test]
+    public function aSelfDescribeCBORTagIsDecodedBackAsACBORTag(): void
+    {
+        $tag = SelfDescribeCBORTag::create(TextStringObject::create('CBOR'));
+
+        $object = $this->getDecoder()
+            ->decode(StringStream::create((string) $tag));
+
+        static::assertInstanceOf(CBORTag::class, $object);
+        static::assertSame('CBOR', $object->normalize());
     }
 }
