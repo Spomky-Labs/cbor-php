@@ -25,7 +25,7 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
     private const ADDITIONAL_INFORMATION = self::LENGTH_INDEFINITE;
 
     /**
-     * @var CBORObject[]
+     * @var array<int, CBORObject>
      */
     private array $data = [];
 
@@ -58,7 +58,7 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
      * Items that do not implement Normalizable -- the encoding tags or the "break" simple value, for instance -- have
      * no native counterpart and are returned as the CBORObject they are.
      *
-     * @return mixed[]
+     * @return array<int, mixed>
      */
     public function normalize(): array
     {

@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Method CBOR\ListObject::normalize() should return array<int, mixed> but returns array<mixed>.'
-			identifier: return.type
-			count: 1
-			path: ../src/ListObject.php
-
-		-
 			rawMessage: 'Method CBOR\NegativeIntegerObject::getValue() should return numeric-string but returns non-empty-string.'
 			identifier: return.type
 			count: 1

@@ -25,7 +25,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
     private const MAJOR_TYPE = self::MAJOR_TYPE_LIST;
 
     /**
-     * @var CBORObject[]
+     * @var array<int, CBORObject>
      */
     private array $data;
 

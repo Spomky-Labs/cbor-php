@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CBOR\Test\Tag;
 
 use CBOR\CBORObject;
+use CBOR\Decoder;
 use CBOR\Normalizable;
 use CBOR\StringStream;
 use CBOR\Tag\Base16EncodingTag;
@@ -27,8 +28,11 @@ use CBOR\Tag\UnsignedBigIntegerTag;
 use CBOR\Tag\UriTag;
 use CBOR\Test\CBORTestCase;
 use CBOR\TextStringObject;
+use function hex2bin;
+use function is_subclass_of;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionClassConstant;
 
 /**
  * The default tag manager used by the decoder must resolve every built-in tag class by its registered
@@ -182,5 +186,37 @@ final class DefaultTagManagerTest extends CBORTestCase
 
         static::assertInstanceOf(UriTag::class, $object);
         static::assertSame('http://www.example.com', $object->normalize());
+    }
+
+    /**
+     * The decoder names its tag classes by number rather than asking each of them, so that a manager holding the
+     * whole registry does not load a hundred classes before the first byte is read. Nothing checks that a class
+     * agrees with the number it is filed under -- checking is what loading would be -- so it is checked here.
+     */
+    #[Test]
+    public function everyTagOfTheDefaultRegistryIsFiledUnderItsOwnTagNumber(): void
+    {
+        /** @var array<int, class-string<TagInterface>> $tags */
+        $tags = (new ReflectionClassConstant(Decoder::class, 'DEFAULT_TAGS'))->getValue();
+
+        static::assertNotEmpty($tags);
+        foreach ($tags as $tagId => $class) {
+            static::assertTrue(is_subclass_of($class, TagInterface::class), $class . ' is not a tag class.');
+            static::assertSame($tagId, $class::getTagId(), $class . ' is filed under the wrong tag number.');
+        }
+    }
+
+    /**
+     * A tag class the decoder does not know about is left to the generic handler, which keeps the number and the
+     * item without pretending to understand either.
+     */
+    #[Test]
+    public function aTagNumberOutsideTheDefaultRegistryIsDecodedAsAGenericTag(): void
+    {
+        // 4711(1), which the IANA registry leaves unassigned.
+        $object = $this->getDecoder()
+            ->decode(StringStream::create((string) hex2bin('d9126701')));
+
+        static::assertInstanceOf(GenericTag::class, $object);
     }
 }

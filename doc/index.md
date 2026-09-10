@@ -81,6 +81,7 @@ CBORObject (interface)
 │   │   ├── TimestampTag
 │   │   ├── DecimalFractionTag
 │   │   ├── BigFloatTag
+│   │   ├── CoseSign1Tag, UuidTag, SetTag, ... (see tags.md)
 │   │   ├── ... (see Tags Reference)
 │   │   └── GenericTag
 │   └── OtherObject (abstract)
@@ -475,16 +476,21 @@ if ($authenticatorData instanceof MapObject) {
 
 ### COSE (Object Signing)
 
+The six COSE structures of RFC 9052 are built in and registered by default -- see
+[COSE and CWT Tags](tags.md#cose-and-cwt-tags).
+
 ```php
+use CBOR\Tag\CoseSign1Tag;
+
 // Decode a COSE_Sign1 structure
 $coseSign1 = $decoder->decode($stream);
 
-if ($coseSign1 instanceof COSESign1Tag) {
-    $protected = $coseSign1->getProtectedHeaders();
-    $payload = $coseSign1->getPayload();
+if ($coseSign1 instanceof CoseSign1Tag) {
+    $protectedHeader = $coseSign1->getProtectedHeaderAsMap();
+    $payload = $coseSign1->getPayload();     // NullObject when the payload is detached
     $signature = $coseSign1->getSignature();
 
-    // Verify signature
+    // Verifying the signature needs keys and algorithms: use web-auth/cose-lib for that.
 }
 ```
 

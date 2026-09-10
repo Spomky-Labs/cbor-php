@@ -8,6 +8,9 @@ use CBOR\Tag\TagInterface;
 use function chr;
 use InvalidArgumentException;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 abstract class Tag extends AbstractCBORObject implements TagInterface
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_TAG;
