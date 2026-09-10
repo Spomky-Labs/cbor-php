@@ -205,12 +205,12 @@ use CBOR\TextStringObject;
 use InvalidArgumentException;
 
 /**
- * Tag 260: Email Address
+ * Tag 64000: Email Address (any number the IANA registry leaves unassigned)
  * Marks a text string as an RFC 5322 email address
  */
 final class EmailTag extends Tag implements Normalizable
 {
-    private const TAG_EMAIL = 260;
+    private const TAG_EMAIL = 64000;
 
     public function __construct(
         int $additionalInformation,
@@ -676,97 +676,15 @@ public function __construct(
 
 ## Integration with Other Specifications
 
-### COSE (RFC 8152) - CBOR Object Signing and Encryption
+### COSE (RFC 9052) and CWT (RFC 8392)
 
-COSE uses several CBOR tags:
+Both are **built in** since 3.4.0: `CoseEncrypt0Tag` (16), `CoseMac0Tag` (17), `CoseSign1Tag` (18),
+`CoseEncryptTag` (96), `CoseMacTag` (97), `CoseSignTag` (98) and `CwtTag` (61) are registered in the decoder by
+default. See [COSE and CWT Tags](tags.md#cose-and-cwt-tags) for what they give access to.
 
-- **Tag 98**: COSE Single Recipient Encrypted
-- **Tag 96**: COSE Encrypted
-- **Tag 97**: COSE MAC'd
-- **Tag 98**: COSE Single Signer
-- **Tag 18**: COSE Sign
-
-Example implementation outline:
-
-```php
-namespace CBOR\Tag\COSE;
-
-use CBOR\CBORObject;
-use CBOR\Tag;
-use CBOR\ListObject;
-
-/**
- * Tag 98: COSE_Sign1 - Single Signer
- * @see https://datatracker.ietf.org/doc/html/rfc8152#section-4.2
- */
-final class COSESign1Tag extends Tag
-{
-    private const TAG_COSE_SIGN1 = 98;
-
-    public function __construct(
-        int $additionalInformation,
-        ?string $data,
-        CBORObject $object
-    ) {
-        if (!$object instanceof ListObject || count($object) !== 4) {
-            throw new InvalidArgumentException(
-                'COSE_Sign1 must be an array of 4 elements'
-            );
-        }
-
-        // Validate structure: [protected, unprotected, payload, signature]
-        // ... validation logic
-
-        parent::__construct($additionalInformation, $data, $object);
-    }
-
-    public static function getTagId(): int
-    {
-        return self::TAG_COSE_SIGN1;
-    }
-
-    // ... implementation
-}
-```
-
-### CWT (RFC 8392) - CBOR Web Token
-
-CWT uses Tag 61 for the entire token:
-
-```php
-namespace CBOR\Tag;
-
-use CBOR\CBORObject;
-use CBOR\Tag;
-use CBOR\Tag\COSE\COSESign1Tag;
-
-/**
- * Tag 61: CBOR Web Token (CWT)
- * @see https://datatracker.ietf.org/doc/html/rfc8392
- */
-final class CWTTag extends Tag
-{
-    private const TAG_CWT = 61;
-
-    public function __construct(
-        int $additionalInformation,
-        ?string $data,
-        CBORObject $object
-    ) {
-        // CWT is typically a COSE_Sign1 or COSE_Mac0
-        if (!$object instanceof COSESign1Tag
-            && !$object instanceof COSEMac0Tag) {
-            throw new InvalidArgumentException(
-                'CWT must wrap a COSE structure'
-            );
-        }
-
-        parent::__construct($additionalInformation, $data, $object);
-    }
-
-    // ... implementation
-}
-```
+They describe the structure only. Verifying a signature or a MAC, and everything about keys and algorithms,
+belongs to a COSE implementation -- [web-auth/cose-lib](https://github.com/web-auth/cose-lib), which also ships
+the algorithm registry of RFC 9053.
 
 ### CoAP (RFC 7252) - Constrained Application Protocol
 
