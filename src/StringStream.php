@@ -55,6 +55,7 @@ final class StringStream implements Stream
             if ($newData === false) {
                 throw new RuntimeException('Unable to read the memory');
             }
+            $data .= $newData;
             if (strlen($newData) < $sizeToRead) {
                 throw new InvalidArgumentException(sprintf(
                     'Out of range. Expected: %d, read: %d.',
@@ -62,7 +63,6 @@ final class StringStream implements Stream
                     strlen($data)
                 ));
             }
-            $data .= $newData;
         }
 
         if (strlen($data) !== $length) {

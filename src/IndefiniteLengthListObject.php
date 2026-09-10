@@ -55,6 +55,9 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements Countable
     }
 
     /**
+     * Items that do not implement Normalizable -- the encoding tags or the "break" simple value, for instance -- have
+     * no native counterpart and are returned as the CBORObject they are.
+     *
      * @return mixed[]
      */
     public function normalize(): array

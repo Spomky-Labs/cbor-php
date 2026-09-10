@@ -234,12 +234,13 @@ $tag = Base64UrlEncodingTag::create(
     ByteStringObject::create('Hello World!')
 );
 
-// The tag hints that this should be base64url encoded
-$encoded = $tag->normalize(); // "SGVsbG8gV29ybGQh"
+// The tag is only a hint: the byte string is stored as-is and the conversion is left to the application.
+$bytes = $tag->getValue()->normalize(); // "Hello World!"
+$encoded = rtrim(strtr(base64_encode($bytes), '+/', '-_'), '='); // "SGVsbG8gV29ybGQh"
 ```
 
 **Accepts:** `ByteStringObject` or `IndefiniteLengthByteStringObject`
-**Returns:** Base64url-encoded string when normalized
+**Returns:** the tagged object through `getValue()`; the tag does not implement `Normalizable`
 
 ---
 
@@ -258,11 +259,12 @@ $tag = Base64EncodingTag::create(
     ByteStringObject::create('Hello World!')
 );
 
-$encoded = $tag->normalize(); // "SGVsbG8gV29ybGQh"
+$bytes = $tag->getValue()->normalize(); // "Hello World!"
+$encoded = base64_encode($bytes); // "SGVsbG8gV29ybGQh"
 ```
 
 **Accepts:** `ByteStringObject` or `IndefiniteLengthByteStringObject`
-**Returns:** Base64-encoded string when normalized
+**Returns:** the tagged object through `getValue()`; the tag does not implement `Normalizable`
 
 ---
 
@@ -281,11 +283,12 @@ $tag = Base16EncodingTag::create(
     ByteStringObject::create('Hello')
 );
 
-$encoded = $tag->normalize(); // "48656c6c6f"
+$bytes = $tag->getValue()->normalize(); // "Hello"
+$encoded = bin2hex($bytes); // "48656c6c6f"
 ```
 
 **Accepts:** `ByteStringObject` or `IndefiniteLengthByteStringObject`
-**Returns:** Hexadecimal string when normalized
+**Returns:** the tagged object through `getValue()`; the tag does not implement `Normalizable`
 
 ---
 
