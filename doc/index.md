@@ -81,6 +81,7 @@ CBORObject (interface)
 │   │   ├── TimestampTag
 │   │   ├── DecimalFractionTag
 │   │   ├── BigFloatTag
+│   │   ├── CoseSign1Tag, UuidTag, SetTag, ... (see tags.md)
 │   │   ├── ... (see Tags Reference)
 │   │   └── GenericTag
 │   └── OtherObject (abstract)
@@ -193,6 +194,24 @@ When the data comes from an untrusted source, a much lower limit is recommended:
 $decoder = Decoder::create(null, null, 32);
 ```
 
+#### Bounding the Cost of a Hostile Document
+
+Normalizing a decoded object turns it into native PHP values, and a few tags expand far beyond the bytes they
+occupy. Two bounds keep that expansion proportionate to the input:
+
+-   `DecimalFractionTag::MAX_ABSOLUTE_EXPONENT` and `BigFloatTag::MAX_ABSOLUTE_EXPONENT` (1024) cap the exponent of
+    tags 4 and 5. `10^e` needs about `e` digits to write down, so an unbounded exponent turns a six byte item into
+    kilobytes.
+-   `UnsignedBigIntegerTag::MAX_BYTE_LENGTH` and `NegativeBigIntegerTag::MAX_BYTE_LENGTH` (256, i.e. a 2048 bit
+    integer) cap the byte string of tags 2 and 3.
+
+A value outside either bound is rejected with an `InvalidArgumentException`.
+
+Install `ext-gmp` when the input is untrusted. Without it, `brick/math` converts the byte string of a big number to
+its decimal form in time quadratic in the length, which is several orders of magnitude slower than GMP.
+
+Note that a map key is normalized as the map is built, so both bounds also apply during `decode()` itself.
+
 #### Decoding Binary Data
 
 ```php
@@ -256,6 +275,13 @@ $map->add(
     TextStringObject::create('name'),
     TextStringObject::create('Alice')
 );
+
+// A map may also be built from MapItem objects. Duplicate keys are rejected,
+// as are two keys of different major types that resolve to the same offset.
+$map = MapObject::create([
+    MapItem::create(TextStringObject::create('name'), TextStringObject::create('Alice')),
+    MapItem::create(UnsignedIntegerObject::create(1), UnsignedIntegerObject::create(2)),
+]);
 
 // Access values
 $name = $map->get('name');
@@ -350,8 +376,16 @@ $list = IndefiniteLengthListObject::create()
 
 // Indefinite-length map
 $map = IndefiniteLengthMapObject::create()
-    ->append(TextStringObject::create('key1'), UnsignedIntegerObject::create(1))
-    ->append(TextStringObject::create('key2'), UnsignedIntegerObject::create(2));
+    ->add(TextStringObject::create('key1'), UnsignedIntegerObject::create(1))
+    ->add(TextStringObject::create('key2'), UnsignedIntegerObject::create(2));
+```
+
+Indefinite-length lists and maps are `Countable`, just like their definite-length counterparts, so `count()`
+works whichever encoding a document uses:
+
+```php
+$decoded = $decoder->decode(StringStream::create($data));
+$count = count($decoded);
 ```
 
 ### Custom Streams
@@ -442,16 +476,21 @@ if ($authenticatorData instanceof MapObject) {
 
 ### COSE (Object Signing)
 
+The six COSE structures of RFC 9052 are built in and registered by default -- see
+[COSE and CWT Tags](tags.md#cose-and-cwt-tags).
+
 ```php
+use CBOR\Tag\CoseSign1Tag;
+
 // Decode a COSE_Sign1 structure
 $coseSign1 = $decoder->decode($stream);
 
-if ($coseSign1 instanceof COSESign1Tag) {
-    $protected = $coseSign1->getProtectedHeaders();
-    $payload = $coseSign1->getPayload();
+if ($coseSign1 instanceof CoseSign1Tag) {
+    $protectedHeader = $coseSign1->getProtectedHeaderAsMap();
+    $payload = $coseSign1->getPayload();     // NullObject when the payload is detached
     $signature = $coseSign1->getSignature();
 
-    // Verify signature
+    // Verifying the signature needs keys and algorithms: use web-auth/cose-lib for that.
 }
 ```
 

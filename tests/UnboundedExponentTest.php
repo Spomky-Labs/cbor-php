@@ -21,6 +21,9 @@ use function sprintf;
  * the decoded document, with no upper bound. An eleven byte payload was enough to make bcpow() request 103 GB in a
  * single allocation, which terminates the process with a fatal error that no try/catch can intercept.
  *
+ * The bound that answered it was 8192, which still let a six byte item expand to more than eight kilobytes. That is
+ * the amplification GHSA-jfrf-557c-963v exploited, so the bound is now 1024.
+ *
  * @internal
  */
 final class UnboundedExponentTest extends CBORTestCase
@@ -61,11 +64,13 @@ final class UnboundedExponentTest extends CBORTestCase
     {
         yield 'BigFloat, exponent 2^32-1' => ['c5821affffffff01', '4294967295'];
         yield 'BigFloat, exponent 2^31' => ['c5821a8000000001', '2147483648'];
-        yield 'BigFloat, exponent just above the bound' => ['c58219200101', '8193'];
-        yield 'BigFloat, negative exponent below the bound' => ['c58239200001', '-8193'];
+        yield 'BigFloat, exponent just above the bound' => ['c58219040101', '1025'];
+        yield 'BigFloat, negative exponent below the bound' => ['c58239040001', '-1025'];
+        yield 'BigFloat, exponent at the former bound' => ['c58219200001', '8192'];
         yield 'DecimalFraction, exponent 2^32-1' => ['c4821affffffff01', '4294967295'];
-        yield 'DecimalFraction, exponent just above the bound' => ['c48219200101', '8193'];
-        yield 'DecimalFraction, negative exponent below the bound' => ['c48239200001', '-8193'];
+        yield 'DecimalFraction, exponent just above the bound' => ['c48219040101', '1025'];
+        yield 'DecimalFraction, negative exponent below the bound' => ['c48239040001', '-1025'];
+        yield 'DecimalFraction, exponent at the former bound' => ['c48219200001', '8192'];
     }
 
     #[Test]
@@ -78,7 +83,7 @@ final class UnboundedExponentTest extends CBORTestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            sprintf('The exponent is out of range. Its absolute value shall not exceed 8192, got "%s".', $exponent)
+            sprintf('The exponent is out of range. Its absolute value shall not exceed 1024, got "%s".', $exponent)
         );
 
         $object->normalize();
@@ -89,10 +94,10 @@ final class UnboundedExponentTest extends CBORTestCase
      */
     public static function exponentsOnTheBound(): iterable
     {
-        yield 'BigFloat, exponent exactly at the bound' => ['c58219200001'];
-        yield 'BigFloat, negative exponent exactly at the bound' => ['c582391fff01'];
-        yield 'DecimalFraction, exponent exactly at the bound' => ['c48219200001'];
-        yield 'DecimalFraction, negative exponent exactly at the bound' => ['c482391fff01'];
+        yield 'BigFloat, exponent exactly at the bound' => ['c58219040001'];
+        yield 'BigFloat, negative exponent exactly at the bound' => ['c5823903ff01'];
+        yield 'DecimalFraction, exponent exactly at the bound' => ['c48219040001'];
+        yield 'DecimalFraction, negative exponent exactly at the bound' => ['c4823903ff01'];
     }
 
     #[Test]
@@ -131,7 +136,7 @@ final class UnboundedExponentTest extends CBORTestCase
     #[Test]
     public function theBoundIsExposedOnBothTags(): void
     {
-        static::assertSame(8192, BigFloatTag::MAX_ABSOLUTE_EXPONENT);
-        static::assertSame(8192, DecimalFractionTag::MAX_ABSOLUTE_EXPONENT);
+        static::assertSame(1024, BigFloatTag::MAX_ABSOLUTE_EXPONENT);
+        static::assertSame(1024, DecimalFractionTag::MAX_ABSOLUTE_EXPONENT);
     }
 }

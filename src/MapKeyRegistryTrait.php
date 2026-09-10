@@ -63,16 +63,31 @@ trait MapKeyRegistryTrait
         return $offset;
     }
 
+    private function unregisterKey(int|string $offset): void
+    {
+        unset($this->keyIdentities[$offset]);
+    }
+
     /**
      * @param MapItem[] $data
+     *
+     * @return MapItem[] the entries, re-keyed by their normalized key
      */
-    private function rebuildKeyIdentities(array $data): void
+    private function registerKeys(array $data): array
     {
-        $this->keyIdentities = [];
-        foreach ($data as $offset => $item) {
-            $key = $item->getKey();
-            $this->keyIdentities[$offset] = $key->getMajorType() . ':' . self::assertNormalizableToScalar($key);
+        $entries = [];
+        foreach ($data as $item) {
+            if (! $item instanceof MapItem) {
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid item. A map shall only contain "%s" objects, got "%s".',
+                    MapItem::class,
+                    get_debug_type($item)
+                ));
+            }
+            $entries[$this->registerKey($item->getKey(), false)] = $item;
         }
+
+        return $entries;
     }
 
     /**
@@ -82,6 +97,16 @@ trait MapKeyRegistryTrait
     {
         if (! $key instanceof Normalizable) {
             throw new InvalidArgumentException('Invalid key. Shall be normalizable');
+        }
+
+        // A list or a map never normalizes to a scalar, so the answer is already known from the head of the item.
+        // Reading it first matters for more than the message: normalizing a container walks the whole sub-structure,
+        // and a hostile document can make that arbitrarily expensive for a key that is turned down anyway.
+        $majorType = $key->getMajorType();
+        if ($majorType === CBORObject::MAJOR_TYPE_LIST || $majorType === CBORObject::MAJOR_TYPE_MAP) {
+            throw new InvalidArgumentException(
+                'Invalid key. A map key shall normalize to an integer or a string, got "array".'
+            );
         }
 
         $normalized = $key->normalize();

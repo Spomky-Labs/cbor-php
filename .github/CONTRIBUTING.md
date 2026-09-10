@@ -23,6 +23,22 @@ such as fix tests, fix 2, fix 3, etc.
 Run test suite
 ------------
 
-* install composer: `curl -s http://getcomposer.org/installer | php`
-* install dependencies: `php composer.phar install`
-* run tests: `vendor/bin/phpunit`
+* install Composer by following the [official installation instructions](https://getcomposer.org/download/), which
+  verify the installer signature before running it. Never pipe the installer straight into `php`.
+* install dependencies: `composer install`
+* run tests: `vendor/bin/phpunit --configuration .ci-tools/phpunit.xml.dist`
+
+Run the full CI suite locally
+------------
+
+The quality checks that gate a Pull Request all run through [Castor](https://castor.jolicode.com/), inside the same
+`ghcr.io/spomky-labs/phpqa` image the CI uses, so the tool versions match:
+
+```sh
+castor ecs        # coding standards (castor ecs_fix to apply)
+castor rector     # automated refactoring, dry-run (castor rector_fix to apply)
+castor phpstan    # static analysis
+castor deptrac    # architecture layers
+castor lint       # syntax check
+castor phpunit    # tests, with coverage
+```

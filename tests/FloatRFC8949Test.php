@@ -33,12 +33,11 @@ final class FloatRFC8949Test extends CBORTestCase
     #[Test]
     public function rfc8949ExampleNegativeZeroHalfPrecision(): void
     {
-        // -0.0 as half precision
-        // Note: PHP doesn't distinguish -0.0 from 0.0 with abs(),
-        // so we just verify it's zero (the sign bit handling is complex in PHP)
+        // -0.0 as half precision: the sign bit is read from the packed representation, since abs() and
+        // comparisons cannot tell -0.0 from 0.0.
         $obj = HalfPrecisionFloatObject::createFromFloat(-0.0);
         static::assertSame(0.0, abs($obj->normalize()));
-        // The actual encoding might be f90000 or f98000 depending on how PHP handles -0.0
+        static::assertSame('f98000', bin2hex($obj->__toString()));
     }
 
     #[Test]

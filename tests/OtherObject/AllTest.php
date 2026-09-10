@@ -106,7 +106,8 @@ final class AllTest extends CBORTestCase
         static::assertSame(CBORObject::MAJOR_TYPE_OTHER_TYPE, $decoded->getMajorType());
         static::assertSame(CBORObject::OBJECT_UNDEFINED, $decoded->getAdditionalInformation());
         static::assertNull($decoded->getContent());
-        static::assertNotInstanceOf(Normalizable::class, $decoded);
+        static::assertInstanceOf(Normalizable::class, $decoded);
+        static::assertNull($decoded->normalize());
     }
 
     #[Test]
