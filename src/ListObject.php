@@ -31,6 +31,8 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
 
     private ?string $length;
 
+    private bool $lengthStale = false;
+
     /**
      * @param CBORObject[] $data
      */
@@ -54,6 +56,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
 
     public function __toString(): string
     {
+        $this->refreshLength();
         $result = parent::__toString();
         $result .= $this->length ?? '';
         foreach ($this->data as $object) {
@@ -61,6 +64,27 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         }
 
         return $result;
+    }
+
+    public function getAdditionalInformation(): int
+    {
+        $this->refreshLength();
+
+        return parent::getAdditionalInformation();
+    }
+
+    /**
+     * The head carries the item count, so every insertion or removal invalidates it. Recomputing it there made the
+     * cost of building a container quadratic in call count; it is only ever observed when the object is written out.
+     */
+    private function refreshLength(): void
+    {
+        if (! $this->lengthStale) {
+            return;
+        }
+
+        [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
+        $this->lengthStale = false;
     }
 
     /**
@@ -74,7 +98,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
     public function add(CBORObject $object): self
     {
         $this->data[] = $object;
-        [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
+        $this->lengthStale = true;
 
         return $this;
     }
@@ -91,7 +115,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         }
         unset($this->data[$index]);
         $this->data = array_values($this->data);
-        [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
+        $this->lengthStale = true;
 
         return $this;
     }
@@ -112,7 +136,7 @@ class ListObject extends AbstractCBORObject implements Countable, IteratorAggreg
         }
 
         $this->data[$index] = $object;
-        [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
+        $this->lengthStale = true;
 
         return $this;
     }

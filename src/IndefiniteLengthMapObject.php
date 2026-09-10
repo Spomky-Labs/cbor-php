@@ -115,12 +115,15 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable,
      */
     public function normalize(): array
     {
-        return array_reduce($this->data, static function (array $carry, MapItem $item): array {
+        $normalized = [];
+        foreach ($this->data as $item) {
             $valueObject = $item->getValue();
-            $carry[self::assertNormalizableToScalar($item->getKey())] = $valueObject instanceof Normalizable ? $valueObject->normalize() : $valueObject;
+            $normalized[self::assertNormalizableToScalar(
+                $item->getKey()
+            )] = $valueObject instanceof Normalizable ? $valueObject->normalize() : $valueObject;
+        }
 
-            return $carry;
-        }, []);
+        return $normalized;
     }
 
     public function offsetExists($offset): bool

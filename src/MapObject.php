@@ -30,6 +30,8 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
 
     private ?string $length;
 
+    private bool $lengthStale = false;
+
     /**
      * @param MapItem[] $data
      */
@@ -44,6 +46,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
 
     public function __toString(): string
     {
+        $this->refreshLength();
         $result = parent::__toString();
         $result .= $this->length ?? '';
         foreach ($this->data as $object) {
@@ -52,6 +55,27 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         }
 
         return $result;
+    }
+
+    public function getAdditionalInformation(): int
+    {
+        $this->refreshLength();
+
+        return parent::getAdditionalInformation();
+    }
+
+    /**
+     * The head carries the item count, so every insertion or removal invalidates it. Recomputing it there made the
+     * cost of building a container quadratic in call count; it is only ever observed when the object is written out.
+     */
+    private function refreshLength(): void
+    {
+        if (! $this->lengthStale) {
+            return;
+        }
+
+        [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
+        $this->lengthStale = false;
     }
 
     /**
@@ -68,7 +92,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
             throw new InvalidArgumentException('Invalid key. Shall be normalizable');
         }
         $this->data[$this->registerKey($key, false)] = MapItem::create($key, $value);
-        [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
+        $this->lengthStale = true;
 
         return $this;
     }
@@ -85,7 +109,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
         }
         unset($this->data[$index]);
         $this->unregisterKey($index);
-        [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
+        $this->lengthStale = true;
 
         return $this;
     }
@@ -102,7 +126,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
     public function set(MapItem $object): self
     {
         $this->data[$this->registerKey($object->getKey(), true)] = $object;
-        [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
+        $this->lengthStale = true;
 
         return $this;
     }
@@ -128,12 +152,15 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
      */
     public function normalize(): array
     {
-        return array_reduce($this->data, static function (array $carry, MapItem $item): array {
+        $normalized = [];
+        foreach ($this->data as $item) {
             $valueObject = $item->getValue();
-            $carry[self::assertNormalizableToScalar($item->getKey())] = $valueObject instanceof Normalizable ? $valueObject->normalize() : $valueObject;
+            $normalized[self::assertNormalizableToScalar(
+                $item->getKey()
+            )] = $valueObject instanceof Normalizable ? $valueObject->normalize() : $valueObject;
+        }
 
-            return $carry;
-        }, []);
+        return $normalized;
     }
 
     public function offsetExists($offset): bool

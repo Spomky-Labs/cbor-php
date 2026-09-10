@@ -98,7 +98,13 @@ final class Decoder implements DecoderInterface
             case CBORObject::LENGTH_2_BYTES: // 25
             case CBORObject::LENGTH_4_BYTES: // 26
             case CBORObject::LENGTH_8_BYTES: // 27
-                $val = $stream->read(2 ** ($ai & 0b00000111));
+                // 24..27 carry 1, 2, 4 and 8 bytes of argument; a table beats a float exponentiation per head.
+                $val = $stream->read(match ($ai) {
+                    CBORObject::LENGTH_1_BYTE => 1,
+                    CBORObject::LENGTH_2_BYTES => 2,
+                    CBORObject::LENGTH_4_BYTES => 4,
+                    default => 8,
+                });
                 break;
             case CBORObject::FUTURE_USE_1: // 28
             case CBORObject::FUTURE_USE_2: // 29
@@ -173,7 +179,7 @@ final class Decoder implements DecoderInterface
                 $object = IndefiniteLengthByteStringObject::create();
                 while (! ($it = $this->process($stream, true, $depth + 1)) instanceof BreakObject) {
                     if (! $it instanceof ByteStringObject) {
-                        throw new RuntimeException(
+                        throw new InvalidArgumentException(
                             'Unable to parse the data. Infinite Byte String object can only get Byte String objects.'
                         );
                     }
@@ -185,7 +191,7 @@ final class Decoder implements DecoderInterface
                 $object = IndefiniteLengthTextStringObject::create();
                 while (! ($it = $this->process($stream, true, $depth + 1)) instanceof BreakObject) {
                     if (! $it instanceof TextStringObject) {
-                        throw new RuntimeException(
+                        throw new InvalidArgumentException(
                             'Unable to parse the data. Infinite Text String object can only get Text String objects.'
                         );
                     }
