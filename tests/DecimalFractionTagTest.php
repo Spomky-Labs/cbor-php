@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 namespace CBOR\Test;
 
+use CBOR\ListObject;
+use CBOR\NegativeIntegerObject;
+use CBOR\StringStream;
 use CBOR\Tag\DecimalFractionTag;
+use CBOR\Tag\NegativeBigIntegerTag;
+use CBOR\Tag\UnsignedBigIntegerTag;
+use CBOR\UnsignedIntegerObject;
 use function extension_loaded;
 use const INF;
 use InvalidArgumentException;
@@ -280,5 +286,76 @@ final class DecimalFractionTagTest extends CBORTestCase
         $normalized = (float) $obj->normalize();
 
         static::assertEqualsWithDelta($value, $normalized, 0.00001);
+    }
+
+    /**
+     * A precision beyond ~19 digits pushes the mantissa past the 8-byte argument an integer head can carry, where
+     * RFC 8949 section 3.4.3 asks for a bignum instead.
+     */
+    #[Test]
+    public function aMantissaLargerThanEightBytesIsWrappedInAnUnsignedBignum(): void
+    {
+        if (! extension_loaded('bcmath')) {
+            static::markTestSkipped('bcmath extension is required');
+        }
+
+        $obj = DecimalFractionTag::createFromFloat(0.1, 40);
+
+        /** @var ListObject $list */
+        $list = $obj->getValue();
+        static::assertInstanceOf(UnsignedBigIntegerTag::class, $list->get(1));
+        static::assertSame('0.1000000000000000055511151231257827021182', $obj->normalize());
+    }
+
+    #[Test]
+    public function aNegativeMantissaLargerThanEightBytesIsWrappedInANegativeBignum(): void
+    {
+        if (! extension_loaded('bcmath')) {
+            static::markTestSkipped('bcmath extension is required');
+        }
+
+        $obj = DecimalFractionTag::createFromFloat(-0.1, 40);
+
+        /** @var ListObject $list */
+        $list = $obj->getValue();
+        static::assertInstanceOf(NegativeBigIntegerTag::class, $list->get(1));
+        static::assertSame('-0.1000000000000000055511151231257827021182', $obj->normalize());
+    }
+
+    #[Test]
+    public function aBignumMantissaSurvivesADecodingRoundTrip(): void
+    {
+        if (! extension_loaded('bcmath')) {
+            static::markTestSkipped('bcmath extension is required');
+        }
+
+        $obj = DecimalFractionTag::createFromFloat(-0.1, 40);
+        $data = (string) $obj;
+
+        $decoded = $this->getDecoder()
+            ->decode(StringStream::create($data))
+        ;
+        static::assertInstanceOf(DecimalFractionTag::class, $decoded);
+        static::assertSame($obj->normalize(), $decoded->normalize());
+    }
+
+    /**
+     * A mantissa that still fits an integer head shall keep using one: the bignum tag is the fallback, not the
+     * default.
+     */
+    #[Test]
+    public function aMantissaThatFitsAHeadIsNotWrappedInABignum(): void
+    {
+        if (! extension_loaded('bcmath')) {
+            static::markTestSkipped('bcmath extension is required');
+        }
+
+        /** @var ListObject $positive */
+        $positive = DecimalFractionTag::createFromFloat(3.14159)->getValue();
+        static::assertInstanceOf(UnsignedIntegerObject::class, $positive->get(1));
+
+        /** @var ListObject $negative */
+        $negative = DecimalFractionTag::createFromFloat(-3.14159)->getValue();
+        static::assertInstanceOf(NegativeIntegerObject::class, $negative->get(1));
     }
 }

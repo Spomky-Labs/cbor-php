@@ -97,7 +97,7 @@ final class UnsignedIntegerObject extends AbstractCBORObject implements Normaliz
         }
         if ($integer->isGreaterThan(self::maximumArgument())) {
             throw new InvalidArgumentException(
-                'Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.'
+                'Out of range. Please use UnsignedBigIntegerTag tag with ByteStringObject object instead.'
             );
         }
 
