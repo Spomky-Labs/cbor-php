@@ -12,7 +12,8 @@ name: "Automatic Releases"
 #
 # Every step uses the vendored ./.github/actions/automatic-releases, which is
 # laminas/automatic-releases 1.26.2 with its Docker image referenced by digest
-# instead of the floating `:1` tag. See that file for the refresh procedure.
+# instead of the floating `:1` tag — GHCR publishes no versioned manifest to
+# pin instead. See that file for the refresh procedure.
 #
 # TODO(#154): ORGANIZATION_ADMIN_TOKEN is an org-wide classic PAT with admin
 # rights over every Spomky-Labs repository. It should be replaced by a
@@ -44,7 +45,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
+        uses: "actions/checkout@v7.0.1"
         with:
           fetch-depth: 0
 

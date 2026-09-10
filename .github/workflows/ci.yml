@@ -23,7 +23,7 @@ jobs:
     name: "0️⃣ Pre-checks"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
 
       - name: "Check file permissions"
         run: |
@@ -50,7 +50,7 @@ jobs:
     outputs:
       cache-key: ${{ steps.cache-key-generator.outputs.key }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
 
       # `composer.lock` is gitignored (this is a library), so hashing it would
       # always yield the empty hash and freeze the cache key forever. The
@@ -58,7 +58,7 @@ jobs:
       - id: cache-key-generator
         run: echo "key=composer-${{ runner.os }}-${{ hashFiles('composer.json') }}" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/cache@v6.1.0
         with:
           path: |
             vendor
@@ -67,7 +67,7 @@ jobs:
           restore-keys: |
             composer-${{ runner.os }}-
 
-      - uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
+      - uses: ramsey/composer-install@4.0.0
         with:
           dependency-versions: highest
           composer-options: --optimize-autoloader
@@ -79,8 +79,8 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/cache@v6.1.0
         with:
           path: |
             vendor
@@ -95,8 +95,8 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/cache@v6.1.0
         with:
           path: |
             vendor
@@ -111,8 +111,8 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/cache@v6.1.0
         with:
           path: |
             vendor
@@ -127,8 +127,8 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/cache@v6.1.0
         with:
           path: |
             vendor
@@ -146,7 +146,7 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
       - run: composer exec -- parallel-lint src tests
 
   check_licenses:
@@ -156,8 +156,8 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/cache@v6.1.0
         with:
           path: |
             vendor
@@ -177,8 +177,8 @@ jobs:
     container:
       image: ghcr.io/spomky-labs/phpqa:8.4
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/cache@v6.1.0
         with:
           path: |
             vendor
@@ -216,7 +216,7 @@ jobs:
       XDEBUG_MODE: 'off'
       PHP_VERSION: ${{ matrix.php-version }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
       - name: Install dependencies
         run: |
           if [ "${{ matrix.lowest-deps || 'false' }}" = "true" ]; then
@@ -240,7 +240,7 @@ jobs:
     env:
       XDEBUG_MODE: coverage
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
       - name: Install dependencies
         run: composer install --no-interaction --no-progress
       - name: Run PHPUnit
@@ -253,7 +253,7 @@ jobs:
     needs: [prepare_dependencies]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
       - name: Check exported files
         run: |
           EXPECTED="CODE_OF_CONDUCT.md,LICENSE,README.md,RELEASES.md,SECURITY.md,composer.json"

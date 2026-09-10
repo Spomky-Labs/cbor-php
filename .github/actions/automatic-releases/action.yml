@@ -1,12 +1,14 @@
 # Vendored copy of https://github.com/laminas/automatic-releases/blob/1.26.2/action.yml
 #
 # The upstream action pins its own Docker image to the FLOATING major tag
-# `ghcr.io/laminas/automatic-releases:1`, so pinning the action to a tag — or
-# even to a commit SHA — buys nothing: whatever is pushed to `:1` is what runs,
-# with this workflow's token and the release signing key in its environment.
+# `ghcr.io/laminas/automatic-releases:1`. That tag is not a semver version: it
+# moves with every 1.x release, and GHCR publishes no `:1.26.2` manifest to
+# pin instead. So `uses: laminas/automatic-releases@1.26.2` says nothing about
+# what actually executes — whatever was last pushed to `:1` runs, with this
+# workflow's token and the release signing key in its environment.
 #
-# Vendoring the definition is the only way to reference the image by digest.
-# To refresh it after reviewing an upstream release:
+# Vendoring the definition is the only way to name a fixed image. To refresh
+# it after reviewing an upstream release:
 #
 #     docker buildx imagetools inspect ghcr.io/laminas/automatic-releases:1 \
 #         --format '{{ .Manifest.Digest }}'
