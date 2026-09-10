@@ -63,16 +63,31 @@ trait MapKeyRegistryTrait
         return $offset;
     }
 
+    private function unregisterKey(int|string $offset): void
+    {
+        unset($this->keyIdentities[$offset]);
+    }
+
     /**
      * @param MapItem[] $data
+     *
+     * @return MapItem[] the entries, re-keyed by their normalized key
      */
-    private function rebuildKeyIdentities(array $data): void
+    private function registerKeys(array $data): array
     {
-        $this->keyIdentities = [];
-        foreach ($data as $offset => $item) {
-            $key = $item->getKey();
-            $this->keyIdentities[$offset] = $key->getMajorType() . ':' . self::assertNormalizableToScalar($key);
+        $entries = [];
+        foreach ($data as $item) {
+            if (! $item instanceof MapItem) {
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid item. A map shall only contain "%s" objects, got "%s".',
+                    MapItem::class,
+                    get_debug_type($item)
+                ));
+            }
+            $entries[$this->registerKey($item->getKey(), false)] = $item;
         }
+
+        return $entries;
     }
 
     /**

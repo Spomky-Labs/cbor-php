@@ -35,11 +35,11 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
      */
     public function __construct(array $data = [])
     {
-        [$additionalInformation, $length] = LengthCalculator::getLengthOfArray($data);
+        $entries = $this->registerKeys($data);
+        [$additionalInformation, $length] = LengthCalculator::getLengthOfArray($entries);
         parent::__construct(self::MAJOR_TYPE, $additionalInformation);
-        $this->data = $data;
+        $this->data = $entries;
         $this->length = $length;
-        $this->rebuildKeyIdentities($data);
     }
 
     public function __toString(): string
@@ -84,8 +84,7 @@ final class MapObject extends AbstractCBORObject implements Countable, IteratorA
             return $this;
         }
         unset($this->data[$index]);
-        $this->data = array_values($this->data);
-        $this->rebuildKeyIdentities($this->data);
+        $this->unregisterKey($index);
         [$this->additionalInformation, $this->length] = LengthCalculator::getLengthOfArray($this->data);
 
         return $this;
