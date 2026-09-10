@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace CBOR\OtherObject;
 
-use Brick\Math\BigInteger;
 use CBOR\Normalizable;
 use CBOR\OtherObject as Base;
-use CBOR\Utils;
 use const INF;
 use InvalidArgumentException;
 use const NAN;
@@ -15,6 +13,8 @@ use function strlen;
 
 final class HalfPrecisionFloatObject extends Base implements Normalizable
 {
+    use FloatBitsTrait;
+
     public static function supportedAdditionalInformation(): array
     {
         return [self::OBJECT_HALF_PRECISION_FLOAT];
@@ -108,11 +108,14 @@ final class HalfPrecisionFloatObject extends Base implements Normalizable
         return new self(self::OBJECT_HALF_PRECISION_FLOAT, $value);
     }
 
-    public function normalize(): float|int
+    public function normalize(): float
     {
-        $exponent = $this->getExponent();
-        $mantissa = $this->getMantissa();
-        $sign = $this->getSign();
+        // PHP has no native binary16, so the value is still assembled by hand -- but from the raw bits rather than
+        // from three brick/math round trips.
+        $bits = $this->bits('n');
+        $exponent = $bits >> 10 & 0b11111;
+        $mantissa = $bits & 0b1111111111;
+        $sign = ($bits >> 15 & 1) === 1 ? -1 : 1;
 
         if ($exponent === 0) {
             $val = $mantissa * 2 ** (-24);
@@ -122,32 +125,22 @@ final class HalfPrecisionFloatObject extends Base implements Normalizable
             $val = $mantissa === 0 ? INF : NAN;
         }
 
-        return $sign * $val;
+        return (float) ($sign * $val);
     }
 
     public function getExponent(): int
     {
-        $data = $this->data;
-        Utils::assertString($data, 'Invalid data');
-
-        return Utils::binToBigInteger($data)->shiftedRight(10)->and(Utils::hexToBigInteger('1f'))->toInt();
+        return $this->bits('n') >> 10 & 0b11111;
     }
 
     public function getMantissa(): int
     {
-        $data = $this->data;
-        Utils::assertString($data, 'Invalid data');
-
-        return Utils::binToBigInteger($data)->and(Utils::hexToBigInteger('3ff'))->toInt();
+        return $this->bits('n') & 0b1111111111;
     }
 
     public function getSign(): int
     {
-        $data = $this->data;
-        Utils::assertString($data, 'Invalid data');
-        $sign = Utils::binToBigInteger($data)->shiftedRight(15);
-
-        return $sign->isEqualTo(BigInteger::one()) ? -1 : 1;
+        return ($this->bits('n') >> 15 & 1) === 1 ? -1 : 1;
     }
 
     private static function hex2binSafe(string $hex): string
