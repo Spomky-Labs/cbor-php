@@ -7,6 +7,8 @@ namespace CBOR;
 use function array_key_exists;
 use ArrayAccess;
 use ArrayIterator;
+use function count;
+use Countable;
 use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
@@ -16,7 +18,7 @@ use IteratorAggregate;
  * @phpstan-implements IteratorAggregate<int, MapItem>
  * @final
  */
-class IndefiniteLengthMapObject extends AbstractCBORObject implements IteratorAggregate, Normalizable, ArrayAccess
+class IndefiniteLengthMapObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable, ArrayAccess
 {
     use MapKeyRegistryTrait;
 
@@ -71,8 +73,7 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements IteratorAg
             return $this;
         }
         unset($this->data[$index]);
-        $this->data = array_values($this->data);
-        $this->rebuildKeyIdentities($this->data);
+        $this->unregisterKey($index);
 
         return $this;
     }
@@ -91,6 +92,11 @@ class IndefiniteLengthMapObject extends AbstractCBORObject implements IteratorAg
         $this->data[$this->registerKey($object->getKey(), true)] = $object;
 
         return $this;
+    }
+
+    public function count(): int
+    {
+        return count($this->data);
     }
 
     /**

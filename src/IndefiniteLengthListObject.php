@@ -7,6 +7,8 @@ namespace CBOR;
 use function array_key_exists;
 use ArrayAccess;
 use ArrayIterator;
+use function count;
+use Countable;
 use InvalidArgumentException;
 use Iterator;
 use IteratorAggregate;
@@ -16,7 +18,7 @@ use IteratorAggregate;
  * @phpstan-implements IteratorAggregate<int, CBORObject>
  * @final
  */
-class IndefiniteLengthListObject extends AbstractCBORObject implements IteratorAggregate, Normalizable, ArrayAccess
+class IndefiniteLengthListObject extends AbstractCBORObject implements Countable, IteratorAggregate, Normalizable, ArrayAccess
 {
     private const MAJOR_TYPE = self::MAJOR_TYPE_LIST;
 
@@ -104,6 +106,11 @@ class IndefiniteLengthListObject extends AbstractCBORObject implements IteratorA
         $this->data[$index] = $object;
 
         return $this;
+    }
+
+    public function count(): int
+    {
+        return count($this->data);
     }
 
     /**

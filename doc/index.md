@@ -257,6 +257,13 @@ $map->add(
     TextStringObject::create('Alice')
 );
 
+// A map may also be built from MapItem objects. Duplicate keys are rejected,
+// as are two keys of different major types that resolve to the same offset.
+$map = MapObject::create([
+    MapItem::create(TextStringObject::create('name'), TextStringObject::create('Alice')),
+    MapItem::create(UnsignedIntegerObject::create(1), UnsignedIntegerObject::create(2)),
+]);
+
 // Access values
 $name = $map->get('name');
 
@@ -350,8 +357,16 @@ $list = IndefiniteLengthListObject::create()
 
 // Indefinite-length map
 $map = IndefiniteLengthMapObject::create()
-    ->append(TextStringObject::create('key1'), UnsignedIntegerObject::create(1))
-    ->append(TextStringObject::create('key2'), UnsignedIntegerObject::create(2));
+    ->add(TextStringObject::create('key1'), UnsignedIntegerObject::create(1))
+    ->add(TextStringObject::create('key2'), UnsignedIntegerObject::create(2));
+```
+
+Indefinite-length lists and maps are `Countable`, just like their definite-length counterparts, so `count()`
+works whichever encoding a document uses:
+
+```php
+$decoded = $decoder->decode(StringStream::create($data));
+$count = count($decoded);
 ```
 
 ### Custom Streams
