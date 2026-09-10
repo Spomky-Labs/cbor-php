@@ -104,7 +104,7 @@ final class UnsignedIntegerTest extends CBORTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Out of range. Please use PositiveBigIntegerTag tag with ByteStringObject object instead.'
+            'Out of range. Please use UnsignedBigIntegerTag tag with ByteStringObject object instead.'
         );
         UnsignedIntegerObject::createFromString('18446744073709551616');
     }

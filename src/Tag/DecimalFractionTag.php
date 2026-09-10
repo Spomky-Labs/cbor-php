@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CBOR\Tag;
 
 use Brick\Math\BigInteger;
+use CBOR\ByteStringObject;
 use CBOR\CBORObject;
 use CBOR\ListObject;
 use CBOR\NegativeIntegerObject;
@@ -16,6 +17,7 @@ use function extension_loaded;
 use InvalidArgumentException;
 use RuntimeException;
 use function sprintf;
+use function str_starts_with;
 use function strlen;
 
 final class DecimalFractionTag extends Tag implements Normalizable
@@ -160,12 +162,60 @@ final class DecimalFractionTag extends Tag implements Normalizable
             $exponentObj = NegativeIntegerObject::create($exponent);
         }
 
-        // Create mantissa object
-        $mantissaObj = $isNegative
-            ? NegativeIntegerObject::createFromString('-' . $mantissa)
-            : UnsignedIntegerObject::createFromString($mantissa);
+        // Put the sign back on the mantissa now that the normalisation above is done with it.
+        return self::createFromExponentAndMantissa(
+            $exponentObj,
+            self::mantissaObject($isNegative ? '-' . $mantissa : $mantissa)
+        );
+    }
 
-        return self::createFromExponentAndMantissa($exponentObj, $mantissaObj);
+    /**
+     * The mantissa of a decimal fraction is only bounded by the requested precision, so it routinely outgrows the
+     * 8-byte argument an integer head can carry. RFC 8949 section 3.4.3 answers that with the bignum tags the
+     * constructor already accepts, and this picks whichever of the four representations fits.
+     *
+     * The sign is read off the string rather than from a PHP integer cast, which saturates at PHP_INT_MIN or
+     * PHP_INT_MAX and would report the wrong sign for exactly the long mantissas this has to handle.
+     */
+    private static function mantissaObject(string $mantissa): CBORObject
+    {
+        $value = BigInteger::of($mantissa);
+        if (str_starts_with($mantissa, '-')) {
+            $argument = BigInteger::of(-1)->minus($value);
+
+            return $argument->isLessThanOrEqualTo(self::maximumHeadArgument())
+                ? NegativeIntegerObject::createFromString($mantissa)
+                : NegativeBigIntegerTag::create(ByteStringObject::create(self::toBigEndianBytes($argument)));
+        }
+
+        return $value->isLessThanOrEqualTo(self::maximumHeadArgument())
+            ? UnsignedIntegerObject::createFromString($mantissa)
+            : UnsignedBigIntegerTag::create(ByteStringObject::create(self::toBigEndianBytes($value)));
+    }
+
+    /**
+     * Largest argument an integer head can carry, 2^64 - 1. Beyond it a bignum tag is the only representation.
+     */
+    private static function maximumHeadArgument(): BigInteger
+    {
+        return BigInteger::fromBase('FFFFFFFFFFFFFFFF', 16);
+    }
+
+    /**
+     * The network byte order, unsigned, no leading zero byte representation a bignum tag wraps.
+     */
+    private static function toBigEndianBytes(BigInteger $value): string
+    {
+        $hex = $value->toBase(16);
+        if (strlen($hex) % 2 === 1) {
+            $hex = '0' . $hex;
+        }
+        $bytes = hex2bin($hex);
+        if ($bytes === false) {
+            throw new InvalidArgumentException('Unable to convert the data');
+        }
+
+        return $bytes;
     }
 
     public function normalize()

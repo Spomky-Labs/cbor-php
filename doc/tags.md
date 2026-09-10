@@ -402,12 +402,12 @@ $decoded = $decoder->decode(StringStream::create($tag->getValue()->getValue()));
 
 A "magic number" that marks the beginning of a CBOR data stream. This helps decoders quickly identify CBOR-encoded data.
 
-**Class:** `CBOR\Tag\SelfDescribeCBORTag`
+**Class:** `CBOR\Tag\CBORTag`
 **Spec:** [RFC 8949 § 3.4.6](https://datatracker.ietf.org/doc/html/rfc8949#section-3.4.6)
 **Tag Number:** `55799` (0xd9d9f7 in hex)
 
 ```php
-use CBOR\Tag\SelfDescribeCBORTag;
+use CBOR\Tag\CBORTag;
 use CBOR\MapObject;
 use CBOR\TextStringObject;
 
@@ -415,17 +415,26 @@ use CBOR\TextStringObject;
 $data = MapObject::create()
     ->add(TextStringObject::create('key'), TextStringObject::create('value'));
 
-$selfDescribed = SelfDescribeCBORTag::create($data);
+$selfDescribed = CBORTag::create($data);
 
 // When encoded, this will start with the bytes: d9 d9 f7
 $encoded = (string) $selfDescribed;
 
 // Retrieve the wrapped object
-$innerObject = $selfDescribed->getCBORObject();
+$innerObject = $selfDescribed->getValue();
+
+// Or normalize straight through to the wrapped value
+$value = $selfDescribed->normalize();
 ```
 
 **Accepts:** Any `CBORObject`
 **Purpose:** Allows decoders to rapidly identify CBOR data without parsing
+
+> **Deprecated:** `CBOR\Tag\SelfDescribeCBORTag` also declares tag 55799 and was documented here until
+> 3.3.5. A tag manager registers one class per tag number, and `CBORTag` is the one the default decoder
+> uses, so decoding a self-described document always yields a `CBORTag`. Use `CBORTag`;
+> `SelfDescribeCBORTag` will be removed in 4.0.0. Its `getCBORObject()` is a duplicate of the inherited
+> `getValue()`.
 
 ---
 
@@ -508,7 +517,7 @@ The CBOR Tags registry is maintained by IANA. This library implements the most c
 | 33 | Base64url | `Base64UrlTag` | RFC 8949 § 3.4.5.2 |
 | 34 | Base64 | `Base64Tag` | RFC 8949 § 3.4.5.2 |
 | 36 | MIME Message | `MimeTag` | RFC 8949 § 3.4.5.3 |
-| 55799 | Self-Describe CBOR | `SelfDescribeCBORTag` | RFC 8949 § 3.4.6 |
+| 55799 | Self-Describe CBOR | `CBORTag` | RFC 8949 § 3.4.6 |
 
 ### Unsupported Tags
 

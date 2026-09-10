@@ -12,11 +12,18 @@ use InvalidArgumentException;
 final class TagManager implements TagManagerInterface
 {
     /**
+     * @var array<int, class-string<TagInterface>>
+     */
+    private array $classes = [];
+
+    /**
      * @param class-string<TagInterface>[] $classes
      */
-    public function __construct(
-        private array $classes = []
-    ) {
+    public function __construct(array $classes = [])
+    {
+        foreach ($classes as $class) {
+            $this->add($class);
+        }
     }
 
     /**
