@@ -114,6 +114,11 @@ $value = $tag->normalize(); // "81985529216486895"
 An empty byte string is the preferred serialization of zero (RFC 8949 § 3.4.3): tag 2 normalizes it to `"0"`
 and tag 3 to `"-1"`.
 
+The byte string shall not exceed `MAX_BYTE_LENGTH` (256 bytes, i.e. a 2048 bit integer); a longer one is rejected
+with an `InvalidArgumentException`. Converting it to the decimal string `normalize()` returns is a base conversion,
+which `brick/math` performs in time quadratic in the length on every calculator but GMP. Install `ext-gmp` when the
+input is untrusted.
+
 ---
 
 #### Tag 3: Negative Bignum
@@ -141,6 +146,11 @@ $value = $tag->normalize(); // "-256"
 An empty byte string is the preferred serialization of zero (RFC 8949 § 3.4.3): tag 2 normalizes it to `"0"`
 and tag 3 to `"-1"`.
 
+The byte string shall not exceed `MAX_BYTE_LENGTH` (256 bytes, i.e. a 2048 bit integer); a longer one is rejected
+with an `InvalidArgumentException`. Converting it to the decimal string `normalize()` returns is a base conversion,
+which `brick/math` performs in time quadratic in the length on every calculator but GMP. Install `ext-gmp` when the
+input is untrusted.
+
 ---
 
 ### Fractional Number Tags
@@ -152,6 +162,10 @@ Encodes a decimal fraction as: **mantissa × 10^exponent**
 **Class:** `CBOR\Tag\DecimalFractionTag`
 **Spec:** [RFC 8949 § 3.4.4](https://datatracker.ietf.org/doc/html/rfc8949#section-3.4.4)
 **Requires:** `ext-bcmath`
+
+**Bound:** the absolute value of the exponent shall not exceed `MAX_ABSOLUTE_EXPONENT` (1024); beyond it the tag is
+rejected with an `InvalidArgumentException`. `10^e` needs about `e` digits to write down, so an unbounded exponent
+lets a six byte item expand into kilobytes.
 
 ```php
 use CBOR\Tag\DecimalFractionTag;
@@ -194,6 +208,10 @@ Encodes a binary floating-point value as: **mantissa × 2^exponent**
 **Class:** `CBOR\Tag\BigFloatTag`
 **Spec:** [RFC 8949 § 3.4.4](https://datatracker.ietf.org/doc/html/rfc8949#section-3.4.4)
 **Requires:** `ext-bcmath`
+
+**Bound:** the absolute value of the exponent shall not exceed `MAX_ABSOLUTE_EXPONENT` (1024); beyond it the tag is
+rejected with an `InvalidArgumentException`. `2^-e` needs exactly `e` digits to write down, so an unbounded exponent
+lets a six byte item expand into kilobytes.
 
 ```php
 use CBOR\Tag\BigFloatTag;
