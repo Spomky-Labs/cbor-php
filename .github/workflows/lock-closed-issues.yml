@@ -4,11 +4,17 @@ on:
   schedule:
     - cron: '12 6 * * *'
 
+permissions:
+  contents: read
+
 jobs:
   lock:
     runs-on: ubuntu-latest
+    permissions:
+      # Required to comment on and lock closed issues.
+      issues: write
     steps:
-      - uses: dessant/lock-threads@v6
+      - uses: dessant/lock-threads@v6.0.2
         with:
           github-token: ${{ github.token }}
           issue-inactive-days: '31'

@@ -1,7 +1,6 @@
 * text=auto
 
 /.ci-tools export-ignore
-/.github export-ignore
 /bin export-ignore
 /doc export-ignore
 /tests export-ignore
