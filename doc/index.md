@@ -193,6 +193,24 @@ When the data comes from an untrusted source, a much lower limit is recommended:
 $decoder = Decoder::create(null, null, 32);
 ```
 
+#### Bounding the Cost of a Hostile Document
+
+Normalizing a decoded object turns it into native PHP values, and a few tags expand far beyond the bytes they
+occupy. Two bounds keep that expansion proportionate to the input:
+
+-   `DecimalFractionTag::MAX_ABSOLUTE_EXPONENT` and `BigFloatTag::MAX_ABSOLUTE_EXPONENT` (1024) cap the exponent of
+    tags 4 and 5. `10^e` needs about `e` digits to write down, so an unbounded exponent turns a six byte item into
+    kilobytes.
+-   `UnsignedBigIntegerTag::MAX_BYTE_LENGTH` and `NegativeBigIntegerTag::MAX_BYTE_LENGTH` (256, i.e. a 2048 bit
+    integer) cap the byte string of tags 2 and 3.
+
+A value outside either bound is rejected with an `InvalidArgumentException`.
+
+Install `ext-gmp` when the input is untrusted. Without it, `brick/math` converts the byte string of a big number to
+its decimal form in time quadratic in the length, which is several orders of magnitude slower than GMP.
+
+Note that a map key is normalized as the map is built, so both bounds also apply during `decode()` itself.
+
 #### Decoding Binary Data
 
 ```php

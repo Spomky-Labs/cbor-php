@@ -24,12 +24,13 @@ final class BigFloatTag extends Tag implements Normalizable
     /**
      * The maximum absolute value accepted for the exponent.
      *
-     * The result of 2^e grows exponentially with e, so an exponent taken from untrusted input is a denial of
-     * service vector: a document of a handful of bytes can otherwise ask bcpow() for a number of several billion
-     * digits. The bound is far above any legitimate use of this tag -- 2^8192 already has more than 2400 digits,
-     * whereas an IEEE 754 double covers exponents within +/-1074.
+     * 2^e needs about e/3 decimal digits to write down and 2^-e exactly e of them, so the exponent alone decides how
+     * much memory normalizing one item costs -- and the exponent is three bytes on the wire. At 8192 a six byte item
+     * expanded to more than eight kilobytes, an amplification of over a thousand, and a document made of such items
+     * exhausted the memory limit inside decode() with a fatal error no try/catch can intercept. The bound is now the
+     * range of an IEEE 754 double, which is what a big float is meant to exceed in precision, not in magnitude.
      */
-    public const MAX_ABSOLUTE_EXPONENT = 8192;
+    public const MAX_ABSOLUTE_EXPONENT = 1024;
 
     public function __construct(int $additionalInformation, ?string $data, CBORObject $object)
     {

@@ -9,7 +9,6 @@ use InvalidArgumentException;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use RuntimeException;
 
 /**
  * @internal
@@ -247,45 +246,45 @@ final class InvalidTypeTest extends CBORTestCase
         ];
         yield [
             '5f00ff',
-            RuntimeException::class,
+            InvalidArgumentException::class,
             'Unable to parse the data. Infinite Byte String object can only get Byte String objects.',
         ];
         yield [
             '5f21ff',
-            RuntimeException::class,
+            InvalidArgumentException::class,
             'Unable to parse the data. Infinite Byte String object can only get Byte String objects.',
         ];
         yield [
             '5f6100ff',
-            RuntimeException::class,
+            InvalidArgumentException::class,
             'Unable to parse the data. Infinite Byte String object can only get Byte String objects.',
         ];
         yield [
             '5f80ff',
-            RuntimeException::class,
+            InvalidArgumentException::class,
             'Unable to parse the data. Infinite Byte String object can only get Byte String objects.',
         ];
         yield [
             '5fa0ff',
-            RuntimeException::class,
+            InvalidArgumentException::class,
             'Unable to parse the data. Infinite Byte String object can only get Byte String objects.',
         ];
         yield ['5fc000ff', InvalidArgumentException::class, 'This tag only accepts a Byte String object.'];
         yield [
             '5fe0ff',
-            RuntimeException::class,
+            InvalidArgumentException::class,
             'Unable to parse the data. Infinite Byte String object can only get Byte String objects.',
         ];
         yield [
             '7f4100ff',
-            RuntimeException::class,
+            InvalidArgumentException::class,
             'Unable to parse the data. Infinite Text String object can only get Text String objects.',
         ];
         yield ['5f5f4100', InvalidArgumentException::class, 'Out of range. Expected: 1, read: 0.'];
         yield ['ffff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'];
         yield [
             '7f7f6100ffff',
-            RuntimeException::class,
+            InvalidArgumentException::class,
             'Unable to parse the data. Infinite Text String object can only get Text String objects.',
         ];
         yield ['ff', InvalidArgumentException::class, 'Cannot parse the data. No enclosing indefinite.'];
