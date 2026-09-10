@@ -173,7 +173,7 @@ final class Decoder implements DecoderInterface
                 $object = IndefiniteLengthByteStringObject::create();
                 while (! ($it = $this->process($stream, true, $depth + 1)) instanceof BreakObject) {
                     if (! $it instanceof ByteStringObject) {
-                        throw new RuntimeException(
+                        throw new InvalidArgumentException(
                             'Unable to parse the data. Infinite Byte String object can only get Byte String objects.'
                         );
                     }
@@ -185,7 +185,7 @@ final class Decoder implements DecoderInterface
                 $object = IndefiniteLengthTextStringObject::create();
                 while (! ($it = $this->process($stream, true, $depth + 1)) instanceof BreakObject) {
                     if (! $it instanceof TextStringObject) {
-                        throw new RuntimeException(
+                        throw new InvalidArgumentException(
                             'Unable to parse the data. Infinite Text String object can only get Text String objects.'
                         );
                     }
