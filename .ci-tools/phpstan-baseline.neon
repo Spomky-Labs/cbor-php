@@ -193,12 +193,6 @@ parameters:
 			path: ../src/NegativeIntegerObject.php
 
 		-
-			rawMessage: Control structures using switch should not be used.
-			identifier: ergebnis.noSwitch
-			count: 1
-			path: ../src/NegativeIntegerObject.php
-
-		-
 			rawMessage: 'Method CBOR\NegativeIntegerObject::__construct() has parameter $data with a nullable type declaration.'
 			identifier: ergebnis.noParameterWithNullableTypeDeclaration
 			count: 1
@@ -849,12 +843,6 @@ parameters:
 		-
 			rawMessage: Class "CBOR\UnsignedIntegerObject" is not allowed to extend "CBOR\AbstractCBORObject".
 			identifier: ergebnis.noExtends
-			count: 1
-			path: ../src/UnsignedIntegerObject.php
-
-		-
-			rawMessage: Control structures using switch should not be used.
-			identifier: ergebnis.noSwitch
 			count: 1
 			path: ../src/UnsignedIntegerObject.php
 
