@@ -15,6 +15,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
 use function preg_match;
+use function str_contains;
 
 /**
  * @see \CBOR\Test\Tag\DatetimeTagTest
@@ -51,6 +52,13 @@ final class DatetimeTag extends Tag implements Normalizable
         /** @var TextStringObject|IndefiniteLengthTextStringObject $object */
         $object = $this->object;
         $value = $object->normalize();
+
+        // Since PHP 8, createFromFormat() rejects an argument holding a NUL byte with a ValueError -- an Error, so
+        // neither the "=== false" guard below nor a caller catching InvalidArgumentException ever sees it. The byte
+        // cannot appear in an RFC 3339 date-time anyway, so it is turned down here, within the error contract.
+        if (str_contains($value, "\0")) {
+            throw new InvalidArgumentException('Invalid data. Cannot be converted into a datetime object');
+        }
 
         // RFC 3339 allows a leap second, which no PHP date can hold. It is parsed as the second before it and
         // shifted forward again, which lands on the next minute: the closest instant this library can return.
