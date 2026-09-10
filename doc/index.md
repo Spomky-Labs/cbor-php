@@ -350,8 +350,8 @@ $list = IndefiniteLengthListObject::create()
 
 // Indefinite-length map
 $map = IndefiniteLengthMapObject::create()
-    ->append(TextStringObject::create('key1'), UnsignedIntegerObject::create(1))
-    ->append(TextStringObject::create('key2'), UnsignedIntegerObject::create(2));
+    ->add(TextStringObject::create('key1'), UnsignedIntegerObject::create(1))
+    ->add(TextStringObject::create('key2'), UnsignedIntegerObject::create(2));
 ```
 
 ### Custom Streams

@@ -389,12 +389,12 @@ final class GeoCoordinatesTag extends Tag implements Normalizable
         ?float $altitude = null
     ): self {
         $list = ListObject::create([
-            DoublePrecisionFloatObject::create($latitude),
-            DoublePrecisionFloatObject::create($longitude),
+            DoublePrecisionFloatObject::createFromFloat($latitude),
+            DoublePrecisionFloatObject::createFromFloat($longitude),
         ]);
 
         if ($altitude !== null) {
-            $list->add(DoublePrecisionFloatObject::create($altitude));
+            $list->add(DoublePrecisionFloatObject::createFromFloat($altitude));
         }
 
         return self::create($list);
