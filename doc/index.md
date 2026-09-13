@@ -7,6 +7,7 @@ Complete documentation for the CBOR (Concise Binary Object Representation) PHP l
 - [Installation & Quick Start](../README.md#installation)
 - [Tags Reference](tags.md) - Complete guide to all supported CBOR tags
 - [Creating Custom Tags](custom-tags.md) - How to implement your own tags
+- [Diagnostic Notation](diagnostic-notation.md) - Print an item as RFC 8949 section 8 writes it, annotated with the CDDL of a schema
 - [API Reference](#api-reference)
 - [Examples](#examples)
 
@@ -659,4 +660,4 @@ $datetime = DatetimeTag::create(TextStringObject::create('2024-01-15T10:30:00Z')
 
 ---
 
-[Tags Reference →](tags.md) | [Creating Custom Tags →](custom-tags.md)
+[Tags Reference →](tags.md) | [Creating Custom Tags →](custom-tags.md) | [Diagnostic Notation →](diagnostic-notation.md)
