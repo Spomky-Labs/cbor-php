@@ -22,7 +22,8 @@ use InvalidArgumentException;
 use function sprintf;
 
 /**
- * Common behaviour of the six COSE structures of RFC 9052: tags 16, 17, 18, 96, 97 and 98.
+ * Common behaviour of the six COSE structures of RFC 9052 -- tags 16, 17, 18, 96, 97 and 98 -- and of the
+ * countersignature of RFC 9338, tag 19.
  *
  * Every one of them is an array that opens with the same two items -- the protected header, wrapped in a byte
  * string so that it is signed exactly as it was written, and the unprotected header as a plain map -- and then
@@ -31,6 +32,7 @@ use function sprintf;
  *
  * @see \CBOR\Test\Tag\CoseTagTest
  * @see https://datatracker.ietf.org/doc/html/rfc9052
+ * @see https://datatracker.ietf.org/doc/html/rfc9338
  */
 abstract class AbstractCoseTag extends Tag implements Normalizable
 {

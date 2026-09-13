@@ -142,7 +142,7 @@ echo $decimal->normalize(); // "3.14159"
 - Big Numbers (Tags 2, 3), Decimal/Binary Fractions (Tags 4, 5) and Rationals (Tag 30)
 - Encoding hints (Tags 21, 22, 23), embedded CBOR (Tags 24, 63)
 - URIs, MIME and UUIDs (Tags 32, 36, 37, 257)
-- COSE structures and CBOR Web Tokens (Tags 16, 17, 18, 61, 96, 97, 98)
+- COSE structures, countersignatures and CBOR Web Tokens (Tags 16, 17, 18, 19, 61, 96, 97, 98)
 - Typed and multi-dimensional arrays (Tags 40, 41, 64-87, 1040)
 - IP and network addresses (Tags 52, 54, 260, 261)
 - [And more...](doc/tags.md)

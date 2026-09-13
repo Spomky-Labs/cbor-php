@@ -488,8 +488,9 @@ $value = $selfDescribed->normalize();
 
 ### COSE and CWT Tags
 
-The six COSE structures of [RFC 9052](https://datatracker.ietf.org/doc/html/rfc9052) and the CBOR Web Token tag
-of [RFC 8392](https://datatracker.ietf.org/doc/html/rfc8392) that wraps them. Each one describes the shape of the
+The six COSE structures of [RFC 9052](https://datatracker.ietf.org/doc/html/rfc9052), the countersignature of
+[RFC 9338](https://datatracker.ietf.org/doc/html/rfc9338) and the CBOR Web Token tag of
+[RFC 8392](https://datatracker.ietf.org/doc/html/rfc8392) that wraps them. Each one describes the shape of the
 structure and gives access to its parts; **verifying a signature or a MAC is not done here** and needs a COSE
 implementation such as [web-auth/cose-lib](https://github.com/web-auth/cose-lib).
 
@@ -498,6 +499,7 @@ implementation such as [web-auth/cose-lib](https://github.com/web-auth/cose-lib)
 | 16 | COSE_Encrypt0 | `CoseEncrypt0Tag` | [protected, unprotected, ciphertext] |
 | 17 | COSE_Mac0 | `CoseMac0Tag` | [protected, unprotected, payload, tag] |
 | 18 | COSE_Sign1 | `CoseSign1Tag` | [protected, unprotected, payload, signature] |
+| 19 | COSE_Countersignature | `CoseCountersignatureTag` | [protected, unprotected, signature] |
 | 96 | COSE_Encrypt | `CoseEncryptTag` | [protected, unprotected, ciphertext, recipients] |
 | 97 | COSE_Mac | `CoseMacTag` | [protected, unprotected, payload, tag, recipients] |
 | 98 | COSE_Sign | `CoseSignTag` | [protected, unprotected, payload, signatures] |
@@ -532,6 +534,18 @@ $tag = CoseSign1Tag::createFromComponents(
     $protectedHeader,    // MapObject; encoded into the byte string COSE signs
     $unprotectedHeader,  // MapObject
     ByteStringObject::create($payload),
+    ByteStringObject::create($signature)
+);
+```
+
+A countersignature (tag 19) is a `COSE_Signature` over another COSE message: the same three items as a
+`COSE_Sign1` minus the payload, since what is signed is the message it is attached to. RFC 9338 leaves the tag
+optional on the wire, so an untagged countersignature is decoded as a plain three-item `ListObject`.
+
+```php
+$tag = CoseCountersignatureTag::createFromComponents(
+    $protectedHeader,    // MapObject
+    $unprotectedHeader,  // MapObject
     ByteStringObject::create($signature)
 );
 ```
@@ -786,6 +800,7 @@ The CBOR Tags registry is maintained by IANA. This library implements the most c
 | 16 | COSE_Encrypt0 | `CoseEncrypt0Tag` | RFC 9052 |
 | 17 | COSE_Mac0 | `CoseMac0Tag` | RFC 9052 |
 | 18 | COSE_Sign1 | `CoseSign1Tag` | RFC 9052 |
+| 19 | COSE_Countersignature | `CoseCountersignatureTag` | RFC 9338 |
 | 21 | Base64url (expected) | `Base64UrlEncodingTag` | RFC 8949 § 3.4.5.2 |
 | 22 | Base64 (expected) | `Base64EncodingTag` | RFC 8949 § 3.4.5.2 |
 | 23 | Base16 (expected) | `Base16EncodingTag` | RFC 8949 § 3.4.5.2 |
