@@ -676,11 +676,11 @@ public function __construct(
 
 ## Integration with Other Specifications
 
-### COSE (RFC 9052) and CWT (RFC 8392)
+### COSE (RFC 9052, RFC 9338) and CWT (RFC 8392)
 
 Both are **built in** since 3.4.0: `CoseEncrypt0Tag` (16), `CoseMac0Tag` (17), `CoseSign1Tag` (18),
 `CoseEncryptTag` (96), `CoseMacTag` (97), `CoseSignTag` (98) and `CwtTag` (61) are registered in the decoder by
-default. See [COSE and CWT Tags](tags.md#cose-and-cwt-tags) for what they give access to.
+default, and so is `CoseCountersignatureTag` (19, RFC 9338) since 3.5.0. See [COSE and CWT Tags](tags.md#cose-and-cwt-tags) for what they give access to.
 
 They describe the structure only. Verifying a signature or a MAC, and everything about keys and algorithms,
 belongs to a COSE implementation -- [web-auth/cose-lib](https://github.com/web-auth/cose-lib), which also ships
