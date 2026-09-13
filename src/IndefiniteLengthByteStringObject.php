@@ -57,6 +57,16 @@ final class IndefiniteLengthByteStringObject extends AbstractCBORObject implemen
         return $this;
     }
 
+    /**
+     * The chunks as they were carried, which the diagnostic notation writes as (_ ..., ...).
+     *
+     * @return ByteStringObject[]
+     */
+    public function getChunks(): array
+    {
+        return $this->chunks;
+    }
+
     public function getValue(): string
     {
         $result = '';

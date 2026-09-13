@@ -15,6 +15,7 @@ A comprehensive PHP library for encoding and decoding **CBOR** (Concise Binary O
 - ✅ Type-safe API with modern PHP 8.0+ features
 - ✅ Comprehensive support for indefinite-length objects
 - ✅ Built-in normalization to PHP native types
+- ✅ Diagnostic notation (RFC 8949 section 8), annotated with the CDDL of a schema
 
 ## Installation
 
@@ -67,6 +68,7 @@ $data = $decoded->normalize();
 
 - **[Tags Reference](doc/tags.md)** - Complete guide to the 70+ supported CBOR tags
 - **[Creating Custom Tags](doc/custom-tags.md)** - Implement your own tags for domain-specific needs
+- **[Diagnostic Notation](doc/diagnostic-notation.md)** - Print an item as RFC 8949 writes it, `[_ 1, [2, 3]]`, annotated with the CDDL of your schema
 - **[API Reference](doc/index.md#api-reference)** - Encoding and decoding API
 - **[Examples](doc/index.md#integration-examples)** - WebAuthn, COSE, IoT, and more
 
