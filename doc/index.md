@@ -277,8 +277,7 @@ $map->add(
     TextStringObject::create('Alice')
 );
 
-// A map may also be built from MapItem objects. Duplicate keys are rejected,
-// as are two keys of different major types that resolve to the same offset.
+// A map may also be built from MapItem objects. Duplicate keys are rejected.
 $map = MapObject::create([
     MapItem::create(TextStringObject::create('name'), TextStringObject::create('Alice')),
     MapItem::create(UnsignedIntegerObject::create(1), UnsignedIntegerObject::create(2)),
@@ -307,6 +306,14 @@ foreach ($map as $item) {
 // Normalize to PHP array
 $phpArray = $map->normalize();
 ```
+
+`get()`, `has()`, `remove()` and `normalize()` address entries by the PHP array offset the key normalizes to: an
+integer or a string. RFC 8949 allows any data item as a key, and the map keeps every key it is given -- a float, a
+boolean, `null`, a list, a map, a tag -- in order, so that it decodes, iterates and re-encodes exactly as it was
+read. Such a key has no offset of its own: its entry is reached by iterating, and `normalize()` refuses the map
+with an `InvalidArgumentException`. The same goes for two keys of different major types that resolve to the same
+offset, such as the integer `1` and the text string `"1"`: both are kept, neither is reachable through `get()`,
+and `normalize()` refuses to pick one.
 
 ### Working with Tags
 
