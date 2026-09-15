@@ -112,21 +112,23 @@ final class HostileDocumentTest extends CBORTestCase
     /**
      * A list or a map can never normalize to the integer or the string a PHP array offset needs, and the major type
      * says so before the content is touched. It used to be normalized first, so a one entry map whose key was a
-     * 100 000 entry map cost 37 s inside decode(), for a document that was rejected anyway.
+     * 100 000 entry map cost 37 s inside decode(), for a key nobody can address anyway. Neither decoding the map
+     * nor refusing to normalize it walks into the key.
      *
      * The keys below hold an item whose own normalize() throws, so the message tells which of the two happened: the
      * exponent is only reached by walking into the container.
      */
     #[Test]
     #[DataProvider('containerKeys')]
-    public function aContainerUsedAsAMapKeyIsRejectedWithoutBeingNormalized(string $payload): void
+    public function aContainerUsedAsAMapKeyIsNeverNormalized(string $payload): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('A map key shall normalize to an integer or a string');
-
-        $this->getDecoder()
+        $object = $this->getDecoder()
             ->decode(StringStream::create((string) hex2bin($payload)))
         ;
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('A map key shall normalize to an integer or a string, got "array".');
+        $object->normalize();
     }
 
     /**
