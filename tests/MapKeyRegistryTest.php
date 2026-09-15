@@ -42,15 +42,19 @@ final class MapKeyRegistryTest extends CBORTestCase
     }
 
     #[Test]
-    public function theConstructorRejectsKeysThatCollideOnTheSameOffset(): void
+    public function theConstructorKeepsKeysThatCollideOnTheSameOffsetAndNormalizeRefusesThem(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('both resolve to the offset "1"');
-
-        MapObject::create([
+        $map = MapObject::create([
             MapItem::create(UnsignedIntegerObject::create(1), UnsignedIntegerObject::create(1)),
             MapItem::create(TextStringObject::create('1'), UnsignedIntegerObject::create(2)),
         ]);
+
+        static::assertCount(2, $map);
+        static::assertFalse($map->has(1));
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('both resolve to the offset "1"');
+        $map->normalize();
     }
 
     #[Test]
