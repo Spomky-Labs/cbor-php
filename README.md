@@ -1,4 +1,9 @@
-# CBOR for PHP
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Spomky-Labs/brand/main/4-Web/svg/marques-de-projet/marque-cbor-php-inverse.svg">
+  <img alt="CBOR PHP" width="217" height="48" src="https://raw.githubusercontent.com/Spomky-Labs/brand/main/4-Web/svg/marques-de-projet/marque-cbor-php-couleur.svg">
+</picture>
+
+CBOR encoding and decoding.
 
 [![CI](https://github.com/Spomky-Labs/cbor-php/actions/workflows/ci.yml/badge.svg)](https://github.com/Spomky-Labs/cbor-php/actions/workflows/ci.yml)
 [![Latest Stable Version](https://poser.pugx.org/spomky-labs/cbor-php/v)](https://packagist.org/packages/spomky-labs/cbor-php)
