@@ -16,9 +16,7 @@ abstract class CBORTestCase extends TestCase
 
     protected function getDecoder(): Decoder
     {
-        if ($this->decoder === null) {
-            $this->decoder = Decoder::create();
-        }
+        $this->decoder ??= Decoder::create();
 
         return $this->decoder;
     }
