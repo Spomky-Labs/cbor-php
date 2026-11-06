@@ -9,7 +9,7 @@ use CBOR\Tag;
 
 /**
  * Every shipped tag hard-codes its own number, so the head computation can only be exercised through a tag that
- * takes the number as an argument -- the very thing doc/custom-tags.md tells implementors to write.
+ * takes the number as an argument -- the very thing the documentation tells implementors to write, on "writing a tag of your own".
  *
  * @internal
  */
