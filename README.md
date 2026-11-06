@@ -61,14 +61,14 @@ $data = $decoded->normalize();
 
 ## Documentation
 
-📖 **[Complete Documentation](doc/index.md)** - Full API reference and guides
+📖 **[cbor.spomky-labs.com](https://cbor.spomky-labs.com/3.4/)** - the full documentation: the API, the tags, the guides and the Symfony bundle
 
 ### Quick Links
 
-- **[Tags Reference](doc/tags.md)** - Complete guide to the 70+ supported CBOR tags
-- **[Creating Custom Tags](doc/custom-tags.md)** - Implement your own tags for domain-specific needs
-- **[API Reference](doc/index.md#api-reference)** - Encoding and decoding API
-- **[Examples](doc/index.md#integration-examples)** - WebAuthn, COSE, IoT, and more
+- **[Tags Reference](https://cbor.spomky-labs.com/3.4/tags/built-in/)** - Complete guide to the 70+ supported CBOR tags
+- **[Creating Custom Tags](https://cbor.spomky-labs.com/3.4/tags/writing-a-tag/)** - Implement your own tags for domain-specific needs
+- **[API Reference](https://cbor.spomky-labs.com/3.4/guide/encoding/)** - Encoding and decoding API
+- **[Examples](https://cbor.spomky-labs.com/3.4/examples/webauthn/)** - WebAuthn, COSE, IoT, and more
 
 ### Major Types Overview
 
@@ -82,7 +82,7 @@ This library supports all CBOR major types defined in RFC 8949:
 | 3 | Text String | `TextStringObject`, `IndefiniteLengthTextStringObject` |
 | 4 | Array | `ListObject`, `IndefiniteLengthListObject` |
 | 5 | Map | `MapObject`, `IndefiniteLengthMapObject` |
-| 6 | Tag | `Tag` and subclasses - [See Tags Reference](doc/tags.md) |
+| 6 | Tag | `Tag` and subclasses - [See Tags Reference](https://cbor.spomky-labs.com/3.4/tags/built-in/) |
 | 7 | Other | `TrueObject`, `FalseObject`, `NullObject`, etc. |
 
 **Common API:**
@@ -92,7 +92,7 @@ This library supports all CBOR major types defined in RFC 8949:
 
 ### Basic Usage Examples
 
-For complete documentation with all examples, see the [**Documentation**](doc/index.md).
+For complete documentation with all examples, see the [**Documentation**](https://cbor.spomky-labs.com/3.4/).
 
 #### Working with Basic Types
 
@@ -121,7 +121,7 @@ $map = MapObject::create()
 
 #### Working with Tags
 
-**📖 For complete tags documentation, see [Tags Reference](doc/tags.md)**
+**📖 For complete tags documentation, see [Tags Reference](https://cbor.spomky-labs.com/3.4/tags/built-in/)**
 
 ```php
 use CBOR\Tag\TimestampTag;
@@ -145,9 +145,9 @@ echo $decimal->normalize(); // "3.14159"
 - COSE structures and CBOR Web Tokens (Tags 16, 17, 18, 61, 96, 97, 98)
 - Typed and multi-dimensional arrays (Tags 40, 41, 64-87, 1040)
 - IP and network addresses (Tags 52, 54, 260, 261)
-- [And more...](doc/tags.md)
+- [And more...](https://cbor.spomky-labs.com/3.4/tags/built-in/)
 
-**Create your own:** See [Creating Custom Tags](doc/custom-tags.md) guide.
+**Create your own:** See [Creating Custom Tags](https://cbor.spomky-labs.com/3.4/tags/writing-a-tag/) guide.
 
 ### Complete Example
 
@@ -191,7 +191,7 @@ $decoded = $decoder->decode(StringStream::create($encoded));
 $phpData = $decoded->normalize();
 ```
 
-For more examples including WebAuthn, COSE, IoT scenarios, and advanced usage, see the [complete documentation](doc/index.md#integration-examples).
+For more examples including WebAuthn, COSE, IoT scenarios, and advanced usage, see the [complete documentation](https://cbor.spomky-labs.com/3.4/examples/webauthn/).
 
 ## Contributing
 
