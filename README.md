@@ -67,15 +67,15 @@ $data = $decoded->normalize();
 
 ## Documentation
 
-📖 **[cbor.spomky-labs.com](https://cbor.spomky-labs.com/latest/)** - the full documentation: the API, the tags, the guides and the Symfony bundle
+📖 **[docs.spomky-labs.com/cbor](https://docs.spomky-labs.com/cbor/latest/)** - the full documentation: the API, the tags, the guides and the Symfony bundle
 
 ### Quick Links
 
-- **[Tags Reference](https://cbor.spomky-labs.com/latest/tags/built-in/)** - Complete guide to the 70+ supported CBOR tags
-- **[Creating Custom Tags](https://cbor.spomky-labs.com/latest/tags/writing-a-tag/)** - Implement your own tags for domain-specific needs
+- **[Tags Reference](https://docs.spomky-labs.com/cbor/latest/tags/built-in/)** - Complete guide to the 70+ supported CBOR tags
+- **[Creating Custom Tags](https://docs.spomky-labs.com/cbor/latest/tags/writing-a-tag/)** - Implement your own tags for domain-specific needs
 - **Diagnostic Notation** - Print an item as RFC 8949 writes it, `[_ 1, [2, 3]]`, annotated with the CDDL of your schema
-- **[API Reference](https://cbor.spomky-labs.com/latest/guide/encoding/)** - Encoding and decoding API
-- **[Examples](https://cbor.spomky-labs.com/latest/examples/webauthn/)** - WebAuthn, COSE, IoT, and more
+- **[API Reference](https://docs.spomky-labs.com/cbor/latest/guide/encoding/)** - Encoding and decoding API
+- **[Examples](https://docs.spomky-labs.com/cbor/latest/examples/webauthn/)** - WebAuthn, COSE, IoT, and more
 
 ### Major Types Overview
 
@@ -89,7 +89,7 @@ This library supports all CBOR major types defined in RFC 8949:
 | 3 | Text String | `TextStringObject`, `IndefiniteLengthTextStringObject` |
 | 4 | Array | `ListObject`, `IndefiniteLengthListObject` |
 | 5 | Map | `MapObject`, `IndefiniteLengthMapObject` |
-| 6 | Tag | `Tag` and subclasses - [See Tags Reference](https://cbor.spomky-labs.com/latest/tags/built-in/) |
+| 6 | Tag | `Tag` and subclasses - [See Tags Reference](https://docs.spomky-labs.com/cbor/latest/tags/built-in/) |
 | 7 | Other | `TrueObject`, `FalseObject`, `NullObject`, etc. |
 
 **Common API:**
@@ -99,7 +99,7 @@ This library supports all CBOR major types defined in RFC 8949:
 
 ### Basic Usage Examples
 
-For complete documentation with all examples, see the [**Documentation**](https://cbor.spomky-labs.com/latest/).
+For complete documentation with all examples, see the [**Documentation**](https://docs.spomky-labs.com/cbor/latest/).
 
 #### Working with Basic Types
 
@@ -128,7 +128,7 @@ $map = MapObject::create()
 
 #### Working with Tags
 
-**📖 For complete tags documentation, see [Tags Reference](https://cbor.spomky-labs.com/latest/tags/built-in/)**
+**📖 For complete tags documentation, see [Tags Reference](https://docs.spomky-labs.com/cbor/latest/tags/built-in/)**
 
 ```php
 use CBOR\Tag\TimestampTag;
@@ -152,9 +152,9 @@ echo $decimal->normalize(); // "3.14159"
 - COSE structures, countersignatures and CBOR Web Tokens (Tags 16, 17, 18, 19, 61, 96, 97, 98)
 - Typed and multi-dimensional arrays (Tags 40, 41, 64-87, 1040)
 - IP and network addresses (Tags 52, 54, 260, 261)
-- [And more...](https://cbor.spomky-labs.com/latest/tags/built-in/)
+- [And more...](https://docs.spomky-labs.com/cbor/latest/tags/built-in/)
 
-**Create your own:** See [Creating Custom Tags](https://cbor.spomky-labs.com/latest/tags/writing-a-tag/) guide.
+**Create your own:** See [Creating Custom Tags](https://docs.spomky-labs.com/cbor/latest/tags/writing-a-tag/) guide.
 
 ### Complete Example
 
@@ -198,7 +198,7 @@ $decoded = $decoder->decode(StringStream::create($encoded));
 $phpData = $decoded->normalize();
 ```
 
-For more examples including WebAuthn, COSE, IoT scenarios, and advanced usage, see the [complete documentation](https://cbor.spomky-labs.com/latest/examples/webauthn/).
+For more examples including WebAuthn, COSE, IoT scenarios, and advanced usage, see the [complete documentation](https://docs.spomky-labs.com/cbor/latest/examples/webauthn/).
 
 ## Contributing
 
