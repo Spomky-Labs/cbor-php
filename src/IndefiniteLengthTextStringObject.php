@@ -57,6 +57,16 @@ final class IndefiniteLengthTextStringObject extends AbstractCBORObject implemen
         return $this;
     }
 
+    /**
+     * The chunks as they were carried, which the diagnostic notation writes as (_ ..., ...).
+     *
+     * @return TextStringObject[]
+     */
+    public function getChunks(): array
+    {
+        return $this->data;
+    }
+
     public function getValue(): string
     {
         $result = '';

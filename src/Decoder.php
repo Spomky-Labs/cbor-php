@@ -26,6 +26,7 @@ use CBOR\Tag\CBOREncodingTag;
 use CBOR\Tag\CBORSequenceTag;
 use CBOR\Tag\CBORTag;
 use CBOR\Tag\ColumnMajorMultiDimensionalArrayTag;
+use CBOR\Tag\CoseCountersignatureTag;
 use CBOR\Tag\CoseEncrypt0Tag;
 use CBOR\Tag\CoseEncryptTag;
 use CBOR\Tag\CoseMac0Tag;
@@ -118,6 +119,7 @@ final class Decoder implements DecoderInterface
         CBORObject::TAG_COSE_ENCRYPT0 => CoseEncrypt0Tag::class,
         CBORObject::TAG_COSE_MAC0 => CoseMac0Tag::class,
         CBORObject::TAG_COSE_SIGN1 => CoseSign1Tag::class,
+        CBORObject::TAG_COSE_COUNTERSIGNATURE => CoseCountersignatureTag::class,
         CBORObject::TAG_ENCODED_BASE64_URL => Base64UrlEncodingTag::class,
         CBORObject::TAG_ENCODED_BASE64 => Base64EncodingTag::class,
         CBORObject::TAG_ENCODED_BASE16 => Base16EncodingTag::class,

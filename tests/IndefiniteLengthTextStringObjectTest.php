@@ -61,4 +61,24 @@ final class IndefiniteLengthTextStringObjectTest extends CBORTestCase
             '7f612863efbda163e2979563e280bf63e2979563efbda16129ff',
         ];
     }
+
+    /**
+     * The chunks stay separate, which is what the diagnostic notation shows as (_ ..., ...).
+     */
+    #[Test]
+    public function theChunksAreKeptApart(): void
+    {
+        $object = IndefiniteLengthTextStringObject::create(...['He', 'll', 'o']);
+        $decoded = $this->getDecoder()
+            ->decode(StringStream::create((string) hex2bin('7f624865626c6c616fff')));
+
+        static::assertInstanceOf(IndefiniteLengthTextStringObject::class, $decoded);
+        foreach ([$object, $decoded] as $string) {
+            $values = [];
+            foreach ($string->getChunks() as $chunk) {
+                $values[] = $chunk->getValue();
+            }
+            static::assertSame(['He', 'll', 'o'], $values);
+        }
+    }
 }

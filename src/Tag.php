@@ -44,6 +44,20 @@ abstract class Tag extends AbstractCBORObject implements TagInterface
     }
 
     /**
+     * The tag number of this object, read back from its head: the additional information when it is below 24, the
+     * argument bytes otherwise (RFC 8949 section 3). Unlike getTagId(), which a class declares, this is what the
+     * bytes say, so it is the same for a GenericTag and for a dedicated class of the same number.
+     */
+    public function getTagNumber(): int
+    {
+        if ($this->data === null) {
+            return $this->getAdditionalInformation();
+        }
+
+        return Utils::binToInt($this->data);
+    }
+
+    /**
      * A tag number is the argument of a major type 6 head, so RFC 8949 section 3 gives it the same five encodings as
      * any other argument and section 4.2 requires the shortest one that holds it. The bounds are therefore inclusive
      * and each payload is packed to the exact width its additional information announces: 255 is the largest

@@ -10,3 +10,4 @@
 /.gitsplit.yml export-ignore
 /castor.php export-ignore
 /.agents export-ignore
+/.oss-scanner export-ignore

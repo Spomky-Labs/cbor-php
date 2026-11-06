@@ -12,10 +12,10 @@ final class StringStream implements Stream
 {
     private int $offset = 0;
 
-    private readonly int $length;
+    private int $length;
 
     public function __construct(
-        private readonly string $data
+        private string $data
     ) {
         $this->length = strlen($data);
     }

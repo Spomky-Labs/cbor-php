@@ -10,6 +10,7 @@ use CBOR\MapObject;
 use CBOR\NegativeIntegerObject;
 use CBOR\OtherObject\NullObject;
 use CBOR\StringStream;
+use CBOR\Tag\CoseCountersignatureTag;
 use CBOR\Tag\CoseEncrypt0Tag;
 use CBOR\Tag\CoseEncryptTag;
 use CBOR\Tag\CoseMac0Tag;
@@ -25,14 +26,22 @@ use function hex2bin;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use function strlen;
 
 /**
- * The six COSE structures of RFC 9052 and the CWT tag of RFC 8392 that wraps them.
+ * The six COSE structures of RFC 9052, the countersignature of RFC 9338 and the CWT tag of RFC 8392 that wraps them.
  *
  * @internal
  */
 final class CoseTagTest extends CBORTestCase
 {
+    /**
+     * The countersignature of RFC 9338 Appendix A.1.1, tagged: 19([h'a10126', {4: '11'}, h'5ac0...eb2c']).
+     */
+    private const RFC_9338_COUNTERSIGNATURE = 'd38343a10126a1044231315840'
+        . '5ac05e289d5d0e1b0a7f048a5d2b643813ded50bc9e49220f4f7278f85f19d4a'
+        . '77d655c9d3b51e805a74b099e1e085aacd97fc29d72f887e8802bb6650cceb2c';
+
     /**
      * @return iterable<string, array{string, class-string<TagInterface>}>
      */
@@ -41,6 +50,7 @@ final class CoseTagTest extends CBORTestCase
         yield 'tag 16 (COSE_Encrypt0)' => ['d08340a043616263', CoseEncrypt0Tag::class];
         yield 'tag 17 (COSE_Mac0)' => ['d18440a04361626343746167', CoseMac0Tag::class];
         yield 'tag 18 (COSE_Sign1)' => ['d28443a10126a043666f6f43736967', CoseSign1Tag::class];
+        yield 'tag 19 (COSE_Countersignature)' => [self::RFC_9338_COUNTERSIGNATURE, CoseCountersignatureTag::class];
         yield 'tag 96 (COSE_Encrypt)' => ['d8608440a04361626380', CoseEncryptTag::class];
         yield 'tag 97 (COSE_Mac)' => ['d8618540a0436162634374616780', CoseMacTag::class];
         yield 'tag 98 (COSE_Sign)' => ['d8628440a04361626380', CoseSignTag::class];
@@ -160,6 +170,106 @@ final class CoseTagTest extends CBORTestCase
         ], $object->getProtectedHeaderAsMap()
             ->normalize());
         static::assertSame('foo', $object->getPayload()->getValue());
+    }
+
+    #[Test]
+    public function aCountersignatureExposesEachOfItsParts(): void
+    {
+        $object = $this->getDecoder()
+            ->decode(StringStream::create((string) hex2bin(self::RFC_9338_COUNTERSIGNATURE)));
+
+        static::assertInstanceOf(CoseCountersignatureTag::class, $object);
+        static::assertSame('a10126', bin2hex($object->getProtectedHeader()->getValue()));
+        static::assertSame([
+            1 => '-7',
+        ], $object->getProtectedHeaderAsMap()
+            ->normalize());
+        static::assertSame([
+            4 => '11',
+        ], $object->getUnprotectedHeader()
+            ->normalize());
+        static::assertSame(64, strlen($object->getSignature()->getValue()));
+        static::assertStringStartsWith('5ac05e28', bin2hex($object->getSignature()->getValue()));
+        static::assertSame([
+            hex2bin('a10126'),
+            [
+                4 => '11',
+            ],
+            hex2bin(substr(self::RFC_9338_COUNTERSIGNATURE, -128)),
+        ], $object->normalize());
+    }
+
+    /**
+     * The RFC 9338 Appendix A.1.1 countersignature, rebuilt from its parts, comes out as the bytes the RFC prints.
+     */
+    #[Test]
+    public function aCountersignatureBuiltFromItsPartsRoundTripsToTheSameBytes(): void
+    {
+        $protectedHeader = MapObject::create()
+            ->add(UnsignedIntegerObject::create(1), NegativeIntegerObject::create(-7));
+        $unprotectedHeader = MapObject::create()
+            ->add(UnsignedIntegerObject::create(4), ByteStringObject::create('11'));
+        $signature = ByteStringObject::create((string) hex2bin(substr(self::RFC_9338_COUNTERSIGNATURE, -128)));
+
+        $tag = CoseCountersignatureTag::createFromComponents($protectedHeader, $unprotectedHeader, $signature);
+
+        static::assertSame(self::RFC_9338_COUNTERSIGNATURE, bin2hex((string) $tag));
+
+        $object = $this->getDecoder()
+            ->decode(StringStream::create((string) $tag));
+
+        static::assertInstanceOf(CoseCountersignatureTag::class, $object);
+        static::assertSame(self::RFC_9338_COUNTERSIGNATURE, bin2hex((string) $object));
+    }
+
+    /**
+     * RFC 9338 leaves the tag optional: an untagged countersignature is a plain array, and telling it apart from
+     * any other three-item array is the business of whoever reads the header it sits in.
+     */
+    #[Test]
+    public function anUntaggedCountersignatureStaysAList(): void
+    {
+        $object = $this->getDecoder()
+            ->decode(StringStream::create((string) hex2bin(substr(self::RFC_9338_COUNTERSIGNATURE, 2))));
+
+        static::assertInstanceOf(ListObject::class, $object);
+        static::assertCount(3, $object);
+    }
+
+    #[Test]
+    public function aCountersignatureWithAPayloadIsRejected(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Not a valid CoseCountersignature object. The list shall have 3 items.');
+        CoseCountersignatureTag::create(ListObject::create([
+            ByteStringObject::create(''),
+            MapObject::create(),
+            ByteStringObject::create('foo'),
+            ByteStringObject::create('sig'),
+        ]));
+    }
+
+    #[Test]
+    public function aCountersignatureWhoseSignatureIsNotAByteStringIsRejected(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Not a valid CoseCountersignature object. The item 3 shall be a Byte String object.'
+        );
+        CoseCountersignatureTag::create(ListObject::create([
+            ByteStringObject::create(''),
+            MapObject::create(),
+            TextStringObject::create('sig'),
+        ]));
+    }
+
+    #[Test]
+    public function aCountersignatureWhoseUnprotectedHeaderIsNotAMapIsRejected(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Not a valid CoseCountersignature object. The item 2 shall be a Map object.');
+        $this->getDecoder()
+            ->decode(StringStream::create((string) hex2bin('d383408043736967')));
     }
 
     #[Test]

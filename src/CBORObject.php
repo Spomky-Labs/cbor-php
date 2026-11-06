@@ -76,6 +76,8 @@ interface CBORObject extends Stringable
 
     public const TAG_COSE_SIGN1 = 18;
 
+    public const TAG_COSE_COUNTERSIGNATURE = 19;
+
     public const TAG_ENCODED_BASE64_URL = 21;
 
     public const TAG_ENCODED_BASE64 = 22;
