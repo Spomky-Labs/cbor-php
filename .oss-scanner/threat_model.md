@@ -62,7 +62,7 @@ What is trusted:
   limit (`Decoder::DEFAULT_MAX_DEPTH`, 1000, or the one the application sets) is rejected with
   `InvalidArgumentException`.
 - Time and memory stay in proportion to the size of the document, in `decode()` and in `normalize()`, with or without
-  `ext-gmp` and `ext-bcmath`. The bounds documented in `doc/index.md` ("Bounding the Cost of a Hostile Document")
+  `ext-gmp` and `ext-bcmath`. The bounds the documentation states ("The cost of a hostile document")
   hold: `DecimalFractionTag::MAX_ABSOLUTE_EXPONENT` and `BigFloatTag::MAX_ABSOLUTE_EXPONENT` (1024),
   `UnsignedBigIntegerTag::MAX_BYTE_LENGTH` and `NegativeBigIntegerTag::MAX_BYTE_LENGTH` (256).
 - `decode()` reads exactly one data item and nothing after it. webauthn-lib reads the credential public key and then
@@ -72,10 +72,10 @@ What is trusted:
 - A map holds every key of the document. Two distinct keys never collapse onto one entry, a duplicate key is
   rejected, and `get()`, `has()` and `normalize()` never return a value stored under another key. A key that cannot
   be told apart through a PHP array offset (a float, a boolean, null, a list, a map, or two keys of different major
-  types resolving to the same offset) makes `normalize()` throw rather than pick one, as `doc/index.md` describes.
+  types resolving to the same offset) makes `normalize()` throw rather than pick one, as the documentation describes.
 - A normalized value is the value the bytes encode: integers beyond `PHP_INT_MAX` are numeric strings and are never
-  wrapped or truncated. As `doc/tags.md` states, a tag whose content does not match its definition is rejected with
-  `InvalidArgumentException` rather than decoded into something it is not, and a date that does not exist is
+  wrapped or truncated. As the documentation states, a tag whose content does not match its definition is rejected
+  with `InvalidArgumentException` rather than decoded into something it is not, and a date that does not exist is
   rejected rather than rolled over.
 - Nothing in the document names code to run: `PerlObjectTag` and `LanguageIndependentObjectTag` return the class name
   and the arguments as data and instantiate nothing, and references (tags 25 and 29) are returned as indexes, not
