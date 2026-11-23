@@ -6,6 +6,7 @@ namespace CBOR\OtherObject;
 
 use CBOR\Normalizable;
 use CBOR\OtherObject as Base;
+use const INF;
 use InvalidArgumentException;
 use function strlen;
 
@@ -22,8 +23,8 @@ final class DoublePrecisionFloatObject extends Base implements Normalizable
     {
         $value = match (true) {
             is_nan($number) => self::hex2binSafe('7FF8000000000000'),
-            is_infinite($number) && $number > 0 => self::hex2binSafe('7FF0000000000000'),
-            is_infinite($number) && $number < 0 => self::hex2binSafe('FFF0000000000000'),
+            $number === INF => self::hex2binSafe('7FF0000000000000'),
+            $number === -INF => self::hex2binSafe('FFF0000000000000'),
             default => (static fn (): string => unpack('S', "\x01\x00")[1] === 1 ? strrev(pack('d', $number)) : pack(
                 'd',
                 $number
